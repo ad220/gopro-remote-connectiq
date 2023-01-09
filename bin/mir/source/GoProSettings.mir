@@ -1,0 +1,466 @@
+[ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc"; @line = 2; ]
+class GoProSettings{
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc"; @line = 2; ]
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc"; @line = 2; ]
+    static
+    <init> {
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 9 23 ]
+        %tmp.1 = newa 4;
+        %tmp.2 = "5.3K";
+        %tmp.3 = dup %tmp.1;
+        %tmp.4 = aputv %tmp.3 0 %tmp.2;
+        %tmp.5 = "4K";
+        %tmp.6 = dup %tmp.4;
+        %tmp.7 = aputv %tmp.6 1 %tmp.5;
+        %tmp.8 = "2.7K";
+        %tmp.9 = dup %tmp.7;
+        %tmp.10 = aputv %tmp.9 2 %tmp.8;
+        %tmp.11 = "1080p";
+        %tmp.12 = dup %tmp.10;
+        %tmp.13 = aputv %tmp.12 3 %tmp.11;
+        putv self :resolutionList %tmp.13;
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 10 23 ]
+        %tmp.14 = newa 3;
+        %tmp.15 = "8:7";
+        %tmp.16 = dup %tmp.14;
+        %tmp.17 = aputv %tmp.16 0 %tmp.15;
+        %tmp.18 = "4:3";
+        %tmp.19 = dup %tmp.17;
+        %tmp.20 = aputv %tmp.19 1 %tmp.18;
+        %tmp.21 = "16:9";
+        %tmp.22 = dup %tmp.20;
+        %tmp.23 = aputv %tmp.22 2 %tmp.21;
+        putv self :ratioList %tmp.23;
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 11 23 ]
+        %tmp.24 = newa 5;
+        %tmp.25 = 240;
+        %tmp.26 = dup %tmp.24;
+        %tmp.27 = aputv %tmp.26 0 %tmp.25;
+        %tmp.28 = 120;
+        %tmp.29 = dup %tmp.27;
+        %tmp.30 = aputv %tmp.29 1 %tmp.28;
+        %tmp.31 = 60;
+        %tmp.32 = dup %tmp.30;
+        %tmp.33 = aputv %tmp.32 2 %tmp.31;
+        %tmp.34 = 30;
+        %tmp.35 = dup %tmp.33;
+        %tmp.36 = aputv %tmp.35 3 %tmp.34;
+        %tmp.37 = 24;
+        %tmp.38 = dup %tmp.36;
+        %tmp.39 = aputv %tmp.38 4 %tmp.37;
+        putv self :framerateList %tmp.39;
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 12 23 ]
+        %tmp.40 = newa 5;
+        %tmp.41 = "HyperView";
+        %tmp.42 = dup %tmp.40;
+        %tmp.43 = aputv %tmp.42 0 %tmp.41;
+        %tmp.44 = "SuperView";
+        %tmp.45 = dup %tmp.43;
+        %tmp.46 = aputv %tmp.45 1 %tmp.44;
+        %tmp.47 = "Large";
+        %tmp.48 = dup %tmp.46;
+        %tmp.49 = aputv %tmp.48 2 %tmp.47;
+        %tmp.50 = "Linéaire + VH";
+        %tmp.51 = dup %tmp.49;
+        %tmp.52 = aputv %tmp.51 3 %tmp.50;
+        %tmp.53 = "Linéaire";
+        %tmp.54 = dup %tmp.52;
+        %tmp.55 = aputv %tmp.54 4 %tmp.53;
+        putv self :lensList %tmp.55;
+    }
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc"; @line = 3; @position = 8; ]
+    var resolution;
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc"; @line = 4; @position = 8; ]
+    var ratio;
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc"; @line = 5; @position = 8; ]
+    var framerate;
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc"; @line = 6; @position = 8; ]
+    var lens;
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc"; @line = 7; @position = 8; ]
+    var region;
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc"; @line = 9; @position = 23; ]
+    private static
+    var resolutionList;
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc"; @line = 10; @position = 23; ]
+    private static
+    var ratioList;
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc"; @line = 11; @position = 23; ]
+    private static
+    var framerateList;
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc"; @line = 12; @position = 23; ]
+    private static
+    var lensList;
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc"; @line = 14; ]
+    function initialize() as Void {
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_14_26_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 15 8 ]
+        %tmp.2 = getv ? :resolutionList;
+        %tmp.3 = 0;
+        %tmp.4 = agetv %tmp.2 %tmp.3;
+        putv self :resolution %tmp.4;
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 16 8 ]
+        %tmp.6 = getv ? :ratioList;
+        %tmp.7 = 0;
+        %tmp.8 = agetv %tmp.6 %tmp.7;
+        putv self :ratio %tmp.8;
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 17 8 ]
+        %tmp.10 = getv ? :framerateList;
+        %tmp.11 = 3;
+        %tmp.12 = agetv %tmp.10 %tmp.11;
+        putv self :framerate %tmp.12;
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 18 8 ]
+        %tmp.14 = getv ? :lensList;
+        %tmp.15 = 2;
+        %tmp.16 = agetv %tmp.14 %tmp.15;
+        putv self :lens %tmp.16;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_14_26_stop:
+    }
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc"; @line = 21; ]
+    function possibleResolutions() {
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_21_35_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 22 8 ]
+        %tmp.2 = getv ? :resolutionList;
+        ret %tmp.2;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_21_35_stop:
+    }
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc"; @line = 25; ]
+    function possibleRatios() {
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_25_30_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 26 8 ]
+        %tmp.2 = getv ? :resolution;
+        push %tmp.2;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_26_8_switchCaseBegin:
+        %tmp.3 = dup %tmp.2;
+        %tmp.4 = "5.3K";
+        %tmp.5 = getv function %tmp.3 :equals;
+        %tmp.6 = invoke %tmp.3 %tmp.5 (%tmp.4);
+        bt %tmp.6 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_27_12;
+        %tmp.7 = dup %tmp.2;
+        %tmp.8 = "4K";
+        %tmp.9 = getv function %tmp.7 :equals;
+        %tmp.10 = invoke %tmp.7 %tmp.9 (%tmp.8);
+        bt %tmp.10 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_28_12;
+        %tmp.11 = dup %tmp.2;
+        %tmp.12 = "2.7K";
+        %tmp.13 = getv function %tmp.11 :equals;
+        %tmp.14 = invoke %tmp.11 %tmp.13 (%tmp.12);
+        bt %tmp.14 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_30_12;
+        goto @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_26_8_defaultCodeBegin;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_27_12:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_28_12:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 29 16 ]
+        %tmp.16 = getv ? :ratioList;
+        ret %tmp.16;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_30_12:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 31 16 ]
+        %tmp.18 = getv ? :ratioList;
+        %tmp.19 = getv function %tmp.18 :slice;
+        %tmp.20 = 1;
+        %tmp.21 = 3;
+        %tmp.22 = invoke %tmp.18 %tmp.19(%tmp.20, %tmp.21);
+        ret %tmp.22;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_32_12:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_26_8_defaultCodeBegin:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 33 16 ]
+        %tmp.24 = getv ? :ratioList;
+        %tmp.25 = getv function %tmp.24 :slice;
+        %tmp.26 = 2;
+        %tmp.27 = 3;
+        %tmp.28 = invoke %tmp.24 %tmp.25(%tmp.26, %tmp.27);
+        ret %tmp.28;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_26_8_switchCaseEnd:
+        pop;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_25_30_stop:
+    }
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc"; @line = 37; ]
+    function possibleLenses() {
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_37_30_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 38 8 ]
+        %tmp.2 = getv ? :ratio;
+        push %tmp.2;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_38_8_switchCaseBegin:
+        %tmp.3 = dup %tmp.2;
+        %tmp.4 = "8:7";
+        %tmp.5 = getv function %tmp.3 :equals;
+        %tmp.6 = invoke %tmp.3 %tmp.5 (%tmp.4);
+        bt %tmp.6 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_39_12;
+        %tmp.7 = dup %tmp.2;
+        %tmp.8 = "4:3";
+        %tmp.9 = getv function %tmp.7 :equals;
+        %tmp.10 = invoke %tmp.7 %tmp.9 (%tmp.8);
+        bt %tmp.10 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_41_12;
+        goto @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_38_8_defaultCodeBegin;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_39_12:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 40 16 ]
+        %tmp.12 = getv ? :lensList;
+        %tmp.13 = getv function %tmp.12 :slice;
+        %tmp.14 = 2;
+        %tmp.15 = 3;
+        %tmp.16 = invoke %tmp.12 %tmp.13(%tmp.14, %tmp.15);
+        ret %tmp.16;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_41_12:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 42 16 ]
+        %tmp.18 = getv ? :lensList;
+        %tmp.19 = getv function %tmp.18 :slice;
+        %tmp.20 = 2;
+        %tmp.21 = 5;
+        %tmp.22 = invoke %tmp.18 %tmp.19(%tmp.20, %tmp.21);
+        ret %tmp.22;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_43_12:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_38_8_defaultCodeBegin:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 44 16 ]
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_44_16_if_stmt:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_44_19_begin:
+        %tmp.24 = getv ? :resolution;
+        %tmp.25 = "2.7K";
+        %tmp.26 = eq %tmp.24 %tmp.25;
+        %tmp.27 = dup %tmp.26;
+        bt %tmp.27 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_44_41_end;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_44_41_false:
+        %tmp.29 = getv ? :resolution;
+        %tmp.30 = "1080p";
+        %tmp.31 = eq %tmp.29 %tmp.30;
+        %tmp.32 = or %tmp.26 %tmp.31;
+        push %tmp.32;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_44_41_end:
+        %tmp.33 = phi [%tmp.27 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_44_19_begin] [%tmp.32 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_44_41_false] [%tmp.33 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_44_41_end];
+        bf %tmp.33 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_44_16_if_false;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_44_16_if_true:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_44_63_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 45 20 ]
+        %tmp.35 = getv ? :lensList;
+        %tmp.36 = getv function %tmp.35 :slice;
+        %tmp.37 = 1;
+        %tmp.38 = 5;
+        %tmp.39 = invoke %tmp.35 %tmp.36(%tmp.37, %tmp.38);
+        ret %tmp.39;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_44_63_stop:
+        goto @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_44_16_if_end;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_44_16_if_false:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_46_23_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 47 20 ]
+        %tmp.41 = getv ? :lensList;
+        ret %tmp.41;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_46_23_stop:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_44_16_if_end:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_38_8_switchCaseEnd:
+        pop;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_37_30_stop:
+    }
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc"; @line = 52; ]
+    function possibleFramerates() {
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_52_34_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 53 8 ]
+        %tmp.2 = getv ? :resolution;
+        push %tmp.2;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_53_8_switchCaseBegin:
+        %tmp.3 = dup %tmp.2;
+        %tmp.4 = "5.3K";
+        %tmp.5 = getv function %tmp.3 :equals;
+        %tmp.6 = invoke %tmp.3 %tmp.5 (%tmp.4);
+        bt %tmp.6 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_54_12;
+        %tmp.7 = dup %tmp.2;
+        %tmp.8 = "4K";
+        %tmp.9 = getv function %tmp.7 :equals;
+        %tmp.10 = invoke %tmp.7 %tmp.9 (%tmp.8);
+        bt %tmp.10 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_62_12;
+        %tmp.11 = dup %tmp.2;
+        %tmp.12 = "2.7K";
+        %tmp.13 = getv function %tmp.11 :equals;
+        %tmp.14 = invoke %tmp.11 %tmp.13 (%tmp.12);
+        bt %tmp.14 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_70_12;
+        goto @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_53_8_defaultCodeBegin;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_54_12:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 55 16 ]
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_55_16_if_stmt:
+        %tmp.16 = getv ? :ratio;
+        %tmp.17 = "8:7";
+        %tmp.18 = eq %tmp.16 %tmp.17;
+        bf %tmp.18 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_55_16_if_false;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_55_16_if_true:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_55_34_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 56 20 ]
+        %tmp.20 = getv ? :framerateList;
+        %tmp.21 = getv function %tmp.20 :slice;
+        %tmp.22 = 3;
+        %tmp.23 = 4;
+        %tmp.24 = invoke %tmp.20 %tmp.21(%tmp.22, %tmp.23);
+        ret %tmp.24;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_55_34_stop:
+        goto @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_55_16_if_end;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_55_16_if_false:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 57 23 ]
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_57_23_if_stmt:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_57_27_begin:
+        %tmp.26 = getv ? :lens;
+        %tmp.27 = "HyperView";
+        %tmp.28 = eq %tmp.26 %tmp.27;
+        %tmp.29 = dup %tmp.28;
+        bt %tmp.29 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_57_48_end;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_57_48_false:
+        %tmp.31 = getv ? :ratio;
+        %tmp.32 = "4:3";
+        %tmp.33 = eq %tmp.31 %tmp.32;
+        %tmp.34 = or %tmp.28 %tmp.33;
+        push %tmp.34;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_57_48_end:
+        %tmp.35 = phi [%tmp.29 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_57_27_begin] [%tmp.34 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_57_48_false] [%tmp.35 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_57_48_end];
+        bf %tmp.35 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_57_23_if_false;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_57_23_if_true:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_57_62_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 58 20 ]
+        %tmp.37 = getv ? :framerateList;
+        %tmp.38 = getv function %tmp.37 :slice;
+        %tmp.39 = 3;
+        %tmp.40 = 5;
+        %tmp.41 = invoke %tmp.37 %tmp.38(%tmp.39, %tmp.40);
+        ret %tmp.41;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_57_62_stop:
+        goto @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_57_23_if_end;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_57_23_if_false:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_59_23_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 60 20 ]
+        %tmp.43 = getv ? :framerateList;
+        %tmp.44 = getv function %tmp.43 :slice;
+        %tmp.45 = 2;
+        %tmp.46 = 4;
+        %tmp.47 = invoke %tmp.43 %tmp.44(%tmp.45, %tmp.46);
+        ret %tmp.47;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_59_23_stop:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_57_23_if_end:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_55_16_if_end:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_62_12:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 63 16 ]
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_63_16_if_stmt:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_63_20_begin:
+        %tmp.49 = getv ? :ratio;
+        %tmp.50 = "8:7";
+        %tmp.51 = eq %tmp.49 %tmp.50;
+        %tmp.52 = dup %tmp.51;
+        bt %tmp.52 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_63_36_end;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_63_36_false:
+        %tmp.54 = getv ? :lens;
+        %tmp.55 = "HyperView";
+        %tmp.56 = eq %tmp.54 %tmp.55;
+        %tmp.57 = or %tmp.51 %tmp.56;
+        push %tmp.57;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_63_36_end:
+        %tmp.58 = phi [%tmp.52 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_63_20_begin] [%tmp.57 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_63_36_false] [%tmp.58 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_63_36_end];
+        bf %tmp.58 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_63_16_if_false;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_63_16_if_true:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_63_55_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 64 20 ]
+        %tmp.60 = getv ? :framerateList;
+        %tmp.61 = getv function %tmp.60 :slice;
+        %tmp.62 = 2;
+        %tmp.63 = 3;
+        %tmp.64 = invoke %tmp.60 %tmp.61(%tmp.62, %tmp.63);
+        ret %tmp.64;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_63_55_stop:
+        goto @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_63_16_if_end;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_63_16_if_false:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 65 23 ]
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_65_23_if_stmt:
+        %tmp.66 = getv ? :ratio;
+        %tmp.67 = "4:3";
+        %tmp.68 = eq %tmp.66 %tmp.67;
+        bf %tmp.68 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_65_23_if_false;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_65_23_if_true:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_65_41_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 66 20 ]
+        %tmp.70 = getv ? :framerateList;
+        %tmp.71 = getv function %tmp.70 :slice;
+        %tmp.72 = 2;
+        %tmp.73 = 5;
+        %tmp.74 = invoke %tmp.70 %tmp.71(%tmp.72, %tmp.73);
+        ret %tmp.74;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_65_41_stop:
+        goto @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_65_23_if_end;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_65_23_if_false:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_67_23_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 68 20 ]
+        %tmp.76 = getv ? :framerateList;
+        %tmp.77 = getv function %tmp.76 :slice;
+        %tmp.78 = 1;
+        %tmp.79 = 5;
+        %tmp.80 = invoke %tmp.76 %tmp.77(%tmp.78, %tmp.79);
+        ret %tmp.80;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_67_23_stop:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_65_23_if_end:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_63_16_if_end:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_70_12:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 71 16 ]
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_71_16_if_stmt:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_71_20_begin:
+        %tmp.82 = getv ? :ratio;
+        %tmp.83 = "4:3";
+        %tmp.84 = eq %tmp.82 %tmp.83;
+        %tmp.85 = dup %tmp.84;
+        bt %tmp.85 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_71_36_end;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_71_36_false:
+        %tmp.87 = getv ? :lens;
+        %tmp.88 = "SuperView";
+        %tmp.89 = eq %tmp.87 %tmp.88;
+        %tmp.90 = or %tmp.84 %tmp.89;
+        push %tmp.90;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_71_36_end:
+        %tmp.91 = phi [%tmp.85 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_71_20_begin] [%tmp.90 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_71_36_false] [%tmp.91 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_71_36_end];
+        bf %tmp.91 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_71_16_if_false;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_71_16_if_true:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_71_55_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 72 20 ]
+        %tmp.93 = getv ? :framerateList;
+        %tmp.94 = getv function %tmp.93 :slice;
+        %tmp.95 = 1;
+        %tmp.96 = 3;
+        %tmp.97 = invoke %tmp.93 %tmp.94(%tmp.95, %tmp.96);
+        ret %tmp.97;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_71_55_stop:
+        goto @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_71_16_if_end;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_71_16_if_false:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_73_23_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 74 20 ]
+        %tmp.99 = getv ? :framerateList;
+        %tmp.100 = getv function %tmp.99 :slice;
+        %tmp.101 = 0;
+        %tmp.102 = 3;
+        %tmp.103 = invoke %tmp.99 %tmp.100(%tmp.101, %tmp.102);
+        ret %tmp.103;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_73_23_stop:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_71_16_if_end:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_76_12:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_53_8_defaultCodeBegin:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 77 16 ]
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_77_16_if_stmt:
+        %tmp.105 = getv ? :lens;
+        %tmp.106 = "SuperView";
+        %tmp.107 = eq %tmp.105 %tmp.106;
+        bf %tmp.107 @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_77_16_if_false;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_77_16_if_true:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_77_39_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 78 20 ]
+        %tmp.109 = getv ? :framerateList;
+        %tmp.110 = getv function %tmp.109 :slice;
+        %tmp.111 = 1;
+        %tmp.112 = 5;
+        %tmp.113 = invoke %tmp.109 %tmp.110(%tmp.111, %tmp.112);
+        ret %tmp.113;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_77_39_stop:
+        goto @C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_77_16_if_end;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_77_16_if_false:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_79_23_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc" 80 20 ]
+        %tmp.115 = getv ? :framerateList;
+        ret %tmp.115;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_79_23_stop:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_77_16_if_end:
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_53_8_switchCaseEnd:
+        pop;
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProSettings_mc_52_34_stop:
+    }
+}
+[ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProSettings.mc"; @line = 2; ]
+<init> {
+}

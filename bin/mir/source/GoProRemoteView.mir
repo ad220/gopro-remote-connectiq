@@ -1,0 +1,56 @@
+[ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProRemoteView.mc"; @line = 1; ]
+import Toybox.Graphics;
+[ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProRemoteView.mc"; @line = 2; ]
+import Toybox.WatchUi;
+[ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProRemoteView.mc"; @line = 4; ]
+class GoProRemoteView extends WatchUi.View{
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProRemoteView.mc"; @line = 4; ]
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProRemoteView.mc"; @line = 4; ]
+    static
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProRemoteView.mc"; @line = 6; ]
+    function initialize() as Void {
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProRemoteView_mc_6_26_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProRemoteView.mc" 7 8 ]
+        %tmp.2 = getv ? :View;
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProRemoteView_mc_6_26_stop:
+    }
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProRemoteView.mc"; @line = 11; ]
+    function onLayout(dc as Dc) as Void {
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProRemoteView_mc_11_40_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProRemoteView.mc" 12 8 ]
+        %tmp.1 = self;
+        %tmp.2 = getv function %tmp.1 :setLayout;
+        %tmp.4 = getv ? :Rez;
+        %tmp.5 = getv %tmp.4 :Layouts;
+        %tmp.6 = getv function %tmp.5 :MainLayout;
+        %tmp.8 = lgetv %dc;
+        %tmp.9 = invoke %tmp.5 %tmp.6(%tmp.8);
+        invoke %tmp.1 %tmp.2(%tmp.9);
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProRemoteView_mc_11_40_stop:
+    }
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProRemoteView.mc"; @line = 18; ]
+    function onShow() as Void {
+    }
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProRemoteView.mc"; @line = 22; ]
+    function onUpdate(dc as Dc) as Void {
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProRemoteView_mc_22_40_start:
+[ "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProRemoteView.mc" 24 8 ]
+        %tmp.2 = getv ? :View;
+        %tmp.3 = getv function %tmp.2 :onUpdate;
+        %tmp.5 = lgetv %dc;
+        invoke %tmp.2 %tmp.3(%tmp.5);
+C_Users_Arthur_Desktop_Fichiers_Temp_GoProRemote_source_GoProRemoteView_mc_22_40_stop:
+    }
+    [ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProRemoteView.mc"; @line = 30; ]
+    function onHide() as Void {
+    }
+}
+[ @file = "C:\Users\Arthur\Desktop\Fichiers Temp\GoProRemote\source\GoProRemoteView.mc"; @line = 1; ]
+<init> {
+}
