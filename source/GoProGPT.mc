@@ -38,32 +38,32 @@ class MyApp extends ConnectIQApp {
     Graphics.drawText("Video Settings", 0, 0, Graphics.FONT_LARGE, Graphics.ALIGN_LEFT);
     
     // Display the resolution options
-    Graphics.drawText("Resolution:", 0, 20, Graphics.FONT_MEDIUM, Graphics.ALIGN_LEFT);
+    Graphics.drawText("Resolution:", 0, 20, GoProResources.fontSmall, Graphics.ALIGN_LEFT);
     for (var i = 0; i < resolutions.length; i++) {
       if (selectedResolution == resolutions[i]) {
-        Graphics.drawText("[X] " + resolutions[i], 40, 40 + i * 20, Graphics.FONT_MEDIUM, Graphics.ALIGN_LEFT);
+        Graphics.drawText("[X] " + resolutions[i], 40, 40 + i * 20, GoProResources.fontSmall, Graphics.ALIGN_LEFT);
       } else {
-        Graphics.drawText("[ ] " + resolutions[i], 40, 40 + i * 20, Graphics.FONT_MEDIUM, Graphics.ALIGN_LEFT);
+        Graphics.drawText("[ ] " + resolutions[i], 40, 40 + i * 20, GoProResources.fontSmall, Graphics.ALIGN_LEFT);
       }
     }
     
     // Display the frame rate options
-    Graphics.drawText("Frame Rate:", 0, 100, Graphics.FONT_MEDIUM, Graphics.ALIGN_LEFT);
+    Graphics.drawText("Frame Rate:", 0, 100, GoProResources.fontSmall, Graphics.ALIGN_LEFT);
     for (var i = 0; i < frameRates.length; i++) {
       if (selectedFrameRate == frameRates[i]) {
-        Graphics.drawText("[X] " + frameRates[i], 40, 120 + i * 20, Graphics.FONT_MEDIUM, Graphics.ALIGN_LEFT);
+        Graphics.drawText("[X] " + frameRates[i], 40, 120 + i * 20, GoProResources.fontSmall, Graphics.ALIGN_LEFT);
       } else {
-        Graphics.drawText("[ ] " + frameRates[i], 40, 120 + i * 20, Graphics.FONT_MEDIUM, Graphics.ALIGN_LEFT);
+        Graphics.drawText("[ ] " + frameRates[i], 40, 120 + i * 20, GoProResources.fontSmall, Graphics.ALIGN_LEFT);
       }
     }
     
     // Display the field of view options
-    Graphics.drawText("Field of View:", 0, 180, Graphics.FONT_MEDIUM, Graphics.ALIGN_LEFT);
+    Graphics.drawText("Field of View:", 0, 180, GoProResources.fontSmall, Graphics.ALIGN_LEFT);
     for (var i = 0; i < fovs.length; i++) {
       if (selectedFOV == fovs[i]) {
-        Graphics.drawText("[X] " + fovs[i], 40, 200 + i * 20, Graphics.FONT_MEDIUM, Graphics.ALIGN_LEFT);
+        Graphics.drawText("[X] " + fovs[i], 40, 200 + i * 20, GoProResources.fontSmall, Graphics.ALIGN_LEFT);
       } else {
-        Graphics.drawText("[ ] " + fovs[i], 40, 200 + i * 20, Graphics.FONT_MEDIUM, Graphics.ALIGN_LEFT);
+        Graphics.drawText("[ ] " + fovs[i], 40, 200 + i * 20, GoProResources.fontSmall, Graphics.ALIGN_LEFT);
       }
     }
     

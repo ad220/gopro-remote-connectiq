@@ -18,18 +18,18 @@ class SettingChooseMenu extends WatchUi.CustomMenu {
     public function initialize(gp as GoProSettings) {
         CustomMenu.initialize(80, Graphics.COLOR_BLACK, {:title=> new GoProMenuTitle(settingsLabel)});
         for (var i=0; i<settingsList.size(); i++) {
-            CustomMenu.addItem(new SettingChooseItem(settingsList[i], gp.getSetting(settingsList[i])));
+            CustomMenu.addItem(new SettingChooseItem(settingsList[i], gp));
         }
     }
 }
 
 class SettingChooseItem extends WatchUi.CustomMenuItem {
     private var id;
-    private var selected;
+    private var gp;
 
-    public function initialize(_id, _selected) {
+    public function initialize(_id, _gp) {
         id=_id;
-        selected = _selected;
+        gp = _gp;
         CustomMenuItem.initialize(_id, {});
     }
 
@@ -37,12 +37,13 @@ class SettingChooseItem extends WatchUi.CustomMenuItem {
         var halfW = dc.getWidth()/2;
         var halfH = dc.getHeight()/2;
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.fillRoundedRectangle(halfW-90, halfH-30, 180, 60, 30);
+        dc.fillRoundedRectangle(halfW-100, halfH-30, 200, 60, 30);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(halfW, halfH-14, fontSohneSmall, settingTitle.get(id), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-        dc.drawText(halfW, halfH+16, fontSohneSmall, settingLabel.get(selected), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(halfW+22, halfH-14, GoProResources.fontSmall, settingTitle.get(id), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(halfW+22, halfH+16, GoProResources.fontTiny, settingLabel.get(gp.getSetting(id)), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawLine(halfW-60, halfH+2, halfW+60, halfH+2);
+        dc.drawLine(halfW-36, halfH+2, halfW+80, halfH+2);
+        dc.drawBitmap(36, halfH-14, icon.get(id));
     }
 
     public function getId() as Symbol {

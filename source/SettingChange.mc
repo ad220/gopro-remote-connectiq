@@ -2,46 +2,10 @@ import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.WatchUi;
 
-var fontSohneSmall = WatchUi.loadResource(Rez.Fonts.SohneSmall);
-
-const settingTitle = {
-    :resolution => WatchUi.loadResource(Rez.Strings.Resolution),
-    :ratio => WatchUi.loadResource(Rez.Strings.Ratio),
-    :lens => WatchUi.loadResource(Rez.Strings.Lens),
-    :framerate => WatchUi.loadResource(Rez.Strings.Framerate),
-};
-
-const settingLabel = {
-    // Resolutions
-    :_5K => WatchUi.loadResource(Rez.Strings._5K),
-    :_4K => WatchUi.loadResource(Rez.Strings._4K),
-    :_3K => WatchUi.loadResource(Rez.Strings._3K),
-    :_2K => WatchUi.loadResource(Rez.Strings._2K),
-    // Aspect Ratios
-    :_8R7 => WatchUi.loadResource(Rez.Strings._8R7),
-    :_4R3 => WatchUi.loadResource(Rez.Strings._4R3),
-    :_16R9 => WatchUi.loadResource(Rez.Strings._16R9),
-    // Framerates
-    :_240 => WatchUi.loadResource(Rez.Strings._240),
-    :_200 => WatchUi.loadResource(Rez.Strings._200),
-    :_120 => WatchUi.loadResource(Rez.Strings._120),
-    :_100 => WatchUi.loadResource(Rez.Strings._100),
-    :_60 => WatchUi.loadResource(Rez.Strings._60),
-    :_50 => WatchUi.loadResource(Rez.Strings._50),
-    :_30 => WatchUi.loadResource(Rez.Strings._30),
-    :_25 => WatchUi.loadResource(Rez.Strings._25),
-    :_24 => WatchUi.loadResource(Rez.Strings._24),
-    // Lenses 
-    :_HyperView => WatchUi.loadResource(Rez.Strings.HyperView),
-    :_SuperView => WatchUi.loadResource(Rez.Strings.SuperView),
-    :_Large => WatchUi.loadResource(Rez.Strings.Large),
-    :_Linear => WatchUi.loadResource(Rez.Strings.Linear),
-    :_LinearLock => WatchUi.loadResource(Rez.Strings.LinearLock)
-};
 
 class SettingChangeMenu extends WatchUi.CustomMenu {
     public function initialize(setting as Symbol, gp as GoProSettings) {
-        CustomMenu.initialize(60, Graphics.COLOR_BLACK, {:title=> new $.GoProMenuTitle(settingTitle.get(setting))});
+        CustomMenu.initialize(70, Graphics.COLOR_BLACK, {:title=> new $.GoProMenuTitle(settingTitle.get(setting))});
         var items;
         var selected;
         switch (setting) {
@@ -87,13 +51,13 @@ class SettingChangeItem extends WatchUi.CustomMenuItem {
 
     public function draw(dc as Dc) as Void {
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.fillRoundedRectangle(dc.getWidth()/2-90, dc.getHeight()/2-20, 180, 40, 20);
+        dc.fillRoundedRectangle(dc.getWidth()/2-100, dc.getHeight()/2-25, 200, 50, 25);
         if (preselected and !modified or isSelected()) {
             dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_TRANSPARENT);
         } else {
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         }
-        dc.drawText(dc.getWidth()/2, dc.getHeight()/2-2, fontSohneSmall, label, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(dc.getWidth()/2, dc.getHeight()/2-2, GoProResources.fontMedium, label, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 
     public function setModified() as Void {

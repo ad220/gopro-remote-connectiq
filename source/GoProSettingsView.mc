@@ -2,9 +2,7 @@ import Toybox.Graphics;
 import Toybox.WatchUi;
 
 class GoProSettingsView extends WatchUi.View {
-    private static var fontSohneSmall;
     private var gp;
-
 
     function initialize() {
         View.initialize();
@@ -12,7 +10,7 @@ class GoProSettingsView extends WatchUi.View {
     
     // Load your resources here
     function onLayout(dc as Dc) as Void {
-        fontSohneSmall = WatchUi.loadResource(Rez.Fonts.SohneSmall);
+        GoProResources.load();
         setLayout(Rez.Layouts.GoProSettings(dc));
         gp = new GoProSettings();
 
@@ -27,7 +25,7 @@ class GoProSettingsView extends WatchUi.View {
 
     // Update the view
     function onUpdate(dc as Dc) as Void {
-        var x = dc.getWidth();
+/*         var x = dc.getWidth();
         var cx = x/2;
         var y = dc.getHeight();
         var cy = y/2;
@@ -39,9 +37,9 @@ class GoProSettingsView extends WatchUi.View {
         dc.fillCircle(x-25, cy, 20);
 
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, cy-10, fontSohneSmall, "Setting", Graphics.TEXT_JUSTIFY_CENTER);
-        dc.drawText(25, cy-16, Graphics.FONT_MEDIUM, "<", Graphics.TEXT_JUSTIFY_CENTER);
-        dc.drawText(x-25, cy-16, Graphics.FONT_MEDIUM, ">", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(cx, cy-10, GoProResources.fontSmall, "Setting", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(25, cy-16, GoProResources.fontSmall, "<", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(x-25, cy-16, GoProResources.fontSmall, ">", Graphics.TEXT_JUSTIFY_CENTER); */
 
 
         WatchUi.pushView(new SettingChooseMenu(gp), new SettingChooseDelegate(gp), WatchUi.SLIDE_UP);

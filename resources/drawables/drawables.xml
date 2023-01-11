@@ -1,3 +1,7 @@
 <drawables>
     <bitmap id="LauncherIcon" filename="launcher_icon.png" />
+    <bitmap id="Resolution" filename="resolution.png" />
+    <bitmap id="Ratio" filename="ratio.png" />
+    <bitmap id="Lens" filename="lens.png" />
+    <bitmap id="Framerate" filename="framerate.png" />
 </drawables>

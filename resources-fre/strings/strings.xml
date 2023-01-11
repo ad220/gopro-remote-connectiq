@@ -1,10 +1,10 @@
 <strings>
     <!-- Paramètres -->
     <string id="Settings">Paramètres</string>
-    <string id="Framerate">Fréquence d'image</string>
-    <string id="Lens">Objectif</string>
     <string id="Resolution">Résolution</string>
     <string id="Ratio">Format d'image</string>
+    <string id="Lens">Objectif</string>
+    <string id="Framerate">Fréq. d'image</string>
 
     <!-- Fréquences d'image -->
     <string id="_240">240 ips</string>

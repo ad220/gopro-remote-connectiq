@@ -1,11 +1,5 @@
 import Toybox.Lang;
 
-// private static const modeList = ["Video", ]
-const resolutionList = [:_5K, :_4K, :_3K, :_2K];
-const ratioList = [:_8R7, :_4R3, :_16R9];
-const lensList = [:_HyperView, :_SuperView, :_Large, :_Linear, :_LinearLock];
-const framerateList = [:_240,:_120,:_60,:_30,:_24]; //TODO: convert NTSC fps -> PAL fps
-
 
 class GoProSettings {
     private var resolution;
@@ -16,7 +10,6 @@ class GoProSettings {
 
     private var settingsDict;
     
-
 
     function initialize() {
         resolution = :_5K;
