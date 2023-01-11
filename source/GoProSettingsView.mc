@@ -3,6 +3,8 @@ import Toybox.WatchUi;
 
 class GoProSettingsView extends WatchUi.View {
     private static var fontSohneSmall;
+    private var gp;
+
 
     function initialize() {
         View.initialize();
@@ -12,6 +14,8 @@ class GoProSettingsView extends WatchUi.View {
     function onLayout(dc as Dc) as Void {
         fontSohneSmall = WatchUi.loadResource(Rez.Fonts.SohneSmall);
         setLayout(Rez.Layouts.GoProSettings(dc));
+        gp = new GoProSettings();
+
     }
 
     // Called when this View is brought to the foreground. Restore
@@ -27,9 +31,9 @@ class GoProSettingsView extends WatchUi.View {
         var cx = x/2;
         var y = dc.getHeight();
         var cy = y/2;
-
-        dc.clear();
+        
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
+        dc.clear();
         dc.fillCircle(25, cy, 20);
         dc.fillRoundedRectangle(cx-60, cy-30, 120, 60, 30);
         dc.fillCircle(x-25, cy, 20);
@@ -39,6 +43,8 @@ class GoProSettingsView extends WatchUi.View {
         dc.drawText(25, cy-16, Graphics.FONT_MEDIUM, "<", Graphics.TEXT_JUSTIFY_CENTER);
         dc.drawText(x-25, cy-16, Graphics.FONT_MEDIUM, ">", Graphics.TEXT_JUSTIFY_CENTER);
 
+
+        WatchUi.pushView(new SettingChooseMenu(gp), new SettingChooseDelegate(gp), WatchUi.SLIDE_UP);
         // var scrollSetting = new Rez.Drawables.ScrollSetting();
         // scrollSetting.draw(dc);
 

@@ -1,4 +1,26 @@
 <strings>
-    <string id="AppName">GoProRemote</string>
-    <!-- <string id="" -->
+    <!-- Paramètres -->
+    <string id="Settings">Paramètres</string>
+    <string id="Framerate">Fréquence d'image</string>
+    <string id="Lens">Objectif</string>
+    <string id="Resolution">Résolution</string>
+    <string id="Ratio">Format d'image</string>
+
+    <!-- Fréquences d'image -->
+    <string id="_240">240 ips</string>
+    <string id="_200">200 ips</string>
+    <string id="_120">120 ips</string>
+    <string id="_100">100 ips</string>
+    <string id="_60">60 ips</string>
+    <string id="_50">50 ips</string>
+    <string id="_30">30 ips</string>
+    <string id="_25">25 ips</string>
+    <string id="_24">24 ips</string>
+
+    <!-- Objectifs -->
+    <string id="HyperView">Hyperview</string>
+    <string id="SuperView">SuperView</string>
+    <string id="Large">Large</string>
+    <string id="Linear">Linéaire</string>
+    <string id="LinearLock">Linéaire + VH</string>
 </strings>

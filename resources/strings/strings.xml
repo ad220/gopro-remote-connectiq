@@ -1,3 +1,40 @@
 <strings>
     <string id="AppName">GoProRemote</string>
+
+    <!-- Settings -->
+    <string id="Settings">Settings</string>
+    <string id="Framerate">Framerate</string>
+    <string id="Lens">Lens</string>
+    <string id="Resolution">Resolution</string>
+    <string id="Ratio">Aspect ratio</string>
+    
+    <!-- Framerates -->
+    <string id="_240">240 fps</string>
+    <string id="_200">200 fps</string>
+    <string id="_120">120 fps</string>
+    <string id="_100">100 fps</string>
+    <string id="_60">60 fps</string>
+    <string id="_50">50 fps</string>
+    <string id="_30">30 fps</string>
+    <string id="_25">25 fps</string>
+    <string id="_24">24 fps</string>
+
+    <!-- Lenses -->
+    <string id="HyperView">Hyperview</string>
+    <string id="SuperView">SuperView</string>
+    <string id="Large">Large</string>
+    <string id="Linear">Linear</string>
+    <string id="LinearLock">Linear + HL</string>
+
+    <!-- Resolutions -->
+    <string id="_5K">5.3K</string>
+    <string id="_4K">4K</string>
+    <string id="_3K">2.7K</string>
+    <string id="_2K">1080p</string>
+
+    <!-- Aspect Ratios -->
+    <string id="_8R7">8:7</string>
+    <string id="_4R3">4:3</string>
+    <string id="_16R9">16:9</string>
+
 </strings>

@@ -1,47 +1,77 @@
+import Toybox.Lang;
+
+// private static const modeList = ["Video", ]
+const resolutionList = [:_5K, :_4K, :_3K, :_2K];
+const ratioList = [:_8R7, :_4R3, :_16R9];
+const lensList = [:_HyperView, :_SuperView, :_Large, :_Linear, :_LinearLock];
+const framerateList = [:_240,:_120,:_60,:_30,:_24]; //TODO: convert NTSC fps -> PAL fps
+
 
 class GoProSettings {
-    var resolution;
-    var ratio;
-    var framerate;
-    var lens;
-    var region; //TODO: change to enum NTSC:0 / PAL:1
+    private var resolution;
+    private var ratio;
+    private var lens;
+    private var framerate;
+    private var region; //TODO: change to enum NTSC:0 / PAL:1
     
-    private static var resolutionList = ["5.3K", "4K", "2.7K", "1080p"];
-    private static var ratioList = ["8:7", "4:3", "16:9"];
-    private static var framerateList = [240,120,60,30,24]; //TODO: convert NTSC fps -> PAL fps
-    private static var lensList = ["HyperView", "SuperView", "Large", "Linéaire + VH", "Linéaire"];
+
 
     function initialize() {
-        resolution = resolutionList[0];
-        ratio = ratioList[0];
-        framerate = framerateList[3];
-        lens = lensList[2];
+        resolution = :_5K;
+        ratio = :_8R7;
+        lens = :_Large;
+        framerate = :_30;
     }
 
-    function possibleResolutions() {
+    public function getResolution() as Symbol {
+        return resolution;
+    }
+    
+    public function setResolution(_resolution as Symbol) {
+        resolution = _resolution;
+    }
+
+    public function possibleResolutions() {
         return resolutionList;
+    }
+
+
+    public function getRatio() as Symbol {
+        return ratio;
+    }
+    
+    public function setRatio(_ratio as Symbol) {
+        ratio = _ratio;
     }
 
     function possibleRatios() {
         switch(resolution) {
-            case "5.3K":
-            case "4K":
+            case :_5K:
+            case :_4K:
                 return ratioList;
-            case "2.7K":
+            case :_3K:
                 return ratioList.slice(1,3);
             default: // 1080p
                 return ratioList.slice(2,3);
         }
     }
 
+    public function getLens() as Symbol {
+        return lens;
+    }
+    
+    public function setLens(_lens as Symbol) {
+        lens = _lens;
+    }
+
     function possibleLenses() {
         switch(ratio) {
-            case "8:7":
+            case :_8R7:
                 return lensList.slice(2,3);
-            case "4:3":
+            case :_4R3:
                 return lensList.slice(2,5);
             default: // 16:9
-                if(resolution=="2.7K" or resolution =="1080p") {
+                if(resolution==:_3K or resolution ==:_2K) {
                     return lensList.slice(1,5);
                 } else {
                     return lensList;
@@ -49,37 +79,44 @@ class GoProSettings {
         }
     }
 
+    public function getFramerate() as Symbol {
+        return framerate;
+    }
+    
+    public function setFramerate(_framerate as Symbol) {
+        framerate = _framerate;
+    }
+    
     function possibleFramerates() {
         switch(resolution) {
-            case "5.3K":
-                if (ratio=="8:7") {
+            case :_5K:
+                if (ratio==:_L) {
                     return framerateList.slice(3,4);
-                } else if (lens=="HyperView" or ratio=="4:3") {
+                } else if (lens==:_HyperView or ratio==:_4R3) {
                     return framerateList.slice(3,5);
                 } else {
                     return framerateList.slice(2,4);
                 }
-            case "4K":
-                if (ratio=="8:7" or lens=="HyperView") {
+            case :_4K:
+                if (ratio==:_8R7 or lens==:_HyperView) {
                     return framerateList.slice(2,3);
-                } else if (ratio=="4:3") {
+                } else if (ratio==:_M) {
                     return framerateList.slice(2,5);
                 } else {
                     return framerateList.slice(1,5);
                 }
-            case "2.7K":
-                if (ratio=="4:3" or lens=="SuperView") {
+            case :_3K:
+                if (ratio==:_4R3 or lens==:_SuperView) {
                     return framerateList.slice(1,3);
                 } else {
                     return framerateList.slice(0,3);
                 }
             default: // 1080p
-                if (lens=="SuperView") {
+                if (lens==:_SuperView) {
                     return framerateList.slice(1,5);
                 } else {
                     return framerateList;
                 }
         }
     }
-
 }
