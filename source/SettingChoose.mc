@@ -16,29 +16,33 @@ const settingsList = [:resolution, :ratio, :lens, :framerate];
 
 class SettingChooseMenu extends WatchUi.CustomMenu {
     public function initialize(gp as GoProSettings) {
-        CustomMenu.initialize(60, Graphics.COLOR_BLACK, {:title=> new GoProMenuTitle(settingsLabel)});
+        CustomMenu.initialize(80, Graphics.COLOR_BLACK, {:title=> new GoProMenuTitle(settingsLabel)});
         for (var i=0; i<settingsList.size(); i++) {
-            CustomMenu.addItem(new SettingChooseItem(settingsList[i]));
-
+            CustomMenu.addItem(new SettingChooseItem(settingsList[i], gp.getSetting(settingsList[i])));
         }
     }
 }
 
 class SettingChooseItem extends WatchUi.CustomMenuItem {
     private var id;
-    private var label;
+    private var selected;
 
-    public function initialize(_id) {
+    public function initialize(_id, _selected) {
         id=_id;
-        label=settingTitle.get(_id);
+        selected = _selected;
         CustomMenuItem.initialize(_id, {});
     }
 
     public function draw(dc as Dc) as Void {
+        var halfW = dc.getWidth()/2;
+        var halfH = dc.getHeight()/2;
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.fillRoundedRectangle(dc.getWidth()/2-90, dc.getHeight()/2-20, 180, 40, 20);
+        dc.fillRoundedRectangle(halfW-90, halfH-30, 180, 60, 30);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(dc.getWidth()/2, dc.getHeight()/2-2, fontSohneSmall, label, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(halfW, halfH-14, fontSohneSmall, settingTitle.get(id), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(halfW, halfH+16, fontSohneSmall, settingLabel.get(selected), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+        dc.drawLine(halfW-60, halfH+2, halfW+60, halfH+2);
     }
 
     public function getId() as Symbol {

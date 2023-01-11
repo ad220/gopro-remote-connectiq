@@ -13,6 +13,8 @@ class GoProSettings {
     private var lens;
     private var framerate;
     private var region; //TODO: change to enum NTSC:0 / PAL:1
+
+    private var settingsDict;
     
 
 
@@ -21,6 +23,21 @@ class GoProSettings {
         ratio = :_8R7;
         lens = :_Large;
         framerate = :_30;
+    }
+
+    public function getSetting(setting as Symbol) as Symbol{
+        switch (setting) {
+            case :resolution:
+                return resolution;
+            case :ratio:
+                return ratio;
+            case :lens:
+                return lens;
+            case :framerate:
+                return framerate;
+            default:
+                return setting;
+        }
     }
 
     public function getResolution() as Symbol {
