@@ -6,14 +6,6 @@ const settingsLabel = WatchUi.loadResource(Rez.Strings.Settings);
 
 const settingsList = [:resolution, :ratio, :lens, :framerate];
 
-
-// const settingTitle = {
-//     :resolution => WatchUi.loadResource(Rez.Strings.Resolution),
-//     :ratio => WatchUi.loadResource(Rez.Strings.Ratio),
-//     :lens => WatchUi.loadResource(Rez.Strings.Lens),
-//     :framerate => WatchUi.loadResource(Rez.Strings.Framerate),
-// };
-
 class SettingChooseMenu extends WatchUi.CustomMenu {
     public function initialize(gp as GoProSettings) {
         CustomMenu.initialize(80, Graphics.COLOR_BLACK, {:title=> new GoProMenuTitle(settingsLabel)});
