@@ -10,7 +10,6 @@ class GoProSettingsView extends WatchUi.View {
     
     // Load your resources here
     function onLayout(dc as Dc) as Void {
-        GoProResources.load();
         setLayout(Rez.Layouts.GoProSettings(dc));
         gp = new GoProSettings();
 
@@ -25,7 +24,7 @@ class GoProSettingsView extends WatchUi.View {
 
     // Update the view
     function onUpdate(dc as Dc) as Void {
-/*         var x = dc.getWidth();
+        var x = dc.getWidth();
         var cx = x/2;
         var y = dc.getHeight();
         var cy = y/2;
@@ -39,10 +38,10 @@ class GoProSettingsView extends WatchUi.View {
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         dc.drawText(cx, cy-10, GoProResources.fontSmall, "Setting", Graphics.TEXT_JUSTIFY_CENTER);
         dc.drawText(25, cy-16, GoProResources.fontSmall, "<", Graphics.TEXT_JUSTIFY_CENTER);
-        dc.drawText(x-25, cy-16, GoProResources.fontSmall, ">", Graphics.TEXT_JUSTIFY_CENTER); */
+        dc.drawText(x-25, cy-16, GoProResources.fontSmall, ">", Graphics.TEXT_JUSTIFY_CENTER);
 
 
-        WatchUi.pushView(new SettingChooseMenu(gp), new SettingChooseDelegate(gp), WatchUi.SLIDE_UP);
+        // WatchUi.pushView(new SettingChooseMenu(gp), new SettingChooseDelegate(gp), WatchUi.SLIDE_UP);
         // var scrollSetting = new Rez.Drawables.ScrollSetting();
         // scrollSetting.draw(dc);
 

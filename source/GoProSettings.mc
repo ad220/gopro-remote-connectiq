@@ -33,6 +33,11 @@ class GoProSettings {
         }
     }
 
+    public function getDescription() as String {
+        var frLabel = settingLabel.get(framerate);
+        return settingLabel.get(resolution) + "@" + frLabel.substring(0, frLabel.length()-4) + " " + settingLabel.get(ratio); //TODO: add lens
+    }
+
     public function getResolution() as Symbol {
         return resolution;
     }

@@ -1,5 +1,12 @@
 <drawables>
     <bitmap id="LauncherIcon" filename="launcher_icon.png"/>
+
+    <bitmap id="Setting" filename="setting.png">
+        <palette>
+            <color>AAAAAA</color>
+        </palette>
+    </bitmap>
+
     <bitmap id="Resolution" filename="resolution.png">
         <palette>
             <color>AAAAAA</color>
