@@ -2,6 +2,8 @@ import Toybox.Application;
 import Toybox.Lang;
 import Toybox.WatchUi;
 
+var cam;
+
 class GoProRemoteApp extends Application.AppBase {
     // var gp;
 
@@ -11,7 +13,7 @@ class GoProRemoteApp extends Application.AppBase {
 
     // onStart() is called on application start up
     function onStart(state as Dictionary?) as Void {
-        // gp = new GoProCamera();
+        cam = new GoProCamera();
         GoProResources.load();
     }
 
@@ -21,7 +23,9 @@ class GoProRemoteApp extends Application.AppBase {
 
     // Return the initial view of your application here
     function getInitialView() as Array<Views or InputDelegates>? {
-        return [ new GoProRemoteView(new GoProCamera()) ] as Array<Views or InputDelegates>;
+        // return [ new GoProRemoteView(new GoProCamera()) ] as Array<Views or InputDelegates>;
+        var view = new GoProRemoteView();
+        return [ view, new GoProRemoteDelegate(view) ] as Array<Views or InputDelegates>;
     }
 
 }

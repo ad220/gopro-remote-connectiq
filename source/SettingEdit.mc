@@ -3,12 +3,13 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 
 
-class SettingChangeMenu extends WatchUi.CustomMenu {
+class SettingEditMenu extends WatchUi.CustomMenu {
     public function initialize(setting as Symbol, gp as GoProSettings) {
         CustomMenu.initialize(70, Graphics.COLOR_BLACK, {:title=> new $.GoProMenuTitle(settingTitle.get(setting))});
         var items;
         var selected;
         switch (setting) {
+            //TODO: gp.possibleOptions();
             case :resolution:
                 items = gp.possibleResolutions();
                 selected = gp.getResolution();
@@ -30,12 +31,12 @@ class SettingChangeMenu extends WatchUi.CustomMenu {
                 selected = null;
         }
         for (var i=0; i<items.size(); i++) {
-            CustomMenu.addItem(new SettingChangeItem(items[i], selected));
+            CustomMenu.addItem(new SettingEditItem(items[i], selected));
         }
     }
 }
 
-class SettingChangeItem extends WatchUi.CustomMenuItem {
+class SettingEditItem extends WatchUi.CustomMenuItem {
     private var id;
     private var label;
     private var preselected;
@@ -69,7 +70,7 @@ class SettingChangeItem extends WatchUi.CustomMenuItem {
     }
 }
 
-class SettingChangeDelegate extends WatchUi.Menu2InputDelegate {
+class SettingEditDelegate extends WatchUi.Menu2InputDelegate {
     private var setting;
     private var gp;
 
@@ -79,7 +80,7 @@ class SettingChangeDelegate extends WatchUi.Menu2InputDelegate {
         Menu2InputDelegate.initialize();
     }
 
-    public function onSelect(item as SettingChangeItem) as Void {
+    public function onSelect(item as SettingEditItem) as Void {
         switch(setting) {
             case :resolution :
                 gp.setResolution(item.getId());

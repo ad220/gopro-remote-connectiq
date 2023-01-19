@@ -6,16 +6,16 @@ const settingsLabel = WatchUi.loadResource(Rez.Strings.Settings);
 
 const settingsList = [:resolution, :ratio, :lens, :framerate];
 
-class SettingChooseMenu extends WatchUi.CustomMenu {
+class SettingPickerMenu extends WatchUi.CustomMenu {
     public function initialize(gp as GoProSettings) {
         CustomMenu.initialize(80, Graphics.COLOR_BLACK, {:title=> new GoProMenuTitle(settingsLabel)});
         for (var i=0; i<settingsList.size(); i++) {
-            CustomMenu.addItem(new SettingChooseItem(settingsList[i], gp));
+            CustomMenu.addItem(new SettingPickerItem(settingsList[i], gp));
         }
     }
 }
 
-class SettingChooseItem extends WatchUi.CustomMenuItem {
+class SettingPickerItem extends WatchUi.CustomMenuItem {
     private var id;
     private var gp;
 
@@ -43,17 +43,17 @@ class SettingChooseItem extends WatchUi.CustomMenuItem {
     }
 }
 
-class SettingChooseDelegate extends WatchUi.Menu2InputDelegate {
-    private var gp;
+class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
+    protected var gp;
 
     public function initialize(_gp as GoProSettings) {
         gp = _gp;
         Menu2InputDelegate.initialize();
     }
 
-    public function onSelect(item as SettingChangeItem) as Void {
+    public function onSelect(item as SettingEditItem) as Void {
         var setting = item.getId();
-        WatchUi.pushView(new SettingChangeMenu(setting, gp), new SettingChangeDelegate(setting, gp), WatchUi.SLIDE_UP);
+        WatchUi.pushView(new SettingEditMenu(setting, gp), new SettingEditDelegate(setting, gp), WatchUi.SLIDE_UP);
         // WatchUi.requestUpdate();
     }
 

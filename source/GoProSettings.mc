@@ -1,17 +1,19 @@
 import Toybox.Lang;
 
+//TODO: switch --> if/else + add other gopros settings restrictions
 
 class GoProSettings {
     private var resolution;
     private var ratio;
     private var lens;
     private var framerate;
-    private var region; //TODO: change to enum NTSC:0 / PAL:1
+    private var region; //TODO: Edit to enum NTSC:0 / PAL:1
 
     private var settingsDict;
     
 
     function initialize() {
+        //TODO: wrap in dictionnary
         resolution = :_5K;
         ratio = :_8R7;
         lens = :_Large;
@@ -30,6 +32,20 @@ class GoProSettings {
                 return framerate;
             default:
                 return setting;
+        }
+    }
+
+    public function setSetting(setting as Symbol, value as Symbol) {
+        //TODO: fix incompabilities
+        switch (setting) {
+            case :resolution:
+                resolution = value;
+            case :ratio:
+                ratio = value;
+            case :lens:
+                lens = value;
+            case :framerate:
+                framerate = value;
         }
     }
 
