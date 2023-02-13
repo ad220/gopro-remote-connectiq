@@ -4,7 +4,7 @@ import Toybox.Lang;
 
 // inspired from Menu2Sample/MenuTestDelegate/DrawableMenuTitle
 
-class GoProMenuTitle extends WatchUi.Drawable {
+class CustomMenuTitle extends WatchUi.Drawable {
     private var title;
 
     //! Constructor

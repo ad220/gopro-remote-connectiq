@@ -1,66 +1,178 @@
 import Toybox.WatchUi;
+import Toybox.Lang;
 
+const N_EDITABLES = 5;
+enum Editables { //TODO: find a better name for enum
+    PSET1,
+    PSET2,
+    PSET3,
+    CAM,
+    EDITP7
+}
 
-// private static const modeList = ["Video", ]
-const resolutionList = [:_5K, :_4K, :_3K, :_2K];
-const ratioList = [:_8R7, :_4R3, :_16R9];
-const lensList = [:_HyperView, :_SuperView, :_Large, :_Linear, :_LinearLock];
-const framerateList = [:_240,:_120,:_60,:_30,:_24]; //TODO: convert NTSC fps -> PAL fps
+const N_SETTINGS = 4;
+enum Settings {
+    RESOLUTION,
+    RATIO,
+    LENS,
+    FRAMERATE
+}
 
-const settingTitle = {
-    :resolution => WatchUi.loadResource(Rez.Strings.Resolution),
-    :ratio => WatchUi.loadResource(Rez.Strings.Ratio),
-    :lens => WatchUi.loadResource(Rez.Strings.Lens),
-    :framerate => WatchUi.loadResource(Rez.Strings.Framerate),
-};
+enum UserInterface {
+    CONNECT,
+    HILIGHT,
+    STATES,
+    MODES,
+    EDITABLES,
+    SETTINGS
+}
 
-const settingLabel = {
-    // Resolutions
-    :_5K => WatchUi.loadResource(Rez.Strings._5K),
-    :_4K => WatchUi.loadResource(Rez.Strings._4K),
-    :_3K => WatchUi.loadResource(Rez.Strings._3K),
-    :_2K => WatchUi.loadResource(Rez.Strings._2K),
-    // Aspect Ratios
-    :_8R7 => WatchUi.loadResource(Rez.Strings._8R7),
-    :_4R3 => WatchUi.loadResource(Rez.Strings._4R3),
-    :_16R9 => WatchUi.loadResource(Rez.Strings._16R9),
-    // Framerates
-    :_240 => WatchUi.loadResource(Rez.Strings._240),
-    :_200 => WatchUi.loadResource(Rez.Strings._200),
-    :_120 => WatchUi.loadResource(Rez.Strings._120),
-    :_100 => WatchUi.loadResource(Rez.Strings._100),
-    :_60 => WatchUi.loadResource(Rez.Strings._60),
-    :_50 => WatchUi.loadResource(Rez.Strings._50),
-    :_30 => WatchUi.loadResource(Rez.Strings._30),
-    :_25 => WatchUi.loadResource(Rez.Strings._25),
-    :_24 => WatchUi.loadResource(Rez.Strings._24),
-    // Lenses 
-    :_HyperView => WatchUi.loadResource(Rez.Strings.HyperView),
-    :_SuperView => WatchUi.loadResource(Rez.Strings.SuperView),
-    :_Large => WatchUi.loadResource(Rez.Strings.Large),
-    :_Linear => WatchUi.loadResource(Rez.Strings.Linear),
-    :_LinearLock => WatchUi.loadResource(Rez.Strings.LinearLock)
-};
+enum Modes {
+    WHEEL
+}
 
-const icon = {
-    :resolution => WatchUi.loadResource(Rez.Drawables.Resolution),
-    :ratio => WatchUi.loadResource(Rez.Drawables.Ratio),
-    :lens => WatchUi.loadResource(Rez.Drawables.Lens),
-    :framerate => WatchUi.loadResource(Rez.Drawables.Framerate)
-};
+enum Resolutions {
+    _5K,
+    _4K,
+    _3K,
+    _2K
+}
+
+enum Ratios {
+    _8R7,
+    _4R3,
+    _16R9
+}
+
+enum Lenses {
+    _HYPERVIEW,
+    _SUPERVIEW,
+    _LARGE,
+    _LINEAR,
+    _LINEARLOCK
+}
+
+enum Framerate {
+    _240,
+    _120,
+    _60,
+    _30,
+    _24
+}
+
+enum Region {
+    NTSC,
+    PAL
+}
 
 
 class GoProResources {
-    static public var fontTiny;
-    static public var fontSmall;
-    static public var fontMedium;
-    static public var fontLarge;
+    static public var fontTiny as FontResource?;
+    static public var fontSmall as FontResource?;
+    static public var fontMedium as FontResource?;
+    static public var fontLarge as FontResource?;
 
-    static public function load() {
+    static public function loadFonts() as Void{
         fontTiny = WatchUi.loadResource(Rez.Fonts.Tiny);
         fontSmall = WatchUi.loadResource(Rez.Fonts.Small);
         fontMedium = WatchUi.loadResource(Rez.Fonts.Medium);
         fontLarge = WatchUi.loadResource(Rez.Fonts.Large);
+    }
+
+    static public var labels as Array<Array<String>?> = [null, null, null, null, null, null];
+
+    static public function loadLabels(id as Number) as Void{
+        if (labels[id]==null) {
+            labels[id] = [
+                WatchUi.loadResource(Rez.Strings.Connect),
+                null, null, null, [
+                    WatchUi.loadResource(Rez.Strings.Cinema),
+                    WatchUi.loadResource(Rez.Strings.Sport),
+                    WatchUi.loadResource(Rez.Strings.Eco),
+                    WatchUi.loadResource(Rez.Strings.Manually),
+                    WatchUi.loadResource(Rez.Strings.EditP7),
+                ], [
+                    WatchUi.loadResource(Rez.Strings.Resolution),
+                    WatchUi.loadResource(Rez.Strings.Ratio),
+                    WatchUi.loadResource(Rez.Strings.Lens),
+                    WatchUi.loadResource(Rez.Strings.Framerate)
+                ]
+            ][id];
+        }
+    }
+
+    static public function freeLabels (id as Number) as Void {
+        labels[id] = null;
+    }
+
+    
+    static public var settingLabels as Array<Array<String>?> = [null, null, null, null]; // N_SETTINGS times
+    static public function loadSettingLabels() as Void {
+        settingLabels = [
+            [
+                WatchUi.loadResource(Rez.Strings._5K),
+                WatchUi.loadResource(Rez.Strings._4K),
+                WatchUi.loadResource(Rez.Strings._3K),
+                WatchUi.loadResource(Rez.Strings._2K)
+            ], [
+                WatchUi.loadResource(Rez.Strings._8R7),
+                WatchUi.loadResource(Rez.Strings._4R3),
+                WatchUi.loadResource(Rez.Strings._16R9)
+            ], [
+                WatchUi.loadResource(Rez.Strings._HYPERVIEW),
+                WatchUi.loadResource(Rez.Strings._SUPERVIEW),
+                WatchUi.loadResource(Rez.Strings._LARGE),
+                WatchUi.loadResource(Rez.Strings._LINEAR),
+                WatchUi.loadResource(Rez.Strings._LINEARLOCK)
+            ], null
+        ];
+        if (cam.getRegion()==NTSC) {
+            settingLabels[FRAMERATE] = [
+                WatchUi.loadResource(Rez.Strings._240),
+                WatchUi.loadResource(Rez.Strings._120),
+                WatchUi.loadResource(Rez.Strings._60),
+                WatchUi.loadResource(Rez.Strings._30),
+                WatchUi.loadResource(Rez.Strings._24),
+            ];
+        } else {
+            settingLabels[FRAMERATE] = [
+                WatchUi.loadResource(Rez.Strings._200),
+                WatchUi.loadResource(Rez.Strings._100),
+                WatchUi.loadResource(Rez.Strings._50),
+                WatchUi.loadResource(Rez.Strings._25),
+                WatchUi.loadResource(Rez.Strings._24),
+            ];
+        }
+    }
+
+
+    static public var icons as Array<Array<BitmapResource>?> = [null, null, null, null, null, null]; //as Array<Array<BitmapResource>?> --> null not accepted for bitmap display
+
+    static public function loadIcons(id as Number) as Void{
+        if (icons[id]==null) {
+            icons[id] = [
+                null,
+                WatchUi.loadResource(Rez.Drawables.Hilight),
+                null, [
+                    WatchUi.loadResource(Rez.Drawables.Wheel)
+                ], [
+                    WatchUi.loadResource(Rez.Drawables.Cinema), //PSET1
+                    WatchUi.loadResource(Rez.Drawables.Sport), //PSET2
+                    WatchUi.loadResource(Rez.Drawables.Eco), //PSET3
+                    WatchUi.loadResource(Rez.Drawables.Camera), //CAM
+                    WatchUi.loadResource(Rez.Drawables.Edit), //EDITP7
+                ], [
+                    WatchUi.loadResource(Rez.Drawables.Resolution),
+                    WatchUi.loadResource(Rez.Drawables.Ratio),
+                    WatchUi.loadResource(Rez.Drawables.Lens),
+                    WatchUi.loadResource(Rez.Drawables.Framerate)
+                ]
+            ] [id];
+        }
+    }
+
+    static public function freeIcons(id as Number) as Void{
+        icons[id] = null;
     }
 }
 

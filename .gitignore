@@ -1,2 +1,7 @@
 bin/
 .vscode/
+
+*_old
+
+*.pdn/
+*unused png/

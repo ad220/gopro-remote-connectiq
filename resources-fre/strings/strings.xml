@@ -1,4 +1,15 @@
 <strings>
+
+    <!-- ConnectView -->
+    <string id="Connect">CONNEXION</string>
+
+    <!-- PresetPick -->
+    <string id="Cinema">Cinéma</string>
+    <string id="Sport">Sport</string>
+    <string id="Eco">Éco</string>
+    <string id="Manually">Paramétrage\n manuel</string>
+    <string id="EditP7">Editer les\npréréglages</string>
+
     <!-- Paramètres -->
     <string id="Settings">Paramètres</string>
     <string id="Resolution">Résolution</string>
@@ -18,9 +29,9 @@
     <string id="_24">24 ips</string>
 
     <!-- Objectifs -->
-    <string id="HyperView">Hyperview</string>
-    <string id="SuperView">SuperView</string>
-    <string id="Large">Large</string>
-    <string id="Linear">Linéaire</string>
-    <string id="LinearLock">Linéaire + VH</string>
+    <string id="_HYPERVIEW">Hyperview</string>
+    <string id="_SUPERVIEW">SuperView</string>
+    <string id="_LARGE">Large</string>
+    <string id="_LINEAR">Linéaire</string>
+    <string id="_LINEARLOCK">Linéaire + VH</string>
 </strings>

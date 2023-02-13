@@ -2,15 +2,17 @@ import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.WatchUi;
 
-const settingsLabel = WatchUi.loadResource(Rez.Strings.Settings);
-
-const settingsList = [:resolution, :ratio, :lens, :framerate];
 
 class SettingPickerMenu extends WatchUi.CustomMenu {
-    public function initialize(gp as GoProSettings) {
-        CustomMenu.initialize(80, Graphics.COLOR_BLACK, {:title=> new GoProMenuTitle(settingsLabel)});
-        for (var i=0; i<settingsList.size(); i++) {
-            CustomMenu.addItem(new SettingPickerItem(settingsList[i], gp));
+    public function initialize(gp as GoProSettings, id as Number) {
+        GoProResources.loadLabels(SETTINGS);
+        var title="GoPro";
+        if (id<3) {
+            title=GoProResources.labels[EDITABLES][id];
+        }
+        CustomMenu.initialize(80, Graphics.COLOR_BLACK, {:title=> new CustomMenuTitle(title)});
+        for (var i=0; i<N_SETTINGS; i++) {
+            CustomMenu.addItem(new SettingPickerItem(i, gp)); // i => enum Settings
         }
     }
 }
@@ -19,7 +21,7 @@ class SettingPickerItem extends WatchUi.CustomMenuItem {
     private var id;
     private var gp;
 
-    public function initialize(_id, _gp) {
+    public function initialize(_id as Number, _gp as GoProSettings) {
         id=_id;
         gp = _gp;
         CustomMenuItem.initialize(_id, {});
@@ -31,14 +33,14 @@ class SettingPickerItem extends WatchUi.CustomMenuItem {
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.fillRoundedRectangle(halfW-100, halfH-30, 200, 60, 30);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(halfW+22, halfH-14, GoProResources.fontSmall, settingTitle.get(id), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-        dc.drawText(halfW+22, halfH+16, GoProResources.fontTiny, settingLabel.get(gp.getSetting(id)), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(halfW+22, halfH-14, GoProResources.fontSmall, GoProResources.labels[SETTINGS][id], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(halfW+22, halfH+16, GoProResources.fontTiny, GoProResources.settingLabels[id][gp.getSetting(id)], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.drawLine(halfW-36, halfH+2, halfW+80, halfH+2);
-        dc.drawBitmap(36, halfH-14, icon.get(id));
+        dc.drawBitmap(36, halfH-14, GoProResources.icons[SETTINGS][id]);
     }
 
-    public function getId() as Symbol {
+    public function getId() as Number {
         return id;
     }
 }
@@ -48,6 +50,7 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
 
     public function initialize(_gp as GoProSettings) {
         gp = _gp;
+        GoProResources.loadIcons(SETTINGS);
         Menu2InputDelegate.initialize();
     }
 
@@ -58,6 +61,8 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     public function onBack() as Void {
+        GoProResources.loadIcons(EDITABLES);
+        // maybe should pop 2 views if camera edit
         WatchUi.popView(WatchUi.SLIDE_DOWN);
     }
 

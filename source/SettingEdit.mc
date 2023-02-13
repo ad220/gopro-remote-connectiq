@@ -4,34 +4,14 @@ import Toybox.WatchUi;
 
 
 class SettingEditMenu extends WatchUi.CustomMenu {
-    public function initialize(setting as Symbol, gp as GoProSettings) {
-        CustomMenu.initialize(70, Graphics.COLOR_BLACK, {:title=> new $.GoProMenuTitle(settingTitle.get(setting))});
+    public function initialize(setting as Number, gp as GoProSettings) {
+        CustomMenu.initialize(70, Graphics.COLOR_BLACK, {:title=> new $.CustomMenuTitle(GoProResources.labels[SETTINGS][setting])});
         var items;
         var selected;
-        switch (setting) {
-            //TODO: gp.possibleOptions();
-            case :resolution:
-                items = gp.possibleResolutions();
-                selected = gp.getResolution();
-                break;
-            case :framerate:
-                items = gp.possibleFramerates();
-                selected = gp.getFramerate();
-                break;
-            case :ratio:
-                items = gp.possibleRatios();
-                selected = gp.getRatio();
-                break;
-            case :lens:
-                items = gp.possibleLenses();
-                selected = gp.getLens();
-                break;
-            default:
-                items = [];
-                selected = null;
-        }
+        items = gp.possibleSettings(setting);
+        selected = gp.getSetting(setting);
         for (var i=0; i<items.size(); i++) {
-            CustomMenu.addItem(new SettingEditItem(items[i], selected));
+            CustomMenu.addItem(new SettingEditItem(setting, items[i], selected));
         }
     }
 }
@@ -42,9 +22,9 @@ class SettingEditItem extends WatchUi.CustomMenuItem {
     private var preselected;
     private static var modified;
 
-    public function initialize(_id, selected as Symbol) {
+    public function initialize(setting, _id, selected as Number) {
         id = _id;
-        label = settingLabel.get(_id);
+        label = GoProResources.settingLabels[setting][_id];
         preselected = _id==selected;
         modified = false;
         CustomMenuItem.initialize(id, {});
@@ -65,7 +45,7 @@ class SettingEditItem extends WatchUi.CustomMenuItem {
         modified = true;
     }
 
-    public function getId() as Symbol {
+    public function getId() as Number {
         return id;
     }
 }
@@ -74,33 +54,20 @@ class SettingEditDelegate extends WatchUi.Menu2InputDelegate {
     private var setting;
     private var gp;
 
-    public function initialize(_setting as Symbol, _gp as GoProSettings) {
+    public function initialize(_setting as Number, _gp as GoProSettings) {
         setting = _setting;
         gp = _gp;
         Menu2InputDelegate.initialize();
     }
 
     public function onSelect(item as SettingEditItem) as Void {
-        switch(setting) {
-            case :resolution :
-                gp.setResolution(item.getId());
-                break;
-            case :ratio :
-                gp.setRatio(item.getId());
-                break;
-            case :lens :
-                gp.setLens(item.getId());
-                break;
-            case :framerate :
-                gp.setFramerate(item.getId());
-                break;
-            default:
-        }
+        gp.setSetting(setting, item.getId());
         item.setModified();
         WatchUi.requestUpdate();
     }
 
     public function onBack() as Void {
+        GoProResources.loadIcons(SETTINGS);
         WatchUi.popView(WatchUi.SLIDE_DOWN);
     }
 

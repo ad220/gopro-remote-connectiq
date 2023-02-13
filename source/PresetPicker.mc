@@ -7,27 +7,26 @@ import Toybox.Lang;
 //edit icon and label in connect iq app settings
 
 class PresetPickerMenu extends WatchUi.CustomMenu {
-    static const presetList = [:preset1, :preset2, :preset3, :camera, :edit];
 
-    public function initialize() {
-        CustomMenu.initialize(80, Graphics.COLOR_BLACK, {:title=> new GoProMenuTitle("Presets")}); //TODO: add in strings.xml
-        for (var i=0; i<presetList.size(); i++) {
-            CustomMenu.addItem(new PresetPickerItem(presetList[i]));
+    public function initialize(editPreset as Number) {
+        GoProResources.freeIcons(HILIGHT);
+        GoProResources.freeIcons(MODES);
+        CustomMenu.initialize(80, Graphics.COLOR_BLACK, {:title=> new CustomMenuTitle("Presets")}); //TODO: add in strings.xml
+        GoProResources.loadIcons(EDITABLES);
+        GoProResources.loadLabels(EDITABLES);
+        for (var i=0; i<N_EDITABLES-2*editPreset; i++) {
+            CustomMenu.addItem(new PresetPickerItem(i)); // i => enum Editables
         }
     }
 }
 
 class PresetPickerItem extends WatchUi.CustomMenuItem {
-    private var id;
-    private var gp;
+    private var id as Number;
+    private var gp as GoProPreset?;
 
     public function initialize(_id) {
         id=_id;
-        if (_id == :camera) {
-            gp = cam;
-        } else if (_id == :edit) {
-            gp = null;
-        } else {
+        if (_id < 3) {
             gp = new GoProPreset(_id);
         }
         CustomMenuItem.initialize(_id, {});
@@ -39,23 +38,21 @@ class PresetPickerItem extends WatchUi.CustomMenuItem {
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.fillRoundedRectangle(halfW-100, halfH-30, 200, 60, 30);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-
-        var text;
-        if (id == :camera) {
-            text = "Manually change GoPro settings"; //TODO: write on two lines, don't use line for :camera and :edit
-        } else if (id == :edit) {
-            text = "Edit presets";
+        
+        dc.drawBitmap(36, halfH-14, GoProResources.icons[EDITABLES][id]);
+        if (id<3) {
+            dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+            dc.drawLine(halfW-36, halfH+2, halfW+80, halfH+2);
+            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+            dc.drawText(halfW+22, halfH+16, GoProResources.fontTiny, gp.getDescription(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+            dc.drawText(halfW+22, halfH-14, GoProResources.fontSmall, GoProResources.labels[EDITABLES][id], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         } else {
-            text = gp.getName();
+            dc.drawText(halfW+22, halfH, GoProResources.fontSmall, GoProResources.labels[EDITABLES][id], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         }
-        dc.drawText(halfW+22, halfH-14, GoProResources.fontSmall, text, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-        dc.drawText(halfW+22, halfH+16, GoProResources.fontTiny, "some descr.", Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-        dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawLine(halfW-36, halfH+2, halfW+80, halfH+2);
-        dc.drawBitmap(36, halfH-14, icon.get(:resolution));
+
     }
 
-    public function getId() as Symbol {
+    public function getId() as Number {
         return id;
     }
 
@@ -72,12 +69,13 @@ class PresetPickerDelegate extends WatchUi.Menu2InputDelegate {
 
     public function onSelect(item as PresetPickerItem) as Void {
         var id = item.getId();
-        if (id == :camera) {
-            WatchUi.pushView(new SettingPickerMenu(cam), new SettingPickerDelegate(cam), WatchUi.SLIDE_UP);
-        } else if (id == :edit) {
-            WatchUi.pushView(new PresetPickerMenu(), new PresetPickerDelegate(), WatchUi.SLIDE_UP);
+        WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
+        if (id == CAM) {
+            WatchUi.pushView(new SettingPickerMenu(cam, id), new SettingPickerDelegate(cam), WatchUi.SLIDE_UP);
+        } else if (id == EDITP7) {
+            WatchUi.pushView(new PresetPickerMenu(1), new PresetPickerDelegate(), WatchUi.SLIDE_UP);
         } else {
-            WatchUi.pushView(new PresetEditMenu(item.getPreset()), new PresetEditDelegate(item.getPreset()), WatchUi.SLIDE_UP);
+            WatchUi.pushView(new PresetEditMenu(item.getPreset(), id), new PresetEditDelegate(item.getPreset()), WatchUi.SLIDE_UP);
         }
     }
 

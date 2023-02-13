@@ -14,7 +14,7 @@ class GoProRemoteApp extends Application.AppBase {
     // onStart() is called on application start up
     function onStart(state as Dictionary?) as Void {
         cam = new GoProCamera();
-        GoProResources.load();
+        GoProResources.loadFonts();
     }
 
     // onStop() is called when your application is exiting
@@ -24,8 +24,8 @@ class GoProRemoteApp extends Application.AppBase {
     // Return the initial view of your application here
     function getInitialView() as Array<Views or InputDelegates>? {
         // return [ new GoProRemoteView(new GoProCamera()) ] as Array<Views or InputDelegates>;
-        var view = new GoProRemoteView();
-        return [ view, new GoProRemoteDelegate(view) ] as Array<Views or InputDelegates>;
+        var view = new GoProConnectView();
+        return [ view, new GoProConnectDelegate(view) ] as Array<Views or InputDelegates>;
     }
 
 }

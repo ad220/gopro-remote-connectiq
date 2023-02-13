@@ -1,6 +1,16 @@
 <strings>
     <string id="AppName">GoProRemote</string>
 
+    <!-- ConnectView -->
+    <string id="Connect">CONNECT</string>
+
+    <!-- PresetPick -->
+    <string id="Cinema">Cinema</string>
+    <string id="Sport">Sport</string>
+    <string id="Eco">Eco</string>
+    <string id="Manually">Manually edit\ncam settings</string>
+    <string id="EditP7">Edit presets</string>
+
     <!-- Settings -->
     <string id="Settings">Settings</string>
     <string id="Framerate">Framerate</string>
@@ -20,11 +30,11 @@
     <string id="_24">24 fps</string>
 
     <!-- Lenses -->
-    <string id="HyperView">Hyperview</string>
-    <string id="SuperView">SuperView</string>
-    <string id="Large">Large</string>
-    <string id="Linear">Linear</string>
-    <string id="LinearLock">Linear + HL</string>
+    <string id="_HYPERVIEW">HyperView</string>
+    <string id="_SUPERVIEW">SuperView</string>
+    <string id="_LARGE">Large</string>
+    <string id="_LINEAR">Linear</string>
+    <string id="_LINEARLOCK">Linear + HL</string>
 
     <!-- Resolutions -->
     <string id="_5K">5.3K</string>

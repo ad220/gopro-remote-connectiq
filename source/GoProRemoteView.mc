@@ -16,12 +16,12 @@ class GoProSettingButton extends WatchUi.Button {
     }
 
     class ButtonDrawable extends WatchUi.Drawable {
-        var icon;
-        var w;
-        var h;
+        // var w;
+        // var h;
 
         function initialize(x, y, w, h) {
-            icon = WatchUi.loadResource(Rez.Drawables.Setting);
+            //TODO: load camera mode icon v2
+            GoProResources.loadIcons(MODES);
             Drawable.initialize({});
             Drawable.setLocation(x, y);
             Drawable.setSize(w, h);
@@ -32,7 +32,7 @@ class GoProSettingButton extends WatchUi.Button {
             dc.fillRoundedRectangle(40, 180, 160, 40, 20);
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
             dc.drawText(132, 200, GoProResources.fontTiny, cam.getDescription(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-            dc.drawBitmap(49, 188, icon);
+            dc.drawBitmap(49, 188, GoProResources.icons[MODES][WHEEL]);
 
             
 
@@ -64,14 +64,14 @@ class GoProRemoteDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onSettings() {
-        WatchUi.pushView(new PresetPickerMenu(), new PresetPickerDelegate(), WatchUi.SLIDE_UP);
+        WatchUi.pushView(new PresetPickerMenu(0), new PresetPickerDelegate(), WatchUi.SLIDE_UP);
         return true;
     }
 
-    public function onSelect() {
+/*     public function onSelect() {
         cam.pressShutter();
         return false;
-    }
+    } */
 }
 
 
@@ -85,12 +85,17 @@ class GoProRemoteView extends WatchUi.View {
     // Load your resources here
     function onLayout(dc as Dc) as Void {
         setLayout(Rez.Layouts.MainLayout(dc));
+        GoProResources.loadSettingLabels();
     }
 
     // Called when this View is brought to the foreground. Restore
     // the state of this View and prepare it to be shown. This includes
     // loading resources into memory.
     function onShow() as Void {
+        GoProResources.loadIcons(HILIGHT);
+        GoProResources.loadIcons(MODES);
+        GoProResources.freeIcons(EDITABLES);
+        GoProResources.freeIcons(STATES);
         settingsButton = new GoProSettingButton(40, 180, 160, 40);
         //TODO: Edit with mode icon
         //TODO: edit preset view with icon for each preset, gear cheel for settings and pen for preset edit
@@ -98,16 +103,26 @@ class GoProRemoteView extends WatchUi.View {
 
     // Update the view
     function onUpdate(dc as Dc) as Void {
+        var enabled;
+        if (cam.isRecording()) {
+            enabled=Graphics.COLOR_DK_GRAY;
+        } else {
+            enabled=Graphics.COLOR_LT_GRAY;
+        }
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLACK);
         dc.clear();
-        dc.fillRoundedRectangle(80, 70, 80, 80, 8);
-        dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_BLACK);
-        dc.setPenWidth(2);
-        dc.drawRoundedRectangle(80, 70, 80, 80, 8);
-        dc.setPenWidth(4);
+        dc.fillCircle(38, 110, 22);
+        dc.drawBitmap(27, 99, GoProResources.icons[HILIGHT] as WatchUi.BitmapResource);
+        dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
+        dc.fillRoundedRectangle(90, 65, 90, 90, 18);
+        dc.setColor(0xFF0000, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(8);
+        dc.drawCircle(135, 110, 28);
+        dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(6);
         dc.drawArc(120, 120, 108, Graphics.ARC_CLOCKWISE, 100, 80);
-        dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
-        dc.drawCircle(120, 110, 25);
+        dc.fillCircle(102, 13, 3);
+        dc.fillCircle(138, 13, 3);
         dc.setPenWidth(1);
         settingsButton.draw(dc);
 

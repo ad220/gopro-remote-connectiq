@@ -1,11 +1,63 @@
 <drawables>
-    <bitmap id="LauncherIcon" filename="launcher_icon.png"/>
+    <bitmap id="LauncherIcon" filename="launcher_icon.png">
+        <palette>
+            <color>000000</color>
+        </palette>
+    </bitmap>
+    
+    <!-- GOPRO -->
+<!--     <bitmap id="GoPro" filename="gopro.png">
+        <palette>
+            <color>000000</color>
+            <color>444444</color>
+            <color>AAAAAA</color>
+            <color>00AAFF</color>
+            <color>FF5500</color>
+        </palette>
+    </bitmap> -->
 
-    <bitmap id="Setting" filename="setting.png">
+    <!-- HILIGHT -->
+    <bitmap id="Hilight" filename="hilight.png">
+        <palette>
+            <color>00AAFF</color>
+        </palette>
+    </bitmap>
+
+    <!-- MODES -->
+    <bitmap id="Wheel" filename="wheel.png">
         <palette>
             <color>AAAAAA</color>
         </palette>
     </bitmap>
+    <bitmap id="Camera" filename="camera.png">
+        <palette>
+            <color>AAAAAA</color>
+        </palette>
+    </bitmap>
+    
+    <!-- EDITABLES -->
+    <bitmap id="Edit" filename="edit.png">
+        <palette>
+            <color>AAAAAA</color>
+        </palette>
+    </bitmap>
+    <bitmap id="Eco" filename="eco3.png">
+        <palette>
+            <color>55FF55</color>
+        </palette>
+    </bitmap>
+    <bitmap id="Sport" filename="sport.png">
+        <palette>
+            <color>FFFF55</color>
+        </palette>
+    </bitmap>
+    <bitmap id="Cinema" filename="cinema2.png">
+        <palette>
+            <color>FF5500</color>
+        </palette>
+    </bitmap>
+
+
 
     <bitmap id="Resolution" filename="resolution.png">
         <palette>
