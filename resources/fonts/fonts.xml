@@ -3,5 +3,5 @@
     <font id="Tiny" filename="tiny.fnt" antialias="true" filter="azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN0123456789 .:!/@éàè'+-"/>
     <font id="Small" filename="small.fnt" antialias="true" filter="azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN0123456789 .:!/@éÉàè'+-"/>
     <font id="Medium" filename="medium.fnt" antialias="true" filter="ifpsKLargenockHyVwS0123456789 .:éè'+"/>
-    <font id="Large" filename="large.fnt" antialias="true" filter="azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN éàè"/>
+    <font id="Large" filename="large.fnt" antialias="true" filter="azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN éàè.'"/>
 </fonts>

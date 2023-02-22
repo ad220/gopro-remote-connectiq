@@ -1,51 +1,6 @@
 import Toybox.Graphics;
 import Toybox.WatchUi;
 
-class GoProSettingButton extends WatchUi.Button {
-    public function initialize(x, y, width, height) {
-        var buttonDrawable = new ButtonDrawable(x, y, width, height); 
-        Button.initialize({
-            :behavior => :onSettings,
-            :locX => x,
-            :locY => y,
-            :width => width,
-            :height => height,
-            :id => :stateDefault,
-            :stateDefault => buttonDrawable
-        });
-    }
-
-    class ButtonDrawable extends WatchUi.Drawable {
-        // var w;
-        // var h;
-
-        function initialize(x, y, w, h) {
-            //TODO: load camera mode icon v2
-            GoProResources.loadIcons(MODES);
-            Drawable.initialize({});
-            Drawable.setLocation(x, y);
-            Drawable.setSize(w, h);
-        }
-
-        function draw(dc as Dc) {
-            dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-            dc.fillRoundedRectangle(40, 165, 160, 40, 20);
-            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(132, 185, GoProResources.fontTiny, cam.getDescription(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-            dc.drawBitmap(49, 173, GoProResources.icons[MODES][WHEEL]);
-
-            
-
-            // var w = dc.getWidth();
-            // var h = dc.getHeight();
-            // dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-            // dc.fillRoundedRectangle(0, 0, w, h, h/2);
-            // dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-            // dc.drawText(117, h/2, GoProResources.fontTiny, cam.getDescription(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-            // dc.drawBitmap(9, 8, icon);
-        }
-    }
-}
 
 class GoProRemoteDelegate extends WatchUi.BehaviorDelegate {
     var view;
@@ -96,7 +51,6 @@ class GoProRemoteView extends WatchUi.View {
         GoProResources.loadIcons(MODES);
         GoProResources.freeIcons(EDITABLES);
         GoProResources.freeIcons(STATES);
-        settingsButton = new GoProSettingButton(40, 165, 160, 40);
         //TODO: Edit with mode icon
         //TODO: edit preset view with icon for each preset, gear cheel for settings and pen for preset edit
     }
@@ -111,20 +65,23 @@ class GoProRemoteView extends WatchUi.View {
         }
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLACK);
         dc.clear();
-        dc.fillCircle(38, 100, 22);
-        dc.drawBitmap(27, 89, GoProResources.icons[HILIGHT] as WatchUi.BitmapResource);
+        dc.fillCircle(48, 95, 22);
+        dc.drawBitmap(37, 84, GoProResources.icons[HILIGHT] as WatchUi.BitmapResource);
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.fillRoundedRectangle(90, 55, 90, 90, 18);
+        dc.fillRoundedRectangle(90, 50, 90, 90, 18);
+        dc.fillRoundedRectangle(40, 165, 160, 40, 20);
+        dc.drawBitmap(49, 173, GoProResources.icons[MODES][WHEEL]);
         dc.setColor(0xFF0000, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(8);
-        dc.drawCircle(135, 100, 28);
+        dc.drawCircle(135, 95, 28);
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(6);
         dc.drawArc(120, 120, 108, Graphics.ARC_CLOCKWISE, 100, 80);
         dc.fillCircle(102, 13, 3);
         dc.fillCircle(138, 13, 3);
         dc.setPenWidth(1);
-        settingsButton.draw(dc);
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(132, 185, GoProResources.fontTiny, cam.getDescription(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
 
         // Preset Button
@@ -135,8 +92,6 @@ class GoProRemoteView extends WatchUi.View {
 
 
         }
-        // Call the parent onUpdate function to redraw the layout
-        // View.onUpdate(dc);
     }
 
     // Called when this View is removed from the screen. Save the
