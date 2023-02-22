@@ -29,10 +29,10 @@ class GoProSettingButton extends WatchUi.Button {
 
         function draw(dc as Dc) {
             dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-            dc.fillRoundedRectangle(40, 180, 160, 40, 20);
+            dc.fillRoundedRectangle(40, 165, 160, 40, 20);
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(132, 200, GoProResources.fontTiny, cam.getDescription(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-            dc.drawBitmap(49, 188, GoProResources.icons[MODES][WHEEL]);
+            dc.drawText(132, 185, GoProResources.fontTiny, cam.getDescription(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+            dc.drawBitmap(49, 173, GoProResources.icons[MODES][WHEEL]);
 
             
 
@@ -96,7 +96,7 @@ class GoProRemoteView extends WatchUi.View {
         GoProResources.loadIcons(MODES);
         GoProResources.freeIcons(EDITABLES);
         GoProResources.freeIcons(STATES);
-        settingsButton = new GoProSettingButton(40, 180, 160, 40);
+        settingsButton = new GoProSettingButton(40, 165, 160, 40);
         //TODO: Edit with mode icon
         //TODO: edit preset view with icon for each preset, gear cheel for settings and pen for preset edit
     }
@@ -111,13 +111,13 @@ class GoProRemoteView extends WatchUi.View {
         }
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLACK);
         dc.clear();
-        dc.fillCircle(38, 110, 22);
-        dc.drawBitmap(27, 99, GoProResources.icons[HILIGHT] as WatchUi.BitmapResource);
+        dc.fillCircle(38, 100, 22);
+        dc.drawBitmap(27, 89, GoProResources.icons[HILIGHT] as WatchUi.BitmapResource);
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.fillRoundedRectangle(90, 65, 90, 90, 18);
+        dc.fillRoundedRectangle(90, 55, 90, 90, 18);
         dc.setColor(0xFF0000, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(8);
-        dc.drawCircle(135, 110, 28);
+        dc.drawCircle(135, 100, 28);
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(6);
         dc.drawArc(120, 120, 108, Graphics.ARC_CLOCKWISE, 100, 80);
