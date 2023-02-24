@@ -1,7 +1,11 @@
 <drawables>
-    <bitmap id="LauncherIcon" filename="launcher_icon.png">
+    <bitmap id="LauncherIcon" filename="thumbnail.png">
         <palette>
             <color>000000</color>
+            <color>444444</color>
+            <color>AAAAAA</color>
+            <color>00AAFF</color>
+            <color>FF5500</color>
         </palette>
     </bitmap>
     
@@ -41,7 +45,7 @@
             <color>AAAAAA</color>
         </palette>
     </bitmap>
-    <bitmap id="Eco" filename="eco3.png">
+    <bitmap id="Eco" filename="eco4.png">
         <palette>
             <color>55FF55</color>
         </palette>

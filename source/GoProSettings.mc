@@ -40,7 +40,7 @@ class GoProSettings {
             return resolutionList;
 
             case RATIO:
-            switch(settings[RATIO]) {
+            switch(settings[RESOLUTION]) {
                 case _5K:
                 case _4K:
                     return ratioList;
@@ -67,7 +67,7 @@ class GoProSettings {
             case FRAMERATE:
             switch(settings[RESOLUTION]) {
                 case _5K:
-                    if (settings[RATIO]==:_L) {
+                    if (settings[RATIO]==_8R7) {
                         return framerateList.slice(3,4);
                     } else if (settings[LENS]==_HYPERVIEW or settings[RATIO]==_4R3) {
                         return framerateList.slice(3,5);

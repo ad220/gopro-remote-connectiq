@@ -5,7 +5,7 @@
 
     <!-- PresetPick -->
     <string id="Cinema">Cinéma</string>
-    <string id="Sport">Sport</string>
+    <!-- <string id="Sport">Sport</string> -->
     <string id="Eco">Éco</string>
     <string id="Manually">Paramétrage\n manuel</string>
     <string id="EditP7">Editer les\npréréglages</string>
@@ -29,9 +29,9 @@
     <string id="_24">24 ips</string>
 
     <!-- Objectifs -->
-    <string id="_HYPERVIEW">Hyperview</string>
+    <!-- <string id="_HYPERVIEW">HyperView</string>
     <string id="_SUPERVIEW">SuperView</string>
-    <string id="_LARGE">Large</string>
+    <string id="_LARGE">Large</string> -->
     <string id="_LINEAR">Linéaire</string>
     <string id="_LINEARLOCK">Linéaire + VH</string>
 </strings>
