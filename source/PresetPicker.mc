@@ -69,13 +69,15 @@ class PresetPickerDelegate extends WatchUi.Menu2InputDelegate {
 
     public function onSelect(item as PresetPickerItem) as Void {
         var id = item.getId();
-        WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
         if (id == CAM) {
-            WatchUi.pushView(new SettingPickerMenu(cam, id), new SettingPickerDelegate(cam), WatchUi.SLIDE_UP);
+            WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
+            WatchUi.pushView(new SettingPickerMenu(cam, id), new SettingPickerDelegate(cam), WatchUi.SLIDE_LEFT);
         } else if (id == EDITP7) {
-            WatchUi.pushView(new PresetPickerMenu(1), new PresetPickerDelegate(), WatchUi.SLIDE_UP);
+            WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
+            WatchUi.pushView(new PresetPickerMenu(1), new PresetPickerDelegate(), WatchUi.SLIDE_LEFT);
         } else {
-            WatchUi.pushView(new PresetEditMenu(item.getPreset(), id), new PresetEditDelegate(item.getPreset()), WatchUi.SLIDE_UP);
+            WatchUi.popView(WatchUi.SLIDE_DOWN);
+            cam.setPreset(item.getPreset());
         }
     }
 

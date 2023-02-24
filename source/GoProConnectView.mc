@@ -48,7 +48,7 @@ class GoProConnectDelegate extends WatchUi.BehaviorDelegate {
 
     public function onTap(tap as ClickEvent) {
         var _view = new GoProRemoteView();
-        WatchUi.pushView(_view, new GoProRemoteDelegate(_view), WatchUi.SLIDE_UP);
+        WatchUi.pushView(_view, new GoProRemoteDelegate(_view), WatchUi.SLIDE_LEFT);
         return true;
     }
 

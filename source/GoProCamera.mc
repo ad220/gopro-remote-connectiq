@@ -8,6 +8,12 @@ class GoProCamera extends GoProSettings {
         region=NTSC;
     }
 
+    public function setPreset(preset as GoProPreset) {
+        for (var id=0; id<N_SETTINGS; id++) {
+            settings[id]=preset.getSetting(id);
+        }
+    }
+
     public function pressShutter() {
         recording = !recording;
     }
