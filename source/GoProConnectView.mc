@@ -9,7 +9,7 @@ class GoProConnectView extends WatchUi.View {
     }
 
     function onLayout(dc as Dc) as Void {
-        GoProResources.loadLabels(CONNECT);
+        GoProResources.loadLabels(UI_CONNECT);
     }
 
     function onShow() as Void {
@@ -20,7 +20,7 @@ class GoProConnectView extends WatchUi.View {
         dc.clear();
         dc.fillRoundedRectangle(45, 170, 150, 40, 20);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(120, 190, GoProResources.fontSmall, GoProResources.labels[CONNECT] as String, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(120, 190, GoProResources.fontSmall, GoProResources.labels[UI_CONNECT] as String, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         drawRectWithBorder(dc, 88, 57, 26, 10, 4, 2, Graphics.COLOR_DK_GRAY);
         drawRectWithBorder(dc, 69, 62, 102, 92, 16, 4, Graphics.COLOR_DK_GRAY);
         drawRectWithBorder(dc, 113, 62, 58, 58, 16, 4, Graphics.COLOR_DK_GRAY);

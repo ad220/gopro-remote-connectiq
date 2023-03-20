@@ -9,11 +9,11 @@ import Toybox.Lang;
 class PresetPickerMenu extends WatchUi.CustomMenu {
 
     public function initialize(editPreset as Number) {
-        GoProResources.freeIcons(HILIGHT);
-        GoProResources.freeIcons(MODES);
+        GoProResources.freeIcons(UI_HILIGHT);
+        GoProResources.freeIcons(UI_MODES);
         CustomMenu.initialize(80, Graphics.COLOR_BLACK, {:title=> new CustomMenuTitle("Presets")}); //TODO: add in strings.xml
-        GoProResources.loadIcons(EDITABLES);
-        GoProResources.loadLabels(EDITABLES);
+        GoProResources.loadIcons(UI_EDITABLES);
+        GoProResources.loadLabels(UI_EDITABLES);
         for (var i=0; i<N_EDITABLES-2*editPreset; i++) {
             CustomMenu.addItem(new PresetPickerItem(i)); // i => enum Editables
         }
@@ -39,15 +39,15 @@ class PresetPickerItem extends WatchUi.CustomMenuItem {
         dc.fillRoundedRectangle(halfW-100, halfH-30, 200, 60, 30);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         
-        dc.drawBitmap(36, halfH-14, GoProResources.icons[EDITABLES][id]);
+        dc.drawBitmap(36, halfH-14, GoProResources.icons[UI_EDITABLES][id]);
         if (id<3) {
             dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
             dc.drawLine(halfW-36, halfH+2, halfW+80, halfH+2);
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
             dc.drawText(halfW+22, halfH+16, GoProResources.fontTiny, gp.getDescription(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-            dc.drawText(halfW+22, halfH-14, GoProResources.fontSmall, GoProResources.labels[EDITABLES][id], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+            dc.drawText(halfW+22, halfH-14, GoProResources.fontSmall, GoProResources.labels[UI_EDITABLES][id], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         } else {
-            dc.drawText(halfW+22, halfH, GoProResources.fontSmall, GoProResources.labels[EDITABLES][id], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+            dc.drawText(halfW+22, halfH, GoProResources.fontSmall, GoProResources.labels[UI_EDITABLES][id], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         }
 
     }

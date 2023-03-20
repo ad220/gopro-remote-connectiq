@@ -14,7 +14,7 @@ class GoProPreset extends GoProSettings {
         id = "preset#"+_id;
         //TODO: get name and icon from settings v2
         name = names[_id];
-        icon = GoProResources.icons[EDITABLES][_id];
+        icon = GoProResources.icons[UI_EDITABLES][_id];
         GoProSettings.initialize();
 
         try {

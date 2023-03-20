@@ -34,7 +34,7 @@ class GoProSettings {
         }
     }
 
-    public function possibleSettings(id) as Array<Number>{
+    public function possibleSettings(id) as Array<Number>{ // for GoPro HERO 11 Black Mini
         switch (id) {
             case RESOLUTION:
             return resolutionList;

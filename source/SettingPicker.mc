@@ -5,10 +5,10 @@ import Toybox.WatchUi;
 
 class SettingPickerMenu extends WatchUi.CustomMenu {
     public function initialize(gp as GoProSettings, id as Number) {
-        GoProResources.loadLabels(SETTINGS);
+        GoProResources.loadLabels(UI_SETTINGS);
         var title="GoPro";
         if (id<3) {
-            title=GoProResources.labels[EDITABLES][id];
+            title=GoProResources.labels[UI_EDITABLES][id];
         }
         CustomMenu.initialize(80, Graphics.COLOR_BLACK, {:title=> new CustomMenuTitle(title)});
         for (var i=0; i<N_SETTINGS; i++) {
@@ -33,11 +33,11 @@ class SettingPickerItem extends WatchUi.CustomMenuItem {
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.fillRoundedRectangle(halfW-100, halfH-30, 200, 60, 30);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(halfW+22, halfH-14, GoProResources.fontSmall, GoProResources.labels[SETTINGS][id], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(halfW+22, halfH-14, GoProResources.fontSmall, GoProResources.labels[UI_SETTINGS][id], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         dc.drawText(halfW+22, halfH+16, GoProResources.fontTiny, GoProResources.settingLabels[id][gp.getSetting(id)], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.drawLine(halfW-36, halfH+2, halfW+80, halfH+2);
-        dc.drawBitmap(36, halfH-14, GoProResources.icons[SETTINGS][id]);
+        dc.drawBitmap(36, halfH-14, GoProResources.icons[UI_SETTINGS][id]);
     }
 
     public function getId() as Number {
@@ -50,7 +50,7 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
 
     public function initialize(_gp as GoProSettings) {
         gp = _gp;
-        GoProResources.loadIcons(SETTINGS);
+        GoProResources.loadIcons(UI_SETTINGS);
         Menu2InputDelegate.initialize();
     }
 
@@ -61,7 +61,7 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     public function onBack() as Void {
-        GoProResources.loadIcons(EDITABLES);
+        GoProResources.loadIcons(UI_EDITABLES);
         // maybe should pop 2 views if camera edit
         WatchUi.popView(WatchUi.SLIDE_RIGHT);
     }

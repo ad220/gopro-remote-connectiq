@@ -43,10 +43,10 @@ class GoProRemoteView extends WatchUi.View {
     // the state of this View and prepare it to be shown. This includes
     // loading resources into memory.
     function onShow() as Void {
-        GoProResources.loadIcons(HILIGHT);
-        GoProResources.loadIcons(MODES);
-        GoProResources.freeIcons(EDITABLES);
-        GoProResources.freeIcons(STATES);
+        GoProResources.loadIcons(UI_HILIGHT);
+        GoProResources.loadIcons(UI_MODES);
+        GoProResources.freeIcons(UI_EDITABLES);
+        GoProResources.freeIcons(UI_STATES);
         //TODO: Edit with mode icon
         //TODO: edit preset view with icon for each preset, gear cheel for settings and pen for preset edit
     }
@@ -62,11 +62,11 @@ class GoProRemoteView extends WatchUi.View {
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLACK);
         dc.clear();
         dc.fillCircle(48, 95, 22);
-        dc.drawBitmap(37, 84, GoProResources.icons[HILIGHT] as WatchUi.BitmapResource);
+        dc.drawBitmap(37, 84, GoProResources.icons[UI_HILIGHT] as WatchUi.BitmapResource);
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.fillRoundedRectangle(90, 50, 90, 90, 18);
         dc.fillRoundedRectangle(40, 165, 160, 40, 20);
-        dc.drawBitmap(49, 173, GoProResources.icons[MODES][WHEEL]);
+        dc.drawBitmap(49, 173, GoProResources.icons[UI_MODES][WHEEL]);
         dc.setColor(0xFF0000, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(8);
         dc.drawCircle(135, 95, 28);

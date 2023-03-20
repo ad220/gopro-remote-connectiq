@@ -19,12 +19,12 @@ enum Settings {
 }
 
 enum UserInterface {
-    CONNECT,
-    HILIGHT,
-    STATES,
-    MODES,
-    EDITABLES,
-    SETTINGS
+    UI_CONNECT,
+    UI_HILIGHT,
+    UI_STATES,
+    UI_MODES,
+    UI_EDITABLES,
+    UI_SETTINGS
 }
 
 enum Modes {
@@ -63,6 +63,17 @@ enum Framerate {
 enum Region {
     NTSC,
     PAL
+}
+
+enum Communication {
+    COM_CONNECT,
+    COM_FETCH_SETTINGS,
+    COM_PUSH_SETTINGS,
+    COM_FETCH_STATES,
+    COM_PUSH_STATES,
+    COM_SHUTTER,
+    COM_HIGHLIGHT,
+    COM_LOCKED
 }
 
 
