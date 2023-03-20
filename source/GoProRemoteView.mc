@@ -12,6 +12,7 @@ class GoProRemoteDelegate extends WatchUi.BehaviorDelegate {
 
     public function onTap(tap as ClickEvent) {
         var coord = tap.getCoordinates();
+        //TODO: other buttons
         if (coord[0]<200 and coord[0]>40 and coord[1]<220 and coord[1]>180) {
             onSettings();
         }
@@ -19,14 +20,9 @@ class GoProRemoteDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onSettings() {
-        WatchUi.pushView(new PresetPickerMenu(0), new PresetPickerDelegate(), WatchUi.SLIDE_UP);
+        WatchUi.pushView(new PresetPickerMenu(0), new PresetPickerDelegate(false), WatchUi.SLIDE_UP);
         return true;
     }
-
-/*     public function onSelect() {
-        cam.pressShutter();
-        return false;
-    } */
 }
 
 

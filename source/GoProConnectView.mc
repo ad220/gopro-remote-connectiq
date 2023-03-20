@@ -51,9 +51,4 @@ class GoProConnectDelegate extends WatchUi.BehaviorDelegate {
         WatchUi.pushView(_view, new GoProRemoteDelegate(_view), WatchUi.SLIDE_LEFT);
         return true;
     }
-
-/*     public function onSelect() {
-        WatchUi.pushView(new PresetPickerMenu(), new PresetPickerDelegate(), WatchUi.SLIDE_UP);
-        return false;
-    } */
 }
