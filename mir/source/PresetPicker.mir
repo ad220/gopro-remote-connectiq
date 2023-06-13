@@ -1,0 +1,502 @@
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 1; ]
+import Toybox.WatchUi;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 2; ]
+import Toybox.Graphics;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 3; ]
+import Toybox.Lang;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 9; ]
+class PresetPickerMenu extends WatchUi.CustomMenu{
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 9; ]
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 9; ]
+    static
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 11; ]
+    public
+    function initialize(editPreset as Number) as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_11_53_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 12 8 ]
+        %tmp.2 = getv ? :GoProResources;
+        %tmp.3 = getv function %tmp.2 :freeIcons;
+        %tmp.5 = getv ? :UI_HILIGHT;
+        invoke %tmp.2 %tmp.3(%tmp.5);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 13 8 ]
+        %tmp.7 = getv ? :GoProResources;
+        %tmp.8 = getv function %tmp.7 :freeIcons;
+        %tmp.10 = getv ? :UI_MODES;
+        invoke %tmp.7 %tmp.8(%tmp.10);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 14 8 ]
+        %tmp.12 = getv ? :CustomMenu;
+        %tmp.13 = getv function %tmp.12 :initialize;
+        %tmp.14 = 80;
+        %tmp.15 = getm $.Toybox.Graphics;
+        %tmp.16 = getv %tmp.15 :COLOR_BLACK;
+        %tmp.17 = newd 1;
+        %tmp.19 = const :title;
+        %tmp.23 = getv ? :CustomMenuTitle;
+        %tmp.24 = "Presets";
+        %tmp.20 = newc %tmp.23 (%tmp.24);
+        %tmp.25 = dup %tmp.17;
+        %tmp.26 = aputv %tmp.25 %tmp.19 %tmp.20;
+        invoke %tmp.12 %tmp.13(%tmp.14, %tmp.16, %tmp.26);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 15 8 ]
+        %tmp.28 = getv ? :GoProResources;
+        %tmp.29 = getv function %tmp.28 :loadIcons;
+        %tmp.31 = getv ? :UI_EDITABLES;
+        invoke %tmp.28 %tmp.29(%tmp.31);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 16 8 ]
+        %tmp.33 = getv ? :GoProResources;
+        %tmp.34 = getv function %tmp.33 :loadLabels;
+        %tmp.36 = getv ? :UI_EDITABLES;
+        invoke %tmp.33 %tmp.34(%tmp.36);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 17 8 ]
+        for @C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_17_8_for_test @C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_17_8_for_incr @C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_17_8_for_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_17_8_for_init:
+        [ "C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_17_8_for_begin" "C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_17_8_for_end" ]
+        %i.1 = local;
+        %tmp.37 = 0;
+        lputv %i.1 %tmp.37;
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_17_8_for_test:
+        %tmp.39 = lgetv %i.1;
+        %tmp.41 = getv ? :N_EDITABLES;
+        %tmp.42 = 2;
+        %tmp.44 = lgetv %editPreset;
+        %tmp.45 = mul %tmp.42 %tmp.44;
+        %tmp.46 = sub %tmp.41 %tmp.45;
+        %tmp.47 = lt %tmp.39 %tmp.46;
+        bf %tmp.47 @C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_17_8_for_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_17_8_for_begin:
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_17_55_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 18 12 ]
+        %tmp.49 = getv ? :CustomMenu;
+        %tmp.50 = getv function %tmp.49 :addItem;
+        %tmp.54 = getv ? :PresetPickerItem;
+        %tmp.56 = lgetv %i.1;
+        %tmp.51 = newc %tmp.54 (%tmp.56);
+        invoke %tmp.49 %tmp.50(%tmp.51);
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_17_55_stop:
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_17_8_for_incr:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 17 ]
+        %tmp.59 = lgetv %i.1;
+        %tmp.60 = add %tmp.59 1;
+        lputv %i.1 %tmp.60;
+        goto @C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_17_8_for_test;
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_17_8_for_end:
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_11_53_stop:
+    }
+}
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 23; ]
+class PresetPickerItem extends WatchUi.CustomMenuItem{
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 23; ]
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 23; ]
+    static
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 24; @position = 16; ]
+    private
+    var id as Number;
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 25; @position = 16; ]
+    private
+    var gp as GoProPreset or Null;
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 27; ]
+    public
+    function initialize(_id) as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_27_36_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 28 8 ]
+        %tmp.2 = lgetv %_id;
+        putv self :id %tmp.2;
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 29 8 ]
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_29_8_if_stmt:
+        %tmp.4 = lgetv %_id;
+        %tmp.5 = 3;
+        %tmp.6 = lt %tmp.4 %tmp.5;
+        bf %tmp.6 @C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_29_8_if_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_29_8_if_true:
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_29_21_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 30 12 ]
+        %tmp.10 = getv ? :GoProPreset;
+        %tmp.12 = lgetv %_id;
+        %tmp.7 = newc %tmp.10 (%tmp.12);
+        putv self :gp %tmp.7;
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_29_21_stop:
+        goto @C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_29_8_if_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_29_8_if_end:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 32 8 ]
+        %tmp.14 = getv ? :CustomMenuItem;
+        %tmp.15 = getv function %tmp.14 :initialize;
+        %tmp.17 = lgetv %_id;
+        %tmp.18 = newd 0;
+        invoke %tmp.14 %tmp.15(%tmp.17, %tmp.18);
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_27_36_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 35; ]
+    public
+    function draw(dc as Dc) as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_35_43_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 36 8 ]
+        [ "C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_35_43_start" "C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_35_43_stop" ]
+        %halfW.1 = local;
+        %tmp.1 = lgetv %dc;
+        %tmp.2 = getv function %tmp.1 :getWidth;
+        %tmp.3 = invoke %tmp.1 %tmp.2();
+        %tmp.4 = 2;
+        %tmp.5 = div %tmp.3 %tmp.4;
+        lputv %halfW.1 %tmp.5;
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 37 8 ]
+        [ "C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_35_43_start" "C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_35_43_stop" ]
+        %halfH.2 = local;
+        %tmp.6 = lgetv %dc;
+        %tmp.7 = getv function %tmp.6 :getHeight;
+        %tmp.8 = invoke %tmp.6 %tmp.7();
+        %tmp.9 = 2;
+        %tmp.10 = div %tmp.8 %tmp.9;
+        lputv %halfH.2 %tmp.10;
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 38 8 ]
+        %tmp.11 = lgetv %dc;
+        %tmp.12 = getv function %tmp.11 :setColor;
+        %tmp.13 = getm $.Toybox.Graphics;
+        %tmp.14 = getv %tmp.13 :COLOR_DK_GRAY;
+        %tmp.15 = getm $.Toybox.Graphics;
+        %tmp.16 = getv %tmp.15 :COLOR_TRANSPARENT;
+        invoke %tmp.11 %tmp.12(%tmp.14, %tmp.16);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 39 8 ]
+        %tmp.17 = lgetv %dc;
+        %tmp.18 = getv function %tmp.17 :fillRoundedRectangle;
+        %tmp.20 = lgetv %halfW.1;
+        %tmp.21 = 100;
+        %tmp.22 = sub %tmp.20 %tmp.21;
+        %tmp.24 = lgetv %halfH.2;
+        %tmp.25 = 30;
+        %tmp.26 = sub %tmp.24 %tmp.25;
+        %tmp.27 = 200;
+        %tmp.28 = 60;
+        %tmp.29 = 30;
+        invoke %tmp.17 %tmp.18(%tmp.22, %tmp.26, %tmp.27, %tmp.28, %tmp.29);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 40 8 ]
+        %tmp.30 = lgetv %dc;
+        %tmp.31 = getv function %tmp.30 :setColor;
+        %tmp.32 = getm $.Toybox.Graphics;
+        %tmp.33 = getv %tmp.32 :COLOR_WHITE;
+        %tmp.34 = getm $.Toybox.Graphics;
+        %tmp.35 = getv %tmp.34 :COLOR_TRANSPARENT;
+        invoke %tmp.30 %tmp.31(%tmp.33, %tmp.35);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 42 8 ]
+        %tmp.36 = lgetv %dc;
+        %tmp.37 = getv function %tmp.36 :drawBitmap;
+        %tmp.38 = 36;
+        %tmp.40 = lgetv %halfH.2;
+        %tmp.41 = 14;
+        %tmp.42 = sub %tmp.40 %tmp.41;
+        %tmp.44 = getv ? :GoProResources;
+        %tmp.45 = getv %tmp.44 :icons;
+        %tmp.47 = getv ? :UI_EDITABLES;
+        %tmp.48 = agetv %tmp.45 %tmp.47;
+        %tmp.50 = getv ? :id;
+        %tmp.51 = agetv %tmp.48 %tmp.50;
+        invoke %tmp.36 %tmp.37(%tmp.38, %tmp.42, %tmp.51);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 43 8 ]
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_43_8_if_stmt:
+        %tmp.53 = getv ? :id;
+        %tmp.54 = 3;
+        %tmp.55 = lt %tmp.53 %tmp.54;
+        bf %tmp.55 @C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_43_8_if_false;
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_43_8_if_true:
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_43_18_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 44 12 ]
+        %tmp.56 = lgetv %dc;
+        %tmp.57 = getv function %tmp.56 :setColor;
+        %tmp.58 = getm $.Toybox.Graphics;
+        %tmp.59 = getv %tmp.58 :COLOR_LT_GRAY;
+        %tmp.60 = getm $.Toybox.Graphics;
+        %tmp.61 = getv %tmp.60 :COLOR_TRANSPARENT;
+        invoke %tmp.56 %tmp.57(%tmp.59, %tmp.61);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 45 12 ]
+        %tmp.62 = lgetv %dc;
+        %tmp.63 = getv function %tmp.62 :drawLine;
+        %tmp.65 = lgetv %halfW.1;
+        %tmp.66 = 36;
+        %tmp.67 = sub %tmp.65 %tmp.66;
+        %tmp.69 = lgetv %halfH.2;
+        %tmp.70 = 2;
+        %tmp.71 = add %tmp.69 %tmp.70;
+        %tmp.73 = lgetv %halfW.1;
+        %tmp.74 = 80;
+        %tmp.75 = add %tmp.73 %tmp.74;
+        %tmp.77 = lgetv %halfH.2;
+        %tmp.78 = 2;
+        %tmp.79 = add %tmp.77 %tmp.78;
+        invoke %tmp.62 %tmp.63(%tmp.67, %tmp.71, %tmp.75, %tmp.79);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 46 12 ]
+        %tmp.80 = lgetv %dc;
+        %tmp.81 = getv function %tmp.80 :setColor;
+        %tmp.82 = getm $.Toybox.Graphics;
+        %tmp.83 = getv %tmp.82 :COLOR_WHITE;
+        %tmp.84 = getm $.Toybox.Graphics;
+        %tmp.85 = getv %tmp.84 :COLOR_TRANSPARENT;
+        invoke %tmp.80 %tmp.81(%tmp.83, %tmp.85);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 47 12 ]
+        %tmp.86 = lgetv %dc;
+        %tmp.87 = getv function %tmp.86 :drawText;
+        %tmp.89 = lgetv %halfW.1;
+        %tmp.90 = 22;
+        %tmp.91 = add %tmp.89 %tmp.90;
+        %tmp.93 = lgetv %halfH.2;
+        %tmp.94 = 16;
+        %tmp.95 = add %tmp.93 %tmp.94;
+        %tmp.97 = getv ? :GoProResources;
+        %tmp.98 = getv %tmp.97 :fontTiny;
+        %tmp.100 = getv ? :gp;
+        %tmp.101 = getv function %tmp.100 :getDescription;
+        %tmp.102 = invoke %tmp.100 %tmp.101();
+        %tmp.103 = getm $.Toybox.Graphics;
+        %tmp.104 = getv %tmp.103 :TEXT_JUSTIFY_CENTER;
+        %tmp.105 = getm $.Toybox.Graphics;
+        %tmp.106 = getv %tmp.105 :TEXT_JUSTIFY_VCENTER;
+        %tmp.107 = bitor %tmp.104 %tmp.106;
+        invoke %tmp.86 %tmp.87(%tmp.91, %tmp.95, %tmp.98, %tmp.102, %tmp.107);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 48 12 ]
+        %tmp.108 = lgetv %dc;
+        %tmp.109 = getv function %tmp.108 :drawText;
+        %tmp.111 = lgetv %halfW.1;
+        %tmp.112 = 22;
+        %tmp.113 = add %tmp.111 %tmp.112;
+        %tmp.115 = lgetv %halfH.2;
+        %tmp.116 = 14;
+        %tmp.117 = sub %tmp.115 %tmp.116;
+        %tmp.119 = getv ? :GoProResources;
+        %tmp.120 = getv %tmp.119 :fontSmall;
+        %tmp.122 = getv ? :GoProResources;
+        %tmp.123 = getv %tmp.122 :labels;
+        %tmp.125 = getv ? :UI_EDITABLES;
+        %tmp.126 = agetv %tmp.123 %tmp.125;
+        %tmp.128 = getv ? :id;
+        %tmp.129 = agetv %tmp.126 %tmp.128;
+        %tmp.130 = getm $.Toybox.Graphics;
+        %tmp.131 = getv %tmp.130 :TEXT_JUSTIFY_CENTER;
+        %tmp.132 = getm $.Toybox.Graphics;
+        %tmp.133 = getv %tmp.132 :TEXT_JUSTIFY_VCENTER;
+        %tmp.134 = bitor %tmp.131 %tmp.133;
+        invoke %tmp.108 %tmp.109(%tmp.113, %tmp.117, %tmp.120, %tmp.129, %tmp.134);
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_43_18_stop:
+        goto @C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_43_8_if_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_43_8_if_false:
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_49_15_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 50 12 ]
+        %tmp.135 = lgetv %dc;
+        %tmp.136 = getv function %tmp.135 :drawText;
+        %tmp.138 = lgetv %halfW.1;
+        %tmp.139 = 22;
+        %tmp.140 = add %tmp.138 %tmp.139;
+        %tmp.142 = lgetv %halfH.2;
+        %tmp.144 = getv ? :GoProResources;
+        %tmp.145 = getv %tmp.144 :fontSmall;
+        %tmp.147 = getv ? :GoProResources;
+        %tmp.148 = getv %tmp.147 :labels;
+        %tmp.150 = getv ? :UI_EDITABLES;
+        %tmp.151 = agetv %tmp.148 %tmp.150;
+        %tmp.153 = getv ? :id;
+        %tmp.154 = agetv %tmp.151 %tmp.153;
+        %tmp.155 = getm $.Toybox.Graphics;
+        %tmp.156 = getv %tmp.155 :TEXT_JUSTIFY_CENTER;
+        %tmp.157 = getm $.Toybox.Graphics;
+        %tmp.158 = getv %tmp.157 :TEXT_JUSTIFY_VCENTER;
+        %tmp.159 = bitor %tmp.156 %tmp.158;
+        invoke %tmp.135 %tmp.136(%tmp.140, %tmp.142, %tmp.145, %tmp.154, %tmp.159);
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_49_15_stop:
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_43_8_if_end:
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_35_43_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 55; ]
+    public
+    function getId() as Number {
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_55_38_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 56 8 ]
+        %tmp.2 = getv ? :id;
+        ret %tmp.2;
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_55_38_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 59; ]
+    public
+    function getPreset() as GoProPreset {
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_59_47_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 60 8 ]
+        %tmp.2 = getv ? :gp;
+        ret %tmp.2;
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_59_47_stop:
+    }
+}
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 64; ]
+class PresetPickerDelegate extends WatchUi.Menu2InputDelegate{
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 64; ]
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 64; ]
+    static
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 65; @position = 8; ]
+    var editPreset as Boolean;
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 67; ]
+    public
+    function initialize(_editPreset as Boolean) as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_67_55_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 68 8 ]
+        %tmp.2 = lgetv %_editPreset;
+        putv self :editPreset %tmp.2;
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 69 8 ]
+        %tmp.4 = getv ? :Menu2InputDelegate;
+        %tmp.5 = getv function %tmp.4 :initialize;
+        invoke %tmp.4 %tmp.5();
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_67_55_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 72; ]
+    public
+    function onSelect(item as PresetPickerItem) as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_72_63_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 73 8 ]
+        [ "C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_72_63_start" "C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_72_63_stop" ]
+        %id.1 = local;
+        %tmp.1 = lgetv %item;
+        %tmp.2 = getv function %tmp.1 :getId;
+        %tmp.3 = invoke %tmp.1 %tmp.2();
+        lputv %id.1 %tmp.3;
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 77 8 ]
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_77_8_if_stmt:
+        %tmp.5 = lgetv %id.1;
+        %tmp.7 = getv ? :CAM;
+        %tmp.8 = eq %tmp.5 %tmp.7;
+        bf %tmp.8 @C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_77_8_if_false;
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_77_8_if_true:
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_77_23_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 78 12 ]
+        %tmp.9 = getm $.Toybox.WatchUi;
+        %tmp.10 = getv function %tmp.9 :popView;
+        %tmp.11 = getm $.Toybox.WatchUi;
+        %tmp.12 = getv %tmp.11 :SLIDE_IMMEDIATE;
+        invoke %tmp.9 %tmp.10(%tmp.12);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 79 12 ]
+        %tmp.13 = getm $.Toybox.WatchUi;
+        %tmp.14 = getv function %tmp.13 :pushView;
+        %tmp.18 = getv ? :SettingPickerMenu;
+        %tmp.20 = getv ? :cam;
+        %tmp.22 = lgetv %id.1;
+        %tmp.15 = newc %tmp.18 (%tmp.20, %tmp.22);
+        %tmp.26 = getv ? :SettingPickerDelegate;
+        %tmp.28 = getv ? :cam;
+        %tmp.23 = newc %tmp.26 (%tmp.28);
+        %tmp.29 = getm $.Toybox.WatchUi;
+        %tmp.30 = getv %tmp.29 :SLIDE_LEFT;
+        invoke %tmp.13 %tmp.14(%tmp.15, %tmp.23, %tmp.30);
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_77_23_stop:
+        goto @C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_77_8_if_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_77_8_if_false:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 80 15 ]
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_80_15_if_stmt:
+        %tmp.32 = lgetv %id.1;
+        %tmp.34 = getv ? :EDITP7;
+        %tmp.35 = eq %tmp.32 %tmp.34;
+        bf %tmp.35 @C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_80_15_if_false;
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_80_15_if_true:
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_80_33_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 81 12 ]
+        %tmp.36 = getm $.Toybox.WatchUi;
+        %tmp.37 = getv function %tmp.36 :popView;
+        %tmp.38 = getm $.Toybox.WatchUi;
+        %tmp.39 = getv %tmp.38 :SLIDE_IMMEDIATE;
+        invoke %tmp.36 %tmp.37(%tmp.39);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 82 12 ]
+        %tmp.40 = getm $.Toybox.WatchUi;
+        %tmp.41 = getv function %tmp.40 :pushView;
+        %tmp.45 = getv ? :PresetPickerMenu;
+        %tmp.46 = 1;
+        %tmp.42 = newc %tmp.45 (%tmp.46);
+        %tmp.50 = getv ? :PresetPickerDelegate;
+        %tmp.51 = true;
+        %tmp.47 = newc %tmp.50 (%tmp.51);
+        %tmp.52 = getm $.Toybox.WatchUi;
+        %tmp.53 = getv %tmp.52 :SLIDE_LEFT;
+        invoke %tmp.40 %tmp.41(%tmp.42, %tmp.47, %tmp.53);
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_80_33_stop:
+        goto @C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_80_15_if_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_80_15_if_false:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 83 15 ]
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_83_15_if_stmt:
+        %tmp.55 = getv ? :editPreset;
+        bf %tmp.55 @C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_83_15_if_false;
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_83_15_if_true:
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_83_31_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 84 12 ]
+        %tmp.56 = getm $.Toybox.WatchUi;
+        %tmp.57 = getv function %tmp.56 :popView;
+        %tmp.58 = getm $.Toybox.WatchUi;
+        %tmp.59 = getv %tmp.58 :SLIDE_IMMEDIATE;
+        invoke %tmp.56 %tmp.57(%tmp.59);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 85 12 ]
+        %tmp.60 = getm $.Toybox.WatchUi;
+        %tmp.61 = getv function %tmp.60 :pushView;
+        %tmp.65 = getv ? :PresetEditMenu;
+        %tmp.66 = lgetv %item;
+        %tmp.67 = getv function %tmp.66 :getPreset;
+        %tmp.68 = invoke %tmp.66 %tmp.67();
+        %tmp.70 = lgetv %id.1;
+        %tmp.62 = newc %tmp.65 (%tmp.68, %tmp.70);
+        %tmp.74 = getv ? :PresetEditDelegate;
+        %tmp.75 = lgetv %item;
+        %tmp.76 = getv function %tmp.75 :getPreset;
+        %tmp.77 = invoke %tmp.75 %tmp.76();
+        %tmp.71 = newc %tmp.74 (%tmp.77);
+        %tmp.78 = getm $.Toybox.WatchUi;
+        %tmp.79 = getv %tmp.78 :SLIDE_LEFT;
+        invoke %tmp.60 %tmp.61(%tmp.62, %tmp.71, %tmp.79);
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_83_31_stop:
+        goto @C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_83_15_if_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_83_15_if_false:
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_86_15_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 87 12 ]
+        %tmp.80 = getm $.Toybox.WatchUi;
+        %tmp.81 = getv function %tmp.80 :popView;
+        %tmp.82 = getm $.Toybox.WatchUi;
+        %tmp.83 = getv %tmp.82 :SLIDE_DOWN;
+        invoke %tmp.80 %tmp.81(%tmp.83);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 88 12 ]
+        %tmp.85 = getv ? :cam;
+        %tmp.86 = getv function %tmp.85 :setPreset;
+        %tmp.87 = lgetv %item;
+        %tmp.88 = getv function %tmp.87 :getPreset;
+        %tmp.89 = invoke %tmp.87 %tmp.88();
+        invoke %tmp.85 %tmp.86(%tmp.89);
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_86_15_stop:
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_83_15_if_end:
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_80_15_if_end:
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_77_8_if_end:
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_72_63_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 92; ]
+    public
+    function onBack() as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_92_37_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 93 8 ]
+        %tmp.1 = getm $.Toybox.WatchUi;
+        %tmp.2 = getv function %tmp.1 :popView;
+        %tmp.3 = getm $.Toybox.WatchUi;
+        %tmp.4 = getv %tmp.3 :SLIDE_DOWN;
+        invoke %tmp.1 %tmp.2(%tmp.4);
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_92_37_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 96; ]
+    public
+    function onWrap(key as Key) as Boolean {
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_96_50_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc" 97 8 ]
+        %tmp.1 = false;
+        ret %tmp.1;
+C_Users_Arthur_Documents_Code_GoProRemote_source_PresetPicker_mc_96_50_stop:
+    }
+}
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PresetPicker.mc"; @line = 1; ]
+<init> {
+}

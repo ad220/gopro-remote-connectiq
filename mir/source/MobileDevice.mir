@@ -1,0 +1,150 @@
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc"; @line = 1; ]
+import Toybox.Communications;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc"; @line = 2; ]
+import Toybox.Lang;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc"; @line = 3; ]
+import Toybox.System;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc"; @line = 22; ]
+class MobileDevice{
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc"; @line = 22; ]
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc"; @line = 22; ]
+    static
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc"; @line = 23; ]
+    public
+    function initialize() as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_23_33_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc" 24 8 ]
+        %tmp.1 = getm $.Toybox.Communications;
+        %tmp.2 = getv function %tmp.1 :registerForPhoneAppMessages;
+        %tmp.3 = self;
+        %tmp.4 = getv function %tmp.3 :method;
+        %tmp.6 = const :onReceive;
+        %tmp.7 = invoke %tmp.3 %tmp.4(%tmp.6);
+        %tmp.8 = as %tmp.7 Communications.PhoneMessageCallback;
+        invoke %tmp.1 %tmp.2(%tmp.8);
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_23_33_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc"; @line = 27; ]
+    public
+    function onReceive(message as Communications.PhoneAppMessage) {
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_27_73_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc" 29 8 ]
+        %tmp.1 = lgetv %message;
+        %tmp.2 = getv %tmp.1 :data;
+        %tmp.3 = 0;
+        %tmp.4 = agetv %tmp.2 %tmp.3;
+        push %tmp.4;
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_29_8_switchCaseBegin:
+        %tmp.5 = dup %tmp.4;
+        %tmp.7 = getv ? :COM_CONNECT;
+        %tmp.8 = getv function %tmp.5 :equals;
+        %tmp.9 = invoke %tmp.5 %tmp.8 (%tmp.7);
+        bt %tmp.9 @C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_30_12;
+        goto @C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_29_8_defaultCodeBegin;
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_30_12:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc" 32 20 ]
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_32_20_if_stmt:
+        %tmp.10 = lgetv %message;
+        %tmp.11 = getv %tmp.10 :data;
+        %tmp.12 = 1;
+        %tmp.13 = agetv %tmp.11 %tmp.12;
+        %tmp.14 = not %tmp.13;
+        bf %tmp.14 @C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_32_20_if_false;
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_32_20_if_true:
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_32_42_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc" 33 24 ]
+        [ "C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_32_42_start" "C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_32_42_stop" ]
+        %_view.1 = local;
+        %tmp.18 = getv ? :GoProRemoteView;
+        %tmp.15 = newc %tmp.18 ();
+        lputv %_view.1 %tmp.15;
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc" 34 24 ]
+        %tmp.20 = getv ? :WatchUi;
+        %tmp.21 = getv function %tmp.20 :pushView;
+        %tmp.23 = lgetv %_view.1;
+        %tmp.27 = getv ? :GoProRemoteDelegate;
+        %tmp.29 = lgetv %_view.1;
+        %tmp.24 = newc %tmp.27 (%tmp.29);
+        %tmp.31 = getv ? :WatchUi;
+        %tmp.32 = getv %tmp.31 :SLIDE_LEFT;
+        invoke %tmp.20 %tmp.21(%tmp.23, %tmp.24, %tmp.32);
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_32_42_stop:
+        goto @C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_32_20_if_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_32_20_if_false:
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_35_27_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc" 36 24 ]
+        [ "C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_35_27_start" "C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_35_27_stop" ]
+        %_view.2 = local;
+        %tmp.36 = getv ? :PopUpView;
+        %tmp.37 = "Unable to connect to GoPro";
+        %tmp.39 = getv ? :POP_ERROR;
+        %tmp.33 = newc %tmp.36 (%tmp.37, %tmp.39);
+        lputv %_view.2 %tmp.33;
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc" 37 24 ]
+        %tmp.41 = getv ? :WatchUi;
+        %tmp.42 = getv function %tmp.41 :pushView;
+        %tmp.44 = lgetv %_view.2;
+        %tmp.48 = getv ? :PopUpDelegate;
+        %tmp.50 = lgetv %_view.2;
+        %tmp.45 = newc %tmp.48 (%tmp.50);
+        %tmp.52 = getv ? :WatchUi;
+        %tmp.53 = getv %tmp.52 :SLIDE_LEFT;
+        invoke %tmp.41 %tmp.42(%tmp.44, %tmp.45, %tmp.53);
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_35_27_stop:
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_32_20_if_end:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc" 39 16 ]
+        goto @C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_29_8_switchCaseEnd;
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_41_12:
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_29_8_defaultCodeBegin:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc" 42 16 ]
+        goto @C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_29_8_switchCaseEnd;
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_29_8_switchCaseEnd:
+        pop;
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_27_73_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc"; @line = 47; ]
+    public
+    function send(data as Object) {
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_47_41_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc" 48 8 ]
+        %tmp.1 = getm $.Toybox.Communications;
+        %tmp.2 = getv function %tmp.1 :transmit;
+        %tmp.4 = lgetv %data;
+        %tmp.5 = newd 0;
+        %tmp.9 = getv ? :MobileConnection;
+        %tmp.6 = newc %tmp.9 ();
+        invoke %tmp.1 %tmp.2(%tmp.4, %tmp.5, %tmp.6);
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_47_41_stop:
+    }
+}
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc"; @line = 52; ]
+class MobileConnection extends Communications.ConnectionListener{
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc"; @line = 52; ]
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc"; @line = 52; ]
+    static
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc"; @line = 53; ]
+    public
+    function initialize() as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_53_33_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc" 54 8 ]
+        %tmp.2 = getv ? :ConnectionListener;
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+C_Users_Arthur_Documents_Code_GoProRemote_source_MobileDevice_mc_53_33_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc"; @line = 57; ]
+    public
+    function onError() {
+    }
+}
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\MobileDevice.mc"; @line = 1; ]
+<init> {
+}

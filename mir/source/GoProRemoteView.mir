@@ -1,0 +1,461 @@
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 1; ]
+import Toybox.Graphics;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 2; ]
+import Toybox.WatchUi;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 3; ]
+import Toybox.System;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 6; ]
+class GoProRemoteDelegate extends WatchUi.BehaviorDelegate{
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 6; ]
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 6; ]
+    static
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 7; @position = 8; ]
+    var view;
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 9; ]
+    public
+    function initialize(_view) as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_9_38_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 10 8 ]
+        %tmp.2 = getv ? :BehaviorDelegate;
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 11 8 ]
+        %tmp.5 = lgetv %_view;
+        putv self :view %tmp.5;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_9_38_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 14; ]
+    public
+    function onTap(tap as ClickEvent) {
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_14_45_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 15 8 ]
+        [ "C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_14_45_start" "C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_14_45_stop" ]
+        %coord.1 = local;
+        %tmp.1 = lgetv %tap;
+        %tmp.2 = getv function %tmp.1 :getCoordinates;
+        %tmp.3 = invoke %tmp.1 %tmp.2();
+        lputv %coord.1 %tmp.3;
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 17 8 ]
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_8_if_stmt:
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_12_begin:
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_12_begin:
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_12_begin:
+        %tmp.5 = lgetv %coord.1;
+        %tmp.6 = 0;
+        %tmp.7 = agetv %tmp.5 %tmp.6;
+        %tmp.8 = 190;
+        %tmp.9 = lt %tmp.7 %tmp.8;
+        %tmp.10 = dup %tmp.9;
+        bf %tmp.10 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_29_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_29_true:
+        %tmp.12 = lgetv %coord.1;
+        %tmp.13 = 0;
+        %tmp.14 = agetv %tmp.12 %tmp.13;
+        %tmp.15 = 80;
+        %tmp.16 = gt %tmp.14 %tmp.15;
+        %tmp.17 = and %tmp.9 %tmp.16;
+        push %tmp.17;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_29_end:
+        %tmp.18 = phi [%tmp.10 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_12_begin] [%tmp.17 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_29_true] [%tmp.18 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_29_end];
+        %tmp.19 = dup %tmp.18;
+        bf %tmp.19 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_45_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_45_true:
+        %tmp.21 = lgetv %coord.1;
+        %tmp.22 = 1;
+        %tmp.23 = agetv %tmp.21 %tmp.22;
+        %tmp.24 = 150;
+        %tmp.25 = lt %tmp.23 %tmp.24;
+        %tmp.26 = and %tmp.18 %tmp.25;
+        push %tmp.26;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_45_end:
+        %tmp.27 = phi [%tmp.19 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_12_begin] [%tmp.26 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_45_true] [%tmp.27 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_45_end];
+        %tmp.28 = dup %tmp.27;
+        bf %tmp.28 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_62_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_62_true:
+        %tmp.30 = lgetv %coord.1;
+        %tmp.31 = 1;
+        %tmp.32 = agetv %tmp.30 %tmp.31;
+        %tmp.33 = 40;
+        %tmp.34 = gt %tmp.32 %tmp.33;
+        %tmp.35 = and %tmp.27 %tmp.34;
+        push %tmp.35;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_62_end:
+        %tmp.36 = phi [%tmp.28 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_12_begin] [%tmp.35 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_62_true] [%tmp.36 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_62_end];
+        bf %tmp.36 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_8_if_false;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_8_if_true:
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_75_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 18 12 ]
+        %tmp.37 = getm $.Toybox.System;
+        %tmp.38 = getv function %tmp.37 :print;
+        %tmp.39 = "pressed shutter";
+        invoke %tmp.37 %tmp.38(%tmp.39);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 19 12 ]
+        %tmp.41 = getv ? :mobile;
+        %tmp.42 = getv function %tmp.41 :send;
+        %tmp.43 = newa 2;
+        %tmp.45 = getv ? :COM_SHUTTER;
+        %tmp.46 = dup %tmp.43;
+        %tmp.47 = aputv %tmp.46 0 %tmp.45;
+        %tmp.48 = 0;
+        %tmp.49 = dup %tmp.47;
+        %tmp.50 = aputv %tmp.49 1 %tmp.48;
+        invoke %tmp.41 %tmp.42(%tmp.50);
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_75_stop:
+        goto @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_8_if_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_8_if_false:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 20 15 ]
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_15_if_stmt:
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_19_begin:
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_19_begin:
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_19_begin:
+        %tmp.52 = lgetv %coord.1;
+        %tmp.53 = 0;
+        %tmp.54 = agetv %tmp.52 %tmp.53;
+        %tmp.55 = 200;
+        %tmp.56 = lt %tmp.54 %tmp.55;
+        %tmp.57 = dup %tmp.56;
+        bf %tmp.57 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_36_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_36_true:
+        %tmp.59 = lgetv %coord.1;
+        %tmp.60 = 0;
+        %tmp.61 = agetv %tmp.59 %tmp.60;
+        %tmp.62 = 40;
+        %tmp.63 = gt %tmp.61 %tmp.62;
+        %tmp.64 = and %tmp.56 %tmp.63;
+        push %tmp.64;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_36_end:
+        %tmp.65 = phi [%tmp.57 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_19_begin] [%tmp.64 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_36_true] [%tmp.65 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_36_end];
+        %tmp.66 = dup %tmp.65;
+        bf %tmp.66 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_52_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_52_true:
+        %tmp.68 = lgetv %coord.1;
+        %tmp.69 = 1;
+        %tmp.70 = agetv %tmp.68 %tmp.69;
+        %tmp.71 = 220;
+        %tmp.72 = lt %tmp.70 %tmp.71;
+        %tmp.73 = and %tmp.65 %tmp.72;
+        push %tmp.73;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_52_end:
+        %tmp.74 = phi [%tmp.66 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_19_begin] [%tmp.73 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_52_true] [%tmp.74 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_52_end];
+        %tmp.75 = dup %tmp.74;
+        bf %tmp.75 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_69_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_69_true:
+        %tmp.77 = lgetv %coord.1;
+        %tmp.78 = 1;
+        %tmp.79 = agetv %tmp.77 %tmp.78;
+        %tmp.80 = 160;
+        %tmp.81 = gt %tmp.79 %tmp.80;
+        %tmp.82 = and %tmp.74 %tmp.81;
+        push %tmp.82;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_69_end:
+        %tmp.83 = phi [%tmp.75 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_19_begin] [%tmp.82 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_69_true] [%tmp.83 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_69_end];
+        bf %tmp.83 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_15_if_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_15_if_true:
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_83_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 21 12 ]
+        %tmp.84 = self;
+        %tmp.85 = getv function %tmp.84 :onSettings;
+        invoke %tmp.84 %tmp.85();
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_83_stop:
+        goto @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_15_if_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_20_15_if_end:
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_17_8_if_end:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 23 8 ]
+        %tmp.86 = true;
+        ret %tmp.86;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_14_45_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 26; ]
+    public
+    function onSettings() {
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_26_33_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 27 8 ]
+        %tmp.1 = getm $.Toybox.WatchUi;
+        %tmp.2 = getv function %tmp.1 :pushView;
+        %tmp.6 = getv ? :PresetPickerMenu;
+        %tmp.7 = 0;
+        %tmp.3 = newc %tmp.6 (%tmp.7);
+        %tmp.11 = getv ? :PresetPickerDelegate;
+        %tmp.12 = false;
+        %tmp.8 = newc %tmp.11 (%tmp.12);
+        %tmp.13 = getm $.Toybox.WatchUi;
+        %tmp.14 = getv %tmp.13 :SLIDE_UP;
+        invoke %tmp.1 %tmp.2(%tmp.3, %tmp.8, %tmp.14);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 28 8 ]
+        %tmp.15 = true;
+        ret %tmp.15;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_26_33_stop:
+    }
+}
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 33; ]
+class GoProRemoteView extends WatchUi.View{
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 33; ]
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 33; ]
+    static
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 34; @position = 8; ]
+    var settingsButton;
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 36; ]
+    function initialize() as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_36_26_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 37 8 ]
+        %tmp.2 = getv ? :View;
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_36_26_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 41; ]
+    function onLayout(dc as Dc) as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_41_40_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 42 8 ]
+        %tmp.1 = self;
+        %tmp.2 = getv function %tmp.1 :setLayout;
+        %tmp.4 = getv ? :Rez;
+        %tmp.5 = getv %tmp.4 :Layouts;
+        %tmp.6 = getv function %tmp.5 :MainLayout;
+        %tmp.8 = lgetv %dc;
+        %tmp.9 = invoke %tmp.5 %tmp.6(%tmp.8);
+        invoke %tmp.1 %tmp.2(%tmp.9);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 43 8 ]
+        %tmp.11 = getv ? :GoProResources;
+        %tmp.12 = getv function %tmp.11 :loadSettingLabels;
+        invoke %tmp.11 %tmp.12();
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_41_40_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 49; ]
+    function onShow() as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_49_30_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 50 8 ]
+        %tmp.2 = getv ? :GoProResources;
+        %tmp.3 = getv function %tmp.2 :loadIcons;
+        %tmp.5 = getv ? :UI_HILIGHT;
+        invoke %tmp.2 %tmp.3(%tmp.5);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 51 8 ]
+        %tmp.7 = getv ? :GoProResources;
+        %tmp.8 = getv function %tmp.7 :loadIcons;
+        %tmp.10 = getv ? :UI_MODES;
+        invoke %tmp.7 %tmp.8(%tmp.10);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 52 8 ]
+        %tmp.12 = getv ? :GoProResources;
+        %tmp.13 = getv function %tmp.12 :freeIcons;
+        %tmp.15 = getv ? :UI_EDITABLES;
+        invoke %tmp.12 %tmp.13(%tmp.15);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 53 8 ]
+        %tmp.17 = getv ? :GoProResources;
+        %tmp.18 = getv function %tmp.17 :freeIcons;
+        %tmp.20 = getv ? :UI_STATES;
+        invoke %tmp.17 %tmp.18(%tmp.20);
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_49_30_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 59; ]
+    function onUpdate(dc as Dc) as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_59_40_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 60 8 ]
+        [ "C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_59_40_start" "C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_59_40_stop" ]
+        %enabled.1 = local;
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 61 8 ]
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_61_8_if_stmt:
+        %tmp.2 = getv ? :cam;
+        %tmp.3 = getv function %tmp.2 :isRecording;
+        %tmp.4 = invoke %tmp.2 %tmp.3();
+        bf %tmp.4 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_61_8_if_false;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_61_8_if_true:
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_61_31_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 62 12 ]
+        %tmp.5 = getm $.Toybox.Graphics;
+        %tmp.6 = getv %tmp.5 :COLOR_DK_GRAY;
+        lputv %enabled.1 %tmp.6;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_61_31_stop:
+        goto @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_61_8_if_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_61_8_if_false:
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_63_15_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 64 12 ]
+        %tmp.7 = getm $.Toybox.Graphics;
+        %tmp.8 = getv %tmp.7 :COLOR_LT_GRAY;
+        lputv %enabled.1 %tmp.8;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_63_15_stop:
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_61_8_if_end:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 66 8 ]
+        %tmp.9 = lgetv %dc;
+        %tmp.10 = getv function %tmp.9 :setColor;
+        %tmp.11 = getm $.Toybox.Graphics;
+        %tmp.12 = getv %tmp.11 :COLOR_DK_GRAY;
+        %tmp.13 = getm $.Toybox.Graphics;
+        %tmp.14 = getv %tmp.13 :COLOR_BLACK;
+        invoke %tmp.9 %tmp.10(%tmp.12, %tmp.14);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 67 8 ]
+        %tmp.15 = lgetv %dc;
+        %tmp.16 = getv function %tmp.15 :clear;
+        invoke %tmp.15 %tmp.16();
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 68 8 ]
+        %tmp.17 = lgetv %dc;
+        %tmp.18 = getv function %tmp.17 :fillCircle;
+        %tmp.19 = 48;
+        %tmp.20 = 95;
+        %tmp.21 = 22;
+        invoke %tmp.17 %tmp.18(%tmp.19, %tmp.20, %tmp.21);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 69 8 ]
+        %tmp.22 = lgetv %dc;
+        %tmp.23 = getv function %tmp.22 :drawBitmap;
+        %tmp.24 = 37;
+        %tmp.25 = 84;
+        %tmp.27 = getv ? :GoProResources;
+        %tmp.28 = getv %tmp.27 :icons;
+        %tmp.30 = getv ? :UI_HILIGHT;
+        %tmp.31 = agetv %tmp.28 %tmp.30;
+        %tmp.32 = as %tmp.31 WatchUi.BitmapResource;
+        invoke %tmp.22 %tmp.23(%tmp.24, %tmp.25, %tmp.32);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 70 8 ]
+        %tmp.33 = lgetv %dc;
+        %tmp.34 = getv function %tmp.33 :setColor;
+        %tmp.35 = getm $.Toybox.Graphics;
+        %tmp.36 = getv %tmp.35 :COLOR_DK_GRAY;
+        %tmp.37 = getm $.Toybox.Graphics;
+        %tmp.38 = getv %tmp.37 :COLOR_TRANSPARENT;
+        invoke %tmp.33 %tmp.34(%tmp.36, %tmp.38);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 71 8 ]
+        %tmp.39 = lgetv %dc;
+        %tmp.40 = getv function %tmp.39 :fillRoundedRectangle;
+        %tmp.41 = 90;
+        %tmp.42 = 50;
+        %tmp.43 = 90;
+        %tmp.44 = 90;
+        %tmp.45 = 18;
+        invoke %tmp.39 %tmp.40(%tmp.41, %tmp.42, %tmp.43, %tmp.44, %tmp.45);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 72 8 ]
+        %tmp.46 = lgetv %dc;
+        %tmp.47 = getv function %tmp.46 :fillRoundedRectangle;
+        %tmp.48 = 40;
+        %tmp.49 = 165;
+        %tmp.50 = 160;
+        %tmp.51 = 40;
+        %tmp.52 = 20;
+        invoke %tmp.46 %tmp.47(%tmp.48, %tmp.49, %tmp.50, %tmp.51, %tmp.52);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 73 8 ]
+        %tmp.53 = lgetv %dc;
+        %tmp.54 = getv function %tmp.53 :drawBitmap;
+        %tmp.55 = 49;
+        %tmp.56 = 173;
+        %tmp.58 = getv ? :GoProResources;
+        %tmp.59 = getv %tmp.58 :icons;
+        %tmp.61 = getv ? :UI_MODES;
+        %tmp.62 = agetv %tmp.59 %tmp.61;
+        %tmp.64 = getv ? :WHEEL;
+        %tmp.65 = agetv %tmp.62 %tmp.64;
+        invoke %tmp.53 %tmp.54(%tmp.55, %tmp.56, %tmp.65);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 74 8 ]
+        %tmp.66 = lgetv %dc;
+        %tmp.67 = getv function %tmp.66 :setColor;
+        %tmp.68 = 0xFF0000;
+        %tmp.69 = getm $.Toybox.Graphics;
+        %tmp.70 = getv %tmp.69 :COLOR_TRANSPARENT;
+        invoke %tmp.66 %tmp.67(%tmp.68, %tmp.70);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 75 8 ]
+        %tmp.71 = lgetv %dc;
+        %tmp.72 = getv function %tmp.71 :setPenWidth;
+        %tmp.73 = 8;
+        invoke %tmp.71 %tmp.72(%tmp.73);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 76 8 ]
+        %tmp.74 = lgetv %dc;
+        %tmp.75 = getv function %tmp.74 :drawCircle;
+        %tmp.76 = 135;
+        %tmp.77 = 95;
+        %tmp.78 = 28;
+        invoke %tmp.74 %tmp.75(%tmp.76, %tmp.77, %tmp.78);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 77 8 ]
+        %tmp.79 = lgetv %dc;
+        %tmp.80 = getv function %tmp.79 :setColor;
+        %tmp.81 = getm $.Toybox.Graphics;
+        %tmp.82 = getv %tmp.81 :COLOR_LT_GRAY;
+        %tmp.83 = getm $.Toybox.Graphics;
+        %tmp.84 = getv %tmp.83 :COLOR_TRANSPARENT;
+        invoke %tmp.79 %tmp.80(%tmp.82, %tmp.84);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 78 8 ]
+        %tmp.85 = lgetv %dc;
+        %tmp.86 = getv function %tmp.85 :setPenWidth;
+        %tmp.87 = 6;
+        invoke %tmp.85 %tmp.86(%tmp.87);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 79 8 ]
+        %tmp.88 = lgetv %dc;
+        %tmp.89 = getv function %tmp.88 :drawArc;
+        %tmp.90 = 120;
+        %tmp.91 = 120;
+        %tmp.92 = 108;
+        %tmp.93 = getm $.Toybox.Graphics;
+        %tmp.94 = getv %tmp.93 :ARC_CLOCKWISE;
+        %tmp.95 = 100;
+        %tmp.96 = 80;
+        invoke %tmp.88 %tmp.89(%tmp.90, %tmp.91, %tmp.92, %tmp.94, %tmp.95, %tmp.96);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 80 8 ]
+        %tmp.97 = lgetv %dc;
+        %tmp.98 = getv function %tmp.97 :fillCircle;
+        %tmp.99 = 102;
+        %tmp.100 = 13;
+        %tmp.101 = 3;
+        invoke %tmp.97 %tmp.98(%tmp.99, %tmp.100, %tmp.101);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 81 8 ]
+        %tmp.102 = lgetv %dc;
+        %tmp.103 = getv function %tmp.102 :fillCircle;
+        %tmp.104 = 138;
+        %tmp.105 = 13;
+        %tmp.106 = 3;
+        invoke %tmp.102 %tmp.103(%tmp.104, %tmp.105, %tmp.106);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 82 8 ]
+        %tmp.107 = lgetv %dc;
+        %tmp.108 = getv function %tmp.107 :setPenWidth;
+        %tmp.109 = 1;
+        invoke %tmp.107 %tmp.108(%tmp.109);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 83 8 ]
+        %tmp.110 = lgetv %dc;
+        %tmp.111 = getv function %tmp.110 :setColor;
+        %tmp.112 = getm $.Toybox.Graphics;
+        %tmp.113 = getv %tmp.112 :COLOR_WHITE;
+        %tmp.114 = getm $.Toybox.Graphics;
+        %tmp.115 = getv %tmp.114 :COLOR_TRANSPARENT;
+        invoke %tmp.110 %tmp.111(%tmp.113, %tmp.115);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 84 8 ]
+        %tmp.116 = lgetv %dc;
+        %tmp.117 = getv function %tmp.116 :drawText;
+        %tmp.118 = 132;
+        %tmp.119 = 185;
+        %tmp.121 = getv ? :GoProResources;
+        %tmp.122 = getv %tmp.121 :fontTiny;
+        %tmp.124 = getv ? :cam;
+        %tmp.125 = getv function %tmp.124 :getDescription;
+        %tmp.126 = invoke %tmp.124 %tmp.125();
+        %tmp.127 = getm $.Toybox.Graphics;
+        %tmp.128 = getv %tmp.127 :TEXT_JUSTIFY_CENTER;
+        %tmp.129 = getm $.Toybox.Graphics;
+        %tmp.130 = getv %tmp.129 :TEXT_JUSTIFY_VCENTER;
+        %tmp.131 = bitor %tmp.128 %tmp.130;
+        invoke %tmp.116 %tmp.117(%tmp.118, %tmp.119, %tmp.122, %tmp.126, %tmp.131);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 90 8 ]
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_90_8_if_stmt:
+        %tmp.133 = getv ? :cam;
+        %tmp.134 = getv function %tmp.133 :isRecording;
+        %tmp.135 = invoke %tmp.133 %tmp.134();
+        bf %tmp.135 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_90_8_if_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_90_8_if_true:
+        goto @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_90_8_if_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_90_8_if_end:
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_59_40_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 100; ]
+    function onHide() as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_100_30_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc" 101 8 ]
+        %tmp.1 = null;
+        putv self :settingsButton %tmp.1;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteView_mc_100_30_stop:
+    }
+}
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteView.mc"; @line = 1; ]
+<init> {
+}

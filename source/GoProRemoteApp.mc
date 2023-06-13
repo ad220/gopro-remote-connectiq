@@ -3,6 +3,7 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 
 var cam;
+var mobile;
 
 class GoProRemoteApp extends Application.AppBase {
     // var gp;
@@ -14,6 +15,7 @@ class GoProRemoteApp extends Application.AppBase {
     // onStart() is called on application start up
     function onStart(state as Dictionary?) as Void {
         cam = new GoProCamera();
+        mobile = new MobileDevice();
         GoProResources.loadFonts();
     }
 

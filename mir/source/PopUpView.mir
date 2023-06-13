@@ -1,0 +1,165 @@
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc"; @line = 1; ]
+import Toybox.Graphics;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc"; @line = 2; ]
+import Toybox.WatchUi;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc"; @line = 3; ]
+import Toybox.Lang;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc"; @line = 5; ]
+class PopUpView extends WatchUi.View{
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc"; @line = 5; ]
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc"; @line = 5; ]
+    static
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc"; @line = 6; @position = 8; ]
+    var message as String;
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc"; @line = 7; @position = 8; ]
+    var type as Number;
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc"; @line = 9; ]
+    function initialize(_message as String, _type as PopUpType) as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_PopUpView_mc_9_64_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc" 10 8 ]
+        %tmp.2 = lgetv %_message;
+        putv self :message %tmp.2;
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc" 11 8 ]
+        %tmp.4 = lgetv %_type;
+        putv self :type %tmp.4;
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc" 12 8 ]
+        %tmp.6 = getv ? :View;
+        %tmp.7 = getv function %tmp.6 :initialize;
+        invoke %tmp.6 %tmp.7();
+C_Users_Arthur_Documents_Code_GoProRemote_source_PopUpView_mc_9_64_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc"; @line = 15; ]
+    function onLayout(dc as Dc) as Void {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc"; @line = 19; ]
+    function onShow() as Void {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc"; @line = 22; ]
+    function onUpdate(dc as Dc) as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_PopUpView_mc_22_40_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc" 23 8 ]
+        %tmp.1 = lgetv %dc;
+        %tmp.2 = getv function %tmp.1 :setColor;
+        %tmp.3 = newa 2;
+        %tmp.4 = getm $.Toybox.Graphics;
+        %tmp.5 = getv %tmp.4 :COLOR_DK_GRAY;
+        %tmp.6 = dup %tmp.3;
+        %tmp.7 = aputv %tmp.6 0 %tmp.5;
+        %tmp.8 = 0xFF5500;
+        %tmp.9 = dup %tmp.7;
+        %tmp.10 = aputv %tmp.9 1 %tmp.8;
+        %tmp.12 = getv ? :type;
+        %tmp.13 = agetv %tmp.10 %tmp.12;
+        %tmp.14 = getm $.Toybox.Graphics;
+        %tmp.15 = getv %tmp.14 :COLOR_TRANSPARENT;
+        invoke %tmp.1 %tmp.2(%tmp.13, %tmp.15);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc" 24 8 ]
+        %tmp.16 = lgetv %dc;
+        %tmp.17 = getv function %tmp.16 :fillRectangle;
+        %tmp.18 = 0;
+        %tmp.19 = 0;
+        %tmp.20 = 240;
+        %tmp.21 = 100;
+        invoke %tmp.16 %tmp.17(%tmp.18, %tmp.19, %tmp.20, %tmp.21);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc" 25 8 ]
+        %tmp.22 = lgetv %dc;
+        %tmp.23 = getv function %tmp.22 :setColor;
+        %tmp.24 = getm $.Toybox.Graphics;
+        %tmp.25 = getv %tmp.24 :COLOR_WHITE;
+        %tmp.26 = getm $.Toybox.Graphics;
+        %tmp.27 = getv %tmp.26 :COLOR_TRANSPARENT;
+        invoke %tmp.22 %tmp.23(%tmp.25, %tmp.27);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc" 26 8 ]
+        %tmp.28 = lgetv %dc;
+        %tmp.29 = getv function %tmp.28 :fillCircle;
+        %tmp.30 = 120;
+        %tmp.31 = 20;
+        %tmp.32 = 10;
+        invoke %tmp.28 %tmp.29(%tmp.30, %tmp.31, %tmp.32);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc" 27 8 ]
+        %tmp.33 = lgetv %dc;
+        %tmp.34 = getv function %tmp.33 :drawText;
+        %tmp.35 = 120;
+        %tmp.36 = 60;
+        %tmp.38 = getv ? :GoProResources;
+        %tmp.39 = getv %tmp.38 :fontTiny;
+        %tmp.41 = getv ? :message;
+        %tmp.42 = getm $.Toybox.Graphics;
+        %tmp.43 = getv %tmp.42 :TEXT_JUSTIFY_CENTER;
+        %tmp.44 = getm $.Toybox.Graphics;
+        %tmp.45 = getv %tmp.44 :TEXT_JUSTIFY_VCENTER;
+        %tmp.46 = bitor %tmp.43 %tmp.45;
+        invoke %tmp.33 %tmp.34(%tmp.35, %tmp.36, %tmp.39, %tmp.41, %tmp.46);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc" 28 8 ]
+        %tmp.47 = lgetv %dc;
+        %tmp.48 = getv function %tmp.47 :setColor;
+        %tmp.49 = newa 2;
+        %tmp.50 = getm $.Toybox.Graphics;
+        %tmp.51 = getv %tmp.50 :COLOR_DK_GRAY;
+        %tmp.52 = dup %tmp.49;
+        %tmp.53 = aputv %tmp.52 0 %tmp.51;
+        %tmp.54 = 0xFF5500;
+        %tmp.55 = dup %tmp.53;
+        %tmp.56 = aputv %tmp.55 1 %tmp.54;
+        %tmp.58 = getv ? :type;
+        %tmp.59 = agetv %tmp.56 %tmp.58;
+        %tmp.60 = getm $.Toybox.Graphics;
+        %tmp.61 = getv %tmp.60 :COLOR_TRANSPARENT;
+        invoke %tmp.47 %tmp.48(%tmp.59, %tmp.61);
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc" 29 8 ]
+        %tmp.62 = lgetv %dc;
+        %tmp.63 = getv function %tmp.62 :drawText;
+        %tmp.64 = 120;
+        %tmp.65 = 20;
+        %tmp.67 = getv ? :GoProResources;
+        %tmp.68 = getv %tmp.67 :fontTiny;
+        %tmp.69 = newa 2;
+        %tmp.70 = "i";
+        %tmp.71 = dup %tmp.69;
+        %tmp.72 = aputv %tmp.71 0 %tmp.70;
+        %tmp.73 = "!";
+        %tmp.74 = dup %tmp.72;
+        %tmp.75 = aputv %tmp.74 1 %tmp.73;
+        %tmp.77 = getv ? :type;
+        %tmp.78 = agetv %tmp.75 %tmp.77;
+        %tmp.79 = getm $.Toybox.Graphics;
+        %tmp.80 = getv %tmp.79 :TEXT_JUSTIFY_CENTER;
+        %tmp.81 = getm $.Toybox.Graphics;
+        %tmp.82 = getv %tmp.81 :TEXT_JUSTIFY_VCENTER;
+        %tmp.83 = bitor %tmp.80 %tmp.82;
+        invoke %tmp.62 %tmp.63(%tmp.64, %tmp.65, %tmp.68, %tmp.78, %tmp.83);
+C_Users_Arthur_Documents_Code_GoProRemote_source_PopUpView_mc_22_40_stop:
+    }
+}
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc"; @line = 33; ]
+class PopUpDelegate extends WatchUi.BehaviorDelegate{
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc"; @line = 33; ]
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc"; @line = 33; ]
+    static
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc"; @line = 34; @position = 8; ]
+    var view as PopUpView;
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc"; @line = 36; ]
+    public
+    function initialize(_view) as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_PopUpView_mc_36_38_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc" 37 8 ]
+        %tmp.2 = getv ? :BehaviorDelegate;
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc" 38 8 ]
+        %tmp.5 = lgetv %_view;
+        putv self :view %tmp.5;
+C_Users_Arthur_Documents_Code_GoProRemote_source_PopUpView_mc_36_38_stop:
+    }
+}
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\PopUpView.mc"; @line = 1; ]
+<init> {
+}

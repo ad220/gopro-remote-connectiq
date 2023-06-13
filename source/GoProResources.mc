@@ -76,6 +76,11 @@ enum Communication {
     COM_LOCKED
 }
 
+enum PopUpType {
+    POP_INFO,
+    POP_ERROR
+}
+
 
 class GoProResources {
     static public var fontTiny as FontResource?;

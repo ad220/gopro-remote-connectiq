@@ -1,0 +1,176 @@
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc"; @line = 1; ]
+import Toybox.WatchUi;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc"; @line = 2; ]
+import Toybox.Application;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc"; @line = 3; ]
+import Toybox.Lang;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc"; @line = 6; ]
+class GoProPreset extends GoProSettings{
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc"; @line = 6; ]
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc"; @line = 6; ]
+    static
+    <init> {
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc" 11 24 ]
+        %tmp.1 = newa 3;
+        %tmp.2 = "Preset 1";
+        %tmp.3 = dup %tmp.1;
+        %tmp.4 = aputv %tmp.3 0 %tmp.2;
+        %tmp.5 = "Preset 2";
+        %tmp.6 = dup %tmp.4;
+        %tmp.7 = aputv %tmp.6 1 %tmp.5;
+        %tmp.8 = "Preset 3";
+        %tmp.9 = dup %tmp.7;
+        %tmp.10 = aputv %tmp.9 2 %tmp.8;
+        putv self :names %tmp.10;
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc"; @line = 7; @position = 16; ]
+    private
+    var id;
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc"; @line = 8; @position = 16; ]
+    private
+    var name;
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc"; @line = 9; @position = 16; ]
+    private
+    var icon;
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc"; @line = 11; @position = 24; ]
+    public static
+    const names;
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc"; @line = 13; ]
+    public
+    function initialize(_id) as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_13_36_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc" 14 8 ]
+        %tmp.1 = "preset#";
+        %tmp.3 = lgetv %_id;
+        %tmp.4 = add %tmp.1 %tmp.3;
+        putv self :id %tmp.4;
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc" 16 8 ]
+        %tmp.6 = getv ? :names;
+        %tmp.8 = lgetv %_id;
+        %tmp.9 = agetv %tmp.6 %tmp.8;
+        putv self :name %tmp.9;
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc" 17 8 ]
+        %tmp.11 = getv ? :GoProResources;
+        %tmp.12 = getv %tmp.11 :icons;
+        %tmp.14 = getv ? :UI_EDITABLES;
+        %tmp.15 = agetv %tmp.12 %tmp.14;
+        %tmp.17 = lgetv %_id;
+        %tmp.18 = agetv %tmp.15 %tmp.17;
+        putv self :icon %tmp.18;
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc" 18 8 ]
+        %tmp.20 = getv ? :GoProSettings;
+        %tmp.21 = getv function %tmp.20 :initialize;
+        invoke %tmp.20 %tmp.21();
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc" 20 8 ]
+        try @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_20_8_beginTry @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_20_8_endTry @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_20_8_catch @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_20_8_finally;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_20_8_beginTry:
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_20_12_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc" 21 12 ]
+        %tmp.22 = getm $.Toybox.Application;
+        %tmp.23 = getv %tmp.22 :Storage;
+        %tmp.24 = getv function %tmp.23 :getValue;
+        %tmp.26 = getv ? :id;
+        %tmp.27 = invoke %tmp.23 %tmp.24(%tmp.26);
+        putv self :settings %tmp.27;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_20_12_stop:
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_20_8_endTry:
+        jsr @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_20_8_finally;
+        goto @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_20_8_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_20_8_catch:
+        %tmp.28 = exception;
+        push %tmp.28;
+        [ "C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_20_8_catch" "C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_22_10_end" ]
+        %exception.1 = local;
+        %tmp.29 = dup %tmp.28;
+        lputv %exception.1 %tmp.29;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_22_28_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc" 23 12 ]
+        %tmp.30 = newa 4;
+        %tmp.32 = getv ? :_4K;
+        %tmp.33 = dup %tmp.30;
+        %tmp.34 = aputv %tmp.33 0 %tmp.32;
+        %tmp.36 = getv ? :_8R7;
+        %tmp.37 = dup %tmp.34;
+        %tmp.38 = aputv %tmp.37 1 %tmp.36;
+        %tmp.40 = getv ? :_LARGE;
+        %tmp.41 = dup %tmp.38;
+        %tmp.42 = aputv %tmp.41 2 %tmp.40;
+        %tmp.44 = getv ? :_60;
+        %tmp.45 = dup %tmp.42;
+        %tmp.46 = aputv %tmp.45 3 %tmp.44;
+        putv self :settings %tmp.46;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_22_28_stop:
+        jsr @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_20_8_finally;
+        pop;
+        goto @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_20_8_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_22_10_end:
+        jsr @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_20_8_finally;
+        throw %tmp.28;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_20_8_finally:
+        jsrret;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_20_8_end:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc" 26 8 ]
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_26_8_if_stmt:
+        %tmp.48 = getv ? :settings;
+        %tmp.49 = null;
+        %tmp.50 = eq %tmp.48 %tmp.49;
+        bf %tmp.50 @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_26_8_if_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_26_8_if_true:
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_26_28_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc" 27 12 ]
+        %tmp.51 = newa 4;
+        %tmp.53 = getv ? :_4K;
+        %tmp.54 = dup %tmp.51;
+        %tmp.55 = aputv %tmp.54 0 %tmp.53;
+        %tmp.57 = getv ? :_8R7;
+        %tmp.58 = dup %tmp.55;
+        %tmp.59 = aputv %tmp.58 1 %tmp.57;
+        %tmp.61 = getv ? :_LARGE;
+        %tmp.62 = dup %tmp.59;
+        %tmp.63 = aputv %tmp.62 2 %tmp.61;
+        %tmp.65 = getv ? :_60;
+        %tmp.66 = dup %tmp.63;
+        %tmp.67 = aputv %tmp.66 3 %tmp.65;
+        putv self :settings %tmp.67;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_26_28_stop:
+        goto @C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_26_8_if_end;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_26_8_if_end:
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_13_36_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc"; @line = 33; ]
+    public
+    function savePreset() {
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_33_33_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc" 34 8 ]
+        %tmp.1 = getm $.Toybox.Application;
+        %tmp.2 = getv %tmp.1 :Storage;
+        %tmp.3 = getv function %tmp.2 :setValue;
+        %tmp.5 = getv ? :id;
+        %tmp.7 = getv ? :settings;
+        invoke %tmp.2 %tmp.3(%tmp.5, %tmp.7);
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_33_33_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc"; @line = 37; ]
+    public
+    function getName() as String {
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_37_40_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc" 38 8 ]
+        %tmp.2 = getv ? :name;
+        ret %tmp.2;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_37_40_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc"; @line = 41; ]
+    public
+    function getIcon() as Bitmap {
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_41_40_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc" 42 8 ]
+        %tmp.2 = getv ? :icon;
+        ret %tmp.2;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProPreset_mc_41_40_stop:
+    }
+}
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProPreset.mc"; @line = 1; ]
+<init> {
+}

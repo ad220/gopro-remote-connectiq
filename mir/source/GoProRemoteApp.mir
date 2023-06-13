@@ -1,0 +1,85 @@
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc"; @line = 1; ]
+import Toybox.Application;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc"; @line = 2; ]
+import Toybox.Lang;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc"; @line = 3; ]
+import Toybox.WatchUi;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc"; @line = 5; @position = 4; ]
+var cam;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc"; @line = 6; @position = 4; ]
+var mobile;
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc"; @line = 8; ]
+class GoProRemoteApp extends Application.AppBase{
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc"; @line = 8; ]
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc"; @line = 8; ]
+    static
+    <init> {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc"; @line = 11; ]
+    function initialize() as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteApp_mc_11_26_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc" 12 8 ]
+        %tmp.2 = getv ? :AppBase;
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteApp_mc_11_26_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc"; @line = 16; ]
+    function onStart(state as Dictionary or Null) as Void {
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteApp_mc_16_51_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc" 17 8 ]
+        %tmp.4 = getv ? :GoProCamera;
+        %tmp.1 = newc %tmp.4 ();
+        putv self :cam %tmp.1;
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc" 18 8 ]
+        %tmp.8 = getv ? :MobileDevice;
+        %tmp.5 = newc %tmp.8 ();
+        putv self :mobile %tmp.5;
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc" 19 8 ]
+        %tmp.10 = getv ? :GoProResources;
+        %tmp.11 = getv function %tmp.10 :loadFonts;
+        invoke %tmp.10 %tmp.11();
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteApp_mc_16_51_stop:
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc"; @line = 23; ]
+    function onStop(state as Dictionary or Null) as Void {
+    }
+    [ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc"; @line = 27; ]
+    function getInitialView() as Array<Views or InputDelegates> or Null {
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteApp_mc_27_65_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc" 29 8 ]
+        [ "C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteApp_mc_27_65_start" "C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteApp_mc_27_65_stop" ]
+        %view.1 = local;
+        %tmp.4 = getv ? :GoProConnectView;
+        %tmp.1 = newc %tmp.4 ();
+        lputv %view.1 %tmp.1;
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc" 30 8 ]
+        %tmp.5 = newa Array<Views or InputDelegates> 2;
+        %tmp.7 = lgetv %view.1;
+        %tmp.8 = dup %tmp.5;
+        %tmp.9 = aputv %tmp.8 0 %tmp.7;
+        %tmp.13 = getv ? :GoProConnectDelegate;
+        %tmp.15 = lgetv %view.1;
+        %tmp.10 = newc %tmp.13 (%tmp.15);
+        %tmp.16 = dup %tmp.9;
+        %tmp.17 = aputv %tmp.16 1 %tmp.10;
+        ret %tmp.17;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteApp_mc_27_65_stop:
+    }
+}
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc"; @line = 35; ]
+function getApp() as GoProRemoteApp {
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteApp_mc_35_36_start:
+[ "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc" 36 4 ]
+    %tmp.1 = getm $.Toybox.Application;
+    %tmp.2 = getv function %tmp.1 :getApp;
+    %tmp.3 = invoke %tmp.1 %tmp.2();
+    %tmp.4 = as %tmp.3 GoProRemoteApp;
+    ret %tmp.4;
+C_Users_Arthur_Documents_Code_GoProRemote_source_GoProRemoteApp_mc_35_36_stop:
+}
+[ @file = "C:\Users\Arthur\Documents\Code\GoProRemote\source\GoProRemoteApp.mc"; @line = 1; ]
+<init> {
+}

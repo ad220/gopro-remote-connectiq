@@ -1,7 +1,10 @@
 bin/
 .vscode/
 
+*.prg
+
 *_old
 
 *.pdn/
 *unused png/
+GoProRemote.prg.debug.xml

@@ -1,0 +1,183 @@
+[ @file = "Rez.mc"; @line = 1; ]
+module Rez {
+    [ @file = "Rez.mc"; @line = 1; ]
+    <init> {
+    }
+    [ @file = "Rez.mc"; @line = 2; ]
+    module Drawables {
+        [ @file = "Rez.mc"; @line = 2; ]
+        <init> {
+        }
+        [ @file = "Rez.mc"; @line = 3; ]
+        import Toybox.Lang;
+        [ @file = "Rez.mc"; @line = 4; @position = 19; initialized = true; ]
+        var Hilight as Symbol;
+        [ @file = "Rez.mc"; @line = 5; @position = 19; initialized = true; ]
+        var Wheel as Symbol;
+        [ @file = "Rez.mc"; @line = 6; @position = 19; initialized = true; ]
+        var Camera as Symbol;
+        [ @file = "Rez.mc"; @line = 7; @position = 19; initialized = true; ]
+        var Edit as Symbol;
+        [ @file = "Rez.mc"; @line = 8; @position = 19; initialized = true; ]
+        var Eco as Symbol;
+        [ @file = "Rez.mc"; @line = 9; @position = 19; initialized = true; ]
+        var Sport as Symbol;
+        [ @file = "Rez.mc"; @line = 10; @position = 19; initialized = true; ]
+        var Cinema as Symbol;
+        [ @file = "Rez.mc"; @line = 11; @position = 19; initialized = true; ]
+        var Resolution as Symbol;
+        [ @file = "Rez.mc"; @line = 12; @position = 19; initialized = true; ]
+        var Ratio as Symbol;
+        [ @file = "Rez.mc"; @line = 13; @position = 19; initialized = true; ]
+        var Lens as Symbol;
+        [ @file = "Rez.mc"; @line = 14; @position = 19; initialized = true; ]
+        var Framerate as Symbol;
+        [ @file = "Rez.mc"; @line = 15; @position = 19; initialized = true; ]
+        var LauncherIcon as Symbol;
+    }
+    [ @file = "Rez.mc"; @line = 17; ]
+    module Fonts {
+        [ @file = "Rez.mc"; @line = 17; ]
+        <init> {
+        }
+        [ @file = "Rez.mc"; @line = 18; ]
+        import Toybox.Lang;
+        [ @file = "Rez.mc"; @line = 19; @position = 19; initialized = true; ]
+        var Tiny as Symbol;
+        [ @file = "Rez.mc"; @line = 20; @position = 19; initialized = true; ]
+        var Small as Symbol;
+        [ @file = "Rez.mc"; @line = 21; @position = 19; initialized = true; ]
+        var Medium as Symbol;
+        [ @file = "Rez.mc"; @line = 22; @position = 19; initialized = true; ]
+        var Large as Symbol;
+    }
+    [ @file = "Rez.mc"; @line = 24; ]
+    module JsonData {
+        [ @file = "Rez.mc"; @line = 24; ]
+        <init> {
+        }
+    }
+    [ @file = "Rez.mc"; @line = 26; ]
+    module Layouts {
+        [ @file = "Rez.mc"; @line = 26; ]
+        <init> {
+        }
+        [ @file = "Rez.mc"; @line = 27; ]
+        import Toybox.Lang;
+        [ @file = "Rez.mc"; @line = 28; ]
+        using Toybox.WatchUi;
+        [ @file = "Rez.mc"; @line = 29; ]
+        using Toybox.WatchUi as :Ui;
+        [ @file = "Rez.mc"; @line = 30; ]
+        using Toybox.Graphics;
+        [ @file = "Rez.mc"; @line = 31; ]
+        using Toybox.Graphics as :Gfx;
+        [ @file = "Rez.mc"; @line = 33; ]
+        function MainLayout(dc as Graphics.Dc) as Array<WatchUi.Drawable> {
+Rez_mc_33_70_start:
+[ "Rez.mc" 34 8 ]
+            %tmp.1 = newa Array<WatchUi.Drawable> 0;
+            ret %tmp.1;
+Rez_mc_33_70_stop:
+        }
+        [ @file = "Rez.mc"; @line = 36; ]
+        using Toybox.WatchUi;
+        [ @file = "Rez.mc"; @line = 37; ]
+        using Toybox.WatchUi as :Ui;
+        [ @file = "Rez.mc"; @line = 38; ]
+        using Toybox.Graphics;
+        [ @file = "Rez.mc"; @line = 39; ]
+        using Toybox.Graphics as :Gfx;
+        [ @file = "Rez.mc"; @line = 41; ]
+        function GoProSettings(dc as Graphics.Dc) as Array<WatchUi.Drawable> {
+Rez_mc_41_73_start:
+[ "Rez.mc" 42 8 ]
+            %tmp.1 = newa Array<WatchUi.Drawable> 0;
+            ret %tmp.1;
+Rez_mc_41_73_stop:
+        }
+    }
+    [ @file = "Rez.mc"; @line = 45; ]
+    module Menus {
+        [ @file = "Rez.mc"; @line = 45; ]
+        <init> {
+        }
+    }
+    [ @file = "Rez.mc"; @line = 47; ]
+    module Strings {
+        [ @file = "Rez.mc"; @line = 47; ]
+        <init> {
+        }
+        [ @file = "Rez.mc"; @line = 48; ]
+        import Toybox.Lang;
+        [ @file = "Rez.mc"; @line = 49; @position = 19; initialized = true; ]
+        var _240 as Symbol;
+        [ @file = "Rez.mc"; @line = 50; @position = 19; initialized = true; ]
+        var _LINEARLOCK as Symbol;
+        [ @file = "Rez.mc"; @line = 51; @position = 19; initialized = true; ]
+        var _LINEAR as Symbol;
+        [ @file = "Rez.mc"; @line = 52; @position = 19; initialized = true; ]
+        var AppName as Symbol;
+        [ @file = "Rez.mc"; @line = 53; @position = 19; initialized = true; ]
+        var Framerate as Symbol;
+        [ @file = "Rez.mc"; @line = 54; @position = 19; initialized = true; ]
+        var _SUPERVIEW as Symbol;
+        [ @file = "Rez.mc"; @line = 55; @position = 19; initialized = true; ]
+        var Sport as Symbol;
+        [ @file = "Rez.mc"; @line = 56; @position = 19; initialized = true; ]
+        var _5K as Symbol;
+        [ @file = "Rez.mc"; @line = 57; @position = 19; initialized = true; ]
+        var _3K as Symbol;
+        [ @file = "Rez.mc"; @line = 58; @position = 19; initialized = true; ]
+        var _HYPERVIEW as Symbol;
+        [ @file = "Rez.mc"; @line = 59; @position = 19; initialized = true; ]
+        var _200 as Symbol;
+        [ @file = "Rez.mc"; @line = 60; @position = 19; initialized = true; ]
+        var _60 as Symbol;
+        [ @file = "Rez.mc"; @line = 61; @position = 19; initialized = true; ]
+        var _100 as Symbol;
+        [ @file = "Rez.mc"; @line = 62; @position = 19; initialized = true; ]
+        var Ratio as Symbol;
+        [ @file = "Rez.mc"; @line = 63; @position = 19; initialized = true; ]
+        var _120 as Symbol;
+        [ @file = "Rez.mc"; @line = 64; @position = 19; initialized = true; ]
+        var Cinema as Symbol;
+        [ @file = "Rez.mc"; @line = 65; @position = 19; initialized = true; ]
+        var Settings as Symbol;
+        [ @file = "Rez.mc"; @line = 66; @position = 19; initialized = true; ]
+        var EditP7 as Symbol;
+        [ @file = "Rez.mc"; @line = 67; @position = 19; initialized = true; ]
+        var _24 as Symbol;
+        [ @file = "Rez.mc"; @line = 68; @position = 19; initialized = true; ]
+        var _25 as Symbol;
+        [ @file = "Rez.mc"; @line = 69; @position = 19; initialized = true; ]
+        var Connect as Symbol;
+        [ @file = "Rez.mc"; @line = 70; @position = 19; initialized = true; ]
+        var Eco as Symbol;
+        [ @file = "Rez.mc"; @line = 71; @position = 19; initialized = true; ]
+        var _8R7 as Symbol;
+        [ @file = "Rez.mc"; @line = 72; @position = 19; initialized = true; ]
+        var _LARGE as Symbol;
+        [ @file = "Rez.mc"; @line = 73; @position = 19; initialized = true; ]
+        var _4K as Symbol;
+        [ @file = "Rez.mc"; @line = 74; @position = 19; initialized = true; ]
+        var Manually as Symbol;
+        [ @file = "Rez.mc"; @line = 75; @position = 19; initialized = true; ]
+        var _2K as Symbol;
+        [ @file = "Rez.mc"; @line = 76; @position = 19; initialized = true; ]
+        var Lens as Symbol;
+        [ @file = "Rez.mc"; @line = 77; @position = 19; initialized = true; ]
+        var _16R9 as Symbol;
+        [ @file = "Rez.mc"; @line = 78; @position = 19; initialized = true; ]
+        var _50 as Symbol;
+        [ @file = "Rez.mc"; @line = 79; @position = 19; initialized = true; ]
+        var _30 as Symbol;
+        [ @file = "Rez.mc"; @line = 80; @position = 19; initialized = true; ]
+        var _4R3 as Symbol;
+        [ @file = "Rez.mc"; @line = 81; @position = 19; initialized = true; ]
+        var Resolution as Symbol;
+    }
+}
+[ @file = "Rez.mc"; @line = 1; ]
+<init> {
+}

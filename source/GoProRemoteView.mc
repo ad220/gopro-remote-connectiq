@@ -1,5 +1,6 @@
 import Toybox.Graphics;
 import Toybox.WatchUi;
+import Toybox.System;
 
 
 class GoProRemoteDelegate extends WatchUi.BehaviorDelegate {
@@ -13,7 +14,10 @@ class GoProRemoteDelegate extends WatchUi.BehaviorDelegate {
     public function onTap(tap as ClickEvent) {
         var coord = tap.getCoordinates();
         //TODO: other buttons
-        if (coord[0]<200 and coord[0]>40 and coord[1]<220 and coord[1]>180) {
+        if (coord[0]<190 and coord[0]>80 and coord[1]<150 and coord[1]>40) {
+            System.print("pressed shutter");
+            mobile.send([COM_SHUTTER, 0]);
+        } else if (coord[0]<200 and coord[0]>40 and coord[1]<220 and coord[1]>160) {
             onSettings();
         }
         return true;
