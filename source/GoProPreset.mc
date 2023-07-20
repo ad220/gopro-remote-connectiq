@@ -30,7 +30,7 @@ class GoProPreset extends GoProSettings {
         //TODO: change initialize with params when BT implemented
     }
 
-    public function savePreset() {
+    public function save() {
         Application.Storage.setValue(id, settings);
     }
 

@@ -29,15 +29,21 @@ class MobileDevice {
         switch (message.data[0]) {
             case COM_CONNECT:
                 // Ouverture connexion M>T>G>T>M
-                    if (!message.data[1]) {
-                        var _view = new GoProRemoteView();
-                        WatchUi.pushView(_view, new GoProRemoteDelegate(_view), WatchUi.SLIDE_LEFT);
-                    } else {
-                        var _view = new PopUpView("Unable to connect to GoPro", POP_ERROR);
-                        WatchUi.pushView(_view, new PopUpDelegate(_view), WatchUi.SLIDE_LEFT);
-                    }
+                if (!message.data[1]) {
+                    var _view = new GoProRemoteView();
+                    WatchUi.pushView(_view, new GoProRemoteDelegate(_view), WatchUi.SLIDE_LEFT);
+                } else {
+                    var _view = new PopUpView("Unable to connect to GoPro", POP_ERROR);
+                    WatchUi.pushView(_view, new PopUpDelegate(_view), WatchUi.SLIDE_IMMEDIATE);
+                }
                 break;
-
+            
+            case COM_FETCH_SETTINGS:
+                // GoPro settings --> montre
+                System.print(message.data);
+                if (message.data[1]) {
+                    cam.syncSettings(message.data[1]);
+                }
             default:
                 break;
         }

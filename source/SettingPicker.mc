@@ -61,6 +61,7 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     public function onBack() as Void {
+        gp.save();
         GoProResources.loadIcons(UI_EDITABLES);
         // maybe should pop 2 views if camera edit
         WatchUi.popView(WatchUi.SLIDE_RIGHT);

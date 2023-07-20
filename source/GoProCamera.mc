@@ -1,3 +1,5 @@
+import Toybox.Lang;
+
 class GoProCamera extends GoProSettings {
     private var recording;
     private var region;
@@ -12,6 +14,12 @@ class GoProCamera extends GoProSettings {
         for (var id=0; id<N_SETTINGS; id++) {
             settings[id]=preset.getSetting(id);
         }
+        mobile.send([COM_PUSH_SETTINGS, settings]);
+    }
+
+    public function syncSettings(_settings as Array<Number>) {
+        settings = _settings;
+        WatchUi.requestUpdate();
     }
 
     public function pressShutter() {
@@ -24,5 +32,9 @@ class GoProCamera extends GoProSettings {
 
     public function getRegion() {
         return region;
+    }
+
+    public function save() {
+        mobile.send([COM_PUSH_SETTINGS, settings]);
     }
 }

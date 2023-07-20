@@ -107,4 +107,8 @@ class GoProSettings {
             + "@" + frLabel.substring(0, frLabel.length()-4) + " " \
             + GoProResources.settingLabels[RATIO][settings[RATIO]]; //[TODO: add lens
     }
+
+    public function save() {
+        // To implement in subclasses
+    }
 }

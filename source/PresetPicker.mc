@@ -8,6 +8,7 @@ import Toybox.Lang;
 
 class PresetPickerMenu extends WatchUi.CustomMenu {
 
+    // editPreset is a boolean indicating if we are editing a preset or not (implies we shouldn't draw last options)
     public function initialize(editPreset as Number) {
         GoProResources.freeIcons(UI_HILIGHT);
         GoProResources.freeIcons(UI_MODES);
@@ -82,7 +83,7 @@ class PresetPickerDelegate extends WatchUi.Menu2InputDelegate {
             WatchUi.pushView(new PresetPickerMenu(1), new PresetPickerDelegate(true), WatchUi.SLIDE_LEFT);
         } else if (editPreset) {
             WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
-            WatchUi.pushView(new PresetEditMenu(item.getPreset(), id), new PresetEditDelegate(item.getPreset()), WatchUi.SLIDE_LEFT);
+            WatchUi.pushView(new SettingPickerMenu(item.getPreset(), id), new SettingPickerDelegate(item.getPreset()), WatchUi.SLIDE_LEFT);
         } else {
             WatchUi.popView(WatchUi.SLIDE_DOWN);
             cam.setPreset(item.getPreset());
