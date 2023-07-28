@@ -28,6 +28,12 @@ class GoProRemoteDelegate extends WatchUi.BehaviorDelegate {
         WatchUi.pushView(new PresetPickerMenu(0), new PresetPickerDelegate(false), WatchUi.SLIDE_UP);
         return true;
     }
+
+    public function onBack() {
+        mobile.send([COM_CONNECT, 1]);
+        WatchUi.popView(WatchUi.SLIDE_DOWN);
+        return true;
+    }
 }
 
 
@@ -42,6 +48,7 @@ class GoProRemoteView extends WatchUi.View {
     function onLayout(dc as Dc) as Void {
         setLayout(Rez.Layouts.MainLayout(dc));
         GoProResources.loadSettingLabels();
+        onRemoteView = true;
     }
 
     // Called when this View is brought to the foreground. Restore
@@ -100,6 +107,7 @@ class GoProRemoteView extends WatchUi.View {
     // memory.
     function onHide() as Void {
         settingsButton = null;
+        onRemoteView = false;
     }
 
 }

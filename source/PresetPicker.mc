@@ -76,14 +76,11 @@ class PresetPickerDelegate extends WatchUi.Menu2InputDelegate {
         //TODO: check with lower SDK version and/or fix this shit
         //TODO: think about view tree for preset edit
         if (id == CAM) {
-            WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
-            WatchUi.pushView(new SettingPickerMenu(cam, id), new SettingPickerDelegate(cam), WatchUi.SLIDE_LEFT);
+            WatchUi.switchToView(new SettingPickerMenu(cam, id), new SettingPickerDelegate(cam), WatchUi.SLIDE_LEFT);
         } else if (id == EDITP7) {
-            WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
-            WatchUi.pushView(new PresetPickerMenu(1), new PresetPickerDelegate(true), WatchUi.SLIDE_LEFT);
+            WatchUi.switchToView(new PresetPickerMenu(1), new PresetPickerDelegate(true), WatchUi.SLIDE_LEFT);
         } else if (editPreset) {
-            WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
-            WatchUi.pushView(new SettingPickerMenu(item.getPreset(), id), new SettingPickerDelegate(item.getPreset()), WatchUi.SLIDE_LEFT);
+            WatchUi.switchToView(new SettingPickerMenu(item.getPreset(), id), new SettingPickerDelegate(item.getPreset()), WatchUi.SLIDE_LEFT);
         } else {
             WatchUi.popView(WatchUi.SLIDE_DOWN);
             cam.setPreset(item.getPreset());

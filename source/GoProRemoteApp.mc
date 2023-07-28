@@ -4,6 +4,7 @@ import Toybox.WatchUi;
 
 var cam;
 var mobile;
+var onRemoteView as Boolean?;
 
 class GoProRemoteApp extends Application.AppBase {
     // var gp;
@@ -16,11 +17,13 @@ class GoProRemoteApp extends Application.AppBase {
     function onStart(state as Dictionary?) as Void {
         cam = new GoProCamera();
         mobile = new MobileDevice();
+        onRemoteView = false;
         GoProResources.loadFonts();
     }
 
     // onStop() is called when your application is exiting
     function onStop(state as Dictionary?) as Void {
+        mobile.send([COM_CONNECT, 1]);
     }
 
     // Return the initial view of your application here

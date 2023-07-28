@@ -29,10 +29,14 @@ class MobileDevice {
         switch (message.data[0]) {
             case COM_CONNECT:
                 // Ouverture connexion M>T>G>T>M
-                if (!message.data[1]) {
+                if (message.data[1] == 0) {
                     var _view = new GoProRemoteView();
                     WatchUi.pushView(_view, new GoProRemoteDelegate(_view), WatchUi.SLIDE_LEFT);
                 } else {
+                    while (!onRemoteView) {
+                        WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
+                    }
+                    WatchUi.popView(WatchUi.SLIDE_LEFT);
                     var _view = new PopUpView("Unable to connect to GoPro", POP_ERROR);
                     WatchUi.pushView(_view, new PopUpDelegate(_view), WatchUi.SLIDE_IMMEDIATE);
                 }
