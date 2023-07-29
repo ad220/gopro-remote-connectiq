@@ -41,4 +41,8 @@ class GoProPreset extends GoProSettings {
     public function getIcon() as Bitmap {
         return icon;
     }
+
+    public function getSettings() as Array<Number> {
+        return settings;
+    }
 }

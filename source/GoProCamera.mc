@@ -2,23 +2,28 @@ import Toybox.Lang;
 
 class GoProCamera extends GoProSettings {
     private var recording;
-    private var region;
+
+    private var states as Array<Number>?;
+    private var settingsSave as Array<Number>?;
 
     public function initialize() {
         GoProSettings.initialize();
         recording=false;
-        region=NTSC;
+        states = [NTSC];
     }
 
     public function setPreset(preset as GoProPreset) {
-        for (var id=0; id<N_SETTINGS; id++) {
-            settings[id]=preset.getSetting(id);
-        }
-        mobile.send([COM_PUSH_SETTINGS, settings]);
+        mobile.send([COM_PUSH_SETTINGS, preset.getSettings()]);
     }
 
     public function syncSettings(_settings as Array<Number>) {
         settings = _settings;
+        WatchUi.requestUpdate();
+    }
+
+    public function syncStates(_states as Array<Number>) {
+        states = _states;
+        GoProResources.loadSettingLabels();
         WatchUi.requestUpdate();
     }
 
@@ -31,7 +36,7 @@ class GoProCamera extends GoProSettings {
     }
 
     public function getRegion() {
-        return region;
+        return states[REGION];
     }
 
     public function save() {

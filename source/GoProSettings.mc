@@ -34,6 +34,7 @@ class GoProSettings {
         }
     }
 
+    // TODO: replace with available settings request to camera
     public function possibleSettings(id) as Array<Number>{ // for GoPro HERO 11 Black Mini
         switch (id) {
             case RESOLUTION:
@@ -109,6 +110,6 @@ class GoProSettings {
     }
 
     public function save() {
-        // To implement in subclasses
+        // Implemented in subclasses
     }
 }

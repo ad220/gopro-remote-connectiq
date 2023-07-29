@@ -48,13 +48,13 @@ class GoProRemoteView extends WatchUi.View {
     function onLayout(dc as Dc) as Void {
         setLayout(Rez.Layouts.MainLayout(dc));
         GoProResources.loadSettingLabels();
-        onRemoteView = true;
     }
 
     // Called when this View is brought to the foreground. Restore
     // the state of this View and prepare it to be shown. This includes
     // loading resources into memory.
     function onShow() as Void {
+        onRemoteView = true;
         GoProResources.loadIcons(UI_HILIGHT);
         GoProResources.loadIcons(UI_MODES);
         GoProResources.freeIcons(UI_EDITABLES);

@@ -18,6 +18,11 @@ enum Settings {
     FRAMERATE
 }
 
+const N_STATES = 1;
+enum States {
+    REGION
+}
+
 enum UserInterface {
     UI_CONNECT,
     UI_HILIGHT,
@@ -31,6 +36,7 @@ enum Modes {
     WHEEL
 }
 
+// Settings enums
 enum Resolutions {
     _5K,
     _4K,
@@ -60,6 +66,7 @@ enum Framerate {
     _24
 }
 
+// States enums
 enum Region {
     NTSC,
     PAL

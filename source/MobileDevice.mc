@@ -20,8 +20,24 @@ import Toybox.System;
 
 
 class MobileDevice {
+    private var connected as Boolean;
+
     public function initialize() {
+        connected = false;
+    }
+
+    public function connect() {
         Communications.registerForPhoneAppMessages(method(:onReceive) as Communications.PhoneMessageCallback);
+        connected = true;
+    }
+
+    public function disconnect() {
+        Communications.registerForPhoneAppMessages(null);
+        connected = false;
+    }
+
+    public function isConnected() {
+        return connected;
     }
 
     public function onReceive(message as Communications.PhoneAppMessage) {
@@ -38,6 +54,7 @@ class MobileDevice {
                     }
                     WatchUi.popView(WatchUi.SLIDE_LEFT);
                     var _view = new PopUpView("Unable to connect to GoPro", POP_ERROR);
+                    disconnect();
                     WatchUi.pushView(_view, new PopUpDelegate(_view), WatchUi.SLIDE_IMMEDIATE);
                 }
                 break;
@@ -47,6 +64,12 @@ class MobileDevice {
                 System.print(message.data);
                 if (message.data[1]) {
                     cam.syncSettings(message.data[1]);
+                }
+
+            case COM_FETCH_STATES:
+                System.print(message.data);
+                if (message.data[1]) {
+                    cam.syncStates(message.data[1]);
                 }
             default:
                 break;
@@ -65,6 +88,7 @@ class MobileConnection extends Communications.ConnectionListener {
     }
 
     public function onError() {
+        // TODO
 
     }
 }
