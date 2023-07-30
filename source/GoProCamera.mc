@@ -1,15 +1,14 @@
 import Toybox.Lang;
 
 class GoProCamera extends GoProSettings {
-    private var recording;
-
     private var states as Array<Number>?;
     private var settingsSave as Array<Number>?;
 
+    private var progress as Number?;
+
     public function initialize() {
         GoProSettings.initialize();
-        recording=false;
-        states = [NTSC];
+        states = [NTSC, 0];
     }
 
     public function setPreset(preset as GoProPreset) {
@@ -23,16 +22,13 @@ class GoProCamera extends GoProSettings {
 
     public function syncStates(_states as Array<Number>) {
         states = _states;
+        // TODO: conditional label reload
         GoProResources.loadSettingLabels();
         WatchUi.requestUpdate();
     }
 
-    public function pressShutter() {
-        recording = !recording;
-    }
-
     public function isRecording() {
-        return recording;
+        return states[RECORDING];
     }
 
     public function getRegion() {
@@ -41,5 +37,18 @@ class GoProCamera extends GoProSettings {
 
     public function save() {
         mobile.send([COM_PUSH_SETTINGS, settings]);
+    }
+
+    public function syncProgress(_progress as Number) {
+        progress = _progress;
+        WatchUi.requestUpdate();
+    }
+
+    public function getProgress() {
+        return progress;
+    }
+
+    public function incrementProgress() {
+        progress++;
     }
 }

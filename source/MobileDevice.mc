@@ -41,7 +41,7 @@ class MobileDevice {
     }
 
     public function onReceive(message as Communications.PhoneAppMessage) {
-        // System.print(message.data);
+        System.println(message.data);
         switch (message.data[0]) {
             case COM_CONNECT:
                 // Ouverture connexion M>T>G>T>M
@@ -61,16 +61,18 @@ class MobileDevice {
             
             case COM_FETCH_SETTINGS:
                 // GoPro settings --> montre
-                System.print(message.data);
                 if (message.data[1]) {
                     cam.syncSettings(message.data[1]);
                 }
-
+                break;
             case COM_FETCH_STATES:
-                System.print(message.data);
                 if (message.data[1]) {
                     cam.syncStates(message.data[1]);
                 }
+                break;
+            case COM_PROGRESS:
+                cam.syncProgress(message.data[1]);
+                break;
             default:
                 break;
         }

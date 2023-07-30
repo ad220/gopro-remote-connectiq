@@ -20,7 +20,8 @@ enum Settings {
 
 const N_STATES = 1;
 enum States {
-    REGION
+    REGION,
+    RECORDING
 }
 
 enum UserInterface {
@@ -80,7 +81,8 @@ enum Communication {
     COM_PUSH_STATES,
     COM_SHUTTER,
     COM_HIGHLIGHT,
-    COM_LOCKED
+    COM_LOCKED,
+    COM_PROGRESS
 }
 
 enum PopUpType {
