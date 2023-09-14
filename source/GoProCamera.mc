@@ -41,6 +41,7 @@ class GoProCamera extends GoProSettings {
 
     public function syncProgress(_progress as Number) {
         progress = _progress;
+        System.println("New progress set: " + progress);
         WatchUi.requestUpdate();
     }
 

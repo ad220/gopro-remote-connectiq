@@ -40,7 +40,7 @@ class SettingPickerItem extends WatchUi.CustomMenuItem {
         dc.drawBitmap(36, halfH-14, GoProResources.icons[UI_SETTINGS][id]);
     }
 
-    public function getId() as Number {
+    public function getId() {
         return id;
     }
 }
@@ -54,8 +54,8 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
         Menu2InputDelegate.initialize();
     }
 
-    public function onSelect(item as SettingEditItem) as Void {
-        var setting = item.getId();
+    public function onSelect(item) {
+        var setting = item.getId() as Number;
         WatchUi.pushView(new SettingEditMenu(setting, gp), new SettingEditDelegate(setting, gp), WatchUi.SLIDE_UP);
         // WatchUi.requestUpdate();
     }

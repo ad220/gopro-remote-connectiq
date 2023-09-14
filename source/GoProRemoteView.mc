@@ -94,13 +94,14 @@ class GoProRemoteView extends WatchUi.View {
 
         // Preset Button
         if (cam.isRecording()) {
-            var recDurationSeconds = cam.getProgress();
+            var recDurationSeconds = cam.getProgress() as Number;
             if (recordingTimer==null) {
                 recordingTimer = new Timer.Timer();
                 recordingTimer.start(method(:recordingTimerCallback), 1000, true);
             }
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
             // Draw the recording duration 
+            System.println(recDurationSeconds);
             var minutes = Math.floor(recDurationSeconds / 60);
             var seconds = recDurationSeconds % 60;
             var timeString = (minutes/100).toString() + (minutes%60).toString() + ":" + (seconds/10).toString() + (seconds%10).toString();

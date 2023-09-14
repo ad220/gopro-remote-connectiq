@@ -41,7 +41,8 @@ class MobileDevice {
     }
 
     public function onReceive(message as Communications.PhoneAppMessage) {
-        System.println(message.data);
+        System.println(message.data[0]);
+        System.println(message.data[1]);
         switch (message.data[0]) {
             case COM_CONNECT:
                 // Ouverture connexion M>T>G>T>M
@@ -71,6 +72,7 @@ class MobileDevice {
                 }
                 break;
             case COM_PROGRESS:
+                System.println("Received progress" + message.data[1]);
                 cam.syncProgress(message.data[1]);
                 break;
             default:

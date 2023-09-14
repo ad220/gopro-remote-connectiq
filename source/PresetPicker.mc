@@ -53,7 +53,7 @@ class PresetPickerItem extends WatchUi.CustomMenuItem {
 
     }
 
-    public function getId() as Number {
+    public function getId() {
         return id;
     }
 
@@ -70,8 +70,8 @@ class PresetPickerDelegate extends WatchUi.Menu2InputDelegate {
         Menu2InputDelegate.initialize();
     }
 
-    public function onSelect(item as PresetPickerItem) as Void {
-        var id = item.getId();
+    public function onSelect(item) {
+        var id = item.getId() as Number;
         //WARNING: popping view unloads mandatory icons and loads unnecessary ones in simulator while the problem doesn't appear on device and lower (<4.1.7 beta) SDK version
         //TODO: check with lower SDK version and/or fix this shit
         //TODO: think about view tree for preset edit
@@ -80,10 +80,10 @@ class PresetPickerDelegate extends WatchUi.Menu2InputDelegate {
         } else if (id == EDITP7) {
             WatchUi.switchToView(new PresetPickerMenu(1), new PresetPickerDelegate(true), WatchUi.SLIDE_LEFT);
         } else if (editPreset) {
-            WatchUi.switchToView(new SettingPickerMenu(item.getPreset(), id), new SettingPickerDelegate(item.getPreset()), WatchUi.SLIDE_LEFT);
+            WatchUi.switchToView(new SettingPickerMenu((item as PresetPickerItem).getPreset(), id), new SettingPickerDelegate((item as PresetPickerItem).getPreset()), WatchUi.SLIDE_LEFT);
         } else {
             WatchUi.popView(WatchUi.SLIDE_DOWN);
-            cam.setPreset(item.getPreset());
+            cam.setPreset((item as PresetPickerItem).getPreset());
         }
     }
 
