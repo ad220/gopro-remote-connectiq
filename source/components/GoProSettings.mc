@@ -103,10 +103,10 @@ class GoProSettings {
 
 
     public function getDescription() as String {
-        var frLabel = GoProResources.settingLabels[FRAMERATE][settings[FRAMERATE]];
-        return GoProResources.settingLabels[RESOLUTION][settings[RESOLUTION]] \
+        var frLabel = MainResources.settingLabels[FRAMERATE][settings[FRAMERATE]];
+        return MainResources.settingLabels[RESOLUTION][settings[RESOLUTION]] \
             + "@" + frLabel.substring(0, frLabel.length()-4) + " " \
-            + GoProResources.settingLabels[RATIO][settings[RATIO]]; //[TODO: add lens
+            + MainResources.settingLabels[RATIO][settings[RATIO]]; //[TODO: add lens
     }
 
     public function save() {

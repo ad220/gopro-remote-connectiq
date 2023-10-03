@@ -23,7 +23,7 @@ class GoProCamera extends GoProSettings {
     public function syncStates(_states as Array<Number>) {
         states = _states;
         // TODO: conditional label reload
-        GoProResources.loadSettingLabels();
+        MainResources.loadSettingLabels();
         WatchUi.requestUpdate();
     }
 

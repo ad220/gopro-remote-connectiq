@@ -1,7 +1,11 @@
 <strings>
 
     <!-- ConnectView -->
+    <string id="Pair">Appairer</string>
     <string id="Connect">CONNEXION</string>
+    <string id="Scan">SCANNER</string>
+    <string id="Connecting">Connexion\n en cours...</string>
+    <string id="Scanning">Scan Bluetooth\n en cours...</string>
 
     <!-- PresetPick -->
     <string id="Cinema">Cinéma</string>

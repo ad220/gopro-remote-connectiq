@@ -18,7 +18,7 @@ class GoProRemoteApp extends Application.AppBase {
         cam = new GoProCamera();
         mobile = new MobileDevice();
         onRemoteView = false;
-        GoProResources.loadFonts();
+        MainResources.loadFonts();
     }
 
     // onStop() is called when your application is exiting

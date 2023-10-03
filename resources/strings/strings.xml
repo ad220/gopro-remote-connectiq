@@ -2,7 +2,11 @@
     <string id="AppName">GoProRemote</string>
 
     <!-- ConnectView -->
+    <string id="Pair">Pair</string>
     <string id="Connect">CONNECT</string>
+    <string id="Scan">SCAN</string>
+    <string id="Connecting">Connecting\n to GoPro...</string>
+    <string id="Scanning">Bluetooth\n scanning...</string>
 
     <!-- PresetPick -->
     <string id="Cinema">Cinema</string>

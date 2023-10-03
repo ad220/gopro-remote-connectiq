@@ -51,7 +51,7 @@ class GoProRemoteView extends WatchUi.View {
     // Load your resources here
     function onLayout(dc as Dc) as Void {
         setLayout(Rez.Layouts.MainLayout(dc));
-        GoProResources.loadSettingLabels();
+        MainResources.loadSettingLabels();
     }
 
     // Called when this View is brought to the foreground. Restore
@@ -59,10 +59,10 @@ class GoProRemoteView extends WatchUi.View {
     // loading resources into memory.
     function onShow() as Void {
         onRemoteView = true;
-        GoProResources.loadIcons(UI_HILIGHT);
-        GoProResources.loadIcons(UI_MODES);
-        GoProResources.freeIcons(UI_EDITABLES);
-        GoProResources.freeIcons(UI_STATES);
+        MainResources.loadIcons(UI_HILIGHT);
+        MainResources.loadIcons(UI_MODES);
+        MainResources.freeIcons(UI_EDITABLES);
+        MainResources.freeIcons(UI_STATES);
         //TODO: Edit with mode icon
         //TODO: edit preset view with icon for each preset, gear cheel for settings and pen for preset edit
     }
@@ -78,18 +78,18 @@ class GoProRemoteView extends WatchUi.View {
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLACK);
         dc.clear();
         dc.fillCircle(48, 95, 22);
-        dc.drawBitmap(37, 84, GoProResources.icons[UI_HILIGHT] as WatchUi.BitmapResource);
+        dc.drawBitmap(37, 84, MainResources.icons[UI_HILIGHT] as WatchUi.BitmapResource);
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.fillRoundedRectangle(90, 50, 90, 90, 18);
         if (cam.isRecording()) {dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);}
         dc.fillRoundedRectangle(40, 165, 160, 40, 20);
-        dc.drawBitmap(49, 173, GoProResources.icons[UI_MODES][WHEEL]);
+        dc.drawBitmap(49, 173, MainResources.icons[UI_MODES][WHEEL]);
         dc.setColor(0xFF0000, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(8);
         dc.drawCircle(135, 95, 28);
         dc.setPenWidth(1);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(132, 185, GoProResources.fontTiny, cam.getDescription(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(132, 185, MainResources.fontTiny, cam.getDescription(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
 
         // Preset Button
@@ -105,7 +105,7 @@ class GoProRemoteView extends WatchUi.View {
             var minutes = Math.floor(recDurationSeconds / 60);
             var seconds = recDurationSeconds % 60;
             var timeString = (minutes/100).toString() + (minutes%60).toString() + ":" + (seconds/10).toString() + (seconds%10).toString();
-            dc.drawText(120, 20, GoProResources.fontTiny, timeString, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+            dc.drawText(120, 20, MainResources.fontTiny, timeString, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
             // Draw the recording circle, blinks every second
             if (recDurationSeconds % 2 == 0) {

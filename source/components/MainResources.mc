@@ -37,6 +37,8 @@ enum Modes {
     WHEEL
 }
 
+// TODO: remove following enums as they only were useful with the mobile version
+
 // Settings enums
 enum Resolutions {
     _5K,
@@ -91,7 +93,7 @@ enum PopUpType {
 }
 
 
-class GoProResources {
+class MainResources {
     static public var fontTiny as FontResource?;
     static public var fontSmall as FontResource?;
     static public var fontMedium as FontResource?;
@@ -109,8 +111,13 @@ class GoProResources {
     static public function loadLabels(id as Number) as Void{
         if (labels[id]==null) {
             labels[id] = [
-                WatchUi.loadResource(Rez.Strings.Connect),
-                null, null, null, [
+                [
+                    WatchUi.loadResource(Rez.Strings.Pair),
+                    WatchUi.loadResource(Rez.Strings.Connect),
+                    WatchUi.loadResource(Rez.Strings.Scan),
+                    WatchUi.loadResource(Rez.Strings.Connecting),
+                    WatchUi.loadResource(Rez.Strings.Scanning),
+                ], null, null, null, [
                     WatchUi.loadResource(Rez.Strings.Cinema),
                     WatchUi.loadResource(Rez.Strings.Sport),
                     WatchUi.loadResource(Rez.Strings.Eco),

@@ -14,7 +14,7 @@ class PopUpView extends WatchUi.View{
     }
 
     function onLayout(dc as Dc) as Void {
-        // GoProResources.load
+        // MainResources.load
     }
 
     function onShow() as Void {
@@ -25,9 +25,9 @@ class PopUpView extends WatchUi.View{
         dc.fillRectangle(0, 0, 240, 90);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         dc.fillCircle(120, 20, 10);
-        dc.drawText(120, 60, GoProResources.fontTiny, message, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(120, 60, MainResources.fontTiny, message, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         dc.setColor([Graphics.COLOR_DK_GRAY, 0xFF5500][type], Graphics.COLOR_TRANSPARENT);
-        dc.drawText(120, 20, GoProResources.fontSmall, ["i", "!"][type], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(120, 20, MainResources.fontSmall, ["i", "!"][type], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 }
 
