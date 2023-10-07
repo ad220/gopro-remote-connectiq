@@ -17,14 +17,18 @@ class GoProPreset extends GoProSettings {
         icon = GoProResources.icons[UI_EDITABLES][_id];
         GoProSettings.initialize();
 
+        System.println(settings);
         try {
             settings = Application.Storage.getValue(id);
         } catch (exception) { //TODO: fix this shit
-            settings = [_4K, _8R7, _LARGE, _60];
+            settings = [0];
         }
-
-        if (settings==null) {
-            settings = [_4K, _8R7, _LARGE, _60];
+        if (settings == null or settings == [0]) {
+            settings = [
+                [_5K, _16R9, _LINEARLOCK, _24],
+                [_4K, _8R7, _LARGE, _60],
+                [_2K, _16R9, _LINEAR, _30]
+            ][_id];
         }
 
         //TODO: change initialize with params when BT implemented

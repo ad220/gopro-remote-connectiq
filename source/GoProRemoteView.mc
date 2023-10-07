@@ -122,12 +122,14 @@ class GoProRemoteView extends WatchUi.View {
                 recordingTimer = null;
                 // recDurationSeconds = 0;
             }
-            dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-            dc.setPenWidth(6);
-            dc.drawArc(120, 120, 108, Graphics.ARC_CLOCKWISE, 100, 80);
-            dc.fillCircle(102, 13, 3);
-            dc.fillCircle(138, 13, 3);
-            dc.setPenWidth(1);
+            // For v2, would open states menu on swipe down
+
+            // dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+            // dc.setPenWidth(6);
+            // dc.drawArc(120, 120, 108, Graphics.ARC_CLOCKWISE, 100, 80);
+            // dc.fillCircle(102, 13, 3);
+            // dc.fillCircle(138, 13, 3);
+            // dc.setPenWidth(1);
         }
     }
 

@@ -25,7 +25,7 @@ class GoProCamera extends GoProSettings {
         states = _states;
         if (states[RECORDING]==null) {states[RECORDING] = 0;}
         // TODO: conditional label reload
-        GoProResources.loadSettingLabels();
+        // GoProResources.loadSettingLabels();
         WatchUi.requestUpdate();
     }
 
