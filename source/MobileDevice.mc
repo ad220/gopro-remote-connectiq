@@ -48,13 +48,17 @@ class MobileDevice {
                 if (message.data[1] == 0) {
                     var _view = new GoProRemoteView();
                     WatchUi.pushView(_view, new GoProRemoteDelegate(_view), WatchUi.SLIDE_LEFT);
+                    cam.setConnected(true);
                 } else {
-                    while (!onRemoteView) {
-                        WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
+                    if (cam.isConnected()){
+                        while (!onRemoteView) {
+                            WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
+                        }
+                        WatchUi.popView(WatchUi.SLIDE_LEFT);
+                        disconnect();
                     }
-                    WatchUi.popView(WatchUi.SLIDE_LEFT);
+                    cam.setConnected(false);
                     var _view = new PopUpView("Unable to connect to GoPro", POP_ERROR);
-                    disconnect();
                     WatchUi.pushView(_view, new PopUpDelegate(_view), WatchUi.SLIDE_IMMEDIATE);
                 }
                 break;

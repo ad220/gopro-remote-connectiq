@@ -4,7 +4,8 @@ class GoProCamera extends GoProSettings {
     private var states as Array<Number>?;
     private var settingsSave as Array<Number>?;
 
-    private var progress as Number?;
+    private var progress = 0 as Number;
+    private var connected = false as Boolean;
 
     public function initialize() {
         GoProSettings.initialize();
@@ -22,13 +23,14 @@ class GoProCamera extends GoProSettings {
 
     public function syncStates(_states as Array<Number>) {
         states = _states;
+        if (states[RECORDING]==null) {states[RECORDING] = 0;}
         // TODO: conditional label reload
         GoProResources.loadSettingLabels();
         WatchUi.requestUpdate();
     }
 
     public function isRecording() {
-        return states[RECORDING];
+        return states[RECORDING]==1;
     }
 
     public function getRegion() {
@@ -50,5 +52,13 @@ class GoProCamera extends GoProSettings {
 
     public function incrementProgress() {
         progress++;
+    }
+
+    public function isConnected() {
+        return connected;
+    }
+
+    public function setConnected(_connected as Boolean) {
+        connected = _connected;
     }
 }

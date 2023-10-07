@@ -18,9 +18,9 @@ class GoProRemoteDelegate extends WatchUi.BehaviorDelegate {
         //TODO: other buttons
         if (coord[0]<190 and coord[0]>85 and coord[1]<150 and coord[1]>40) {
             mobile.send([COM_SHUTTER, 0]);
-        } else if (coord[0]<75 and coord[0]>15 and coord[1]<120 and coord[1]>60) {
+        } else if (cam.isRecording() and coord[0]<75 and coord[0]>15 and coord[1]<120 and coord[1]>60) {
             mobile.send([COM_HIGHLIGHT, 0]);
-        } else if (coord[0]<200 and coord[0]>40 and coord[1]<220 and coord[1]>160) {
+        } else if (!cam.isRecording() and coord[0]<200 and coord[0]>40 and coord[1]<220 and coord[1]>160) {
             onSettings();
         }
         return true;
@@ -78,18 +78,20 @@ class GoProRemoteView extends WatchUi.View {
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLACK);
         dc.clear();
         dc.fillCircle(48, 95, 22);
-        dc.drawBitmap(37, 84, GoProResources.icons[UI_HILIGHT] as WatchUi.BitmapResource);
-        dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.fillRoundedRectangle(90, 50, 90, 90, 18);
-        if (cam.isRecording()) {dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);}
-        dc.fillRoundedRectangle(40, 165, 160, 40, 20);
+        if (!cam.isRecording()) {
+            dc.fillRoundedRectangle(40, 165, 160, 40, 20);
+            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        } else {
+            dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+        }
+        dc.drawText(132, 185, GoProResources.fontTiny, cam.getDescription(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawBitmap(37, 84, GoProResources.icons[UI_HILIGHT] as WatchUi.BitmapResource);
         dc.drawBitmap(49, 173, GoProResources.icons[UI_MODES][WHEEL]);
         dc.setColor(0xFF0000, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(8);
         dc.drawCircle(135, 95, 28);
         dc.setPenWidth(1);
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(132, 185, GoProResources.fontTiny, cam.getDescription(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
 
         // Preset Button
@@ -125,6 +127,7 @@ class GoProRemoteView extends WatchUi.View {
             dc.drawArc(120, 120, 108, Graphics.ARC_CLOCKWISE, 100, 80);
             dc.fillCircle(102, 13, 3);
             dc.fillCircle(138, 13, 3);
+            dc.setPenWidth(1);
         }
     }
 

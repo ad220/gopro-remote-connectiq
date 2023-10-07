@@ -2,8 +2,8 @@ import Toybox.Application;
 import Toybox.Lang;
 import Toybox.WatchUi;
 
-var cam;
-var mobile;
+var cam as GoProCamera?;
+var mobile as MobileDevice?;
 var onRemoteView as Boolean?;
 
 class GoProRemoteApp extends Application.AppBase {

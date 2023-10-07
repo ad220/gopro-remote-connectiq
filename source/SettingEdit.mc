@@ -45,7 +45,7 @@ class SettingEditItem extends WatchUi.CustomMenuItem {
         modified = true;
     }
 
-    public function getId() as Number {
+    public function getId() {
         return id;
     }
 }
@@ -60,9 +60,9 @@ class SettingEditDelegate extends WatchUi.Menu2InputDelegate {
         Menu2InputDelegate.initialize();
     }
 
-    public function onSelect(item as SettingEditItem) as Void {
+    public function onSelect(item) {
         gp.setSetting(setting, item.getId());
-        item.setModified();
+        (item as SettingEditItem).setModified();
         WatchUi.requestUpdate();
     }
 
