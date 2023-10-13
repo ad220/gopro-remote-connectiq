@@ -91,7 +91,7 @@ enum PopUpType {
 }
 
 
-class GoProResources {
+class MainResources {
     static public var fontTiny as FontResource?;
     static public var fontSmall as FontResource?;
     static public var fontMedium as FontResource?;

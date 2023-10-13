@@ -5,7 +5,7 @@ import Toybox.WatchUi;
 
 class SettingEditMenu extends WatchUi.CustomMenu {
     public function initialize(setting as Number, gp as GoProSettings) {
-        CustomMenu.initialize(70, Graphics.COLOR_BLACK, {:title=> new $.CustomMenuTitle(GoProResources.labels[UI_SETTINGS][setting])});
+        CustomMenu.initialize(70, Graphics.COLOR_BLACK, {:title=> new $.CustomMenuTitle(MainResources.labels[UI_SETTINGS][setting])});
         var items;
         var selected;
         items = gp.possibleSettings(setting);
@@ -24,7 +24,7 @@ class SettingEditItem extends WatchUi.CustomMenuItem {
 
     public function initialize(setting, _id, selected as Number) {
         id = _id;
-        label = GoProResources.settingLabels[setting][_id];
+        label = MainResources.settingLabels[setting][_id];
         preselected = _id==selected;
         modified = false;
         CustomMenuItem.initialize(id, {});
@@ -38,7 +38,7 @@ class SettingEditItem extends WatchUi.CustomMenuItem {
         } else {
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         }
-        dc.drawText(dc.getWidth()/2, dc.getHeight()/2-2, GoProResources.fontMedium, label, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(dc.getWidth()/2, dc.getHeight()/2-2, MainResources.fontMedium, label, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 
     public function setModified() as Void {
@@ -67,7 +67,7 @@ class SettingEditDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     public function onBack() as Void {
-        GoProResources.loadIcons(UI_SETTINGS);
+        MainResources.loadIcons(UI_SETTINGS);
         WatchUi.popView(WatchUi.SLIDE_RIGHT);
     }
 

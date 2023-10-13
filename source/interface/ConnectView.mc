@@ -2,14 +2,14 @@ import Toybox.Graphics;
 import Toybox.WatchUi;
 import Toybox.Lang;
 
-class GoProConnectView extends WatchUi.View {
+class ConnectView extends WatchUi.View {
 
     function initialize() {
         View.initialize();
     }
 
     function onLayout(dc as Dc) as Void {
-        GoProResources.loadLabels(UI_CONNECT);
+        MainResources.loadLabels(UI_CONNECT);
     }
 
     function onShow() as Void {
@@ -20,7 +20,7 @@ class GoProConnectView extends WatchUi.View {
         dc.clear();
         dc.fillRoundedRectangle(45, 170, 150, 40, 20);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(120, 190, GoProResources.fontSmall, GoProResources.labels[UI_CONNECT] as String, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(120, 190, MainResources.fontSmall, MainResources.labels[UI_CONNECT] as String, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         drawRectWithBorder(dc, 88, 57, 26, 10, 4, 2, Graphics.COLOR_DK_GRAY);
         drawRectWithBorder(dc, 69, 62, 102, 92, 16, 4, Graphics.COLOR_DK_GRAY);
         drawRectWithBorder(dc, 113, 62, 58, 58, 16, 4, Graphics.COLOR_DK_GRAY);
@@ -51,8 +51,8 @@ class GoProConnectDelegate extends WatchUi.BehaviorDelegate {
         mobile.send([COM_CONNECT, 0]);
         // var _view = new PopUpView("Connecting to GoPro ...", POP_INFO);
         // WatchUi.pushView(_view, new PopUpDelegate(_view), WatchUi.SLIDE_UP);
-        // var _view = new GoProRemoteView();
-        // WatchUi.pushView(_view, new GoProRemoteDelegate(_view), WatchUi.SLIDE_LEFT);
+        // var _view = new RemoteView();
+        // WatchUi.pushView(_view, new RemoteDelegate(_view), WatchUi.SLIDE_LEFT);
         return true;
     }
 }

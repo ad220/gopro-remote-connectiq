@@ -46,8 +46,8 @@ class MobileDevice {
             case COM_CONNECT:
                 // Ouverture connexion M>T>G>T>M
                 if (message.data[1] == 0) {
-                    var _view = new GoProRemoteView();
-                    WatchUi.pushView(_view, new GoProRemoteDelegate(_view), WatchUi.SLIDE_LEFT);
+                    var _view = new RemoteView();
+                    WatchUi.pushView(_view, new RemoteDelegate(_view), WatchUi.SLIDE_LEFT);
                     cam.setConnected(true);
                 } else {
                     if (cam.isConnected()){
