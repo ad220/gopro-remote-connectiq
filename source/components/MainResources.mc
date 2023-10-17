@@ -151,6 +151,9 @@ class MainResources {
                 WatchUi.loadResource(Rez.Strings._LINEARLOCK)
             ], null
         ];
+        loadRegionLabels();
+    }
+    static public function loadRegionLabels() as Void {
         if (cam.getRegion()==NTSC) {
             settingLabels[FRAMERATE] = [
                 WatchUi.loadResource(Rez.Strings._240),

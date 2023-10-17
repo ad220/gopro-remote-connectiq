@@ -20,7 +20,7 @@ class GoProPreset extends GoProSettings {
         System.println(settings);
         try {
             settings = Application.Storage.getValue(id);
-        } catch (exception) { //TODO: fix this shit
+        } catch (exception) { //TODO: fix this: should not happen
             settings = [0];
         }
         if (settings == null or settings == [0]) {
