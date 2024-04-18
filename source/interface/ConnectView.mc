@@ -18,23 +18,24 @@ class ConnectView extends WatchUi.View {
     function onUpdate(dc as Dc) as Void {
         dc.setColor(0x00AAFF, Graphics.COLOR_BLACK);
         dc.clear();
-        dc.fillRoundedRectangle(45, 170, 150, 40, 20);
+        dc.fillRoundedRectangle(halfW-75*kMult, halfH+50*kMult, 150*kMult, 40*kMult, 20*kMult);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(120, 190, MainResources.fontSmall, MainResources.labels[UI_CONNECT] as String, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-        drawRectWithBorder(dc, 88, 57, 26, 10, 4, 2, Graphics.COLOR_DK_GRAY);
-        drawRectWithBorder(dc, 69, 62, 102, 92, 16, 4, Graphics.COLOR_DK_GRAY);
-        drawRectWithBorder(dc, 113, 62, 58, 58, 16, 4, Graphics.COLOR_DK_GRAY);
-        drawRectWithBorder(dc, 80, 95, 25, 25, 6, 3, Graphics.COLOR_DK_GRAY);
-        drawRectWithBorder(dc, 81, 74, 20, 9, 4, 3, 0xFF5500);
-        drawRectWithBorder(dc, 124, 127, 36, 16, 8, 3, 0x00AAFF);
-        drawRectWithBorder(dc, 126, 75, 32, 32, 16, 10, Graphics.COLOR_LT_GRAY);
+        dc.drawText(halfW, halfH+70*kMult, adaptFontMid(), MainResources.labels[UI_CONNECT] as String, JTEXT_MID);
+        drawRectWithBorder(dc, -32, -63, 26, 10, 4, 2, Graphics.COLOR_DK_GRAY);
+        drawRectWithBorder(dc, -51, -58, 102, 92, 16, 4, Graphics.COLOR_DK_GRAY);
+        drawRectWithBorder(dc, -7, -58, 58, 58, 16, 4, Graphics.COLOR_DK_GRAY);
+        drawRectWithBorder(dc, -40, -25, 25, 25, 6, 3, Graphics.COLOR_DK_GRAY);
+        drawRectWithBorder(dc, -39, -46, 20, 9, 4, 3, 0xFF5500);
+        drawRectWithBorder(dc, +4, +7, 36, 16, 8, 3, 0x00AAFF);
+        drawRectWithBorder(dc, +6, -45, 32, 32, 16, 10, Graphics.COLOR_LT_GRAY);
+
     }
 
-    private function drawRectWithBorder(dc, x, y, w, h, rad, thick, color) as Void{
+    private function drawRectWithBorder(dc, offx, offy, w, h, rad, thick, color) as Void{
         dc.setColor(Graphics.COLOR_BLACK,Graphics.COLOR_TRANSPARENT);
-        dc.fillRoundedRectangle(x,y,w,h,rad);
+        dc.fillRoundedRectangle(halfW+offx*kMult, halfH+offy*kMult, w*kMult, h*kMult, rad*kMult);
         dc.setColor(color,Graphics.COLOR_TRANSPARENT);
-        dc.fillRoundedRectangle(x+thick,y+thick,w-2*thick,h-2*thick,rad-thick);
+        dc.fillRoundedRectangle(halfW+(offx+thick)*kMult, halfH+(offy+thick)*kMult, (w-2*thick)*kMult, (h-2*thick)*kMult, (rad-thick)*kMult);
     }
 }
 
@@ -49,8 +50,8 @@ class GoProConnectDelegate extends WatchUi.BehaviorDelegate {
     public function onTap(tap as ClickEvent) {
         mobile.connect();
         mobile.send([COM_CONNECT, 0]);
-        // var _view = new PopUpView("Connecting to GoPro ...", POP_INFO);
-        // WatchUi.pushView(_view, new PopUpDelegate(_view), WatchUi.SLIDE_UP);
+        var _view = new PopUpView("Connecting to GoPro ...", POP_INFO);
+        WatchUi.pushView(_view, new PopUpDelegate(_view), WatchUi.SLIDE_UP);
         // var _view = new RemoteView();
         // WatchUi.pushView(_view, new RemoteDelegate(_view), WatchUi.SLIDE_LEFT);
         return true;

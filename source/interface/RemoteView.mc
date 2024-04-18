@@ -16,11 +16,11 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
     public function onTap(tap as ClickEvent) {
         var coord = tap.getCoordinates();
         //TODO: other buttons
-        if (coord[0]<190 and coord[0]>85 and coord[1]<150 and coord[1]>40) {
+        if (coord[0]<halfW+70*kMult and coord[0]>halfW-35*kMult and coord[1]<halfH*1.25 and coord[1]>halfH+80*kMult) {
             mobile.send([COM_SHUTTER, 0]);
-        } else if (cam.isRecording() and coord[0]<75 and coord[0]>15 and coord[1]<120 and coord[1]>60) {
+        } else if (cam.isRecording() and coord[0]<halfW+45*kMult and coord[0]>halfW-105*kMult and coord[1]<halfH and coord[1]>halfH*0.5) {
             mobile.send([COM_HIGHLIGHT, 0]);
-        } else if (!cam.isRecording() and coord[0]<200 and coord[0]>40 and coord[1]<220 and coord[1]>160) {
+        } else if (!cam.isRecording() and coord[0]<halfW+80*kMult and coord[0]>halfW-80*kMult and coord[1]<halfH+100*kMult and coord[1]>halfH+40*kMult) {
             onSettings();
         }
         return true;
@@ -77,20 +77,20 @@ class RemoteView extends WatchUi.View {
         // }
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLACK);
         dc.clear();
-        dc.fillCircle(48, 95, 22);
-        dc.fillRoundedRectangle(90, 50, 90, 90, 18);
+        dc.fillCircle(halfW-72*kMult, halfH-25*kMult, 22*kMult);
+        dc.fillRoundedRectangle(halfW*0.75, halfH-70*kMult, 90*kMult, 90*kMult, 18*kMult);
         if (!cam.isRecording()) {
-            dc.fillRoundedRectangle(40, 165, 160, 40, 20);
+            dc.fillRoundedRectangle(halfW/3, halfH+45*kMult, 160*kMult, 40*kMult, 20*kMult);
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         } else {
             dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
         }
-        dc.drawText(132, 185, MainResources.fontTiny, cam.getDescription(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-        dc.drawBitmap(37, 84, MainResources.icons[UI_HILIGHT] as WatchUi.BitmapResource);
-        dc.drawBitmap(49, 173, MainResources.icons[UI_MODES][WHEEL]);
+        dc.drawText(halfW*1.1, halfH+65*kMult, adaptFontSmall(), cam.getDescription(), JTEXT_MID);
+        dc.drawBitmap(halfW-83*kMult, halfH-36*kMult, MainResources.icons[UI_HILIGHT] as WatchUi.BitmapResource);
+        dc.drawBitmap(halfW-71*kMult, halfH+53*kMult, MainResources.icons[UI_MODES][WHEEL]);
         dc.setColor(0xFF0000, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(8);
-        dc.drawCircle(135, 95, 28);
+        dc.setPenWidth(8*kMult);
+        dc.drawCircle(halfW+15*kMult, halfH-25*kMult, 28*kMult);
         dc.setPenWidth(1);
 
 
@@ -106,7 +106,7 @@ class RemoteView extends WatchUi.View {
             var minutes = Math.floor(recDurationSeconds / 60);
             var seconds = recDurationSeconds % 60;
             var timeString = (minutes/100).toString() + (minutes%60).toString() + ":" + (seconds/10).toString() + (seconds%10).toString();
-            dc.drawText(120, 20, MainResources.fontTiny, timeString, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+            dc.drawText(halfW, halfH/6, MainResources.fontTiny, timeString, JTEXT_MID);
 
             // Draw the recording circle, blinks every second
             if (recDurationSeconds % 2 == 0) {
@@ -114,7 +114,7 @@ class RemoteView extends WatchUi.View {
             } else {
                 dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
             }
-            dc.fillCircle(85, 20, 6);
+            dc.fillCircle(halfW-35*kMult, halfH/6, 6*kMult);
 
         } else {
             if (recordingTimer!=null) {
@@ -125,10 +125,10 @@ class RemoteView extends WatchUi.View {
             // For v2, would open states menu on swipe down
 
             // dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-            // dc.setPenWidth(6);
-            // dc.drawArc(120, 120, 108, Graphics.ARC_CLOCKWISE, 100, 80);
-            // dc.fillCircle(102, 13, 3);
-            // dc.fillCircle(138, 13, 3);
+            // dc.setPenWidth(6*kMult);
+            // dc.drawArc(halfW, halfH, 108*kMult, Graphics.ARC_CLOCKWISE, 100, 80);
+            // dc.fillCircle(halfW-18*kMult, halfH-107*kMult, round(3*kMult));
+            // dc.fillCircle(halfW+18*kMult, halfH-107*kMult, round(3*kMult));
             // dc.setPenWidth(1);
         }
     }

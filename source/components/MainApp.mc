@@ -1,10 +1,17 @@
 import Toybox.Application;
 import Toybox.Lang;
 import Toybox.WatchUi;
+import Toybox.System;
 
 var cam as GoProCamera?;
 var mobile as MobileDevice?;
 var onRemoteView as Boolean?;
+
+var screenH as Number?;
+var screenW as Number?;
+var halfH as Number?;
+var halfW as Number?;
+var kMult as Float?; // compared to 240x240 screen
 
 class GoProRemoteApp extends Application.AppBase {
     // var gp;
@@ -19,6 +26,14 @@ class GoProRemoteApp extends Application.AppBase {
         mobile = new MobileDevice();
         onRemoteView = false;
         MainResources.loadFonts();
+    
+        var deviceSettings = System.getDeviceSettings() as DeviceSettings;
+        screenH = deviceSettings.screenHeight;
+        screenW = deviceSettings.screenWidth;
+        halfH = screenH / 2;
+        halfW = screenW / 2;
+        kMult = (screenW / 120)*0.5;
+        deviceSettings = null;
     }
 
     // onStop() is called when your application is exiting

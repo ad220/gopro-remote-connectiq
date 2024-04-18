@@ -34,21 +34,20 @@ class PresetPickerItem extends WatchUi.CustomMenuItem {
     }
 
     public function draw(dc as Dc) as Void {
-        var halfW = dc.getWidth()/2;
-        var halfH = dc.getHeight()/2;
+        var m_halfW = dc.getWidth()/2;
+        var m_halfH = dc.getHeight()/2;
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.fillRoundedRectangle(halfW-100, halfH-30, 200, 60, 30);
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.fillRoundedRectangle(m_halfW-100, m_halfH-30, 200, 60, 30);
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT); //TODO: is it useful ?
         
-        dc.drawBitmap(36, halfH-14, MainResources.icons[UI_EDITABLES][id]);
+        dc.drawBitmap(36, m_halfH-14, MainResources.icons[UI_EDITABLES][id]);
         if (id<3) {
+            dc.drawText(m_halfW+22, m_halfH+16, MainResources.fontTiny, gp.getDescription(), JTEXT_MID);
+            dc.drawText(m_halfW+22, m_halfH-14, MainResources.fontSmall, MainResources.labels[UI_EDITABLES][id], JTEXT_MID);
             dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-            dc.drawLine(halfW-36, halfH+2, halfW+80, halfH+2);
-            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(halfW+22, halfH+16, MainResources.fontTiny, gp.getDescription(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-            dc.drawText(halfW+22, halfH-14, MainResources.fontSmall, MainResources.labels[UI_EDITABLES][id], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+            dc.drawLine(m_halfW-36, m_halfH+2, m_halfW+80, m_halfH+2);
         } else {
-            dc.drawText(halfW+22, halfH, MainResources.fontSmall, MainResources.labels[UI_EDITABLES][id], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+            dc.drawText(m_halfW+22, m_halfH, MainResources.fontSmall, MainResources.labels[UI_EDITABLES][id], JTEXT_MID);
         }
 
     }
