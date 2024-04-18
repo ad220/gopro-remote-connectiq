@@ -4,7 +4,7 @@ import Toybox.WatchUi;
 import Toybox.System;
 
 var cam as GoProCamera?;
-var mobile as MobileDevice?;
+var mobile as MobileStub?; //TODO: reverse this to MobileDevice
 var onRemoteView as Boolean?;
 
 var screenH as Number?;
@@ -23,7 +23,7 @@ class GoProRemoteApp extends Application.AppBase {
     // onStart() is called on application start up
     function onStart(state as Dictionary?) as Void {
         cam = new GoProCamera();
-        mobile = new MobileDevice();
+        mobile = new MobileStub(); //TODO: reverse this to MobileDevice
         onRemoteView = false;
         MainResources.loadFonts();
     
