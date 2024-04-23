@@ -8,54 +8,43 @@
             <color>FF5500</color>
         </palette>
     </bitmap>
-    
-    <!-- GOPRO -->
-<!--     <bitmap id="GoPro" filename="gopro.png">
-        <palette>
-            <color>000000</color>
-            <color>444444</color>
-            <color>AAAAAA</color>
-            <color>00AAFF</color>
-            <color>FF5500</color>
-        </palette>
-    </bitmap> -->
 
     <!-- HILIGHT -->
-    <bitmap id="Hilight" filename="hilight.png">
+    <bitmap id="Hilight" filename="hilight2.png" scaleX="9.17%" scaleY="9.17%" scaleRelativeTo="screen">
         <palette>
             <color>00AAFF</color>
         </palette>
     </bitmap>
 
     <!-- MODES -->
-    <bitmap id="Wheel" filename="wheel.png">
+    <bitmap id="Wheel" filename="wheel2.png" scaleX="10%" scaleY="10%" scaleRelativeTo="screen">
         <palette>
             <color>AAAAAA</color>
         </palette>
     </bitmap>
-    <bitmap id="Camera" filename="camera.png">
+    <bitmap id="Camera" filename="camera.png" scaleX="10%" scaleY="10%" scaleRelativeTo="screen">
         <palette>
             <color>AAAAAA</color>
         </palette>
     </bitmap>
     
     <!-- EDITABLES -->
-    <bitmap id="Edit" filename="edit.png">
+    <bitmap id="Edit" filename="edit.png" scaleX="10%" scaleY="10%" scaleRelativeTo="screen">
         <palette>
             <color>AAAAAA</color>
         </palette>
     </bitmap>
-    <bitmap id="Eco" filename="eco4.png">
+    <bitmap id="Eco" filename="eco5.png" scaleX="10%" scaleY="10%" scaleRelativeTo="screen">
         <palette>
             <color>55FF55</color>
         </palette>
     </bitmap>
-    <bitmap id="Sport" filename="sport.png">
+    <bitmap id="Sport" filename="sport.png" scaleX="10%" scaleY="10%" scaleRelativeTo="screen">
         <palette>
             <color>FFFF55</color>
         </palette>
     </bitmap>
-    <bitmap id="Cinema" filename="cinema2.png">
+    <bitmap id="Cinema" filename="cinema3.png" scaleX="10%" scaleY="10%" scaleRelativeTo="screen">
         <palette>
             <color>FF5500</color>
         </palette>
@@ -63,22 +52,22 @@
 
 
 
-    <bitmap id="Resolution" filename="resolution.png">
+    <bitmap id="Resolution" filename="resolution.png" scaleX="10%" scaleY="10%" scaleRelativeTo="screen">
         <palette>
             <color>AAAAAA</color>
         </palette>
     </bitmap>
-    <bitmap id="Ratio" filename="ratio.png">
+    <bitmap id="Ratio" filename="ratio.png" scaleX="10%" scaleY="10%" scaleRelativeTo="screen">
         <palette>
             <color>AAAAAA</color>
         </palette>
     </bitmap>
-    <bitmap id="Lens" filename="lens.png">
+    <bitmap id="Lens" filename="lens2.png" scaleX="10%" scaleY="10%" scaleRelativeTo="screen">
         <palette>
             <color>AAAAAA</color>
         </palette>
     </bitmap>
-    <bitmap id="Framerate" filename="framerate.png">
+    <bitmap id="Framerate" filename="framerate2.png" scaleX="10%" scaleY="10%" scaleRelativeTo="screen">
         <palette>
             <color>AAAAAA</color>
         </palette>

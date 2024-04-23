@@ -4,6 +4,7 @@ import Toybox.Graphics;
 
 const JTEXT_MID = Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER;
 
+// TODO: change font size on var creation
 function adaptFontSmall() as FontResource {
     return kMult<=1 ? MainResources.fontTiny : MainResources.fontSmall;
 }

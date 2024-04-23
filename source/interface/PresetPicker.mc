@@ -1,6 +1,7 @@
 import Toybox.WatchUi;
 import Toybox.Graphics;
 import Toybox.Lang;
+import Toybox.Math;
 
 //button ids : preset1, preset2, preset3, camera, edit
 //editing presets pushes another PresetPickerMenu view over the first one
@@ -12,7 +13,8 @@ class PresetPickerMenu extends WatchUi.CustomMenu {
     public function initialize(editPreset as Number) {
         MainResources.freeIcons(UI_HILIGHT);
         MainResources.freeIcons(UI_MODES);
-        CustomMenu.initialize(80, Graphics.COLOR_BLACK, {:title=> new CustomMenuTitle("Presets")}); //TODO: add in strings.xml
+        var height = 80*kMult;
+        CustomMenu.initialize(height.toNumber(), Graphics.COLOR_BLACK, {:title=> new CustomMenuTitle("Presets")}); //TODO: add in strings.xml
         MainResources.loadIcons(UI_EDITABLES);
         MainResources.loadLabels(UI_EDITABLES);
         for (var i=0; i<N_EDITABLES-2*editPreset; i++) {
@@ -37,17 +39,17 @@ class PresetPickerItem extends WatchUi.CustomMenuItem {
         var m_halfW = dc.getWidth()/2;
         var m_halfH = dc.getHeight()/2;
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.fillRoundedRectangle(m_halfW-100, m_halfH-30, 200, 60, 30);
+        dc.fillRoundedRectangle(m_halfW-100*kMult, m_halfH-30*kMult, 200*kMult, 60*kMult, 30*kMult);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT); //TODO: is it useful ?
         
-        dc.drawBitmap(36, m_halfH-14, MainResources.icons[UI_EDITABLES][id]);
+        dc.drawBitmap(m_halfW-84*kMult, m_halfH-14*kMult, MainResources.icons[UI_EDITABLES][id]);
         if (id<3) {
-            dc.drawText(m_halfW+22, m_halfH+16, MainResources.fontTiny, gp.getDescription(), JTEXT_MID);
-            dc.drawText(m_halfW+22, m_halfH-14, MainResources.fontSmall, MainResources.labels[UI_EDITABLES][id], JTEXT_MID);
+            dc.drawText(m_halfW+22*kMult, m_halfH+16*kMult, adaptFontSmall(), gp.getDescription(), JTEXT_MID);
+            dc.drawText(m_halfW+22*kMult, m_halfH-14*kMult, adaptFontMid(), MainResources.labels[UI_EDITABLES][id], JTEXT_MID);
             dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-            dc.drawLine(m_halfW-36, m_halfH+2, m_halfW+80, m_halfH+2);
+            dc.drawLine(m_halfW-36*kMult, m_halfH+2*kMult, m_halfW+80*kMult, m_halfH+2*kMult);
         } else {
-            dc.drawText(m_halfW+22, m_halfH, MainResources.fontSmall, MainResources.labels[UI_EDITABLES][id], JTEXT_MID);
+            dc.drawText(m_halfW+22*kMult, m_halfH, adaptFontMid(), MainResources.labels[UI_EDITABLES][id], JTEXT_MID);
         }
 
     }

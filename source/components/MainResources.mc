@@ -107,6 +107,8 @@ class MainResources {
     static public var labels as Array<Array<String>?> = [null, null, null, null, null, null];
 
     static public function loadLabels(id as Number) as Void{
+        // TODO: replace list selector with if-else or switch
+        // doesn't work as expected and evaluates all list items regardless of id
         if (labels[id]==null) {
             labels[id] = [
                 WatchUi.loadResource(Rez.Strings.Connect),
