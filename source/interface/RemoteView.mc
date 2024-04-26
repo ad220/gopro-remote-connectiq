@@ -26,6 +26,19 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
         return true;
     }
 
+    public function onSelect() {
+        mobile.send([COM_CONNECT, 0]);
+        return true;
+    }
+
+    public function onMenu() {
+        return onSettings();
+    }
+
+    public function onNextPage() {
+        return onSettings();
+    }
+    
     public function onSettings() {
         WatchUi.pushView(new PresetPickerMenu(0), new PresetPickerDelegate(false), WatchUi.SLIDE_UP);
         return true;
