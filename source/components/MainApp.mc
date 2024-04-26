@@ -12,6 +12,7 @@ var screenW as Number?;
 var halfH as Number?;
 var halfW as Number?;
 var kMult as Float?; // compared to 240x240 screen
+var imgOff as Float?;
 
 class GoProRemoteApp extends Application.AppBase {
     // var gp;
@@ -32,7 +33,8 @@ class GoProRemoteApp extends Application.AppBase {
         screenW = deviceSettings.screenWidth;
         halfH = screenH / 2;
         halfW = screenW / 2;
-        kMult = (screenW / 120)*0.5;
+        kMult = (screenH / 120)*0.5;
+        imgOff = 0.05*screenH-12*kMult;
         deviceSettings = null;
     }
 

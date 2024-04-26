@@ -78,16 +78,16 @@ class RemoteView extends WatchUi.View {
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLACK);
         dc.clear();
         dc.fillCircle(halfW-72*kMult, halfH-25*kMult, 22*kMult);
-        dc.fillRoundedRectangle(halfW*0.75, halfH-70*kMult, 90*kMult, 90*kMult, 18*kMult);
+        dc.fillRoundedRectangle(halfW-30*kMult, halfH-70*kMult, 90*kMult, 90*kMult, 18*kMult);
         if (!cam.isRecording()) {
-            dc.fillRoundedRectangle(halfW/3, halfH+45*kMult, 160*kMult, 40*kMult, 20*kMult);
+            dc.fillRoundedRectangle(halfW-80*kMult, halfH+45*kMult, 160*kMult, 40*kMult, 20*kMult);
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         } else {
             dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
         }
-        dc.drawText(halfW*1.1, halfH+65*kMult, adaptFontSmall(), cam.getDescription(), JTEXT_MID);
-        dc.drawBitmap(halfW-83*kMult, halfH-36*kMult, MainResources.icons[UI_HILIGHT] as WatchUi.BitmapResource);
-        dc.drawBitmap(halfW-71*kMult, halfH+53*kMult, MainResources.icons[UI_MODES][WHEEL]);
+        dc.drawText(halfW+12*kMult, halfH+65*kMult, adaptFontSmall(), cam.getDescription(), JTEXT_MID);
+        dc.drawBitmap(halfW-83*kMult-imgOff, halfH-36*kMult-imgOff, MainResources.icons[UI_HILIGHT] as WatchUi.BitmapResource);
+        dc.drawBitmap(halfW-71*kMult-imgOff, halfH+53*kMult-imgOff, MainResources.icons[UI_MODES][WHEEL]);
         dc.setColor(0xFF0000, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(8*kMult);
         dc.drawCircle(halfW+15*kMult, halfH-25*kMult, 28*kMult);
