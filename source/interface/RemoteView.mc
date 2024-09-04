@@ -27,7 +27,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onSettings() {
-        WatchUi.pushView(new PresetPickerMenu(0), new PresetPickerDelegate(false), WatchUi.SLIDE_UP);
+        WatchUi.pushView(new SettingsMenu(SettingsMenu.SM_MENU, -1, null), new SettingsMenuDelegate(SettingsMenu.SM_MENU, null), WatchUi.SLIDE_UP);
         return true;
     }
 
@@ -61,7 +61,7 @@ class RemoteView extends WatchUi.View {
         onRemoteView = true;
         MainResources.loadIcons(UI_HILIGHT);
         MainResources.loadIcons(UI_MODES);
-        MainResources.freeIcons(UI_EDITABLES);
+        MainResources.freeIcons(UI_PRESETMENU);
         MainResources.freeIcons(UI_STATES);
         //TODO: Edit with mode icon
         //TODO: edit preset view with icon for each preset, gear cheel for settings and pen for preset edit

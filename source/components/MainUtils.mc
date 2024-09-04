@@ -10,7 +10,7 @@ function adaptFontSmall() as FontResource {
 }
 
 function adaptFontMid() as FontResource {
-    return kMult<=1 ? MainResources.fontSmall : MainResources.fontSmall;
+    return kMult<=1 ? MainResources.fontSmall : MainResources.fontMedium;
 }
 
 class MainUtils {

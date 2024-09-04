@@ -5,10 +5,9 @@ import Toybox.WatchUi;
 
 class SettingPickerMenu extends WatchUi.CustomMenu {
     public function initialize(gp as GoProSettings, id as Number) {
-        MainResources.loadLabels(UI_SETTINGS);
         var title="GoPro";
         if (id<3) {
-            title=MainResources.labels[UI_EDITABLES][id];
+            title=MainResources.labels[UI_PRESETMENU][id];
         }
         CustomMenu.initialize(80, Graphics.COLOR_BLACK, {:title=> new CustomMenuTitle(title)});
         for (var i=0; i<N_SETTINGS; i++) {
@@ -39,7 +38,6 @@ class SettingPickerItem extends WatchUi.CustomMenuItem {
         dc.drawLine(m_halfW-36, m_halfH+2, m_halfW+80, m_halfH+2);
         dc.drawBitmap(36, m_halfH-14, MainResources.icons[UI_SETTINGS][id]);
     }
-
     public function getId() {
         return id;
     }
@@ -56,13 +54,12 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
 
     public function onSelect(item) {
         var setting = item.getId() as Number;
-        WatchUi.pushView(new SettingEditMenu(setting, gp), new SettingEditDelegate(setting, gp), WatchUi.SLIDE_UP);
         // WatchUi.requestUpdate();
     }
 
     public function onBack() as Void {
         gp.save();
-        MainResources.loadIcons(UI_EDITABLES);
+        MainResources.loadIcons(UI_PRESETMENU);
         // maybe should pop 2 views if camera edit
         WatchUi.popView(WatchUi.SLIDE_RIGHT);
     }

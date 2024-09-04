@@ -29,7 +29,7 @@ enum UserInterface {
     UI_HILIGHT,
     UI_STATES,
     UI_MODES,
-    UI_EDITABLES,
+    UI_PRESETMENU,
     UI_SETTINGS
 }
 
