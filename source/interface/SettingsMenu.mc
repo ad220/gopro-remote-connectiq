@@ -79,11 +79,11 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
         dc.fillRoundedRectangle(m_halfW-100*kMult, m_halfH-30*kMult, 200*kMult, 60*kMult, 30*kMult);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
 
-        dc.drawBitmap(m_halfW-84*kMult, m_halfH-14*kMult, MainResources.icons[isEdit ? UI_SETTINGS : UI_PRESETMENU][id]);
+        dc.drawBitmap(m_halfW-84*kMult-imgOff, m_halfH-14*kMult-imgOff, MainResources.icons[isEdit ? UI_SETTINGS : UI_PRESETMENU][id]);
         
         if (isEdit or presetId<3) {
             dc.drawText(m_halfW+22*kMult, m_halfH-14*kMult, adaptFontMid(), MainResources.labels[isEdit ? UI_SETTINGS : UI_PRESETMENU][id], JTEXT_MID);
-            dc.drawText(m_halfW+22*kMult, m_halfH+16*kMult, isEdit ? MainResources.fontTiny : adaptFontSmall(), isEdit ? MainResources.settingLabels[id][gp.getSetting(id)] : gp.getDescription(), JTEXT_MID);
+            dc.drawText(m_halfW+22*kMult, m_halfH+16*kMult, adaptFontSmall(), isEdit ? MainResources.settingLabels[id][gp.getSetting(id)] : gp.getDescription(), JTEXT_MID);
             dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
             dc.drawLine(m_halfW-36*kMult, m_halfH+2*kMult, m_halfW+80*kMult, m_halfH+2*kMult);
         } else {

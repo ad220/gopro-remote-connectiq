@@ -44,11 +44,11 @@ class PopUpDelegate extends WatchUi.BehaviorDelegate {
 
     public function onBack() {
         timer.stop();
-        WatchUi.popView(SLIDE_DOWN);
+        WatchUi.popView(WatchUi.SLIDE_BLINK);
         return true;
     }
 
     public function fadeOut() as Void {
-        WatchUi.popView(SLIDE_DOWN);
+        WatchUi.popView(WatchUi.SLIDE_BLINK);
     }
 }

@@ -2,6 +2,7 @@ import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.WatchUi;
 
+// TODO: adapt item size to screen size
 
 class SettingEditMenu extends WatchUi.CustomMenu {
     public function initialize(setting as Number, gp as GoProSettings) {

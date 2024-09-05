@@ -51,7 +51,7 @@ class GoProConnectDelegate extends WatchUi.BehaviorDelegate {
         mobile.connect();
         mobile.send([COM_CONNECT, 0]);
         var _view = new PopUpView("Connecting to GoPro ...", POP_INFO);
-        WatchUi.pushView(_view, new PopUpDelegate(_view), WatchUi.SLIDE_UP);
+        WatchUi.pushView(_view, new PopUpDelegate(_view), WatchUi.SLIDE_BLINK);
         // var _view = new RemoteView();
         // WatchUi.pushView(_view, new RemoteDelegate(_view), WatchUi.SLIDE_LEFT);
         return true;

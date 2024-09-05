@@ -34,6 +34,7 @@ class GoProRemoteApp extends Application.AppBase {
         halfH = screenH / 2;
         halfW = screenW / 2;
         kMult = (screenH / 120)*0.5;
+        if (kMult < 1) {kMult = 1.0;}
         imgOff = 0.05*screenH-12*kMult;
         deviceSettings = null;
     }
@@ -44,10 +45,9 @@ class GoProRemoteApp extends Application.AppBase {
     }
 
     // Return the initial view of your application here
-    function getInitialView() as Array<Views or InputDelegates>? {
-        // return [ new RemoteView(new GoProCamera()) ] as Array<Views or InputDelegates>;
+    function getInitialView() {
         var view = new ConnectView();
-        return [ view, new GoProConnectDelegate(view) ] as Array<Views or InputDelegates>;
+        return [ view, new GoProConnectDelegate(view) ];
     }
 
 }
