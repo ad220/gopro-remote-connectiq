@@ -14,10 +14,9 @@ class GoProPreset extends GoProSettings {
         id = "preset#"+_id;
         //TODO: get name and icon from settings v2
         name = names[_id];
-        icon = MainResources.icons[UI_EDITABLES][_id];
+        icon = MainResources.icons[UI_PRESETMENU][_id];
         GoProSettings.initialize();
 
-        System.println(settings);
         try {
             settings = Application.Storage.getValue(id);
         } catch (exception) { //TODO: fix this: should not happen
@@ -38,13 +37,6 @@ class GoProPreset extends GoProSettings {
         Application.Storage.setValue(id, settings);
     }
 
-    public function getName() as String {
-        return name;
-    }
-
-    public function getIcon() as Bitmap {
-        return icon;
-    }
 
     public function getSettings() as Array<Number> {
         return settings;

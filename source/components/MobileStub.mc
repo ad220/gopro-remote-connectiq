@@ -25,6 +25,7 @@ class MobileStub {
         if (data[0] == COM_CONNECT && data[1]==0) {
             var _view = new RemoteView();
             WatchUi.pushView(_view, new RemoteDelegate(_view), WatchUi.SLIDE_LEFT);
+            System.println("Send connected stub");
             cam.setConnected(true);
         } else {
             System.println(data);

@@ -21,13 +21,13 @@ class PopUpView extends WatchUi.View{
     }
 
     function onUpdate(dc as Dc) as Void {
-        dc.setColor([Graphics.COLOR_DK_GRAY, 0xFF5500][type], Graphics.COLOR_TRANSPARENT);
-        dc.fillRectangle(0, 0, 240, 90);
+        dc.setColor(type ? 0xFF5500 : Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
+        dc.fillRectangle(0, 0, screenW, 90*kMult);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(120, 20, 10);
-        dc.drawText(120, 60, MainResources.fontTiny, message, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-        dc.setColor([Graphics.COLOR_DK_GRAY, 0xFF5500][type], Graphics.COLOR_TRANSPARENT);
-        dc.drawText(120, 20, MainResources.fontSmall, ["i", "!"][type], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.fillCircle(halfW, 20*kMult, 10*kMult);
+        dc.drawText(halfW, 60*kMult, adaptFontSmall(), message, JTEXT_MID);
+        dc.setColor(type ? 0xFF5500 : Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(halfW, 20*kMult, adaptFontMid() , type ? "!" : "i", JTEXT_MID);
     }
 }
 

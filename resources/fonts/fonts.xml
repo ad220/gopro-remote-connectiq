@@ -2,6 +2,6 @@
     <!-- <font id="SohneSmall" filename="sohne_small.fnt" antialias="true"/> -->
     <font id="Tiny" filename="tiny.fnt" antialias="true" filter="azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN0123456789 .:!/@éàè'+-"/>
     <font id="Small" filename="small.fnt" antialias="true" filter="azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN0123456789 .:!/@éÉàè'+-"/>
-    <font id="Medium" filename="medium.fnt" antialias="true" filter="ifpsKLargenockHyVwuS0123456789 .:éè'+"/>
+    <font id="Medium" filename="medium.fnt" antialias="true" filter="ifpsKLargenockHyVwuCONETS0123456789 .:éè'+"/>
     <font id="Large" filename="large.fnt" antialias="true" filter="azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN éàèÉ.'"/>
 </fonts>

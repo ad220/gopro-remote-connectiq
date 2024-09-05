@@ -38,7 +38,7 @@ class SettingEditItem extends WatchUi.CustomMenuItem {
         } else {
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         }
-        dc.drawText(dc.getWidth()/2, dc.getHeight()/2-2, MainResources.fontMedium, label, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(dc.getWidth()/2, dc.getHeight()/2-2, MainResources.fontMedium, label, JTEXT_MID);
     }
 
     public function setModified() as Void {
