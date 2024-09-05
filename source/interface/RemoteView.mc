@@ -7,6 +7,7 @@ import Toybox.Lang;
 
 class RemoteDelegate extends WatchUi.BehaviorDelegate {
     var view;
+    var actionIsSelect = false;
 
     public function initialize(_view) {
         BehaviorDelegate.initialize();
@@ -14,6 +15,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onTap(tap as ClickEvent) {
+        actionIsSelect = false;
         var coord = tap.getCoordinates();
         //TODO: other buttons
         if (coord[0]<halfW+70*kMult and coord[0]>halfW-35*kMult and coord[1]<halfH*1.25 and coord[1]>halfH+80*kMult) {
@@ -27,7 +29,15 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onSelect() {
-        mobile.send([COM_CONNECT, 0]);
+        actionIsSelect = true;
+        return false;
+    }
+
+    public function onKeyPressed(keyEvent) {
+        if (actionIsSelect) {
+            actionIsSelect = false;
+            mobile.send([COM_SHUTTER, 0]);
+        }
         return true;
     }
 
