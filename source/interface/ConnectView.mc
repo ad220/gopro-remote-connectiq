@@ -47,7 +47,7 @@ class GoProConnectDelegate extends WatchUi.BehaviorDelegate {
         view = _view;
     }
 
-    public function onTap(tap as ClickEvent) {
+    public function onSelect() {
         mobile.connect();
         mobile.send([COM_CONNECT, 0]);
         var _view = new PopUpView("Connecting to GoPro ...", POP_INFO);
