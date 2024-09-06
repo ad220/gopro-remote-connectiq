@@ -16,24 +16,26 @@ class SettingsMenu extends WatchUi.CustomMenu {
 
     // menuType is a boolean indicating if we are editing a preset or not (implies we shouldn't draw last options)
     public function initialize(menuType as SettingsMenuType, presetId as Number, gp as GoProPreset?) {
-
-        var title = "Edit Preset";
-        //TODO: add all titles options in strings.xml
+        // TODO: check if resources are properly freed
+        var title;
         if (menuType == SM_EDIT) {
-            MainResources.loadIcons(UI_SETTINGS);
-            MainResources.loadLabels(UI_SETTINGS); // TODO: move to SM_MENU
+            MainResources.loadIcons(UI_SETTINGEDIT);
+            MainResources.loadLabels(UI_SETTINGEDIT); // TODO: move to SM_MENU
 
             title = "GoPro";
             if (presetId<3) {
-                title=MainResources.labels[UI_PRESETMENU][presetId];
+                title=MainResources.labels[UI_SETTINGSMENU][presetId];
             }
         } else if (menuType == SM_MENU) {
             MainResources.freeIcons(UI_HILIGHT);
-            MainResources.freeIcons(UI_MODES);
-            MainResources.loadIcons(UI_PRESETMENU);
-            MainResources.loadLabels(UI_PRESETMENU);
+            MainResources.freeIcons(UI_MENUS);
+            MainResources.loadIcons(UI_SETTINGSMENU);
+            MainResources.loadLabels(UI_MENUS);
+            MainResources.loadLabels(UI_SETTINGSMENU);
 
-            title = "Settings";
+            title = MainResources.labels[UI_MENUS][SETTINGS];
+        } else {
+            title = MainResources.labels[UI_MENUS][PRESETS];
         }
 
         CustomMenu.initialize((80*kMult).toNumber(), Graphics.COLOR_BLACK, {:title=> new CustomMenuTitle(title)});
@@ -79,15 +81,15 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
         dc.fillRoundedRectangle(m_halfW-100*kMult, m_halfH-30*kMult, 200*kMult, 60*kMult, 30*kMult);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
 
-        dc.drawBitmap(m_halfW-84*kMult-imgOff, m_halfH-14*kMult-imgOff, MainResources.icons[isEdit ? UI_SETTINGS : UI_PRESETMENU][id]);
+        dc.drawBitmap(m_halfW-84*kMult-imgOff, m_halfH-14*kMult-imgOff, MainResources.icons[isEdit ? UI_SETTINGEDIT : UI_SETTINGSMENU][id]);
         
         if (isEdit or presetId<3) {
-            dc.drawText(m_halfW+22*kMult, m_halfH-14*kMult, adaptFontMid(), MainResources.labels[isEdit ? UI_SETTINGS : UI_PRESETMENU][id], JTEXT_MID);
+            dc.drawText(m_halfW+22*kMult, m_halfH-14*kMult, adaptFontMid(), MainResources.labels[isEdit ? UI_SETTINGEDIT : UI_SETTINGSMENU][id], JTEXT_MID);
             dc.drawText(m_halfW+22*kMult, m_halfH+16*kMult, adaptFontSmall(), isEdit ? MainResources.settingLabels[id][gp.getSetting(id)] : gp.getDescription(), JTEXT_MID);
             dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
             dc.drawLine(m_halfW-36*kMult, m_halfH+2*kMult, m_halfW+80*kMult, m_halfH+2*kMult);
         } else {
-            dc.drawText(m_halfW+22*kMult, m_halfH, adaptFontMid(), MainResources.labels[UI_PRESETMENU][id], JTEXT_MID);
+            dc.drawText(m_halfW+22*kMult, m_halfH, adaptFontMid(), MainResources.labels[UI_SETTINGSMENU][id], JTEXT_MID);
         }
     }
 

@@ -22,14 +22,14 @@
             <color>AAAAAA</color>
         </palette>
     </bitmap>
-    <bitmap id="Camera" filename="camera.png" scaleY="10%" scaleRelativeTo="screen">
+    
+    <!-- EDITABLES -->
+    <bitmap id="Edit" filename="edit.png" scaleY="10%" scaleRelativeTo="screen">
         <palette>
             <color>AAAAAA</color>
         </palette>
     </bitmap>
-    
-    <!-- EDITABLES -->
-    <bitmap id="Edit" filename="edit.png" scaleY="10%" scaleRelativeTo="screen">
+    <bitmap id="Camera" filename="camera.png" scaleY="10%" scaleRelativeTo="screen">
         <palette>
             <color>AAAAAA</color>
         </palette>

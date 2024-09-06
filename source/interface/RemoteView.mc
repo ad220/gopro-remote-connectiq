@@ -83,8 +83,8 @@ class RemoteView extends WatchUi.View {
     function onShow() as Void {
         onRemoteView = true;
         MainResources.loadIcons(UI_HILIGHT);
-        MainResources.loadIcons(UI_MODES);
-        MainResources.freeIcons(UI_PRESETMENU);
+        MainResources.loadIcons(UI_MENUS);
+        MainResources.freeIcons(UI_SETTINGSMENU);
         MainResources.freeIcons(UI_STATES);
         //TODO: Edit with mode icon
         //TODO: edit preset view with icon for each preset, gear cheel for settings and pen for preset edit
@@ -110,7 +110,7 @@ class RemoteView extends WatchUi.View {
         }
         dc.drawText(halfW+12*kMult, halfH+65*kMult, adaptFontSmall(), cam.getDescription(), JTEXT_MID);
         dc.drawBitmap(halfW-83*kMult-imgOff, halfH-36*kMult-imgOff, MainResources.icons[UI_HILIGHT] as WatchUi.BitmapResource);
-        dc.drawBitmap(halfW-71*kMult-imgOff, halfH+53*kMult-imgOff, MainResources.icons[UI_MODES][WHEEL]);
+        dc.drawBitmap(halfW-71*kMult-imgOff, halfH+53*kMult-imgOff, MainResources.icons[UI_MENUS][SETTINGS]);
         dc.setColor(0xFF0000, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(8*kMult);
         dc.drawCircle(halfW+15*kMult, halfH-25*kMult, 28*kMult);

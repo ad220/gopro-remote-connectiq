@@ -28,13 +28,15 @@ enum UserInterface {
     UI_CONNECT,
     UI_HILIGHT,
     UI_STATES,
-    UI_MODES,
-    UI_PRESETMENU,
-    UI_SETTINGS
+    UI_MENUS,
+    UI_SETTINGSMENU,
+    UI_SETTINGEDIT
 }
 
-enum Modes {
-    WHEEL
+enum Menus {
+    SETTINGS,
+    PRESETS,
+    EDIT
 }
 
 // Settings enums
@@ -112,7 +114,10 @@ class MainResources {
         if (labels[id]==null) {
             labels[id] = [
                 WatchUi.loadResource(Rez.Strings.Connect),
-                null, null, null, [
+                null, null, [
+                    WatchUi.loadResource(Rez.Strings.Settings),
+                    WatchUi.loadResource(Rez.Strings.Presets)
+                ], [
                     WatchUi.loadResource(Rez.Strings.Cinema),
                     WatchUi.loadResource(Rez.Strings.Sport),
                     WatchUi.loadResource(Rez.Strings.Eco),

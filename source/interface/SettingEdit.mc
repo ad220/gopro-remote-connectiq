@@ -6,7 +6,7 @@ import Toybox.WatchUi;
 
 class SettingEditMenu extends WatchUi.CustomMenu {
     public function initialize(setting as Number, gp as GoProSettings) {
-        CustomMenu.initialize(70, Graphics.COLOR_BLACK, {:title=> new $.CustomMenuTitle(MainResources.labels[UI_SETTINGS][setting])});
+        CustomMenu.initialize(70, Graphics.COLOR_BLACK, {:title=> new $.CustomMenuTitle(MainResources.labels[UI_SETTINGEDIT][setting])});
         var items;
         var selected;
         items = gp.possibleSettings(setting);
@@ -68,7 +68,7 @@ class SettingEditDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     public function onBack() as Void {
-        MainResources.loadIcons(UI_SETTINGS);
+        MainResources.loadIcons(UI_SETTINGEDIT);
         WatchUi.popView(WatchUi.SLIDE_RIGHT);
     }
 
