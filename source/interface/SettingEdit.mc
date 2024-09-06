@@ -2,11 +2,10 @@ import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.WatchUi;
 
-// TODO: adapt item size to screen size
 
 class SettingEditMenu extends WatchUi.CustomMenu {
     public function initialize(setting as Number, gp as GoProSettings) {
-        CustomMenu.initialize(70, Graphics.COLOR_BLACK, {:title=> new $.CustomMenuTitle(MainResources.labels[UI_SETTINGEDIT][setting])});
+        CustomMenu.initialize((70*kMult).toNumber(), Graphics.COLOR_BLACK, {:title=> new $.CustomMenuTitle(MainResources.labels[UI_SETTINGEDIT][setting])});
         var items;
         var selected;
         items = gp.possibleSettings(setting);
@@ -33,13 +32,13 @@ class SettingEditItem extends WatchUi.CustomMenuItem {
 
     public function draw(dc as Dc) as Void {
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.fillRoundedRectangle(dc.getWidth()/2-100, dc.getHeight()/2-25, 200, 50, 25);
+        dc.fillRoundedRectangle(dc.getWidth()/2-100*kMult, dc.getHeight()/2-25*kMult, 200*kMult, 50*kMult, 25*kMult);
         if (preselected and !modified or isSelected()) {
             dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_TRANSPARENT);
         } else {
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         }
-        dc.drawText(dc.getWidth()/2, dc.getHeight()/2-2, MainResources.fontMedium, label, JTEXT_MID);
+        dc.drawText(dc.getWidth()/2, dc.getHeight()/2-2*kMult, MainResources.fontMedium, label, JTEXT_MID);
     }
 
     public function setModified() as Void {
