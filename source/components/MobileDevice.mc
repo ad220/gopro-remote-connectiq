@@ -95,7 +95,6 @@ class MobileConnection extends Communications.ConnectionListener {
     }
 
     public function onError() {
-        // TODO
-
+        System.println("Error on MobileConnection");
     }
 }

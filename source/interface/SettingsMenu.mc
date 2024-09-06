@@ -3,10 +3,7 @@ import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.Math;
 
-//button ids : preset1, preset2, preset3, camera, edit
-//editing presets pushes another SettingsMenu view over the first one
-//edit icon and label in connect iq app settings
-
+// TODO: replace preset edit with camera settings save as preset
 class SettingsMenu extends WatchUi.CustomMenu {
     public enum SettingsMenuType {
         SM_MENU,
@@ -14,21 +11,19 @@ class SettingsMenu extends WatchUi.CustomMenu {
         SM_EDIT
     }
 
-    // menuType is a boolean indicating if we are editing a preset or not (implies we shouldn't draw last options)
     public function initialize(menuType as SettingsMenuType, presetId as Number, gp as GoProPreset?) {
-        // TODO: check if resources are properly freed
         var title;
         if (menuType == SM_EDIT) {
             MainResources.loadIcons(UI_SETTINGEDIT);
-            MainResources.loadLabels(UI_SETTINGEDIT); // TODO: move to SM_MENU
+            MainResources.loadLabels(UI_SETTINGEDIT);
 
             title = "GoPro";
             if (presetId<3) {
                 title=MainResources.labels[UI_SETTINGSMENU][presetId];
             }
         } else if (menuType == SM_MENU) {
-            MainResources.freeIcons(UI_HILIGHT);
-            MainResources.freeIcons(UI_MENUS);
+            // MainResources.freeIcons(UI_HILIGHT);
+            // MainResources.freeIcons(UI_MENUS);
             MainResources.loadIcons(UI_SETTINGSMENU);
             MainResources.loadLabels(UI_MENUS);
             MainResources.loadLabels(UI_SETTINGSMENU);
@@ -110,17 +105,15 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     public function onSelect(item) {
         var id = item.getId() as Number;
-        //WARNING: popping view unloads mandatory icons and loads unnecessary ones in simulator while the problem doesn't appear on device and lower (<4.1.7 beta) SDK version
-        //TODO: check with lower SDK version and/or fix this shit
-        //TODO: think about view tree for preset edit
-
+        // WARNING: popping view unloads mandatory icons and loads unnecessary ones in simulator while the problem doesn't appear on device and lower (<4.1.7 beta) SDK versions
+        // NOTE: issue unseen with SDK 6.3.0 and 7.3.0
         if (menuType == SettingsMenu.SM_EDIT) {
             WatchUi.pushView(new SettingEditMenu(id, gp), new SettingEditDelegate(id, gp), WatchUi.SLIDE_UP);
         } else {
             if (id == CAM or menuType == SettingsMenu.SM_PSETS) {
                 WatchUi.switchToView(new SettingsMenu(SettingsMenu.SM_EDIT, id, (item as SettingsMenuItem).getPreset()), new SettingsMenuDelegate(SettingsMenu.SM_EDIT, (item as SettingsMenuItem).getPreset()), WatchUi.SLIDE_LEFT);
             } else if (id == EDITP7) {
-                WatchUi.switchToView(new SettingsMenu(SettingsMenu.SM_PSETS, -1, null), new SettingsMenuDelegate(SettingsMenu.SM_PSETS, null), WatchUi.SLIDE_LEFT);
+                WatchUi.pushView(new SettingsMenu(SettingsMenu.SM_PSETS, -1, null), new SettingsMenuDelegate(SettingsMenu.SM_PSETS, null), WatchUi.SLIDE_LEFT);
             } else {
                 WatchUi.popView(WatchUi.SLIDE_DOWN);
                 cam.setPreset((item as SettingsMenuItem).getPreset());

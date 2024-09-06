@@ -15,7 +15,6 @@ var kMult as Float?; // compared to 240x240 screen
 var imgOff as Float?;
 
 class GoProRemoteApp extends Application.AppBase {
-    // var gp;
 
     function initialize() {
         AppBase.initialize();
@@ -24,7 +23,7 @@ class GoProRemoteApp extends Application.AppBase {
     // onStart() is called on application start up
     function onStart(state as Dictionary?) as Void {
         cam = new GoProCamera();
-        mobile = new MobileStub(); //TODO: reverse this to MobileDevice
+        mobile = new MobileStub();
         onRemoteView = false;
         MainResources.loadFonts();
     

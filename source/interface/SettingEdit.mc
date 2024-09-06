@@ -19,21 +19,19 @@ class SettingEditMenu extends WatchUi.CustomMenu {
 class SettingEditItem extends WatchUi.CustomMenuItem {
     private var id;
     private var label;
-    private var preselected;
-    private static var modified;
+    private static var selected;
 
-    public function initialize(setting, _id, selected as Number) {
+    public function initialize(setting, _id, _selected as Number) {
         id = _id;
         label = MainResources.settingLabels[setting][_id];
-        preselected = _id==selected;
-        modified = false;
+        selected = _selected;
         CustomMenuItem.initialize(id, {});
     }
 
     public function draw(dc as Dc) as Void {
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.fillRoundedRectangle(dc.getWidth()/2-100*kMult, dc.getHeight()/2-25*kMult, 200*kMult, 50*kMult, 25*kMult);
-        if (preselected and !modified or isSelected()) {
+        if (id == selected) {
             dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_TRANSPARENT);
         } else {
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
@@ -41,8 +39,8 @@ class SettingEditItem extends WatchUi.CustomMenuItem {
         dc.drawText(dc.getWidth()/2, dc.getHeight()/2-2*kMult, MainResources.fontMedium, label, JTEXT_MID);
     }
 
-    public function setModified() as Void {
-        modified = true;
+    public function select() as Void {
+        selected = id;
     }
 
     public function getId() {
@@ -62,7 +60,7 @@ class SettingEditDelegate extends WatchUi.Menu2InputDelegate {
 
     public function onSelect(item) {
         gp.setSetting(setting, item.getId());
-        (item as SettingEditItem).setModified();
+        (item as SettingEditItem).select();
         WatchUi.requestUpdate();
     }
 

@@ -17,7 +17,6 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
     public function onTap(tap as ClickEvent) {
         actionIsSelect = false;
         var coord = tap.getCoordinates();
-        //TODO: other buttons
         if (coord[0]<halfW+70*kMult and coord[0]>halfW-35*kMult and coord[1]<halfH*1.25 and coord[1]>halfH+80*kMult) {
             mobile.send([COM_SHUTTER, 0]);
         } else if (cam.isRecording() and coord[0]<halfW+45*kMult and coord[0]>halfW-105*kMult and coord[1]<halfH and coord[1]>halfH*0.5) {
@@ -71,23 +70,21 @@ class RemoteView extends WatchUi.View {
         recordingTimer = new Timer.Timer();
     }
     
-    // Load your resources here
     function onLayout(dc as Dc) as Void {
         setLayout(Rez.Layouts.MainLayout(dc));
         MainResources.loadSettingLabels();
     }
 
-    // Called when this View is brought to the foreground. Restore
-    // the state of this View and prepare it to be shown. This includes
-    // loading resources into memory.
     function onShow() as Void {
         onRemoteView = true;
         MainResources.loadIcons(UI_HILIGHT);
         MainResources.loadIcons(UI_MENUS);
         MainResources.freeIcons(UI_SETTINGSMENU);
+        MainResources.freeIcons(UI_SETTINGEDIT);
         MainResources.freeIcons(UI_STATES);
-        //TODO: Edit with mode icon
-        //TODO: edit preset view with icon for each preset, gear cheel for settings and pen for preset edit
+        MainResources.freeLabels(UI_MENUS);
+        MainResources.freeLabels(UI_SETTINGSMENU);
+        MainResources.freeLabels(UI_SETTINGEDIT);
     }
 
     // Update the view
@@ -143,7 +140,6 @@ class RemoteView extends WatchUi.View {
             if (recordingTimer!=null) {
                 recordingTimer.stop();
                 recordingTimer = null;
-                // recDurationSeconds = 0;
             }
             // For v2, would open states menu on swipe down
 
@@ -155,10 +151,7 @@ class RemoteView extends WatchUi.View {
             // dc.setPenWidth(1);
         }
     }
-
-    // Called when this View is removed from the screen. Save the
-    // state of this View here. This includes freeing resources from
-    // memory.
+ 
     function onHide() as Void {
         settingsButton = null;
         onRemoteView = false;
