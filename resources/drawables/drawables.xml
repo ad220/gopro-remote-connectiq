@@ -1,5 +1,5 @@
 <drawables>
-    <bitmap id="LauncherIcon" filename="thumbnail.png">
+    <bitmap id="LauncherIcon" filename="gopro.png">
         <palette>
             <color>000000</color>
             <color>444444</color>

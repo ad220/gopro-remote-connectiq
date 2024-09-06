@@ -1,0 +1,11 @@
+<drawables>
+    <bitmap id="LauncherIcon" filename="launcher_icon.png">
+        <palette>
+            <color>000000</color>
+            <color>444444</color>
+            <color>AAAAAA</color>
+            <color>00AAFF</color>
+            <color>FF5500</color>
+        </palette>
+    </bitmap>
+</drawables>
