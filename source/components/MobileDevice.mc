@@ -42,10 +42,11 @@ class MobileDevice {
 
     public function onReceive(message as Communications.PhoneAppMessage) {
         System.println(message.data);
-        switch (message.data[0]) {
+        var data = message.data as Array<Number or Array<Number>>;
+        switch (data[0]) {
             case COM_CONNECT:
                 // Ouverture connexion M>T>G>T>M
-                if (message.data[1] == 0) {
+                if (data[1] == 0) {
                     var _view = new RemoteView();
                     WatchUi.pushView(_view, new RemoteDelegate(_view), WatchUi.SLIDE_LEFT);
                     cam.setConnected(true);
@@ -65,17 +66,17 @@ class MobileDevice {
             
             case COM_FETCH_SETTINGS:
                 // GoPro settings --> montre
-                if (message.data[1]) {
-                    cam.syncSettings(message.data[1]);
+                if (data[1]) {
+                    cam.syncSettings(data[1]);
                 }
                 break;
             case COM_FETCH_STATES:
-                if (message.data[1]) {
-                    cam.syncStates(message.data[1]);
+                if (data[1]) {
+                    cam.syncStates(data[1]);
                 }
                 break;
             case COM_PROGRESS:
-                cam.syncProgress(message.data[1]);
+                cam.syncProgress(data[1]);
                 break;
             default:
                 break;

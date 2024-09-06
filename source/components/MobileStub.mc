@@ -21,7 +21,7 @@ class MobileStub {
         return connected;
     }
 
-    public function send(data as Object) {
+    public function send(data as Array<Number or Array<Number>>) {
         if (data[0] == COM_CONNECT && data[1]==0) {
             var _view = new RemoteView();
             WatchUi.pushView(_view, new RemoteDelegate(_view), WatchUi.SLIDE_LEFT);

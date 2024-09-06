@@ -2,7 +2,6 @@ import Toybox.Lang;
 
 class GoProCamera extends GoProSettings {
     private var states as Array<Number>?;
-    private var settingsSave as Array<Number>?;
 
     private var progress = 0 as Number;
     private var connected = false as Boolean;

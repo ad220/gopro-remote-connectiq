@@ -5,16 +5,9 @@ import Toybox.Lang;
 
 class GoProPreset extends GoProSettings {
     private var id;
-    private var name;
-    private var icon;
-
-    public static const names = ["Preset 1", "Preset 2", "Preset 3"];
 
     public function initialize(_id) {
         id = "preset#"+_id;
-        //TODO: get name and icon from settings v2
-        name = names[_id];
-        icon = MainResources.icons[UI_SETTINGSMENU][_id];
         GoProSettings.initialize();
 
         try {

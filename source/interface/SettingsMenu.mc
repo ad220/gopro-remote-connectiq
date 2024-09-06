@@ -131,7 +131,7 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     public function onBack() as Void {
-        if (gp) {gp.save();}
+        if (gp != null) {gp.save();}
         WatchUi.popView(WatchUi.SLIDE_DOWN);
     }
 
