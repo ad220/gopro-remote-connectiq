@@ -22,7 +22,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
         } else if (cam.isRecording() and coord[0]<halfW+45*kMult and coord[0]>halfW-105*kMult and coord[1]<halfH and coord[1]>halfH*0.5) {
             mobile.send([COM_HIGHLIGHT, 0]);
         } else if (!cam.isRecording() and coord[0]<halfW+80*kMult and coord[0]>halfW-80*kMult and coord[1]<halfH+100*kMult and coord[1]>halfH+40*kMult) {
-            onSettings();
+            return onMenu();
         }
         return true;
     }
@@ -41,16 +41,12 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onMenu() {
-        return onSettings();
+        WatchUi.pushView(new SettingsMenu(SettingsMenu.SM_MENU, -1, null), new SettingsMenuDelegate(SettingsMenu.SM_MENU, null), WatchUi.SLIDE_UP);
+        return true;
     }
 
     public function onNextPage() {
-        return onSettings();
-    }
-    
-    public function onSettings() {
-        WatchUi.pushView(new SettingsMenu(SettingsMenu.SM_MENU, -1, null), new SettingsMenuDelegate(SettingsMenu.SM_MENU, null), WatchUi.SLIDE_UP);
-        return true;
+        return onMenu();
     }
 
     public function onBack() {
