@@ -2,16 +2,21 @@
 
     <!-- ConnectView -->
     <string id="Connect">CONNEXION</string>
+    <string id="Connecting">Connexion à la caméra...</string>
+    <string id="ConnectFail">Connexion échouée</string>
 
     <!-- PresetPick -->
     <string id="Cinema">Cinéma</string>
-    <!-- <string id="Sport">Sport</string> -->
+    <string id="Sport">Sport</string>
     <string id="Eco">Éco</string>
     <string id="Manually">Paramétrage\n manuel</string>
     <string id="EditP7">Editer les\npréréglages</string>
 
-    <!-- Paramètres -->
+    <!-- Menus -->
     <string id="Settings">Paramètres</string>
+    <string id="Presets">Éditer un\npréréglage</string>
+    
+    <!-- Paramètres -->
     <string id="Resolution">Résolution</string>
     <string id="Ratio">Format d'image</string>
     <string id="Lens">Objectif</string>
@@ -29,9 +34,7 @@
     <string id="_24">24 ips</string>
 
     <!-- Objectifs -->
-    <!-- <string id="_HYPERVIEW">HyperView</string>
-    <string id="_SUPERVIEW">SuperView</string>
-    <string id="_LARGE">Large</string> -->
+    <string id="_LARGE">Large</string>
     <string id="_LINEAR">Linéaire</string>
     <string id="_LINEARLOCK">Linéaire + VH</string>
 </strings>

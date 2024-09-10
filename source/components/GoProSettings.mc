@@ -1,10 +1,9 @@
 import Toybox.Lang;
 
-//TODO: switch --> if/else + add other gopros settings restrictions
+// NOTE: replacing switch with if-else would be more memory efficient
 
 class GoProSettings {
     protected var settings as Array<Number>;
-    // private var region; //TODO: Edit to enum NTSC:0 / PAL:1 --> goto camera settings in v2
     
     public static const resolutionList = [_5K, _4K, _3K, _2K];
     public static const ratioList = [_8R7, _4R3, _16R9];
@@ -20,7 +19,6 @@ class GoProSettings {
     }
 
     public function setSetting(id as Number, value as Number) {
-        //TODO: fix incompabilities
         settings[id] = value;
 
         var possibleValues;
@@ -106,7 +104,7 @@ class GoProSettings {
         var frLabel = MainResources.settingLabels[FRAMERATE][settings[FRAMERATE]];
         return MainResources.settingLabels[RESOLUTION][settings[RESOLUTION]] \
             + "@" + frLabel.substring(0, frLabel.length()-4) + " " \
-            + MainResources.settingLabels[RATIO][settings[RATIO]]; //[TODO: add lens
+            + MainResources.settingLabels[RATIO][settings[RATIO]];
     }
 
     public function save() {

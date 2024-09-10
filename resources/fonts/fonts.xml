@@ -1,7 +1,6 @@
 <fonts>
-    <!-- <font id="SohneSmall" filename="sohne_small.fnt" antialias="true"/> -->
-    <font id="Tiny" filename="tiny.fnt" antialias="true" filter="azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN0123456789 .:!/@éàè'+-"/>
-    <font id="Small" filename="small.fnt" antialias="true" filter="azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN0123456789 .:!/@éÉàè'+-"/>
-    <font id="Medium" filename="medium.fnt" antialias="true" filter="ifpsKLargenockHyVwuS0123456789 .:éè'+"/>
-    <font id="Large" filename="large.fnt" antialias="true" filter="azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN éàèÉ.'"/>
+    <font id="Tiny" filename="tiny.fnt" antialias="true" filter=" '+.0123456789:ACEFGHIKLMNOPRSTUVXabcdefghijlmnopqrstuwxyÉàèé@"/>
+    <font id="Small" filename="small.fnt" antialias="true" filter=" '+.0123456789:ACEFGHIKLMNOPRSTUVXabcdefghijlmnopqrstuwxyÉàèé@!"/>
+    <font id="Medium" filename="medium.fnt" antialias="true" filter=" '+.0123456789:ACEFGHIKLMNOPRSTVXabcdefgijlmnopqrstuwyÉèé@!"/>
+    <font id="Large" filename="large.fnt" antialias="true" filter=" '+.0123456789:ACEFGHIKLMNOPRSTVXabcdefgijlmnopqrstuwyÉèé"/>
 </fonts>

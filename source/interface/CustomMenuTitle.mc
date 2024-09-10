@@ -21,6 +21,6 @@ class CustomMenuTitle extends WatchUi.Drawable {
 
         // dc.drawBitmap(bitmapX, bitmapY, appIcon);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(dc.getWidth()/2, dc.getHeight()/2+8, MainResources.fontLarge, title, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(dc.getWidth()/2, dc.getHeight()/2+8, MainResources.fontLarge, title, JTEXT_MID);
     }
 }

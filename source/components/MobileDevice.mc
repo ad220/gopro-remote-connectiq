@@ -41,41 +41,41 @@ class MobileDevice {
     }
 
     public function onReceive(message as Communications.PhoneAppMessage) {
-        System.println(message.data);
-        switch (message.data[0]) {
+        System.println("received: " + message.data.toString());
+        var data = message.data as Array<Number or Array<Number>>;
+        switch (data[0]) {
             case COM_CONNECT:
                 // Ouverture connexion M>T>G>T>M
-                if (message.data[1] == 0) {
+                if (data[1] == 0) {
                     var _view = new RemoteView();
-                    WatchUi.pushView(_view, new RemoteDelegate(_view), WatchUi.SLIDE_LEFT);
+                    GoProRemoteApp.pushView(_view, new RemoteDelegate(_view), WatchUi.SLIDE_LEFT, false);
                     cam.setConnected(true);
                 } else {
                     if (cam.isConnected()){
-                        while (!onRemoteView) {
-                            WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
+                        while (nViewLayers > 1) {
+                            GoProRemoteApp.popView(WatchUi.SLIDE_IMMEDIATE);
                         }
-                        WatchUi.popView(WatchUi.SLIDE_LEFT);
+                        GoProRemoteApp.popView(WatchUi.SLIDE_LEFT);
                         disconnect();
                     }
                     cam.setConnected(false);
-                    var _view = new PopUpView("Unable to connect to GoPro", POP_ERROR);
-                    WatchUi.pushView(_view, new PopUpDelegate(_view), WatchUi.SLIDE_IMMEDIATE);
+                    GoProRemoteApp.pushView(new PopUpView(MainResources.labels[UI_CONNECT][CONNECTFAIL], POP_ERROR), new PopUpDelegate(), WatchUi.SLIDE_BLINK, false);
                 }
                 break;
             
             case COM_FETCH_SETTINGS:
                 // GoPro settings --> montre
-                if (message.data[1]) {
-                    cam.syncSettings(message.data[1]);
+                if (data[1]) {
+                    cam.syncSettings(data[1]);
                 }
                 break;
             case COM_FETCH_STATES:
-                if (message.data[1]) {
-                    cam.syncStates(message.data[1]);
+                if (data[1]) {
+                    cam.syncStates(data[1]);
                 }
                 break;
             case COM_PROGRESS:
-                cam.syncProgress(message.data[1]);
+                cam.syncProgress(data[1]);
                 break;
             default:
                 break;
@@ -84,6 +84,7 @@ class MobileDevice {
     }
 
     public function send(data as Object) {
+        System.println("sending: " + data.toString());
         Communications.transmit(data, {}, new MobileConnection());
     }
 }
@@ -94,7 +95,6 @@ class MobileConnection extends Communications.ConnectionListener {
     }
 
     public function onError() {
-        // TODO
-
+        System.println("Error on MobileConnection");
     }
 }

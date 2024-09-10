@@ -1,8 +1,14 @@
 import Toybox.WatchUi;
 import Toybox.Lang;
 
+enum ConnectLabels {
+    CONNECT,
+    CONNECTING,
+    CONNECTFAIL
+}
+
 const N_EDITABLES = 5;
-enum Editables { //TODO: find a better name for enum
+enum Editables {
     PSET1,
     PSET2,
     PSET3,
@@ -28,13 +34,15 @@ enum UserInterface {
     UI_CONNECT,
     UI_HILIGHT,
     UI_STATES,
-    UI_MODES,
-    UI_EDITABLES,
-    UI_SETTINGS
+    UI_MENUS,
+    UI_SETTINGSMENU,
+    UI_SETTINGEDIT
 }
 
-enum Modes {
-    WHEEL
+enum Menus {
+    SETTINGS,
+    PRESETS,
+    EDIT
 }
 
 // Settings enums
@@ -108,21 +116,37 @@ class MainResources {
 
     static public function loadLabels(id as Number) as Void{
         if (labels[id]==null) {
-            labels[id] = [
-                WatchUi.loadResource(Rez.Strings.Connect),
-                null, null, null, [
+            if (id == UI_CONNECT) {
+                labels[id] = [
+                    WatchUi.loadResource(Rez.Strings.Connect),
+                    WatchUi.loadResource(Rez.Strings.Connecting),
+                    WatchUi.loadResource(Rez.Strings.ConnectFail)
+                ];
+            } else if (id == UI_HILIGHT) {
+                labels[id] = null;
+            } else if (id == UI_STATES) {
+                labels[id] = null;
+            } else if (id == UI_MENUS) {
+                labels[id] = [
+                    WatchUi.loadResource(Rez.Strings.Settings),
+                    WatchUi.loadResource(Rez.Strings.Presets)
+                ];
+            } else if (id == UI_SETTINGSMENU) {
+                labels[id] = [
                     WatchUi.loadResource(Rez.Strings.Cinema),
                     WatchUi.loadResource(Rez.Strings.Sport),
                     WatchUi.loadResource(Rez.Strings.Eco),
                     WatchUi.loadResource(Rez.Strings.Manually),
-                    WatchUi.loadResource(Rez.Strings.EditP7),
-                ], [
+                    WatchUi.loadResource(Rez.Strings.EditP7)
+                ];
+            } else if (id == UI_SETTINGEDIT) {
+                labels[id] = [
                     WatchUi.loadResource(Rez.Strings.Resolution),
                     WatchUi.loadResource(Rez.Strings.Ratio),
                     WatchUi.loadResource(Rez.Strings.Lens),
                     WatchUi.loadResource(Rez.Strings.Framerate)
-                ]
-            ][id];
+                ];
+            }
         }
     }
 
@@ -174,28 +198,36 @@ class MainResources {
     }
 
 
-    static public var icons as Array<Array<BitmapResource>?> = [null, null, null, null, null, null]; //as Array<Array<BitmapResource>?> --> null not accepted for bitmap display
+    static public var icons as Array<Array<BitmapResource>?> = [null, null, null, null, null, null];
 
     static public function loadIcons(id as Number) as Void{
         if (icons[id]==null) {
-            icons[id] = [
-                null,
-                WatchUi.loadResource(Rez.Drawables.Hilight),
-                null, [
+            if (id == UI_CONNECT) {
+                icons[id] = null;
+            } else if (id == UI_HILIGHT) {
+                icons[id] = WatchUi.loadResource(Rez.Drawables.Hilight);
+            } else if (id == UI_STATES) {
+                icons[id] = null;
+            } else if (id == UI_MENUS) {
+                icons[id] = [
                     WatchUi.loadResource(Rez.Drawables.Wheel)
-                ], [
+                ];
+            } else if (id == UI_SETTINGSMENU) {
+                icons[id] = [
                     WatchUi.loadResource(Rez.Drawables.Cinema), //PSET1
-                    WatchUi.loadResource(Rez.Drawables.Sport), //PSET2
-                    WatchUi.loadResource(Rez.Drawables.Eco), //PSET3
+                    WatchUi.loadResource(Rez.Drawables.Sport),  //PSET2
+                    WatchUi.loadResource(Rez.Drawables.Eco),    //PSET3
                     WatchUi.loadResource(Rez.Drawables.Camera), //CAM
-                    WatchUi.loadResource(Rez.Drawables.Edit), //EDITP7
-                ], [
+                    WatchUi.loadResource(Rez.Drawables.Edit)    //EDITP7
+                ];
+            } else if (id == UI_SETTINGEDIT) {
+                icons[id] = [
                     WatchUi.loadResource(Rez.Drawables.Resolution),
                     WatchUi.loadResource(Rez.Drawables.Ratio),
                     WatchUi.loadResource(Rez.Drawables.Lens),
                     WatchUi.loadResource(Rez.Drawables.Framerate)
-                ]
-            ] [id];
+                ];
+            }
         }
     }
 
