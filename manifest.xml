@@ -5,7 +5,7 @@
         Use "Monkey C: Edit Application" from the Visual Studio Code command palette
         to update the application attributes.
     -->
-    <iq:application id="e3998790-3052-4fe7-8c81-0c11d0fc52fc" type="widget" name="@Strings.AppName" entry="GoProRemoteApp" launcherIcon="@Drawables.LauncherIcon" minApiLevel="2.4.0">
+    <iq:application id="ede98b81-5b9e-4b9b-b14a-3b46b8185ade" type="widget" name="@Strings.AppName" entry="GoProRemoteApp" launcherIcon="@Drawables.LauncherIcon" minApiLevel="2.4.0">
         <!--
             Use the following from the Visual Studio Code comand palette to edit
             the build targets:
@@ -58,7 +58,6 @@
             <iq:product id="fr55"/>
             <iq:product id="fr645"/>
             <iq:product id="fr645m"/>
-            <iq:product id="fr735xt"/>
             <iq:product id="fr745"/>
             <iq:product id="fr935"/>
             <iq:product id="fr945"/>
@@ -97,7 +96,6 @@
             <iq:product id="vivoactive4"/>
             <iq:product id="vivoactive4s"/>
             <iq:product id="vivoactive5"/>
-            <iq:product id="vivoactive_hr"/>
         </iq:products>
         <!--
             Use "Monkey C: Edit Permissions" from the Visual Studio Code command

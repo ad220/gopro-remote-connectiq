@@ -1,7 +1,7 @@
 # GoPro remote for Garmin watch
 A ConnectIQ widget to control your GoPro from your wrist. Uses the [Open GoPro Bluetooth Low Energy API](https://gopro.github.io/OpenGoPro/ble_2_0) and the [Garmin ConnectIQ SDK](https://developer.garmin.com/connect-iq/overview/).
 
-Built for the vivoactive 3, it only supports touchscreen watches and UI scaling is hardcoded for 240x240 pixels display for now.
+The widget is now supporting every mainstream Garmin watch with API level 2.4.0 and above. However it is designed to be used specifically with a GoPro HERO11 as the capabilities are hardcoded in the app.
 
 Must be used in pair with the [Android companion app](https://github.com/ad220/gopro-remote-companion-android) as a bridge to communicate with the GoPro.
 
@@ -16,15 +16,15 @@ Please note that the app is still under development and while this should be sta
 
 
 ### Planned
-- add support for a wider range of ConnectIQ products
 - achieve full support for all Open GoPro cameras (see [*](#disclaimer))
 - add photo support
 - add hypersmooth + most of toggables states
 - better info and error pop-ups message
-- release on the ConnectIQ Store
 
 ## Installation
-I did not released this on the ConnectIQ Store for now as it only supports the vivoactive 3. It can be built with the Garmin SDK using the VSCode extension. Then, plug your watch with the USB cable in mass storage mode, and copy the generated `.prg` file to the `/GARMIN/APPS` folder on your device.
+The widget is available on the [Garmin Connect IQ store](https://apps.garmin.com/apps/f9e09224-1c60-4e94-a616-f9ef10932fdf). You can install it directly from your Garmin Connect app on your smartphone.
+
+You can also build the widget for your specific device with the Garmin SDK and the VSCode extension. Then, plug your watch to the computer with the USB cable in mass storage mode, and copy the generated `.prg` file to the `/GARMIN/APPS` folder on your device.
 
 Alternatively you can use the release provided on GitHub.
 
