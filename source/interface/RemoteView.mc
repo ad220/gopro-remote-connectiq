@@ -17,9 +17,9 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
     public function onTap(tap as ClickEvent) {
         actionIsSelect = false;
         var coord = tap.getCoordinates();
-        if (coord[0]<halfW+70*kMult and coord[0]>halfW-35*kMult and coord[1]<halfH*1.25 and coord[1]>halfH+80*kMult) {
+        if (coord[0]<halfW+75*kMult and coord[0]>halfW-35*kMult and coord[1]<halfH+25*kMult and coord[1]>halfH-75*kMult) {
             mobile.send([COM_SHUTTER, 0]);
-        } else if (cam.isRecording() and coord[0]<halfW+45*kMult and coord[0]>halfW-105*kMult and coord[1]<halfH and coord[1]>halfH*0.5) {
+        } else if (cam.isRecording() and coord[0]<halfW-45*kMult and coord[0]>halfW-100*kMult and coord[1]<halfH+5*kMult and coord[1]>halfH-55*kMult) {
             mobile.send([COM_HIGHLIGHT, 0]);
         } else if (!cam.isRecording() and coord[0]<halfW+80*kMult and coord[0]>halfW-80*kMult and coord[1]<halfH+100*kMult and coord[1]>halfH+40*kMult) {
             return onMenu();
@@ -85,12 +85,6 @@ class RemoteView extends WatchUi.View {
 
     // Update the view
     function onUpdate(dc as Dc) as Void {
-        // var enabled;
-        // if (cam.isRecording()) {
-        //     enabled=Graphics.COLOR_DK_GRAY;
-        // } else {
-        //     enabled=Graphics.COLOR_LT_GRAY;
-        // }
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLACK);
         dc.clear();
         dc.fillCircle(halfW-72*kMult, halfH-25*kMult, 22*kMult);

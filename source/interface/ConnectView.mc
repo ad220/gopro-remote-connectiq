@@ -20,7 +20,7 @@ class ConnectView extends WatchUi.View {
         dc.clear();
         dc.fillRoundedRectangle(halfW-75*kMult, halfH+50*kMult, 150*kMult, 40*kMult, 20*kMult);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(halfW, halfH+70*kMult, adaptFontMid(), MainResources.labels[UI_CONNECT] as String, JTEXT_MID);
+        dc.drawText(halfW, halfH+70*kMult, adaptFontMid(), MainResources.labels[UI_CONNECT][CONNECT] as String, JTEXT_MID);
         drawRectWithBorder(dc, -32, -63, 26, 10, 4, 2, Graphics.COLOR_DK_GRAY);
         drawRectWithBorder(dc, -51, -58, 102, 92, 16, 4, Graphics.COLOR_DK_GRAY);
         drawRectWithBorder(dc, -7, -58, 58, 58, 16, 4, Graphics.COLOR_DK_GRAY);
@@ -50,10 +50,7 @@ class GoProConnectDelegate extends WatchUi.BehaviorDelegate {
     public function onSelect() {
         mobile.connect();
         mobile.send([COM_CONNECT, 0]);
-        var _view = new PopUpView("Connecting to GoPro ...", POP_INFO);
-        WatchUi.pushView(_view, new PopUpDelegate(_view), WatchUi.SLIDE_BLINK);
-        // var _view = new RemoteView();
-        // WatchUi.pushView(_view, new RemoteDelegate(_view), WatchUi.SLIDE_LEFT);
+        WatchUi.pushView(new PopUpView(MainResources.labels[UI_CONNECT][CONNECTING], POP_INFO), new PopUpDelegate(), WatchUi.SLIDE_BLINK);
         return true;
     }
 }

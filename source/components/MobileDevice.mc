@@ -59,8 +59,7 @@ class MobileDevice {
                         disconnect();
                     }
                     cam.setConnected(false);
-                    var _view = new PopUpView("Unable to connect to GoPro", POP_ERROR);
-                    WatchUi.pushView(_view, new PopUpDelegate(_view), WatchUi.SLIDE_IMMEDIATE);
+                    WatchUi.pushView(new PopUpView(MainResources.labels[UI_CONNECT][CONNECTFAIL], POP_ERROR), new PopUpDelegate(), WatchUi.SLIDE_BLINK);
                 }
                 break;
             
@@ -85,6 +84,7 @@ class MobileDevice {
     }
 
     public function send(data as Object) {
+        System.println("sending: " + data.toString());
         Communications.transmit(data, {}, new MobileConnection());
     }
 }

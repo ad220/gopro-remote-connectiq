@@ -1,6 +1,12 @@
 import Toybox.WatchUi;
 import Toybox.Lang;
 
+enum ConnectLabels {
+    CONNECT,
+    CONNECTING,
+    CONNECTFAIL
+}
+
 const N_EDITABLES = 5;
 enum Editables {
     PSET1,
@@ -111,7 +117,11 @@ class MainResources {
     static public function loadLabels(id as Number) as Void{
         if (labels[id]==null) {
             if (id == UI_CONNECT) {
-                labels[id] = WatchUi.loadResource(Rez.Strings.Connect);
+                labels[id] = [
+                    WatchUi.loadResource(Rez.Strings.Connect),
+                    WatchUi.loadResource(Rez.Strings.Connecting),
+                    WatchUi.loadResource(Rez.Strings.ConnectFail)
+                ];
             } else if (id == UI_HILIGHT) {
                 labels[id] = null;
             } else if (id == UI_STATES) {

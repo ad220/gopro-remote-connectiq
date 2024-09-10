@@ -2,6 +2,8 @@
 
     <!-- ConnectView -->
     <string id="Connect">CONNEXION</string>
+    <string id="Connecting">Connexion à la caméra...</string>
+    <string id="ConnectFail">Connexion échouée</string>
 
     <!-- PresetPick -->
     <string id="Cinema">Cinéma</string>
