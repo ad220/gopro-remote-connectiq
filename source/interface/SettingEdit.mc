@@ -66,7 +66,7 @@ class SettingEditDelegate extends WatchUi.Menu2InputDelegate {
 
     public function onBack() as Void {
         MainResources.loadIcons(UI_SETTINGEDIT);
-        WatchUi.popView(WatchUi.SLIDE_RIGHT);
+        GoProRemoteApp.popView(WatchUi.SLIDE_RIGHT);
     }
 
     public function onWrap(key as Key) as Boolean {

@@ -41,7 +41,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onMenu() {
-        WatchUi.pushView(new SettingsMenu(SettingsMenu.SM_MENU, -1, null), new SettingsMenuDelegate(SettingsMenu.SM_MENU, null), WatchUi.SLIDE_UP);
+        GoProRemoteApp.pushView(new SettingsMenu(SettingsMenu.SM_MENU, -1, null), new SettingsMenuDelegate(SettingsMenu.SM_MENU, null), WatchUi.SLIDE_UP, false);
         return true;
     }
 
@@ -51,7 +51,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
 
     public function onBack() {
         mobile.send([COM_CONNECT, 1]);
-        WatchUi.popView(WatchUi.SLIDE_DOWN);
+        GoProRemoteApp.popView(WatchUi.SLIDE_DOWN);
         return true;
     }
 }
@@ -72,7 +72,6 @@ class RemoteView extends WatchUi.View {
     }
 
     function onShow() as Void {
-        onRemoteView = true;
         MainResources.loadIcons(UI_HILIGHT);
         MainResources.loadIcons(UI_MENUS);
         MainResources.freeIcons(UI_SETTINGSMENU);
@@ -144,7 +143,6 @@ class RemoteView extends WatchUi.View {
  
     function onHide() as Void {
         settingsButton = null;
-        onRemoteView = false;
     }
 
     function recordingTimerCallback() as Void {

@@ -108,14 +108,14 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
         // WARNING: popping view unloads mandatory icons and loads unnecessary ones in simulator while the problem doesn't appear on device and lower (<4.1.7 beta) SDK versions
         // NOTE: issue unseen with SDK 6.3.0 and 7.3.0
         if (menuType == SettingsMenu.SM_EDIT) {
-            WatchUi.pushView(new SettingEditMenu(id, gp), new SettingEditDelegate(id, gp), WatchUi.SLIDE_UP);
+            GoProRemoteApp.pushView(new SettingEditMenu(id, gp), new SettingEditDelegate(id, gp), WatchUi.SLIDE_UP, false);
         } else {
             if (id == CAM or menuType == SettingsMenu.SM_PSETS) {
-                WatchUi.switchToView(new SettingsMenu(SettingsMenu.SM_EDIT, id, (item as SettingsMenuItem).getPreset()), new SettingsMenuDelegate(SettingsMenu.SM_EDIT, (item as SettingsMenuItem).getPreset()), WatchUi.SLIDE_LEFT);
+                GoProRemoteApp.pushView(new SettingsMenu(SettingsMenu.SM_EDIT, id, (item as SettingsMenuItem).getPreset()), new SettingsMenuDelegate(SettingsMenu.SM_EDIT, (item as SettingsMenuItem).getPreset()), WatchUi.SLIDE_LEFT, true);
             } else if (id == EDITP7) {
-                WatchUi.pushView(new SettingsMenu(SettingsMenu.SM_PSETS, -1, null), new SettingsMenuDelegate(SettingsMenu.SM_PSETS, null), WatchUi.SLIDE_LEFT);
+                GoProRemoteApp.pushView(new SettingsMenu(SettingsMenu.SM_PSETS, -1, null), new SettingsMenuDelegate(SettingsMenu.SM_PSETS, null), WatchUi.SLIDE_LEFT, false);
             } else {
-                WatchUi.popView(WatchUi.SLIDE_DOWN);
+                GoProRemoteApp.popView(WatchUi.SLIDE_DOWN);
                 cam.setPreset((item as SettingsMenuItem).getPreset());
             }
         }
@@ -125,7 +125,7 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     public function onBack() as Void {
         if (gp != null) {gp.save();}
-        WatchUi.popView(WatchUi.SLIDE_DOWN);
+        GoProRemoteApp.popView(WatchUi.SLIDE_DOWN);
     }
 
     public function onWrap(key as Key) as Boolean {

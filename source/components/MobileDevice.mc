@@ -41,25 +41,25 @@ class MobileDevice {
     }
 
     public function onReceive(message as Communications.PhoneAppMessage) {
-        System.println(message.data);
+        System.println("received: " + message.data.toString());
         var data = message.data as Array<Number or Array<Number>>;
         switch (data[0]) {
             case COM_CONNECT:
                 // Ouverture connexion M>T>G>T>M
                 if (data[1] == 0) {
                     var _view = new RemoteView();
-                    WatchUi.pushView(_view, new RemoteDelegate(_view), WatchUi.SLIDE_LEFT);
+                    GoProRemoteApp.pushView(_view, new RemoteDelegate(_view), WatchUi.SLIDE_LEFT, false);
                     cam.setConnected(true);
                 } else {
                     if (cam.isConnected()){
-                        while (!onRemoteView) {
-                            WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
+                        while (nViewLayers > 1) {
+                            GoProRemoteApp.popView(WatchUi.SLIDE_IMMEDIATE);
                         }
-                        WatchUi.popView(WatchUi.SLIDE_LEFT);
+                        GoProRemoteApp.popView(WatchUi.SLIDE_LEFT);
                         disconnect();
                     }
                     cam.setConnected(false);
-                    WatchUi.pushView(new PopUpView(MainResources.labels[UI_CONNECT][CONNECTFAIL], POP_ERROR), new PopUpDelegate(), WatchUi.SLIDE_BLINK);
+                    GoProRemoteApp.pushView(new PopUpView(MainResources.labels[UI_CONNECT][CONNECTFAIL], POP_ERROR), new PopUpDelegate(), WatchUi.SLIDE_BLINK, false);
                 }
                 break;
             
