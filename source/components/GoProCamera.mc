@@ -2,9 +2,11 @@ import Toybox.Lang;
 
 class GoProCamera extends GoProSettings {
     private var states as Array<Number>?;
+    private var availableSettings as Array<Array<Number>>?;
 
-    private var progress = 0 as Number;
-    private var connected = false as Boolean;
+    private var progress as Number = 0;
+    private var connected as Boolean = false;
+
 
     public function initialize() {
         GoProSettings.initialize();
@@ -26,6 +28,15 @@ class GoProCamera extends GoProSettings {
         if (states[RECORDING]==null) {states[RECORDING] = 0;}
         if (regionChanged) {MainResources.loadRegionLabels();}
         WatchUi.requestUpdate();
+    }
+
+    public function syncAvailableSettings(_availableSettings as Array<Array<Number>>) {
+        availableSettings = _availableSettings;
+        WatchUi.requestUpdate();
+    }
+
+    public function getAvailableSettings(id as Number) as Array<Number> {
+        return availableSettings[id];
     }
 
     public function isRecording() {

@@ -10,11 +10,11 @@
     <string id="Sport">Sport</string>
     <string id="Eco">Éco</string>
     <string id="Manually">Paramétrage\n manuel</string>
-    <string id="EditP7">Editer les\npréréglages</string>
+    <string id="SaveP7">Sauvegarder\ncomme préréglage</string>
 
     <!-- Menus -->
     <string id="Settings">Paramètres</string>
-    <string id="Presets">Éditer un\npréréglage</string>
+    <string id="Presets">Choix du\npréréglage</string>
     
     <!-- Paramètres -->
     <string id="Resolution">Résolution</string>

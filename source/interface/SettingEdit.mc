@@ -4,12 +4,12 @@ import Toybox.WatchUi;
 
 
 class SettingEditMenu extends WatchUi.CustomMenu {
-    public function initialize(setting as Number, gp as GoProSettings) {
+    public function initialize(setting as Number) {
         CustomMenu.initialize((70*kMult).toNumber(), Graphics.COLOR_BLACK, {:title=> new $.CustomMenuTitle(MainResources.labels[UI_SETTINGEDIT][setting])});
         var items;
         var selected;
-        items = gp.possibleSettings(setting);
-        selected = gp.getSetting(setting);
+        items = cam.getAvailableSettings(setting);
+        selected = cam.getSetting(setting);
         for (var i=0; i<items.size(); i++) {
             CustomMenu.addItem(new SettingEditItem(setting, items[i], selected));
         }
@@ -50,22 +50,20 @@ class SettingEditItem extends WatchUi.CustomMenuItem {
 
 class SettingEditDelegate extends WatchUi.Menu2InputDelegate {
     private var setting;
-    private var gp;
 
-    public function initialize(_setting as Number, _gp as GoProSettings) {
+    public function initialize(_setting as Number) {
         setting = _setting;
-        gp = _gp;
         Menu2InputDelegate.initialize();
     }
 
     public function onSelect(item) {
-        gp.setSetting(setting, item.getId());
+        cam.setSetting(setting, item.getId() as Number);
         (item as SettingEditItem).select();
         WatchUi.requestUpdate();
     }
 
     public function onBack() as Void {
-        MainResources.loadIcons(UI_SETTINGEDIT);
+        cam.save();
         GoProRemoteApp.popView(WatchUi.SLIDE_RIGHT);
     }
 

@@ -41,7 +41,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onMenu() {
-        GoProRemoteApp.pushView(new SettingsMenu(SettingsMenu.SM_MENU, -1, null), new SettingsMenuDelegate(SettingsMenu.SM_MENU, null), WatchUi.SLIDE_UP, false);
+        GoProRemoteApp.pushView(new SettingsMenu(SettingsMenu.SM_MENU, -1), new SettingsMenuDelegate(SettingsMenu.SM_MENU), WatchUi.SLIDE_UP, false);
         return true;
     }
 

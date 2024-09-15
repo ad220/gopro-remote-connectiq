@@ -42,7 +42,7 @@ class MobileDevice {
 
     public function onReceive(message as Communications.PhoneAppMessage) {
         System.println("received: " + message.data.toString());
-        var data = message.data as Array<Number or Array<Number>>;
+        var data = message.data as Array<Number or Array<Number or Array<Number>>>;
         switch (data[0]) {
             case COM_CONNECT:
                 // Ouverture connexion M>T>G>T>M
@@ -72,6 +72,11 @@ class MobileDevice {
             case COM_FETCH_STATES:
                 if (data[1]) {
                     cam.syncStates(data[1]);
+                }
+                break;
+            case COM_FETCH_AVAILABLE:
+                if (data[1]) {
+                    cam.syncAvailableSettings(data[1]);
                 }
                 break;
             case COM_PROGRESS:

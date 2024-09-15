@@ -11,11 +11,11 @@
     <string id="Sport">Sport</string>
     <string id="Eco">Eco</string>
     <string id="Manually">Manually edit\ncam settings</string>
-    <string id="EditP7">Edit presets</string>
+    <string id="SaveP7">Save current\n settings as preset</string>
 
     <!-- Menus -->
     <string id="Settings">Settings</string>
-    <string id="Presets">Edit Preset</string>
+    <string id="Presets">Choose preset</string>
     
     <!-- Settings -->
     <string id="Framerate">Framerate</string>
@@ -44,8 +44,8 @@
     <!-- Resolutions -->
     <string id="_5K" translatable="false">5.3K</string>
     <string id="_4K" translatable="false">4K</string>
-    <string id="_3K" translatable="false">2.7K</string>
-    <string id="_2K" translatable="false">1080p</string>
+    <string id="_2K7" translatable="false">2.7K</string>
+    <string id="_1080" translatable="false">1080p</string>
 
     <!-- Aspect Ratios -->
     <string id="_8R7" translatable="false">8:7</string>
