@@ -47,6 +47,7 @@ enum Menus {
 
 // Settings enums
 enum Resolutions {
+    _5K3,
     _5K,
     _4K,
     _2K7,
@@ -57,7 +58,8 @@ enum Resolutions {
 enum Ratios {
     _8R7,
     _4R3,
-    _16R9
+    _16R9,
+    _9R16
 }
 
 enum Lenses {
@@ -65,7 +67,8 @@ enum Lenses {
     _SUPERVIEW,
     _LARGE,
     _LINEAR,
-    _LINEARLOCK
+    _LINEARLOCK,
+    _NARROW
 }
 
 enum Framerate {
@@ -162,21 +165,24 @@ class MainResources {
     static public function loadSettingLabels() as Void {
         settingLabels = [
             [
+                WatchUi.loadResource(Rez.Strings._5K3),
                 WatchUi.loadResource(Rez.Strings._5K),
                 WatchUi.loadResource(Rez.Strings._4K),
                 WatchUi.loadResource(Rez.Strings._2K7),
-                "",
+                WatchUi.loadResource(Rez.Strings._1440),
                 WatchUi.loadResource(Rez.Strings._1080)
             ], [
                 WatchUi.loadResource(Rez.Strings._8R7),
                 WatchUi.loadResource(Rez.Strings._4R3),
-                WatchUi.loadResource(Rez.Strings._16R9)
+                WatchUi.loadResource(Rez.Strings._16R9),
+                WatchUi.loadResource(Rez.Strings._9R16)
             ], [
                 WatchUi.loadResource(Rez.Strings._HYPERVIEW),
                 WatchUi.loadResource(Rez.Strings._SUPERVIEW),
                 WatchUi.loadResource(Rez.Strings._LARGE),
                 WatchUi.loadResource(Rez.Strings._LINEAR),
-                WatchUi.loadResource(Rez.Strings._LINEARLOCK)
+                WatchUi.loadResource(Rez.Strings._LINEARLOCK),
+                WatchUi.loadResource(Rez.Strings._NARROW)
             ], null
         ];
         loadRegionLabels();

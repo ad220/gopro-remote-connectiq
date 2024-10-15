@@ -40,16 +40,20 @@
     <string id="_LARGE">Large</string>
     <string id="_LINEAR">Linear</string>
     <string id="_LINEARLOCK">Linear + HL</string>
+    <string id="_NARROW">Narrow</string>
 
     <!-- Resolutions -->
-    <string id="_5K" translatable="false">5.3K</string>
+    <string id="_5K3" translatable="false">5.3K</string>
+    <string id="_5K" translatable="false">5K</string>
     <string id="_4K" translatable="false">4K</string>
     <string id="_2K7" translatable="false">2.7K</string>
+    <string id="_1440" translatable="false">1440p</string>
     <string id="_1080" translatable="false">1080p</string>
 
     <!-- Aspect Ratios -->
     <string id="_8R7" translatable="false">8:7</string>
     <string id="_4R3" translatable="false">4:3</string>
     <string id="_16R9" translatable="false">16:9</string>
+    <string id="_9R16" translatable="false">9:16</string>
 
 </strings>

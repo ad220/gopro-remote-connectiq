@@ -10,11 +10,11 @@
     <string id="Sport">Sport</string>
     <string id="Eco">Éco</string>
     <string id="Manually">Paramétrage\n manuel</string>
-    <string id="SaveP7">Sauvegarder\ncomme préréglage</string>
+    <string id="SaveP7">Sauvegarder\ncomme mode</string>
 
     <!-- Menus -->
     <string id="Settings">Paramètres</string>
-    <string id="Presets">Choix du\npréréglage</string>
+    <string id="Presets">Choix du\nmode</string>
     
     <!-- Paramètres -->
     <string id="Resolution">Résolution</string>
@@ -37,4 +37,5 @@
     <string id="_LARGE">Large</string>
     <string id="_LINEAR">Linéaire</string>
     <string id="_LINEARLOCK">Linéaire + VH</string>
+    <string id="_NARROW">Étroit</string>
 </strings>

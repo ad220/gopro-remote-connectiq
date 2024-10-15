@@ -27,7 +27,7 @@ class SettingsMenu extends WatchUi.CustomMenu {
 
             title = MainResources.labels[UI_MENUS][SETTINGS];
         } else {
-            title = cam.getDescription();
+            title = MainResources.labels[UI_MENUS][PRESETS];
         }
 
         CustomMenu.initialize((80*kMult).toNumber(), Graphics.COLOR_BLACK, {:title=> new CustomMenuTitle(title)});
@@ -110,6 +110,8 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
                 GoProRemoteApp.pushView(new SettingsMenu(SettingsMenu.SM_PSETS, -1), new SettingsMenuDelegate(SettingsMenu.SM_PSETS), WatchUi.SLIDE_LEFT, false);
             } else if (menuType == SettingsMenu.SM_PSETS) {
                 (item as SettingsMenuItem).getPreset().save();
+                // Pop two views to remove old preset from menu memory
+                GoProRemoteApp.popView(WatchUi.SLIDE_IMMEDIATE);
                 GoProRemoteApp.popView(WatchUi.SLIDE_DOWN);
             } else {
                 cam.setPreset((item as SettingsMenuItem).getPreset());

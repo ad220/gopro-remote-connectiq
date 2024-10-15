@@ -19,7 +19,7 @@ class GoProPreset extends GoProSettings {
         if (settings == null or settings == [0]) {
             // Default presets defined below
             settings = [
-                [_5K, _16R9, _LINEARLOCK, _24],
+                [_5K3, _16R9, _LINEARLOCK, _24],
                 [_4K, _8R7, _LARGE, _60],
                 [_1080, _16R9, _LINEAR, _30]
             ][_id];
