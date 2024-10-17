@@ -19,19 +19,15 @@ class GoProPreset extends GoProSettings {
         if (settings == null or settings == [0]) {
             // Default presets defined below
             settings = [
-                [_5K, _16R9, _LINEARLOCK, _24],
+                [_5K3, _16R9, _LINEARLOCK, _24],
                 [_4K, _8R7, _LARGE, _60],
-                [_2K, _16R9, _LINEAR, _30]
+                [_1080, _16R9, _LINEAR, _30]
             ][_id];
         } 
     }
 
     public function save() {
+        settings = cam.getSettings();
         Application.Storage.setValue(id, settings);
-    }
-
-
-    public function getSettings() as Array<Number> {
-        return settings;
     }
 }

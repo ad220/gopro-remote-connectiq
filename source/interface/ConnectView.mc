@@ -50,7 +50,7 @@ class GoProConnectDelegate extends WatchUi.BehaviorDelegate {
     public function onSelect() {
         mobile.connect();
         mobile.send([COM_CONNECT, 0]);
-        WatchUi.pushView(new PopUpView(MainResources.labels[UI_CONNECT][CONNECTING], POP_INFO), new PopUpDelegate(), WatchUi.SLIDE_BLINK);
+        GoProRemoteApp.pushView(new PopUpView(MainResources.labels[UI_CONNECT][CONNECTING], POP_INFO), new PopUpDelegate(), WatchUi.SLIDE_BLINK, false);
         return true;
     }
 }

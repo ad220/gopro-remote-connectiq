@@ -58,6 +58,7 @@ class GoProRemoteApp extends Application.AppBase {
             if (PopUpView.currentView) { PopUpView.currentView.popOut(); }
             WatchUi.pushView(view, delegate, slide);
             nViewLayers++;
+            System.println("view_stack_size: " + nViewLayers.toString());
         }
     }
 
@@ -67,6 +68,7 @@ class GoProRemoteApp extends Application.AppBase {
             else {
                 WatchUi.popView(slide);
                 nViewLayers--;
+                System.println("view_stack_size: " + nViewLayers.toString());
             }
         }
     }

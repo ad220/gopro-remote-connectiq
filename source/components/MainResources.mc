@@ -13,7 +13,7 @@ enum Editables {
     PSET2,
     PSET3,
     CAM,
-    EDITP7
+    SAVEP7
 }
 
 const N_SETTINGS = 4;
@@ -47,16 +47,19 @@ enum Menus {
 
 // Settings enums
 enum Resolutions {
+    _5K3,
     _5K,
     _4K,
-    _3K,
-    _2K
+    _2K7,
+    _1440,
+    _1080,
 }
 
 enum Ratios {
     _8R7,
     _4R3,
-    _16R9
+    _16R9,
+    _9R16
 }
 
 enum Lenses {
@@ -64,7 +67,8 @@ enum Lenses {
     _SUPERVIEW,
     _LARGE,
     _LINEAR,
-    _LINEARLOCK
+    _LINEARLOCK,
+    _NARROW
 }
 
 enum Framerate {
@@ -87,6 +91,8 @@ enum Communication {
     COM_PUSH_SETTINGS,
     COM_FETCH_STATES,
     COM_PUSH_STATES,
+    COM_FETCH_AVAILABLE,
+    COM_PUSH_AVAILABLE,
     COM_SHUTTER,
     COM_HIGHLIGHT,
     COM_LOCKED,
@@ -137,7 +143,7 @@ class MainResources {
                     WatchUi.loadResource(Rez.Strings.Sport),
                     WatchUi.loadResource(Rez.Strings.Eco),
                     WatchUi.loadResource(Rez.Strings.Manually),
-                    WatchUi.loadResource(Rez.Strings.EditP7)
+                    WatchUi.loadResource(Rez.Strings.SaveP7)
                 ];
             } else if (id == UI_SETTINGEDIT) {
                 labels[id] = [
@@ -159,20 +165,24 @@ class MainResources {
     static public function loadSettingLabels() as Void {
         settingLabels = [
             [
+                WatchUi.loadResource(Rez.Strings._5K3),
                 WatchUi.loadResource(Rez.Strings._5K),
                 WatchUi.loadResource(Rez.Strings._4K),
-                WatchUi.loadResource(Rez.Strings._3K),
-                WatchUi.loadResource(Rez.Strings._2K)
+                WatchUi.loadResource(Rez.Strings._2K7),
+                WatchUi.loadResource(Rez.Strings._1440),
+                WatchUi.loadResource(Rez.Strings._1080)
             ], [
                 WatchUi.loadResource(Rez.Strings._8R7),
                 WatchUi.loadResource(Rez.Strings._4R3),
-                WatchUi.loadResource(Rez.Strings._16R9)
+                WatchUi.loadResource(Rez.Strings._16R9),
+                WatchUi.loadResource(Rez.Strings._9R16)
             ], [
                 WatchUi.loadResource(Rez.Strings._HYPERVIEW),
                 WatchUi.loadResource(Rez.Strings._SUPERVIEW),
                 WatchUi.loadResource(Rez.Strings._LARGE),
                 WatchUi.loadResource(Rez.Strings._LINEAR),
-                WatchUi.loadResource(Rez.Strings._LINEARLOCK)
+                WatchUi.loadResource(Rez.Strings._LINEARLOCK),
+                WatchUi.loadResource(Rez.Strings._NARROW)
             ], null
         ];
         loadRegionLabels();
@@ -218,7 +228,7 @@ class MainResources {
                     WatchUi.loadResource(Rez.Drawables.Sport),  //PSET2
                     WatchUi.loadResource(Rez.Drawables.Eco),    //PSET3
                     WatchUi.loadResource(Rez.Drawables.Camera), //CAM
-                    WatchUi.loadResource(Rez.Drawables.Edit)    //EDITP7
+                    WatchUi.loadResource(Rez.Drawables.Edit)    //SAVEP7
                 ];
             } else if (id == UI_SETTINGEDIT) {
                 icons[id] = [
