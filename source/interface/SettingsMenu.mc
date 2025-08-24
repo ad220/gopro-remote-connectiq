@@ -76,7 +76,7 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
         
         if (isEdit or presetId<3) {
             dc.drawText(m_halfW+22*kMult, m_halfH-14*kMult, adaptFontMid(), MainResources.labels[isEdit ? UI_SETTINGEDIT : UI_SETTINGSMENU][id], JTEXT_MID);
-            dc.drawText(m_halfW+22*kMult, m_halfH+16*kMult, adaptFontSmall(), isEdit ? MainResources.settingLabels[id][gp.getSetting(id)] : gp.getDescription(), JTEXT_MID);
+            dc.drawText(m_halfW+22*kMult, m_halfH+16*kMult, adaptFontSmall(), isEdit ? GoProSettings.getLabel(id, gp.getSetting(id)) : gp.getDescription(), JTEXT_MID);
             dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
             dc.drawLine(m_halfW-36*kMult, m_halfH+2*kMult, m_halfW+80*kMult, m_halfH+2*kMult);
         } else {

@@ -23,7 +23,7 @@ class SettingEditItem extends WatchUi.CustomMenuItem {
 
     public function initialize(setting, _id, _selected as Number) {
         id = _id;
-        label = MainResources.settingLabels[setting][_id];
+        label = GoProSettings.getLabel(setting, _id);
         selected = _selected;
         CustomMenuItem.initialize(id, {});
     }

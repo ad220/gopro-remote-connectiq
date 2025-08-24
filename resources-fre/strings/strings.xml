@@ -23,19 +23,14 @@
     <string id="Framerate">Fréq. d'image</string>
 
     <!-- Fréquences d'image -->
-    <string id="_240">240 ips</string>
-    <string id="_200">200 ips</string>
-    <string id="_120">120 ips</string>
-    <string id="_100">100 ips</string>
-    <string id="_60">60 ips</string>
-    <string id="_50">50 ips</string>
-    <string id="_30">30 ips</string>
-    <string id="_25">25 ips</string>
-    <string id="_24">24 ips</string>
+    <string id="_FPS"> ips</string>
 
     <!-- Objectifs -->
-    <string id="_LARGE">Large</string>
+    <string id="_WIDE">Large</string>
     <string id="_LINEAR">Linéaire</string>
     <string id="_LINEARLOCK">Linéaire + VH</string>
+    <string id="_LINEARLEVEL">Linear + NH</string>
     <string id="_NARROW">Étroit</string>
+    <string id="_ULTRAWIDE">Ultra Large</string>
+    <string id="_ULTRALINEAR">Ultra Linéaire</string>
 </strings>

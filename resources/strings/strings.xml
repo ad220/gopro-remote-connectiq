@@ -23,24 +23,23 @@
     <string id="Resolution">Resolution</string>
     <string id="Ratio">Aspect ratio</string>
     
-    <!-- Framerates -->
-    <string id="_240">240 fps</string>
-    <string id="_200">200 fps</string>
-    <string id="_120">120 fps</string>
-    <string id="_100">100 fps</string>
-    <string id="_60">60 fps</string>
-    <string id="_50">50 fps</string>
-    <string id="_30">30 fps</string>
-    <string id="_25">25 fps</string>
-    <string id="_24">24 fps</string>
+    <!-- Framerate -->
+    <string id="_FPS"> fps</string>
 
     <!-- Lenses -->
     <string id="_HYPERVIEW" translatable="false">HyperView</string>
     <string id="_SUPERVIEW" translatable="false">SuperView</string>
-    <string id="_LARGE">Large</string>
+    <string id="_WIDE">Wide</string>
     <string id="_LINEAR">Linear</string>
-    <string id="_LINEARLOCK">Linear + HL</string>
+    <string id="_LINEARLOCK">Linear + HLock</string>
+    <string id="_LINEARLEVEL">Linear + HLvl</string>
     <string id="_NARROW">Narrow</string>
+    <string id="_MAXHYPERVIEW" translatable="false">MAX HyperView</string>
+    <string id="_MAXSUPERVIEW" translatable="false">MAX SuperView</string>
+    <string id="_ULTRAHYPERVIEW" translatable="false">Ultra Hyperview</string>
+    <string id="_ULTRASUPERVIEW" translatable="false">Ultra Superview</string>
+    <string id="_ULTRAWIDE">Ultra Wide</string>
+    <string id="_ULTRALINEAR">Ultra Linear</string>
 
     <!-- Resolutions -->
     <string id="_5K3" translatable="false">5.3K</string>
@@ -49,11 +48,14 @@
     <string id="_2K7" translatable="false">2.7K</string>
     <string id="_1440" translatable="false">1440p</string>
     <string id="_1080" translatable="false">1080p</string>
+    <string id="_900" translatable="false">900p</string>
+    <string id="_720" translatable="false">720p</string>
 
     <!-- Aspect Ratios -->
     <string id="_8R7" translatable="false">8:7</string>
     <string id="_4R3" translatable="false">4:3</string>
     <string id="_16R9" translatable="false">16:9</string>
     <string id="_9R16" translatable="false">9:16</string>
+    <string id="_21R9" translatable="false">21:9</string>
 
 </strings>

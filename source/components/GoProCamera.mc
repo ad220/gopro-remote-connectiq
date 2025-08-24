@@ -23,10 +23,10 @@ class GoProCamera extends GoProSettings {
     }
 
     public function syncStates(_states as Array<Number>) {
-        var regionChanged = states[REGION]!=_states[REGION];
+        // var regionChanged = states[REGION]!=_states[REGION];
         states = _states;
         if (states[RECORDING]==null) {states[RECORDING] = 0;}
-        if (regionChanged) {MainResources.loadRegionLabels();}
+        // if (regionChanged) {MainResources.loadRegionLabels();}
         WatchUi.requestUpdate();
     }
 

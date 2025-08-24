@@ -1,16 +1,128 @@
 import Toybox.Lang;
-
-// NOTE: replacing switch with if-else would be more memory efficient
+import Toybox.System;
+import Toybox.WatchUi;
 
 class GoProSettings {
-    protected var settings as Array<Number>;
+
+    public enum SettingId {
+        RESOLUTION  = 2,
+        FRAMERATE   = 3,
+        LENS        = 121,
+        FLICKER     = 134,
+
+        RATIO = -1
+    }
+
+    public static const RESOLUTION_MAP = {
+        1   => [:_4K, :_16R9],
+        4   => [:_2K7, :_16R9],
+        6   => [:_2K7, :_4R3],
+        7   => [:_1440, :_16R9],
+        9   => [:_1080, :_16R9],
+        12  => [:_720, :_16R9],
+        18  => [:_4K, :_4R3],
+        24  => [:_5K, :_16R9],
+        25  => [:_5, :_4R3],
+        26  => [:_5K3, :_8R7],
+        27  => [:_5K3, :_4R3],
+        28  => [:_4K, :_8R7],
+        35  => [:_5K3, :_21R9],
+        36  => [:_4K, :_21R9],
+        37  => [:_4K, :_1R1],
+        38  => [:_900, :_16R9],
+        100 => [:_5K3, :_16R9],
+        107 => [:_5K3, :_8R7],
+        108 => [:_4K, :_8R7],
+        109 => [:_4K, :_9R16],
+        110 => [:_1080, :_9R16],
+        111 => [:_2K7, :_4R3],
+        112 => [:_4K, :_4R3],
+        113 => [:_5K3, :_4R3],
+    };
+
+    public static const RESOLUTION_LABELS = {
+        :_5K3   => WatchUi.loadResource(Rez.Strings._5K3),
+        :_5K    => WatchUi.loadResource(Rez.Strings._5K),
+        :_4K    => WatchUi.loadResource(Rez.Strings._4K),
+        :_2K7   => WatchUi.loadResource(Rez.Strings._2K7),
+        :_1440  => WatchUi.loadResource(Rez.Strings._1440),
+        :_1080  => WatchUi.loadResource(Rez.Strings._1080),
+        :_900   => WatchUi.loadResource(Rez.Strings._900),
+        :_720   => WatchUi.loadResource(Rez.Strings._720)
+    };
+
+    public static const RATIO_LABELS = {
+        :_8R7   => WatchUi.loadResource(Rez.Strings._8R7),
+        :_4R3   => WatchUi.loadResource(Rez.Strings._4R3),
+        :_16R9  => WatchUi.loadResource(Rez.Strings._16R9),
+        :_9R16  => WatchUi.loadResource(Rez.Strings._9R16),
+        :_21R9  => WatchUi.loadResource(Rez.Strings._21R9)
+    };
+
+    public static const FRAMERATE_MAP = {
+        0  => 240,
+        1  => 120,
+        2  => 100,
+        5  => 60,
+        6  => 50,
+        8  => 30,
+        9  => 25,
+        10 => 24,
+        13 => 200,
+        15 => 400,
+        16 => 360,
+        17 => 300,
+    };
+
+    public static const FRAMERATE_LABEL = WatchUi.loadResource(Rez.Strings._FPS);
+
+    public enum LensId {
+        WIDE            = 0,
+        NARROW          = 2,
+        SUPERVIEW       = 3,
+        LINEAR          = 4,
+        MAXSUPERVIEW    = 7,
+        LINEARLEVEL     = 8,
+        HYPERVIEW       = 9,
+        LINEARLOCK      = 10,
+        MAXHYPERVIEW    = 11,
+        ULTRASUPERVIEW  = 12,
+        ULTRAWIDE       = 13,
+        ULTRALINEAR     = 14,
+        ULTRAHYPERVIEW  = 104,
+    }
+
+    public static const LENS_LABELS = {
+        WIDE            => WatchUi.loadResource(Rez.Strings._WIDE),
+        NARROW          => WatchUi.loadResource(Rez.Strings._NARROW),
+        SUPERVIEW       => WatchUi.loadResource(Rez.Strings._SUPERVIEW),
+        LINEAR          => WatchUi.loadResource(Rez.Strings._LINEAR),
+        MAXSUPERVIEW    => WatchUi.loadResource(Rez.Strings._MAXSUPERVIEW),
+        LINEARLEVEL     => WatchUi.loadResource(Rez.Strings._LINEARLEVEL),
+        HYPERVIEW       => WatchUi.loadResource(Rez.Strings._HYPERVIEW),
+        LINEARLOCK      => WatchUi.loadResource(Rez.Strings._LINEARLOCK),
+        MAXHYPERVIEW    => WatchUi.loadResource(Rez.Strings._MAXHYPERVIEW),
+        ULTRASUPERVIEW  => WatchUi.loadResource(Rez.Strings._ULTRASUPERVIEW),
+        ULTRAWIDE       => WatchUi.loadResource(Rez.Strings._ULTRAWIDE),
+        ULTRALINEAR     => WatchUi.loadResource(Rez.Strings._ULTRALINEAR),
+        ULTRAHYPERVIEW  => WatchUi.loadResource(Rez.Strings._ULTRAHYPERVIEW),
+    };
+
+    public enum FLICKER {
+        NTSC,
+        PAL,
+        HZ50,
+        HZ60
+    }
+
+    protected var settings = {} as Dictionary;
 
     function initialize() {
-        settings = [];
+        settings = {};
     }
 
     public function getSetting(id as Number) as Number {
-        return settings[id];
+        return settings.get(id);
     }
 
     public function getSettings() as Array<Number> {
@@ -18,7 +130,31 @@ class GoProSettings {
     }
 
     public function setSetting(id as Number, value as Number) {
-        settings[id] = value;
+        settings.put(id, value);
+    }
+
+    public static function getLabel(settingId as Number, setting as Number) as String{
+         switch (settingId) {
+            case RESOLUTION:
+                var resolution = RESOLUTION_MAP.get(setting);
+                if (resolution instanceof Symbol) {
+                    return RESOLUTION_LABELS.get(resolution[0]);
+                }
+                return "";
+            case LENS:
+                return LENS_LABELS.get(setting);
+            case FRAMERATE:
+                return FRAMERATE_MAP.get(setting) + FRAMERATE_LABEL;
+            case RATIO:
+                var ratio = RESOLUTION_MAP.get(setting);
+                if (ratio instanceof Symbol) {
+                    return RESOLUTION_LABELS.get(ratio[1]);
+                }
+                return "";
+            default:
+                System.println("Unknown setting ID requested for label");
+                return "";
+        }
     }
 
     public function getDescription() as String {
@@ -26,10 +162,7 @@ class GoProSettings {
             return "...";
         }
         // System.println(settings);
-        var frLabel = MainResources.settingLabels[FRAMERATE][settings[FRAMERATE]];
-        return MainResources.settingLabels[RESOLUTION][settings[RESOLUTION]] \
-            + "@" + frLabel.substring(0, frLabel.length()-4) + " " \
-            + MainResources.settingLabels[RATIO][settings[RATIO]];
+        return getLabel(RESOLUTION, settings.get(RESOLUTION)) + "@" + settings.get(FRAMERATE) + " " + getLabel(RATIO, settings.get(RATIO));
     }
 
     public function save() {

@@ -45,46 +45,6 @@ enum Menus {
     EDIT
 }
 
-// Settings enums
-enum Resolutions {
-    _5K3,
-    _5K,
-    _4K,
-    _2K7,
-    _1440,
-    _1080,
-}
-
-enum Ratios {
-    _8R7,
-    _4R3,
-    _16R9,
-    _9R16
-}
-
-enum Lenses {
-    _HYPERVIEW,
-    _SUPERVIEW,
-    _LARGE,
-    _LINEAR,
-    _LINEARLOCK,
-    _NARROW
-}
-
-enum Framerate {
-    _240,
-    _120,
-    _60,
-    _30,
-    _24
-}
-
-// States enums
-enum Region {
-    NTSC,
-    PAL
-}
-
 enum Communication {
     COM_CONNECT,
     COM_FETCH_SETTINGS,
@@ -160,54 +120,6 @@ class MainResources {
         labels[id] = null;
     }
 
-    
-    static public var settingLabels as Array<Array<String>?> = [null, null, null, null]; // N_SETTINGS times
-    static public function loadSettingLabels() as Void {
-        settingLabels = [
-            [
-                WatchUi.loadResource(Rez.Strings._5K3),
-                WatchUi.loadResource(Rez.Strings._5K),
-                WatchUi.loadResource(Rez.Strings._4K),
-                WatchUi.loadResource(Rez.Strings._2K7),
-                WatchUi.loadResource(Rez.Strings._1440),
-                WatchUi.loadResource(Rez.Strings._1080)
-            ], [
-                WatchUi.loadResource(Rez.Strings._8R7),
-                WatchUi.loadResource(Rez.Strings._4R3),
-                WatchUi.loadResource(Rez.Strings._16R9),
-                WatchUi.loadResource(Rez.Strings._9R16)
-            ], [
-                WatchUi.loadResource(Rez.Strings._HYPERVIEW),
-                WatchUi.loadResource(Rez.Strings._SUPERVIEW),
-                WatchUi.loadResource(Rez.Strings._LARGE),
-                WatchUi.loadResource(Rez.Strings._LINEAR),
-                WatchUi.loadResource(Rez.Strings._LINEARLOCK),
-                WatchUi.loadResource(Rez.Strings._NARROW)
-            ], null
-        ];
-        loadRegionLabels();
-    }
-    static public function loadRegionLabels() as Void {
-        if (cam.getRegion()==NTSC) {
-            settingLabels[FRAMERATE] = [
-                WatchUi.loadResource(Rez.Strings._240),
-                WatchUi.loadResource(Rez.Strings._120),
-                WatchUi.loadResource(Rez.Strings._60),
-                WatchUi.loadResource(Rez.Strings._30),
-                WatchUi.loadResource(Rez.Strings._24),
-            ];
-        } else {
-            settingLabels[FRAMERATE] = [
-                WatchUi.loadResource(Rez.Strings._200),
-                WatchUi.loadResource(Rez.Strings._100),
-                WatchUi.loadResource(Rez.Strings._50),
-                WatchUi.loadResource(Rez.Strings._25),
-                WatchUi.loadResource(Rez.Strings._24),
-            ];
-        }
-    }
-
-
     static public var icons as Array<Array<BitmapResource>?> = [null, null, null, null, null, null];
 
     static public function loadIcons(id as Number) as Void{
@@ -245,4 +157,3 @@ class MainResources {
         icons[id] = null;
     }
 }
-

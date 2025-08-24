@@ -68,7 +68,6 @@ class RemoteView extends WatchUi.View {
     
     function onLayout(dc as Dc) as Void {
         setLayout(Rez.Layouts.MainLayout(dc));
-        MainResources.loadSettingLabels();
     }
 
     function onShow() as Void {
