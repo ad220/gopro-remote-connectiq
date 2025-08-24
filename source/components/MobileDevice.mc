@@ -66,7 +66,7 @@ class MobileDevice {
             case COM_FETCH_SETTINGS:
                 // GoPro settings --> montre
                 if (data[1]) {
-                    cam.syncSettings(data[1]);
+                    // cam.syncSettings(data[1]);
                 }
                 break;
             case COM_FETCH_STATES:

@@ -33,9 +33,10 @@ class SettingsMenu extends WatchUi.CustomMenu {
         CustomMenu.initialize((80*kMult).toNumber(), Graphics.COLOR_BLACK, {:title=> new CustomMenuTitle(title)});
         
         if (menuType == SM_EDIT) {
-            for (var id=0; id<N_SETTINGS; id++) { // id => settingId
-                CustomMenu.addItem(new SettingsMenuItem(-1, id));
-            }
+            CustomMenu.addItem(new SettingsMenuItem(-1, GoProSettings.RESOLUTION));
+            CustomMenu.addItem(new SettingsMenuItem(-1, GoProSettings.RATIO));
+            CustomMenu.addItem(new SettingsMenuItem(-1, GoProSettings.LENS));
+            CustomMenu.addItem(new SettingsMenuItem(-1, GoProSettings.FRAMERATE));
         } else {
             for (var id=0; id < (menuType==SM_PSETS ? 3 : 5); id++) { // id => presetId
                 CustomMenu.addItem(new SettingsMenuItem(id, -1)); // i => enum Editables
@@ -46,14 +47,14 @@ class SettingsMenu extends WatchUi.CustomMenu {
 
 class SettingsMenuItem extends WatchUi.CustomMenuItem {
     private var presetId as Editables;
-    private var settingId as Settings;
+    private var settingId as GoProSettings.SettingId;
     private var gp as GoProPreset?;
 
     public function initialize(pId, sId) {
         presetId = pId;
         settingId = sId;
         var itemId;
-        if (sId != -1) {
+        if (pId == -1) {
             itemId = sId;
             gp = cam;
         } else {
@@ -66,7 +67,7 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
     public function draw(dc as Dc) as Void {
         var m_halfW = dc.getWidth()/2;
         var m_halfH = dc.getHeight()/2;
-        var isEdit = (settingId != -1);
+        var isEdit = (presetId == -1);
         var id = getId() as Number;
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.fillRoundedRectangle(m_halfW-100*kMult, m_halfH-30*kMult, 200*kMult, 60*kMult, 30*kMult);

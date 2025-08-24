@@ -108,7 +108,7 @@ class GoProSettings {
         ULTRAHYPERVIEW  => WatchUi.loadResource(Rez.Strings._ULTRAHYPERVIEW),
     };
 
-    public enum FLICKER {
+    public enum Flicker {
         NTSC,
         PAL,
         HZ50,
@@ -125,7 +125,7 @@ class GoProSettings {
         return settings.get(id);
     }
 
-    public function getSettings() as Array<Number> {
+    public function getSettings() as Dictionary {
         return settings;
     }
 
@@ -137,7 +137,7 @@ class GoProSettings {
          switch (settingId) {
             case RESOLUTION:
                 var resolution = RESOLUTION_MAP.get(setting);
-                if (resolution instanceof Symbol) {
+                if (resolution instanceof Array) {
                     return RESOLUTION_LABELS.get(resolution[0]);
                 }
                 return "";
@@ -147,8 +147,9 @@ class GoProSettings {
                 return FRAMERATE_MAP.get(setting) + FRAMERATE_LABEL;
             case RATIO:
                 var ratio = RESOLUTION_MAP.get(setting);
-                if (ratio instanceof Symbol) {
-                    return RESOLUTION_LABELS.get(ratio[1]);
+                System.println(ratio);
+                if (ratio instanceof Array) {
+                    return RATIO_LABELS.get(ratio[1]);
                 }
                 return "";
             default:
@@ -158,11 +159,14 @@ class GoProSettings {
     }
 
     public function getDescription() as String {
-        if (settings.size() != 4) {
+        try {
+            return getLabel(RESOLUTION, settings.get(RESOLUTION)) \
+                    + "@" + FRAMERATE_MAP.get(settings.get(FRAMERATE)) \
+                    + " " + getLabel(RATIO, settings.get(RATIO));
+        } catch (ex) {
+            System.println(ex.getErrorMessage());
             return "...";
         }
-        // System.println(settings);
-        return getLabel(RESOLUTION, settings.get(RESOLUTION)) + "@" + settings.get(FRAMERATE) + " " + getLabel(RATIO, settings.get(RATIO));
     }
 
     public function save() {

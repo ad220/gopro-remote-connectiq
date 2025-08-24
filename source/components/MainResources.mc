@@ -16,14 +16,6 @@ enum Editables {
     SAVEP7
 }
 
-const N_SETTINGS = 4;
-enum Settings {
-    RESOLUTION,
-    RATIO,
-    LENS,
-    FRAMERATE
-}
-
 const N_STATES = 1;
 enum States {
     REGION,
@@ -78,7 +70,7 @@ class MainResources {
         fontLarge = WatchUi.loadResource(Rez.Fonts.Large);
     }
 
-    static public var labels as Array<Array<String>?> = [null, null, null, null, null, null];
+    static public var labels as Array = [null, null, null, null, null, null];
 
     static public function loadLabels(id as Number) as Void{
         if (labels[id]==null) {
@@ -106,12 +98,12 @@ class MainResources {
                     WatchUi.loadResource(Rez.Strings.SaveP7)
                 ];
             } else if (id == UI_SETTINGEDIT) {
-                labels[id] = [
-                    WatchUi.loadResource(Rez.Strings.Resolution),
-                    WatchUi.loadResource(Rez.Strings.Ratio),
-                    WatchUi.loadResource(Rez.Strings.Lens),
-                    WatchUi.loadResource(Rez.Strings.Framerate)
-                ];
+                labels[id] = {
+                    GoProSettings.RESOLUTION    => WatchUi.loadResource(Rez.Strings.Resolution),
+                    GoProSettings.RATIO         => WatchUi.loadResource(Rez.Strings.Ratio),
+                    GoProSettings.LENS          => WatchUi.loadResource(Rez.Strings.Lens),
+                    GoProSettings.FRAMERATE     => WatchUi.loadResource(Rez.Strings.Framerate)
+                };
             }
         }
     }
@@ -120,7 +112,7 @@ class MainResources {
         labels[id] = null;
     }
 
-    static public var icons as Array<Array<BitmapResource>?> = [null, null, null, null, null, null];
+    static public var icons as Array = [null, null, null, null, null, null];
 
     static public function loadIcons(id as Number) as Void{
         if (icons[id]==null) {
@@ -143,12 +135,12 @@ class MainResources {
                     WatchUi.loadResource(Rez.Drawables.Edit)    //SAVEP7
                 ];
             } else if (id == UI_SETTINGEDIT) {
-                icons[id] = [
-                    WatchUi.loadResource(Rez.Drawables.Resolution),
-                    WatchUi.loadResource(Rez.Drawables.Ratio),
-                    WatchUi.loadResource(Rez.Drawables.Lens),
-                    WatchUi.loadResource(Rez.Drawables.Framerate)
-                ];
+                icons[id] = {
+                    GoProSettings.RESOLUTION    => WatchUi.loadResource(Rez.Drawables.Resolution),
+                    GoProSettings.RATIO         => WatchUi.loadResource(Rez.Drawables.Ratio),
+                    GoProSettings.LENS          => WatchUi.loadResource(Rez.Drawables.Lens),
+                    GoProSettings.FRAMERATE     => WatchUi.loadResource(Rez.Drawables.Framerate)
+                };
             }
         }
     }

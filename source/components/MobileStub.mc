@@ -27,6 +27,8 @@ class MobileStub {
             GoProRemoteApp.pushView(_view, new RemoteDelegate(_view), WatchUi.SLIDE_LEFT, false);
             System.println("Send connected stub");
             cam.setConnected(true);
+            var preset = new GoProPreset(PSET1);
+            cam.syncSettings(preset.getSettings());
         } else {
             System.println(data);
         }

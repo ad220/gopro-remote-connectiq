@@ -14,10 +14,10 @@ class GoProCamera extends GoProSettings {
     }
 
     public function setPreset(preset as GoProPreset) {
-        mobile.send([COM_PUSH_SETTINGS, preset.getSettings()]);
+        // mobile.send([COM_PUSH_SETTINGS, preset.getSettings()]);
     }
 
-    public function syncSettings(_settings as Array<Number>) {
+    public function syncSettings(_settings as Dictionary) {
         settings = _settings;
         WatchUi.requestUpdate();
     }

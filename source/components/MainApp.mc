@@ -4,7 +4,7 @@ import Toybox.WatchUi;
 import Toybox.System;
 
 var cam as GoProCamera?;
-var mobile as MobileDevice?;
+var mobile as MobileStub?;
 
 var screenH as Number?;
 var screenW as Number?;
@@ -25,7 +25,7 @@ class GoProRemoteApp extends Application.AppBase {
     function onStart(state as Dictionary?) as Void {
         nViewLayers = 0;
         cam = new GoProCamera();
-        mobile = new MobileDevice();
+        mobile = new MobileStub();
         MainResources.loadFonts();
     
         var deviceSettings = System.getDeviceSettings() as DeviceSettings;
