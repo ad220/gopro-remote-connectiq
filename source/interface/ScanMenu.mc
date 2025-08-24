@@ -20,29 +20,61 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     private var scanResults = [] as Array<ScanEntry>;
 
     private var menu as Menu2;
-    private var statusItem as MenuItem?;
-    private var cancelItem as MenuItem?;
+    private var statusItem as MenuItem;
+    private var cancelItem as MenuItem;
+
+    private var scanState as Ble.ScanState?;
+    private var scanTimer as Timer.Timer?;
+    private var animTimer as Timer.Timer?;
 
     public function initialize(menu as Menu2) {
         Menu2InputDelegate.initialize();
-        menu.setTitle("Scanning for GoPros");
-        self.statusItem = new MenuItem("...", null, "status", null);
-        self.cancelItem = new MenuItem("Cancel scan", null, "cancel", null);
+        self.statusItem = new MenuItem("", null, "status", null);
+        self.cancelItem = new MenuItem("", null, "cancel", null);
         menu.addItem(self.statusItem);
         menu.addItem(self.cancelItem);
         self.menu = menu;
-
-        Ble.setScanState(Ble.SCAN_STATE_SCANNING);
-        var scanTimer = new Timer.Timer();
-        scanTimer.start(method(:stopScan), 20000, false);
+        startScan();
     }
 
-    public function stopScan() as Void{
-        Ble.setScanState(Ble.SCAN_STATE_OFF);
-        statusItem.setLabel("Restart scan");
-        // menu.updateItem(statusItem, scanResults.size());
-        menu.setTitle(scanResults.size()+" devices found");
-        WatchUi.requestUpdate();
+    public function startScan() as Void {
+        if (scanState!=Ble.SCAN_STATE_SCANNING) {
+            Ble.setScanState(Ble.SCAN_STATE_SCANNING);
+            scanTimer = new Timer.Timer();
+            animTimer = new Timer.Timer();
+            scanTimer.start(method(:stopScan), 20000, false);
+            animTimer.start(method(:animate), 1000, true);
+
+            statusItem.setLabel("...");
+            cancelItem.setLabel("Cancel scan");
+            menu.setTitle("Scanning for GoPros");
+            WatchUi.requestUpdate();
+        }
+    }
+
+    public function stopScan() as Void {
+        if (scanState!=Ble.SCAN_STATE_OFF) {
+            Ble.setScanState(Ble.SCAN_STATE_OFF);
+            animTimer.stop();
+
+            statusItem.setLabel("Restart scan");
+            cancelItem.setLabel("Exit");
+            menu.setTitle(scanResults.size()+" devices found");
+            WatchUi.requestUpdate();
+        }
+    }
+
+    public function animate() as Void {
+        if (scanState == Ble.SCAN_STATE_SCANNING) {
+            var label = statusItem.getLabel() + ".";
+            label = label.substring(0, label.length()%4 + 1);
+            statusItem.setLabel(label);
+            WatchUi.requestUpdate();
+        }
+    }
+
+    public function setScanState(state as Ble.ScanState) as Void {
+        scanState = state;
     }
 
     public function onScanResults(results as [Ble.ScanResult]) as Void{
@@ -63,7 +95,8 @@ class ScanMenuDelegate extends Menu2InputDelegate {
 
     private function isDeviceInMenu(device as Ble.ScanResult) as Boolean {
         for (var i=0; i<scanResults.size(); i++) {
-            if (scanResults[i].get(:device).isSameDevice(device)) {
+            var res = scanResults[i];
+            if (res.get(:device).isSameDevice(device)) {
                 return true;
             }
         }
@@ -71,13 +104,37 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     }
 
     public function onSelect(item as MenuItem) as Void {
-        if (item.getLabel().equals("Restart scan")) {
-            statusItem.setLabel("...");
-            menu.setTitle("Scanning for GoPros");
-            
-            Ble.setScanState(Ble.SCAN_STATE_SCANNING);
-            var scanTimer = new Timer.Timer();
-            scanTimer.start(method(:stopScan), 20000, false);
+        switch (item.getId()) {
+            case "status":
+                if (scanState==Ble.SCAN_STATE_OFF) {
+                    startScan();
+                }
+                break;
+            case "cancel":
+                if (scanState==Ble.SCAN_STATE_SCANNING) {
+                    stopScan();
+                } else {
+                    // exit
+                    GoProRemoteApp.popView(SLIDE_LEFT);
+                }
+                break;            
+            default:
+                // pair device and quit menu
+                for (var i=0; i<scanResults.size(); i++) {
+                    if (scanResults[i].get(:menuid).equals(item.getId())) {
+                        var scan = scanResults[i].get(:device);
+                        try {
+                            Ble.unpairDevice(scan);
+                        } catch (ex) {
+                            System.println(ex.getErrorMessage());
+                        }
+                        Ble.pairDevice(scan);
+                        break;
+                    }
+                }
+                GoProRemoteApp.popView(SLIDE_LEFT);
+                GoProRemoteApp.pushView(new PopUpView(MainResources.labels[UI_CONNECT][CONNECT], POP_INFO), new PopUpDelegate(), WatchUi.SLIDE_BLINK, false);
+                break;
         }
     }
 }

@@ -5,6 +5,7 @@ using Toybox.BluetoothLowEnergy as Ble;
 
 class GoProDelegate extends Ble.BleDelegate {
 
+    private var scanStateChangeCallback as Method(state as Ble.ScanState) as Void?;
     private var scanResultCallback as Method(scanResults as [Ble.ScanResult]) as Void?;
 
     public function initialize() {
@@ -15,8 +16,15 @@ class GoProDelegate extends Ble.BleDelegate {
         
     }
 
+    public function setScanStateChangeCallback(callback as Method(state as Ble.ScanState) as Void) as Void {
+        scanStateChangeCallback = callback;
+    }
+
     public function onScanStateChange(scanState as Ble.ScanState, status as Ble.Status) as Void {
         System.println("BLE scan state changed : " + scanState + " / " + status);
+        if (status == Ble.STATUS_SUCCESS) {
+            scanStateChangeCallback.invoke(scanState);
+        }
     }
 
     public function setScanResultCallback(callback as Method(scanResults as [Ble.ScanResult]) as Void) {
@@ -35,6 +43,7 @@ class GoProDelegate extends Ble.BleDelegate {
                     System.println(uuid.toString());
                     if (uuid.equals(GattProfileManager.GOPRO_CONTROL_SERVICE)) {
                         scanResultsArray.add(device);
+                        break;
                     }
                 }
             }
