@@ -51,11 +51,6 @@ enum Communication {
     COM_PROGRESS
 }
 
-enum PopUpType {
-    POP_INFO,
-    POP_ERROR
-}
-
 
 class MainResources {
     static public var fontTiny as FontResource?;

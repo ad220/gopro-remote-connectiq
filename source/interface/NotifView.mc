@@ -3,23 +3,24 @@ import Toybox.WatchUi;
 import Toybox.Lang;
 import Toybox.Timer;
 
-class PopUpView extends WatchUi.View{
-    public static var currentView = null as PopUpView?;
+class NotifView extends WatchUi.View{
 
-    var message as String;
-    var type as Number;
-    var timer as Timer.Timer;
+    public enum NotifType {
+        NOTIF_INFO,
+        NOTIF_ERROR
+    }
 
-    function initialize(_message as String, _type as PopUpType) {
-        message = _message;
-        type = _type;
-        timer = new Timer.Timer();
-        timer.start(method(:popOut), 4000, false);
-        View.initialize(); 
+    private var message as String;
+    private var type as Number;
+
+
+    function initialize(message as String, type as NotifType) {
+        self.message = message;
+        self.type = type;
+        View.initialize();
     }
 
     function onShow() as Void {
-        currentView = self;
     }
 
     function onUpdate(dc as Dc) as Void {
@@ -33,25 +34,32 @@ class PopUpView extends WatchUi.View{
     }
 
     function onHide() as Void {
-        currentView = null;
     }
-    
-    public function popOut() as Void {
-        currentView = null;
-        timer.stop();
-        nViewLayers--;
-        WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
-    }
+
 }
 
-class PopUpDelegate extends WatchUi.BehaviorDelegate {
+class NotifDelegate extends WatchUi.BehaviorDelegate {
+
+    private var stillExists as Boolean;
+    private var timer as Timer.Timer;
 
     public function initialize() {
+        self.stillExists = true;
+        self.timer = new Timer.Timer();
+        self.timer.start(method(:pop), 4000, false);
+
         BehaviorDelegate.initialize();
     }
 
     public function onBack() {
-        GoProRemoteApp.popView(WatchUi.SLIDE_IMMEDIATE);
+        pop();
         return true;
+    }
+
+    public function pop() as Void {
+        if (stillExists) {
+            stillExists = false;
+            WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
+        }
     }
 }

@@ -23,8 +23,8 @@ class MobileStub {
 
     public function send(data as Array<Number or Array<Number>>) {
         if (data[0] == COM_CONNECT && data[1]==0) {
-            var _view = new RemoteView();
-            GoProRemoteApp.pushView(_view, new RemoteDelegate(_view), WatchUi.SLIDE_LEFT, false);
+            // var _view = new RemoteView();
+            // viewController.push(_view, new RemoteDelegate(_view), WatchUi.SLIDE_LEFT, false);
             System.println("Send connected stub");
             cam.setConnected(true);
             var preset = new GoProPreset(PSET1);

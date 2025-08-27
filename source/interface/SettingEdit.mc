@@ -49,10 +49,12 @@ class SettingEditItem extends WatchUi.CustomMenuItem {
 }
 
 class SettingEditDelegate extends WatchUi.Menu2InputDelegate {
-    private var setting;
+    private var setting as Number;
+    private var viewController as ViewController;
 
-    public function initialize(_setting as Number) {
-        setting = _setting;
+    public function initialize(setting as Number, viewController as ViewController) {
+        self.setting = setting;
+        self.viewController = viewController;
         Menu2InputDelegate.initialize();
     }
 
@@ -64,7 +66,7 @@ class SettingEditDelegate extends WatchUi.Menu2InputDelegate {
 
     public function onBack() as Void {
         cam.save();
-        GoProRemoteApp.popView(WatchUi.SLIDE_RIGHT);
+        viewController.pop(WatchUi.SLIDE_RIGHT);
     }
 
     public function onWrap(key as Key) as Boolean {

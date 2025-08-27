@@ -44,27 +44,30 @@ var profileManager as GattProfileManager?;
 
 
 class GoProConnectDelegate extends WatchUi.BehaviorDelegate {
-        var view;
+    private var viewController;
 
-    public function initialize(_view) {
+
+    public function initialize(viewController) {
+        self.viewController = viewController;
+
         BehaviorDelegate.initialize();
-        view = _view;
     }
 
     public function onSelect() {
         // mobile.connect();
         // mobile.send([COM_CONNECT, 0]);
-        // GoProRemoteApp.pushView(new PopUpView(MainResources.labels[UI_CONNECT][CONNECTING], POP_INFO), new PopUpDelegate(), WatchUi.SLIDE_BLINK, false);
+        // viewController.push(new NotifView(MainResources.labels[UI_CONNECT][CONNECTING], notifView.NOTIF_INFO), new NotifDelegate(), WatchUi.SLIDE_BLINK, false);
         var scanMenu = new WatchUi.Menu2({});
-        var menuDelegate = new ScanMenuDelegate(scanMenu);
+        var menuDelegate = new ScanMenuDelegate(scanMenu, viewController);
         delegate = new GoProDelegate();
         profileManager = new GattProfileManager();
         BluetoothLowEnergy.setDelegate(delegate);
         profileManager.registerProfiles();
         delegate.setScanStateChangeCallback(menuDelegate.method(:setScanState));
         delegate.setScanResultCallback(menuDelegate.method(:onScanResults));
+        BluetoothLowEnergy.setConnectionStrategy(BluetoothLowEnergy.CONNECTION_STRATEGY_SECURE_PAIR_BOND);
 
-        GoProRemoteApp.pushView(scanMenu, menuDelegate, WatchUi.SLIDE_IMMEDIATE, false);
+        viewController.push(scanMenu, menuDelegate, WatchUi.SLIDE_IMMEDIATE);
         return true;
     }
 }

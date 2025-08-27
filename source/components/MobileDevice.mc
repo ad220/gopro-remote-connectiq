@@ -44,44 +44,44 @@ class MobileDevice {
         System.println("received: " + message.data.toString());
         var data = message.data as Array<Number or Array<Number or Array<Number>>>;
         switch (data[0]) {
-            case COM_CONNECT:
-                // Ouverture connexion M>T>G>T>M
-                if (data[1] == 0) {
-                    var _view = new RemoteView();
-                    GoProRemoteApp.pushView(_view, new RemoteDelegate(_view), WatchUi.SLIDE_LEFT, false);
-                    cam.setConnected(true);
-                } else {
-                    if (cam.isConnected()){
-                        while (nViewLayers > 1) {
-                            GoProRemoteApp.popView(WatchUi.SLIDE_IMMEDIATE);
-                        }
-                        GoProRemoteApp.popView(WatchUi.SLIDE_LEFT);
-                        disconnect();
-                    }
-                    cam.setConnected(false);
-                    GoProRemoteApp.pushView(new PopUpView(MainResources.labels[UI_CONNECT][CONNECTFAIL], POP_ERROR), new PopUpDelegate(), WatchUi.SLIDE_BLINK, false);
-                }
-                break;
+            // case COM_CONNECT:
+            //     // Ouverture connexion M>T>G>T>M
+            //     if (data[1] == 0) {
+            //         var _view = new RemoteView();
+            //         viewController.push(_view, new RemoteDelegate(_view), WatchUi.SLIDE_LEFT, false);
+            //         cam.setConnected(true);
+            //     } else {
+            //         if (cam.isConnected()){
+            //             while (nViewLayers > 1) {
+            //                 viewController.pop(WatchUi.SLIDE_IMMEDIATE);
+            //             }
+            //             viewController.pop(WatchUi.SLIDE_LEFT);
+            //             disconnect();
+            //         }
+            //         cam.setConnected(false);
+            //         viewController.push(new NotifView(MainResources.labels[UI_CONNECT][CONNECTFAIL], notifView.NOTIF_ERROR), new NotifDelegate(), WatchUi.SLIDE_BLINK, false);
+            //     }
+            //     break;
             
-            case COM_FETCH_SETTINGS:
-                // GoPro settings --> montre
-                if (data[1]) {
-                    // cam.syncSettings(data[1]);
-                }
-                break;
-            case COM_FETCH_STATES:
-                if (data[1]) {
-                    cam.syncStates(data[1]);
-                }
-                break;
-            case COM_FETCH_AVAILABLE:
-                if (data[1]) {
-                    cam.syncAvailableSettings(data[1]);
-                }
-                break;
-            case COM_PROGRESS:
-                cam.syncProgress(data[1]);
-                break;
+            // case COM_FETCH_SETTINGS:
+            //     // GoPro settings --> montre
+            //     if (data[1]) {
+            //         // cam.syncSettings(data[1]);
+            //     }
+            //     break;
+            // case COM_FETCH_STATES:
+            //     if (data[1]) {
+            //         cam.syncStates(data[1]);
+            //     }
+            //     break;
+            // case COM_FETCH_AVAILABLE:
+            //     if (data[1]) {
+            //         cam.syncAvailableSettings(data[1]);
+            //     }
+            //     break;
+            // case COM_PROGRESS:
+            //     cam.syncProgress(data[1]);
+            //     break;
             default:
                 break;
         }

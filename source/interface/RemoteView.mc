@@ -4,59 +4,6 @@ import Toybox.System;
 import Toybox.Timer;
 import Toybox.Lang;
 
-
-class RemoteDelegate extends WatchUi.BehaviorDelegate {
-    var view;
-    var actionIsSelect = false;
-
-    public function initialize(_view) {
-        BehaviorDelegate.initialize();
-        view = _view;
-    }
-
-    public function onTap(tap as ClickEvent) {
-        actionIsSelect = false;
-        var coord = tap.getCoordinates();
-        if (coord[0]<halfW+75*kMult and coord[0]>halfW-35*kMult and coord[1]<halfH+25*kMult and coord[1]>halfH-75*kMult) {
-            mobile.send([COM_SHUTTER, 0]);
-        } else if (cam.isRecording() and coord[0]<halfW-45*kMult and coord[0]>halfW-100*kMult and coord[1]<halfH+5*kMult and coord[1]>halfH-55*kMult) {
-            mobile.send([COM_HIGHLIGHT, 0]);
-        } else if (!cam.isRecording() and coord[0]<halfW+80*kMult and coord[0]>halfW-80*kMult and coord[1]<halfH+100*kMult and coord[1]>halfH+40*kMult) {
-            return onMenu();
-        }
-        return true;
-    }
-
-    public function onSelect() {
-        actionIsSelect = true;
-        return false;
-    }
-
-    public function onKeyPressed(keyEvent) {
-        if (actionIsSelect) {
-            actionIsSelect = false;
-            mobile.send([COM_SHUTTER, 0]);
-        }
-        return true;
-    }
-
-    public function onMenu() {
-        GoProRemoteApp.pushView(new SettingsMenu(SettingsMenu.SM_MENU, -1), new SettingsMenuDelegate(SettingsMenu.SM_MENU), WatchUi.SLIDE_UP, false);
-        return true;
-    }
-
-    public function onNextPage() {
-        return onMenu();
-    }
-
-    public function onBack() {
-        mobile.send([COM_CONNECT, 1]);
-        GoProRemoteApp.popView(WatchUi.SLIDE_DOWN);
-        return true;
-    }
-}
-
-
 class RemoteView extends WatchUi.View {
     var settingsButton;
     var recordingTimer as Timer.Timer?;
@@ -149,4 +96,56 @@ class RemoteView extends WatchUi.View {
         WatchUi.requestUpdate();
     }
 
+}
+
+class RemoteDelegate extends WatchUi.BehaviorDelegate {
+    private var viewController as ViewController;
+    private var actionIsSelect as Boolean;
+
+    public function initialize(viewController as ViewController) {
+        self.viewController = viewController;
+        self.actionIsSelect = false;
+        BehaviorDelegate.initialize();
+    }
+
+    public function onTap(tap as ClickEvent) {
+        actionIsSelect = false;
+        var coord = tap.getCoordinates();
+        if (coord[0]<halfW+75*kMult and coord[0]>halfW-35*kMult and coord[1]<halfH+25*kMult and coord[1]>halfH-75*kMult) {
+            mobile.send([COM_SHUTTER, 0]);
+        } else if (cam.isRecording() and coord[0]<halfW-45*kMult and coord[0]>halfW-100*kMult and coord[1]<halfH+5*kMult and coord[1]>halfH-55*kMult) {
+            mobile.send([COM_HIGHLIGHT, 0]);
+        } else if (!cam.isRecording() and coord[0]<halfW+80*kMult and coord[0]>halfW-80*kMult and coord[1]<halfH+100*kMult and coord[1]>halfH+40*kMult) {
+            return onMenu();
+        }
+        return true;
+    }
+
+    public function onSelect() {
+        actionIsSelect = true;
+        return false;
+    }
+
+    public function onKeyPressed(keyEvent) {
+        if (actionIsSelect) {
+            actionIsSelect = false;
+            mobile.send([COM_SHUTTER, 0]);
+        }
+        return true;
+    }
+
+    public function onMenu() {
+        viewController.push(new SettingsMenu(SettingsMenu.SM_MENU, -1), new SettingsMenuDelegate(SettingsMenu.SM_MENU, viewController), WatchUi.SLIDE_UP);
+        return true;
+    }
+
+    public function onNextPage() {
+        return onMenu();
+    }
+
+    public function onBack() {
+        mobile.send([COM_CONNECT, 1]);
+        viewController.pop(WatchUi.SLIDE_DOWN);
+        return true;
+    }
 }

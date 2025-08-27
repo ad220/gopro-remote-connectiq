@@ -17,23 +17,26 @@ class ScanMenuDelegate extends Menu2InputDelegate {
         65 => "HERO13 Black",
     };
 
-    private var scanResults = [] as Array<ScanEntry>;
-
     private var menu as Menu2;
+    private var viewController as ViewController;
     private var statusItem as MenuItem;
     private var cancelItem as MenuItem;
 
+    private var scanResults as Array<ScanEntry>;
     private var scanState as Ble.ScanState?;
     private var scanTimer as Timer.Timer?;
     private var animTimer as Timer.Timer?;
 
-    public function initialize(menu as Menu2) {
+
+    public function initialize(menu as Menu2, viewController as ViewController) {
         Menu2InputDelegate.initialize();
+        self.menu = menu;
+        self.viewController = viewController;
         self.statusItem = new MenuItem("", null, "status", null);
         self.cancelItem = new MenuItem("", null, "cancel", null);
+        self.scanResults = [];
         menu.addItem(self.statusItem);
         menu.addItem(self.cancelItem);
-        self.menu = menu;
         startScan();
     }
 
@@ -115,7 +118,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
                     stopScan();
                 } else {
                     // exit
-                    GoProRemoteApp.popView(SLIDE_LEFT);
+                    viewController.pop(SLIDE_LEFT);
                 }
                 break;            
             default:
@@ -124,16 +127,15 @@ class ScanMenuDelegate extends Menu2InputDelegate {
                     if (scanResults[i].get(:menuid).equals(item.getId())) {
                         var scan = scanResults[i].get(:device);
                         try {
-                            Ble.unpairDevice(scan);
+                            Ble.pairDevice(scan);
                         } catch (ex) {
                             System.println(ex.getErrorMessage());
                         }
-                        Ble.pairDevice(scan);
                         break;
                     }
                 }
-                GoProRemoteApp.popView(SLIDE_LEFT);
-                GoProRemoteApp.pushView(new PopUpView(MainResources.labels[UI_CONNECT][CONNECT], POP_INFO), new PopUpDelegate(), WatchUi.SLIDE_BLINK, false);
+                viewController.pop(SLIDE_LEFT);
+                viewController.push(new NotifView(MainResources.labels[UI_CONNECT][CONNECT], NotifView.NOTIF_INFO), new NotifDelegate(), WatchUi.SLIDE_BLINK);
                 break;
         }
     }
