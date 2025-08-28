@@ -3,6 +3,9 @@ import Toybox.WatchUi;
 import Toybox.Lang;
 import Toybox.Timer;
 
+using InterfaceComponentsManager as ICM;
+
+
 class NotifView extends WatchUi.View{
 
     public enum NotifType {
@@ -25,12 +28,12 @@ class NotifView extends WatchUi.View{
 
     function onUpdate(dc as Dc) as Void {
         dc.setColor(type ? 0xFF5500 : Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.fillRectangle(0, 0, screenW, 90*kMult);
+        dc.fillRectangle(0, 0, ICM.screenW, 90*ICM.kMult);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(halfW, 20*kMult, 10*kMult);
-        dc.drawText(halfW, 60*kMult, adaptFontSmall(), message, JTEXT_MID);
+        dc.fillCircle(ICM.halfW, 20*ICM.kMult, 10*ICM.kMult);
+        dc.drawText(ICM.halfW, 60*ICM.kMult, ICM.adaptFontSmall(), message, ICM.JTEXT_MID);
         dc.setColor(type ? 0xFF5500 : Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(halfW, 20*kMult, adaptFontMid() , type ? "!" : "i", JTEXT_MID);
+        dc.drawText(ICM.halfW, 20*ICM.kMult, ICM.adaptFontMid() , type ? "!" : "i", ICM.JTEXT_MID);
     }
 
     function onHide() as Void {

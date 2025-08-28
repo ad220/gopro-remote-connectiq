@@ -20,6 +20,19 @@ import Toybox.System;
 
 
 class MobileDevice {
+    enum Communication {
+        COM_CONNECT,
+        COM_FETCH_SETTINGS,
+        COM_PUSH_SETTINGS,
+        COM_FETCH_STATES,
+        COM_PUSH_STATES,
+        COM_FETCH_AVAILABLE,
+        COM_PUSH_AVAILABLE,
+        COM_SHUTTER,
+        COM_HIGHLIGHT,
+        COM_LOCKED,
+        COM_PROGRESS
+    }
     private var connected as Boolean;
 
     public function initialize() {

@@ -5,7 +5,9 @@ import Toybox.Timer;
 
 using Toybox.BluetoothLowEnergy as Ble;
 
+
 class ScanMenuDelegate extends Menu2InputDelegate {
+
     typedef ScanEntry as {:name as String, :device as Ble.ScanResult, :menuid as Number};
 
     public const goproModelTable = {
@@ -135,7 +137,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
                     }
                 }
                 viewController.pop(SLIDE_LEFT);
-                viewController.push(new NotifView(MainResources.labels[UI_CONNECT][CONNECT], NotifView.NOTIF_INFO), new NotifDelegate(), WatchUi.SLIDE_BLINK);
+                // viewController.push(new NotifView(WatchUi.loadResource(Rez.Strings.Connect), NotifView.NOTIF_INFO), new NotifDelegate(), WatchUi.SLIDE_DOWN);
                 break;
         }
     }

@@ -4,13 +4,19 @@ import Toybox.System;
 import Toybox.Timer;
 import Toybox.Lang;
 
+using InterfaceComponentsManager as ICM;
+
+
 class RemoteView extends WatchUi.View {
-    var settingsButton;
-    var recordingTimer as Timer.Timer?;
+
+    private var hilightIcon as BitmapResource?;
+    private var settingsIcon as BitmapResource?;
+    private var recordingTimer as Timer.Timer;
+
 
     function initialize() {
+        self.recordingTimer = new Timer.Timer();
         View.initialize();
-        recordingTimer = new Timer.Timer();
     }
     
     function onLayout(dc as Dc) as Void {
@@ -18,50 +24,41 @@ class RemoteView extends WatchUi.View {
     }
 
     function onShow() as Void {
-        MainResources.loadIcons(UI_HILIGHT);
-        MainResources.loadIcons(UI_MENUS);
-        MainResources.freeIcons(UI_SETTINGSMENU);
-        MainResources.freeIcons(UI_SETTINGEDIT);
-        MainResources.freeIcons(UI_STATES);
-        MainResources.freeLabels(UI_MENUS);
-        MainResources.freeLabels(UI_SETTINGSMENU);
-        MainResources.freeLabels(UI_SETTINGEDIT);
+        hilightIcon = WatchUi.loadResource(Rez.Drawables.Hilight);
+        settingsIcon = WatchUi.loadResource(Rez.Drawables.Wheel);
     }
 
     // Update the view
     function onUpdate(dc as Dc) as Void {
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLACK);
         dc.clear();
-        dc.fillCircle(halfW-72*kMult, halfH-25*kMult, 22*kMult);
-        dc.fillRoundedRectangle(halfW-30*kMult, halfH-70*kMult, 90*kMult, 90*kMult, 18*kMult);
+        dc.fillCircle(ICM.halfW-72*ICM.kMult, ICM.halfH-25*ICM.kMult, 22*ICM.kMult);
+        dc.fillRoundedRectangle(ICM.halfW-30*ICM.kMult, ICM.halfH-70*ICM.kMult, 90*ICM.kMult, 90*ICM.kMult, 18*ICM.kMult);
         if (!cam.isRecording()) {
-            dc.fillRoundedRectangle(halfW-80*kMult, halfH+45*kMult, 160*kMult, 40*kMult, 20*kMult);
+            dc.fillRoundedRectangle(ICM.halfW-80*ICM.kMult, ICM.halfH+45*ICM.kMult, 160*ICM.kMult, 40*ICM.kMult, 20*ICM.kMult);
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         } else {
             dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
         }
-        dc.drawText(halfW+12*kMult, halfH+65*kMult, adaptFontSmall(), cam.getDescription(), JTEXT_MID);
-        dc.drawBitmap(halfW-83*kMult-imgOff, halfH-36*kMult-imgOff, MainResources.icons[UI_HILIGHT] as WatchUi.BitmapResource);
-        dc.drawBitmap(halfW-71*kMult-imgOff, halfH+53*kMult-imgOff, MainResources.icons[UI_MENUS][SETTINGS]);
+        dc.drawText(ICM.halfW+12*ICM.kMult, ICM.halfH+65*ICM.kMult, ICM.adaptFontSmall(), cam.getDescription(), ICM.JTEXT_MID);
+        dc.drawBitmap(ICM.halfW-83*ICM.kMult-ICM.imgOff, ICM.halfH-36*ICM.kMult-ICM.imgOff, hilightIcon);
+        dc.drawBitmap(ICM.halfW-71*ICM.kMult-ICM.imgOff, ICM.halfH+53*ICM.kMult-ICM.imgOff, settingsIcon);
         dc.setColor(0xFF0000, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(8*kMult);
-        dc.drawCircle(halfW+15*kMult, halfH-25*kMult, 28*kMult);
+        dc.setPenWidth(8*ICM.kMult);
+        dc.drawCircle(ICM.halfW+15*ICM.kMult, ICM.halfH-25*ICM.kMult, 28*ICM.kMult);
         dc.setPenWidth(1);
 
 
         // Preset Button
         if (cam.isRecording()) {
             var recDurationSeconds = cam.getProgress();
-            if (recordingTimer==null) {
-                recordingTimer = new Timer.Timer();
-                recordingTimer.start(method(:recordingTimerCallback), 1000, true);
-            }
+            recordingTimer.start(method(:recordingTimerCallback), 1000, true);
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
             // Draw the recording duration 
             var minutes = Math.floor(recDurationSeconds / 60);
             var seconds = recDurationSeconds % 60;
             var timeString = (minutes/100).toString() + (minutes%60).toString() + ":" + (seconds/10).toString() + (seconds%10).toString();
-            dc.drawText(halfW, halfH/6, MainResources.fontTiny, timeString, JTEXT_MID);
+            dc.drawText(ICM.halfW, ICM.halfH/6, ICM.fontTiny, timeString, ICM.JTEXT_MID);
 
             // Draw the recording circle, blinks every second
             if (recDurationSeconds % 2 == 0) {
@@ -69,31 +66,31 @@ class RemoteView extends WatchUi.View {
             } else {
                 dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
             }
-            dc.fillCircle(halfW-35*kMult, halfH/6, 6*kMult);
+            dc.fillCircle(ICM.halfW-35*ICM.kMult, ICM.halfH/6, 6*ICM.kMult);
 
         } else {
-            if (recordingTimer!=null) {
-                recordingTimer.stop();
-                recordingTimer = null;
-            }
+            recordingTimer.stop();
             // For v2, would open states menu on swipe down
 
             // dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-            // dc.setPenWidth(6*kMult);
-            // dc.drawArc(halfW, halfH, 108*kMult, Graphics.ARC_CLOCKWISE, 100, 80);
-            // dc.fillCircle(halfW-18*kMult, halfH-107*kMult, round(3*kMult));
-            // dc.fillCircle(halfW+18*kMult, halfH-107*kMult, round(3*kMult));
+            // dc.setPenWidth(6*ICM.kMult);
+            // dc.drawArc(ICM.halfW, ICM.halfH, 108*ICM.kMult, Graphics.ARC_CLOCKWISE, 100, 80);
+            // dc.fillCircle(ICM.halfW-18*ICM.kMult, ICM.halfH-107*ICM.kMult, round(3*ICM.kMult));
+            // dc.fillCircle(ICM.halfW+18*ICM.kMult, ICM.halfH-107*ICM.kMult, round(3*ICM.kMult));
             // dc.setPenWidth(1);
         }
     }
  
     function onHide() as Void {
-        settingsButton = null;
+        hilightIcon = null;
+        settingsIcon = null;
     }
 
-    function recordingTimerCallback() as Void {
-        cam.incrementProgress();
-        WatchUi.requestUpdate();
+    private function recordingTimerCallback() as Void {
+        if (cam.isRecording()) {
+            cam.incrementProgress();
+            WatchUi.requestUpdate();
+        }
     }
 
 }
@@ -111,11 +108,11 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
     public function onTap(tap as ClickEvent) {
         actionIsSelect = false;
         var coord = tap.getCoordinates();
-        if (coord[0]<halfW+75*kMult and coord[0]>halfW-35*kMult and coord[1]<halfH+25*kMult and coord[1]>halfH-75*kMult) {
-            mobile.send([COM_SHUTTER, 0]);
-        } else if (cam.isRecording() and coord[0]<halfW-45*kMult and coord[0]>halfW-100*kMult and coord[1]<halfH+5*kMult and coord[1]>halfH-55*kMult) {
-            mobile.send([COM_HIGHLIGHT, 0]);
-        } else if (!cam.isRecording() and coord[0]<halfW+80*kMult and coord[0]>halfW-80*kMult and coord[1]<halfH+100*kMult and coord[1]>halfH+40*kMult) {
+        if (coord[0]<ICM.halfW+75*ICM.kMult and coord[0]>ICM.halfW-35*ICM.kMult and coord[1]<ICM.halfH+25*ICM.kMult and coord[1]>ICM.halfH-75*ICM.kMult) {
+            mobile.send([MobileDevice.COM_SHUTTER, 0]);
+        } else if (cam.isRecording() and coord[0]<ICM.halfW-45*ICM.kMult and coord[0]>ICM.halfW-100*ICM.kMult and coord[1]<ICM.halfH+5*ICM.kMult and coord[1]>ICM.halfH-55*ICM.kMult) {
+            mobile.send([MobileDevice.COM_HIGHLIGHT, 0]);
+        } else if (!cam.isRecording() and coord[0]<ICM.halfW+80*ICM.kMult and coord[0]>ICM.halfW-80*ICM.kMult and coord[1]<ICM.halfH+100*ICM.kMult and coord[1]>ICM.halfH+40*ICM.kMult) {
             return onMenu();
         }
         return true;
@@ -129,7 +126,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
     public function onKeyPressed(keyEvent) {
         if (actionIsSelect) {
             actionIsSelect = false;
-            mobile.send([COM_SHUTTER, 0]);
+            mobile.send([MobileDevice.COM_SHUTTER, 0]);
         }
         return true;
     }
@@ -144,7 +141,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onBack() {
-        mobile.send([COM_CONNECT, 1]);
+        mobile.send([MobileDevice.COM_CONNECT, 1]);
         viewController.pop(WatchUi.SLIDE_DOWN);
         return true;
     }

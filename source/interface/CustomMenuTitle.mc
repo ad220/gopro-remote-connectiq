@@ -2,14 +2,17 @@ import Toybox.Graphics;
 import Toybox.WatchUi;
 import Toybox.Lang;
 
-// inspired from Menu2Sample/MenuTestDelegate/DrawableMenuTitle
+using InterfaceComponentsManager as ICM;
+
 
 class CustomMenuTitle extends WatchUi.Drawable {
-    private var title;
+    
+    private var title as String;
+
 
     //! Constructor
-    public function initialize(_title as String) {
-        title = _title;
+    public function initialize(title as String) {
+        self.title = title;
         Drawable.initialize({});
     }
 
@@ -21,6 +24,6 @@ class CustomMenuTitle extends WatchUi.Drawable {
 
         // dc.drawBitmap(bitmapX, bitmapY, appIcon);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(dc.getWidth()/2, dc.getHeight()/2+8, MainResources.fontLarge, title, JTEXT_MID);
+        dc.drawText(dc.getWidth()/2, dc.getHeight()/2+8, ICM.fontLarge, title, ICM.JTEXT_MID);
     }
 }

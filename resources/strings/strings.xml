@@ -15,7 +15,6 @@
 
     <!-- Menus -->
     <string id="Settings">Settings</string>
-    <string id="Presets">Choose preset</string>
     
     <!-- Settings -->
     <string id="Framerate">Framerate</string>

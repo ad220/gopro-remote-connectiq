@@ -2,41 +2,67 @@ import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.WatchUi;
 
+using InterfaceComponentsManager as ICM;
+
 
 class SettingEditMenu extends WatchUi.CustomMenu {
-    public function initialize(setting as Number) {
-        CustomMenu.initialize((70*kMult).toNumber(), Graphics.COLOR_BLACK, {:title=> new $.CustomMenuTitle(MainResources.labels[UI_SETTINGEDIT][setting])});
-        var items;
-        var selected;
-        items = cam.getAvailableSettings(setting);
-        selected = cam.getSetting(setting);
+
+    public function initialize(setting as GoProSettings.SettingId) {
+        var title;
+        switch (setting) {
+            case GoProSettings.RESOLUTION:
+                title = WatchUi.loadResource(Rez.Strings.Resolution);
+                break;
+            case GoProSettings.RATIO:
+                title = WatchUi.loadResource(Rez.Strings.Ratio);
+                break;
+            case GoProSettings.LENS:
+                title = WatchUi.loadResource(Rez.Strings.Lens);
+                break;
+            case GoProSettings.FRAMERATE:
+                title = WatchUi.loadResource(Rez.Strings.Framerate);
+                break;
+            default:
+                System.println("Unknown Setting id");
+                throw new Exception();
+        }
+        CustomMenu.initialize((70*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {:title=> new $.CustomMenuTitle(title)});
+
+        var items = cam.getAvailableSettings(setting);
+        var selected = cam.getSetting(setting);
         for (var i=0; i<items.size(); i++) {
             CustomMenu.addItem(new SettingEditItem(setting, items[i], selected));
         }
     }
 }
 
-class SettingEditItem extends WatchUi.CustomMenuItem {
-    private var id;
-    private var label;
-    private static var selected;
 
-    public function initialize(setting, _id, _selected as Number) {
-        id = _id;
-        label = GoProSettings.getLabel(setting, _id);
-        selected = _selected;
+class SettingEditItem extends WatchUi.CustomMenuItem {
+
+    private static var selected as Number;
+
+    private var id as Number;
+    private var label as String;
+
+
+    public function initialize(setting as GoProSettings.SettingId, id as Number, selected as Number) {
+        self.selected = selected;
+
+        self.id = id;
+        self.label = GoProSettings.getLabel(setting, id);
+
         CustomMenuItem.initialize(id, {});
     }
 
     public function draw(dc as Dc) as Void {
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.fillRoundedRectangle(dc.getWidth()/2-100*kMult, dc.getHeight()/2-25*kMult, 200*kMult, 50*kMult, 25*kMult);
+        dc.fillRoundedRectangle(dc.getWidth()/2-100*ICM.kMult, dc.getHeight()/2-25*ICM.kMult, 200*ICM.kMult, 50*ICM.kMult, 25*ICM.kMult);
         if (id == selected) {
             dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_TRANSPARENT);
         } else {
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         }
-        dc.drawText(dc.getWidth()/2, dc.getHeight()/2-2*kMult, MainResources.fontMedium, label, JTEXT_MID);
+        dc.drawText(dc.getWidth()/2, dc.getHeight()/2-2*ICM.kMult, ICM.fontMedium, label, ICM.JTEXT_MID);
     }
 
     public function select() as Void {
@@ -48,13 +74,17 @@ class SettingEditItem extends WatchUi.CustomMenuItem {
     }
 }
 
+
 class SettingEditDelegate extends WatchUi.Menu2InputDelegate {
+
     private var setting as Number;
     private var viewController as ViewController;
 
-    public function initialize(setting as Number, viewController as ViewController) {
+
+    public function initialize(setting as GoProSettings.SettingId, viewController as ViewController) {
         self.setting = setting;
         self.viewController = viewController;
+
         Menu2InputDelegate.initialize();
     }
 

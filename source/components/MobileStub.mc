@@ -22,12 +22,12 @@ class MobileStub {
     }
 
     public function send(data as Array<Number or Array<Number>>) {
-        if (data[0] == COM_CONNECT && data[1]==0) {
+        if (data[0] == MobileDevice.COM_CONNECT && data[1]==0) {
             // var _view = new RemoteView();
             // viewController.push(_view, new RemoteDelegate(_view), WatchUi.SLIDE_LEFT, false);
             System.println("Send connected stub");
             cam.setConnected(true);
-            var preset = new GoProPreset(PSET1);
+            var preset = new GoProPreset(SettingsMenuItem.PSET1);
             cam.syncSettings(preset.getSettings());
         } else {
             System.println(data);

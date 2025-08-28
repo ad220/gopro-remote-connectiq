@@ -1,8 +1,13 @@
 import Toybox.Lang;
 
 class GoProCamera extends GoProSettings {
-    private var states as Array<Number>?;
-    private var availableSettings as Array<Array<Number>>?;
+
+    public enum StateId {
+        ENCODING = 10,
+    }
+
+    private var states as Dictionary;
+    private var availableSettings as Array<Array<Number>>;
 
     private var progress as Number = 0;
     private var connected as Boolean = false;
@@ -10,28 +15,30 @@ class GoProCamera extends GoProSettings {
 
     public function initialize() {
         GoProSettings.initialize();
-        states = [NTSC, 0];
+
+        self.states = {ENCODING => 0};
+        self.availableSettings = [];
     }
 
     public function setPreset(preset as GoProPreset) {
-        // mobile.send([COM_PUSH_SETTINGS, preset.getSettings()]);
+        // mobile.send([MobileDevice.COM_PUSH_SETTINGS, preset.getSettings()]);
     }
 
-    public function syncSettings(_settings as Dictionary) {
-        settings = _settings;
+    public function syncSettings(settings as Dictionary) {
+        self.settings = settings;
         WatchUi.requestUpdate();
     }
 
-    public function syncStates(_states as Array<Number>) {
+    public function syncStates(states as Dictionary) {
         // var regionChanged = states[REGION]!=_states[REGION];
-        states = _states;
-        if (states[RECORDING]==null) {states[RECORDING] = 0;}
+        self.states = states;
+        if (states[ENCODING]==null) {states[ENCODING] = 0;}
         // if (regionChanged) {MainResources.loadRegionLabels();}
         WatchUi.requestUpdate();
     }
 
-    public function syncAvailableSettings(_availableSettings as Array<Array<Number>>) {
-        availableSettings = _availableSettings;
+    public function syncAvailableSettings(availableSettings as Array<Array<Number>>) {
+        self.availableSettings = availableSettings;
         WatchUi.requestUpdate();
     }
 
@@ -40,15 +47,11 @@ class GoProCamera extends GoProSettings {
     }
 
     public function isRecording() {
-        return states[RECORDING]==1;
-    }
-
-    public function getRegion() {
-        return states[REGION];
+        return states.get(ENCODING)==1;
     }
 
     public function save() {
-        mobile.send([COM_PUSH_SETTINGS, settings]);
+        mobile.send([MobileDevice.COM_PUSH_SETTINGS, settings]);
     }
 
     public function syncProgress(_progress as Number) {
