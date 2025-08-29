@@ -7,7 +7,7 @@ using InterfaceComponentsManager as ICM;
 
 
 class ConnectView extends WatchUi.View {
-    
+
     private var connectLabel as String?;
 
 
@@ -47,7 +47,6 @@ class ConnectView extends WatchUi.View {
 }
 
 var delegate as GoProDelegate?;
-var profileManager as GattProfileManager?;
 
 
 class GoProConnectDelegate extends WatchUi.BehaviorDelegate {
@@ -73,9 +72,8 @@ class GoProConnectDelegate extends WatchUi.BehaviorDelegate {
         var scanMenu = new WatchUi.Menu2({});
         var menuDelegate = new ScanMenuDelegate(scanMenu, viewController, timerController, method(:onScanResult));
         delegate = new GoProDelegate(timerController);
-        profileManager = new GattProfileManager();
         Ble.setDelegate(delegate);
-        profileManager.registerProfiles();
+        GattProfileManager.registerProfiles();
         delegate.setScanStateChangeCallback(menuDelegate.method(:setScanState));
         delegate.setScanResultCallback(menuDelegate.method(:onScanResults));
         Ble.setConnectionStrategy(Ble.CONNECTION_STRATEGY_SECURE_PAIR_BOND);

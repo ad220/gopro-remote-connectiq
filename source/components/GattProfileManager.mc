@@ -1,3 +1,5 @@
+import Toybox.System;
+
 using Toybox.BluetoothLowEnergy as Ble;
 
 class GattProfileManager {
@@ -13,7 +15,7 @@ class GattProfileManager {
     public static const NETWORK_CHARACTERISTIC             = Ble.stringToUuid("B5F90091-AA8D-11E3-9046-0002A5D5C51B");
     public static const NETWORK_RESPONSE_CHARACTERISTIC    = Ble.stringToUuid("B5F90092-AA8D-11E3-9046-0002A5D5C51B");
 
-    private const goproControlProfileDef = {
+    private static const goproControlProfileDef = {
         :uuid => GOPRO_CONTROL_SERVICE,
         :characteristics => [{
             :uuid => COMMAND_CHARACTERISTIC,
@@ -36,7 +38,7 @@ class GattProfileManager {
         }]
     };
 
-    private const goproManageProfileDef = {
+    private static const goproManageProfileDef = {
         :uuid => GOPRO_MANAGE_SERVICE,
         :characteristics => [{
             :uuid => NETWORK_CHARACTERISTIC,
@@ -47,7 +49,7 @@ class GattProfileManager {
         }]
     };
 
-    public function registerProfiles() as Void {
+    public static function registerProfiles() as Void {
         System.println("register");
         try {
             Ble.registerProfile(goproControlProfileDef);
