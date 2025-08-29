@@ -2,6 +2,7 @@ import Toybox.Graphics;
 import Toybox.WatchUi;
 import Toybox.Lang;
 
+using Toybox.BluetoothLowEnergy as Ble;
 using InterfaceComponentsManager as ICM;
 
 
@@ -51,12 +52,14 @@ var profileManager as GattProfileManager?;
 
 class GoProConnectDelegate extends WatchUi.BehaviorDelegate {
     private var viewController as ViewController;
+    private var timerController as TimerController;
     private var connectingLabel as String;
     private var connectErrorLabel as String;
 
 
-    public function initialize(viewController) {
+    public function initialize(viewController, timerController) {
         self.viewController = viewController;
+        self.timerController = timerController;
         self.connectingLabel = WatchUi.loadResource(Rez.Strings.Connecting);
         self.connectErrorLabel = WatchUi.loadResource(Rez.Strings.ConnectFail);
 
@@ -68,16 +71,24 @@ class GoProConnectDelegate extends WatchUi.BehaviorDelegate {
         // mobile.send([MobileDevice.COM_CONNECT, 0]);
         // viewController.push(new NotifView(connectingLabel, notifView.NOTIF_INFO), new NotifDelegate(), WatchUi.SLIDE_BLINK, false);
         var scanMenu = new WatchUi.Menu2({});
-        var menuDelegate = new ScanMenuDelegate(scanMenu, viewController);
-        delegate = new GoProDelegate();
+        var menuDelegate = new ScanMenuDelegate(scanMenu, viewController, timerController, method(:onScanResult));
+        delegate = new GoProDelegate(timerController);
         profileManager = new GattProfileManager();
-        BluetoothLowEnergy.setDelegate(delegate);
+        Ble.setDelegate(delegate);
         profileManager.registerProfiles();
         delegate.setScanStateChangeCallback(menuDelegate.method(:setScanState));
         delegate.setScanResultCallback(menuDelegate.method(:onScanResults));
-        BluetoothLowEnergy.setConnectionStrategy(BluetoothLowEnergy.CONNECTION_STRATEGY_SECURE_PAIR_BOND);
+        Ble.setConnectionStrategy(Ble.CONNECTION_STRATEGY_SECURE_PAIR_BOND);
 
         viewController.push(scanMenu, menuDelegate, WatchUi.SLIDE_IMMEDIATE);
         return true;
+    }
+
+    public function onScanResult(device as Ble.ScanResult) as Void {
+        delegate.setScanStateChangeCallback(null);
+        delegate.setScanResultCallback(null);
+        Ble.setScanState(Ble.SCAN_STATE_SCANNING);
+        Ble.pairDevice(device);
+        viewController.push(new NotifView(connectingLabel, NotifView.NOTIF_INFO), new NotifDelegate(), WatchUi.SLIDE_DOWN);
     }
 }

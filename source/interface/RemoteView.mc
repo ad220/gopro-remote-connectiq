@@ -86,7 +86,7 @@ class RemoteView extends WatchUi.View {
         settingsIcon = null;
     }
 
-    private function recordingTimerCallback() as Void {
+    public function recordingTimerCallback() as Void {
         if (cam.isRecording()) {
             cam.incrementProgress();
             WatchUi.requestUpdate();

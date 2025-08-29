@@ -8,6 +8,7 @@ var mobile as MobileStub?;
 
 
 class GoProRemoteApp extends Application.AppBase {
+    private var timerController as TimerController?;
     private var viewController as ViewController?;
 
     function initialize() {
@@ -21,16 +22,19 @@ class GoProRemoteApp extends Application.AppBase {
         InterfaceComponentsManager.loadFonts();
         cam = new GoProCamera();
         mobile = new MobileStub();
-        viewController = new ViewController();
+        timerController = new TimerController();
+        viewController = new ViewController(timerController);
     }
 
     // onStop() is called when your application is exiting
     function onStop(state as Dictionary?) as Void {
+        viewController.returnHome(null, null);
+        timerController.stopAll();
     }
 
     // Return the initial view of your application here
     function getInitialView() {
-        return [ new ConnectView(), new GoProConnectDelegate(viewController) ];
+        return [ new ConnectView(), new GoProConnectDelegate(viewController, timerController) ];
     }
 
 }

@@ -44,12 +44,9 @@ class NotifView extends WatchUi.View{
 class NotifDelegate extends WatchUi.BehaviorDelegate {
 
     private var stillExists as Boolean;
-    private var timer as Timer.Timer;
 
     public function initialize() {
         self.stillExists = true;
-        self.timer = new Timer.Timer();
-        self.timer.start(method(:pop), 4000, false);
 
         BehaviorDelegate.initialize();
     }
