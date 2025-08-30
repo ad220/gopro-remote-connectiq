@@ -7,7 +7,11 @@ using InterfaceComponentsManager as ICM;
 
 class SettingEditMenu extends WatchUi.CustomMenu {
 
-    public function initialize(setting as GoProSettings.SettingId) {
+    private var gopro;
+
+    public function initialize(setting as GoProSettings.SettingId, gopro as GoProCamera) {
+        self.gopro = gopro;
+
         var title;
         switch (setting) {
             case GoProSettings.RESOLUTION:
@@ -28,8 +32,8 @@ class SettingEditMenu extends WatchUi.CustomMenu {
         }
         CustomMenu.initialize((70*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {:title=> new $.CustomMenuTitle(title)});
 
-        var items = cam.getAvailableSettings(setting);
-        var selected = cam.getSetting(setting);
+        var items = gopro.getAvailableSettings(setting);
+        var selected = gopro.getSetting(setting);
         for (var i=0; i<items.size(); i++) {
             CustomMenu.addItem(new SettingEditItem(setting, items[i], selected));
         }
@@ -77,25 +81,26 @@ class SettingEditItem extends WatchUi.CustomMenuItem {
 
 class SettingEditDelegate extends WatchUi.Menu2InputDelegate {
 
-    private var setting as Number;
+    private var setting as GoProSettings.SettingId;
     private var viewController as ViewController;
+    private var gopro as GoProCamera;
 
 
-    public function initialize(setting as GoProSettings.SettingId, viewController as ViewController) {
+    public function initialize(setting as GoProSettings.SettingId, viewController as ViewController, gopro as GoProCamera) {
         self.setting = setting;
         self.viewController = viewController;
+        self.gopro = gopro;
 
         Menu2InputDelegate.initialize();
     }
 
     public function onSelect(item) {
-        cam.setSetting(setting, item.getId() as Number);
+        gopro.sendSetting(setting, item.getId() as Number);
         (item as SettingEditItem).select();
         WatchUi.requestUpdate();
     }
 
     public function onBack() as Void {
-        cam.save();
         viewController.pop(WatchUi.SLIDE_RIGHT);
     }
 

@@ -3,9 +3,6 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 import Toybox.System;
 
-var cam as GoProCamera?;
-var mobile as MobileStub?;
-
 
 class GoProRemoteApp extends Application.AppBase {
     private var timerController as TimerController?;
@@ -20,8 +17,6 @@ class GoProRemoteApp extends Application.AppBase {
     function onStart(state as Dictionary?) as Void {
         InterfaceComponentsManager.computeInterfaceConstants();
         InterfaceComponentsManager.loadFonts();
-        cam = new GoProCamera();
-        mobile = new MobileStub();
         timerController = new TimerController();
         viewController = new ViewController(timerController);
     }
@@ -34,7 +29,7 @@ class GoProRemoteApp extends Application.AppBase {
 
     // Return the initial view of your application here
     function getInitialView() {
-        return [ new ConnectView(), new GoProConnectDelegate(viewController, timerController) ];
+        return [ new ConnectView(), new ConnectDelegate(timerController, viewController) ];
     }
 
 }

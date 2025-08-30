@@ -1,7 +1,6 @@
 import Toybox.System;
 import Toybox.Lang;
 import Toybox.WatchUi;
-import Toybox.Timer;
 
 using Toybox.BluetoothLowEnergy as Ble;
 
@@ -63,8 +62,8 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     public function stopScan() as Void {
         if (scanState!=Ble.SCAN_STATE_OFF) {
             Ble.setScanState(Ble.SCAN_STATE_OFF);
-            scanTimer.stop();
-            animTimer.stop();
+            timerController.stop(scanTimer);
+            timerController.stop(animTimer);
 
             statusItem.setLabel("Restart scan");
             cancelItem.setLabel("Exit");

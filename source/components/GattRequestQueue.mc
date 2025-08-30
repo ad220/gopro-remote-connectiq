@@ -23,7 +23,6 @@ class GattRequestQueue {
         request.setCallbacks(method(:sendRequest), method(:onRequestFail));
         queue.add(request);
         if (!isProcessing) {
-            isProcessing = true;
             sendRequest();
         }
     }
@@ -46,11 +45,15 @@ class GattRequestQueue {
         isProcessing = true;
         var request = queue[0];
         var characteristic = service.getCharacteristic(request.getUuid());
-        if (request.getType() == GattRequest.REGISTER_NOTIFICATION) {
-            var descriptor = characteristic.getDescriptor(Ble.cccdUuid());
-            descriptor.requestWrite(request.getData());
-        } else {
-            characteristic.requestWrite(request.getData(), {:writeType => Ble.WRITE_TYPE_DEFAULT});
+        try {
+            if (request.getType() == GattRequest.REGISTER_NOTIFICATION) {
+                var descriptor = characteristic.getDescriptor(Ble.cccdUuid());
+                descriptor.requestWrite(request.getData());
+            } else {
+                characteristic.requestWrite(request.getData(), {:writeType => Ble.WRITE_TYPE_DEFAULT});
+            }
+        } catch (ex) {
+            System.println(ex.getErrorMessage());
         }
         request.startTimer();
     }

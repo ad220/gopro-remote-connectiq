@@ -1,7 +1,6 @@
 import Toybox.Graphics;
 import Toybox.WatchUi;
 import Toybox.Lang;
-import Toybox.Timer;
 
 using InterfaceComponentsManager as ICM;
 

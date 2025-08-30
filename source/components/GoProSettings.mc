@@ -118,19 +118,15 @@ class GoProSettings {
     protected var settings = {} as Dictionary;
 
     function initialize() {
-        settings = {};
+        self.settings = {};
     }
 
-    public function getSetting(id as Number) as Number {
+    public function getSetting(id as Number) as Number? {
         return settings.get(id);
     }
 
     public function getSettings() as Dictionary {
         return settings;
-    }
-
-    public function setSetting(id as Number, value as Number) {
-        settings.put(id, value);
     }
 
     public static function getLabel(settingId as Number, setting as Number) as String{

@@ -21,7 +21,7 @@ class SettingsMenu extends WatchUi.CustomMenu {
     }
 
 
-    public function initialize(menuType as SettingsMenuType, presetId as Number) {
+    public function initialize(menuType as SettingsMenuType, presetId as Number, gopro as GoProCamera?) {
         var title;
         if (menuType == SM_EDIT) {
             title = "GoPro";
@@ -32,13 +32,13 @@ class SettingsMenu extends WatchUi.CustomMenu {
         CustomMenu.initialize((80*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {:title=> new CustomMenuTitle(title)});
         
         if (menuType == SM_EDIT) {
-            CustomMenu.addItem(new SettingsMenuItem(-1, GoProSettings.RESOLUTION));
-            CustomMenu.addItem(new SettingsMenuItem(-1, GoProSettings.RATIO));
-            CustomMenu.addItem(new SettingsMenuItem(-1, GoProSettings.LENS));
-            CustomMenu.addItem(new SettingsMenuItem(-1, GoProSettings.FRAMERATE));
+            CustomMenu.addItem(new SettingsMenuItem(-1, GoProSettings.RESOLUTION, gopro));
+            CustomMenu.addItem(new SettingsMenuItem(-1, GoProSettings.RATIO, gopro));
+            CustomMenu.addItem(new SettingsMenuItem(-1, GoProSettings.LENS, gopro));
+            CustomMenu.addItem(new SettingsMenuItem(-1, GoProSettings.FRAMERATE, gopro));
         } else {
             for (var id=0; id < (menuType==SM_PSETS ? 3 : 5); id++) { // id => presetId
-                CustomMenu.addItem(new SettingsMenuItem(id, -1)); // i => enum Editables
+                CustomMenu.addItem(new SettingsMenuItem(id, -1, null)); // i => enum Editables
             }
         }
     }
@@ -61,14 +61,14 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
     private var gp as GoProPreset?;
 
 
-    public function initialize(presetId, settingId) {
+    public function initialize(presetId, settingId, gopro) {
         self.presetId = presetId;
 
         var itemId;
         if (presetId == -1) {
             itemId = settingId;
             loadResources(SettingsMenu.SM_EDIT, itemId);
-            self.gp = cam;
+            self.gp = gopro;
         } else {
             itemId = presetId;
             loadResources(SettingsMenu.SM_MENU, itemId);
@@ -150,11 +150,14 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
 }
 
 class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
+
     private var menuType as SettingsMenu.SettingsMenuType;
+    private var gopro as GoProCamera;
     private var viewController as ViewController;
 
-    public function initialize(menuType as SettingsMenu.SettingsMenuType, viewController as ViewController) {
+    public function initialize(menuType as SettingsMenu.SettingsMenuType, gopro as GoProCamera, viewController as ViewController) {
         self.menuType = menuType;
+        self.gopro = gopro;
         self.viewController = viewController;
         Menu2InputDelegate.initialize();
     }
@@ -164,19 +167,19 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
         // WARNING: popping view unloads mandatory icons and loads unnecessary ones in simulator while the problem doesn't appear on device and lower (<4.1.7 beta) SDK versions
         // NOTE: issue unseen with SDK 6.3.0 and 7.3.0
         if (menuType == SettingsMenu.SM_EDIT) {
-            viewController.push(new SettingEditMenu(id as GoProSettings.SettingId), new SettingEditDelegate(id as GoProSettings.SettingId, viewController), WatchUi.SLIDE_UP);
+            viewController.push(new SettingEditMenu(id as GoProSettings.SettingId, gopro), new SettingEditDelegate(id as GoProSettings.SettingId, viewController, gopro), WatchUi.SLIDE_UP);
         } else {
             if (id == SettingsMenuItem.CAM) {
-                viewController.switchTo(new SettingsMenu(SettingsMenu.SM_EDIT, id), new SettingsMenuDelegate(SettingsMenu.SM_EDIT, viewController), WatchUi.SLIDE_LEFT);
+                viewController.switchTo(new SettingsMenu(SettingsMenu.SM_EDIT, id, gopro), new SettingsMenuDelegate(SettingsMenu.SM_EDIT, gopro, viewController), WatchUi.SLIDE_LEFT);
             } else if (id == SettingsMenuItem.SAVEP7) {
-                viewController.push(new SettingsMenu(SettingsMenu.SM_PSETS, -1), new SettingsMenuDelegate(SettingsMenu.SM_PSETS, viewController), WatchUi.SLIDE_LEFT);
+                viewController.push(new SettingsMenu(SettingsMenu.SM_PSETS, -1, gopro), new SettingsMenuDelegate(SettingsMenu.SM_PSETS, gopro, viewController), WatchUi.SLIDE_LEFT);
             } else if (menuType == SettingsMenu.SM_PSETS) {
                 (item as SettingsMenuItem).getPreset().save();
                 // Pop two views to remove old preset from menu memory
                 viewController.pop(WatchUi.SLIDE_IMMEDIATE);
                 viewController.pop(WatchUi.SLIDE_DOWN);
             } else {
-                cam.setPreset((item as SettingsMenuItem).getPreset());
+                gopro.sendPreset((item as SettingsMenuItem).getPreset().getSettings());
                 viewController.pop(WatchUi.SLIDE_DOWN);
             }
         }

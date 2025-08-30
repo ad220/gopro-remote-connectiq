@@ -49,16 +49,16 @@ class ConnectView extends WatchUi.View {
 var delegate as GoProDelegate?;
 
 
-class GoProConnectDelegate extends WatchUi.BehaviorDelegate {
-    private var viewController as ViewController;
+class ConnectDelegate extends WatchUi.BehaviorDelegate {
     private var timerController as TimerController;
+    private var viewController as ViewController;
     private var connectingLabel as String;
     private var connectErrorLabel as String;
 
 
-    public function initialize(viewController, timerController) {
-        self.viewController = viewController;
+    public function initialize(timerController, viewController) {
         self.timerController = timerController;
+        self.viewController = viewController;
         self.connectingLabel = WatchUi.loadResource(Rez.Strings.Connecting);
         self.connectErrorLabel = WatchUi.loadResource(Rez.Strings.ConnectFail);
 
@@ -71,7 +71,7 @@ class GoProConnectDelegate extends WatchUi.BehaviorDelegate {
         // viewController.push(new NotifView(connectingLabel, notifView.NOTIF_INFO), new NotifDelegate(), WatchUi.SLIDE_BLINK, false);
         var scanMenu = new WatchUi.Menu2({});
         var menuDelegate = new ScanMenuDelegate(scanMenu, viewController, timerController, method(:onScanResult));
-        delegate = new GoProDelegate(timerController);
+        delegate = new GoProDelegate(timerController, viewController);
         Ble.setDelegate(delegate);
         GattProfileManager.registerProfiles();
         delegate.setScanStateChangeCallback(menuDelegate.method(:setScanState));

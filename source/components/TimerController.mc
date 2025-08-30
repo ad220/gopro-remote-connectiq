@@ -25,7 +25,7 @@ class TimerController {
         return timerCallback;
     }
 
-    public function stop(callback as TimerCallback) {
+    public function stop(callback as TimerCallback?) {
         callbackList.remove(callback);
     }
 
