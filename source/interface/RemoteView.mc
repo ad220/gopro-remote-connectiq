@@ -17,10 +17,6 @@ class RemoteView extends WatchUi.View {
         self.gopro = gopro;
         View.initialize();
     }
-    
-    function onLayout(dc as Dc) as Void {
-        setLayout(Rez.Layouts.MainLayout(dc));
-    }
 
     function onShow() as Void {
         hilightIcon = WatchUi.loadResource(Rez.Drawables.Hilight);
