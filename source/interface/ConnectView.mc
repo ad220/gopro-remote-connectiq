@@ -76,7 +76,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         GattProfileManager.registerProfiles();
         delegate.setScanStateChangeCallback(menuDelegate.method(:setScanState));
         delegate.setScanResultCallback(menuDelegate.method(:onScanResults));
-        Ble.setConnectionStrategy(Ble.CONNECTION_STRATEGY_SECURE_PAIR_BOND);
+        // Ble.setConnectionStrategy(Ble.CONNECTION_STRATEGY_SECURE_PAIR_BOND);
 
         viewController.push(scanMenu, menuDelegate, WatchUi.SLIDE_IMMEDIATE);
         return true;

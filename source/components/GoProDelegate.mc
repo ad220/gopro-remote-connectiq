@@ -42,7 +42,7 @@ class GoProDelegate extends Ble.BleDelegate {
     }
 
     public function onProfileRegister(uuid as Ble.Uuid, status as Ble.Status) as Void {
-        
+        System.println("Profile register, status: "+ status);
     }
 
     public function setScanStateChangeCallback(callback as Method(state as Ble.ScanState) as Void?) as Void {
@@ -85,6 +85,7 @@ class GoProDelegate extends Ble.BleDelegate {
     public function onConnectedStateChanged(device as Ble.Device, state as Ble.ConnectionState) as Void {
         if (device!=null) {
             if (state == Ble.CONNECTION_STATE_CONNECTED) {
+                System.println("Device connected");
                 if (device.isBonded()) {
                     isConnected = true;
                     initiateConnection(device);
@@ -93,8 +94,8 @@ class GoProDelegate extends Ble.BleDelegate {
                     device.requestBond();
                 }                
             } else {
-                isConnected = false;
-                keepAliveTimer.stop();
+                System.println("Device disconnected");
+                onDisconnect();
             }
         } else {
             isConnected = false;
@@ -104,8 +105,11 @@ class GoProDelegate extends Ble.BleDelegate {
     
     public function onEncryptionStatus(device as Ble.Device, status as Ble.Status) as Void {
         if (device!=null and status == Ble.STATUS_SUCCESS) {
-            isConnected = true;
-            initiateConnection(device);
+            if (!isConnected) {
+                System.println("Device bonded");
+                isConnected = true;
+                initiateConnection(device);
+            }
         } else {
             isConnected = false;
             System.println("null device changed encryption status");
@@ -113,44 +117,53 @@ class GoProDelegate extends Ble.BleDelegate {
     }
 
     private function initiateConnection(device as Ble.Device) as Void {
+        System.println("Initiating connection");
+        Ble.setScanState(Ble.SCAN_STATE_OFF);
         var service = device.getService(GattProfileManager.GOPRO_CONTROL_SERVICE);
-        requestQueue = new GattRequestQueue(service, timerController);
+        if (service != null) {
+            requestQueue = new GattRequestQueue(service, timerController);
+        }
         gopro = new GoProCamera(timerController, requestQueue, method(:onDisconnect));
+        
+        requestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.COMMAND_RESPONSE_CHARACTERISTIC, [0x01, 0x00]b);
+        requestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.SETTINGS_RESPONSE_CHARACTERISTIC, [0x01, 0x00]b);
+        requestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.QUERY_RESPONSE_CHARACTERISTIC, [0x01, 0x00]b);
+        requestQueue.add(
+            GattRequest.WRITE_CHARACTERISTIC,
+            GattProfileManager.QUERY_CHARACTERISTIC,
+            [0x05, REGISTER_SETTING, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.LENS, GoProSettings.FLICKER]b
+        );
+        requestQueue.add(
+            GattRequest.WRITE_CHARACTERISTIC,
+            GattProfileManager.QUERY_CHARACTERISTIC,
+            [0x02, REGISTER_STATUS, GoProCamera.ENCODING]b
+        );
+        requestQueue.add(
+            GattRequest.WRITE_CHARACTERISTIC,
+            GattProfileManager.QUERY_CHARACTERISTIC,
+            [0x04, REGISTER_AVAILABLE, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.LENS]b
+        );
 
-        requestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.COMMAND_RESPONSE_CHARACTERISTIC, [1] as ByteArray);
-        requestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.SETTINGS_RESPONSE_CHARACTERISTIC, [1] as ByteArray);
-        requestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.QUERY_RESPONSE_CHARACTERISTIC, [1] as ByteArray);
-        requestQueue.add(
-            GattRequest.WRITE_CHARACTERISTIC,
-            GattProfileManager.QUERY_CHARACTERISTIC,
-            [5, REGISTER_SETTING, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.LENS, GoProSettings.FLICKER] as ByteArray
-        );
-        requestQueue.add(
-            GattRequest.WRITE_CHARACTERISTIC,
-            GattProfileManager.QUERY_CHARACTERISTIC,
-            [2, REGISTER_STATUS, GoProCamera.ENCODING] as ByteArray
-        );
-        requestQueue.add(
-            GattRequest.WRITE_CHARACTERISTIC,
-            GattProfileManager.QUERY_CHARACTERISTIC,
-            [4, REGISTER_AVAILABLE, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.LENS] as ByteArray
-        );
-
-        keepAliveTimer = timerController.start(method(:keepAlive), 10, true);
-        viewController.push(new RemoteView(gopro), new RemoteDelegate(viewController, gopro), WatchUi.SLIDE_LEFT);
+        keepAliveTimer = timerController.start(method(:keepAlive), 8, true);
+        // viewController.push(new RemoteView(gopro), new RemoteDelegate(viewController, gopro), WatchUi.SLIDE_LEFT);
     }
 
     public function keepAlive() as Void {
+        System.println("KeepAlive, isConnected: "+isConnected);
         if (isConnected) {
-            var data = [0x03, 0x5b, 0x01, 0x42];
-            requestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.SETTINGS_CHARACTERISTIC, data as ByteArray);
+            var data = [0x03, 0x5b, 0x01, 0x42]b;
+            requestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.SETTINGS_CHARACTERISTIC, data);
         }
     }
 
     public function onDisconnect() as Void {
-
+        // put camera to sleep and close connection
+        if (isConnected) {
+            requestQueue.close();
+            timerController.stop(keepAliveTimer);
+            viewController.returnHome(null, null);
+        }
     }
-
 
     public function onCharacteristicChanged(characteristic as Ble.Characteristic, value as ByteArray) as Void {
         System.println("Characteristic changed, uuid: " + characteristic.getUuid().toString());
@@ -200,7 +213,7 @@ class GoProDelegate extends Ble.BleDelegate {
         if (status != 0) {
             System.println("Wrong query status received from camera, value: " + status.toNumber());
         }
-
+        System.println("Received TLV message, query: "+queryId+", data: "+data);
         switch (queryId) {
             case REGISTER_SETTING:
             case NOTIF_SETTING:
@@ -209,9 +222,12 @@ class GoProDelegate extends Ble.BleDelegate {
             case REGISTER_STATUS:
             case NOTIF_STATUS:
                 decoder = gopro.method(:onReceiveStatus);
+                break;
             case REGISTER_AVAILABLE:
             case NOTIF_AVAILABLE:
+                gopro.resetAvailableSettings();
                 decoder = gopro.method(:onReceiveAvailable);
+                break;
             default:
                 System.println("Unknown queryId: " + queryId.toNumber());
                 return;
@@ -227,14 +243,19 @@ class GoProDelegate extends Ble.BleDelegate {
             value = data.slice(i+2, i+2+length);
             (decoder as Method(id as Number, value as ByteArray) as Void).invoke(type, value);
         }
+        if (queryId==REGISTER_STATUS) {
+            viewController.push(new RemoteView(gopro), new RemoteDelegate(viewController, gopro), WatchUi.SLIDE_LEFT);
+        } else if (queryId == REGISTER_AVAILABLE or queryId == NOTIF_AVAILABLE) {
+            gopro.applyAvailableSettings();
+        }
         WatchUi.requestUpdate();
     }
 
     public function onCharacteristicWrite(characteristic as Ble.Characteristic, status as Ble.Status) as Void {
-        requestQueue.onRequestProcessed(characteristic.getUuid(), status);
+        requestQueue.onRequestProcessed(GattRequest.WRITE_CHARACTERISTIC, characteristic.getUuid(), status);
     }
 
     public function onDescriptorWrite(descriptor as Ble.Descriptor, status as Ble.Status) as Void {
-        requestQueue.onRequestProcessed(descriptor.getUuid(), status);        
+        requestQueue.onRequestProcessed(GattRequest.REGISTER_NOTIFICATION, descriptor.getUuid(), status);        
     }
 }

@@ -27,24 +27,15 @@ class GattRequestQueue {
         }
     }
 
-    public function onRequestProcessed(uuid as Ble.Uuid, status as Ble.Status) {
-        var request = queue[0];
-        if (request != null and uuid.equals(request.getUuid()) and status==Ble.STATUS_SUCCESS) {
-            queue.remove(queue[0]);
-            if (queue.size()>0) {
-                sendRequest();
-            } else {
-                isProcessing = false;
-            }
-        } else {
-            System.println("Write operation failed or queue is not synchronized");
-        }
-    }
-
     public function sendRequest() as Void {
         isProcessing = true;
         var request = queue[0];
+        if (!(request.getData() instanceof ByteArray)) {
+            System.println("Request data is not a ByteArray: "+request.getData());
+            onRequestProcessed(request.getType(), request.getUuid(), Ble.STATUS_SUCCESS);
+        }
         var characteristic = service.getCharacteristic(request.getUuid());
+        System.println("Sending request");
         try {
             if (request.getType() == GattRequest.REGISTER_NOTIFICATION) {
                 var descriptor = characteristic.getDescriptor(Ble.cccdUuid());
@@ -57,9 +48,34 @@ class GattRequestQueue {
         }
         request.startTimer();
     }
+    
+    public function onRequestProcessed(type as GattRequest.RequestType, uuid as Ble.Uuid, status as Ble.Status) {
+        var request = queue[0];
+        if (request != null and (type==GattRequest.REGISTER_NOTIFICATION or uuid.equals(request.getUuid())) and status==Ble.STATUS_SUCCESS) {
+            System.println("Write op went successfully");
+            request.onResponse();
+            queue = queue.slice(1, queue.size());
+            if (queue.size()>0) {
+                sendRequest();
+            } else {
+                isProcessing = false;
+            }
+        } else {
+            System.println("Write operation failed or queue is not synchronized, status: " + status);
+        }
+    }
 
     public function onRequestFail() as Void {
         System.println("GATT write operation failed");
+    }
+
+    public function close() as Void {
+        while (queue.size()>0) {
+            queue[0].onResponse();
+            queue = queue.slice(1, queue.size());
+        }
+        isProcessing = false;
+        Ble.unpairDevice(service.getDevice());
     }
 }
 
@@ -97,7 +113,7 @@ class GattRequest {
         return uuid;
     }
 
-    public function getData() as ByteArray{
+    public function getData() as ByteArray {
         return data;
     }
 
@@ -130,6 +146,4 @@ class GattRequest {
     public function onResponse() as Void {
         done = true;
     }
-
-
 }

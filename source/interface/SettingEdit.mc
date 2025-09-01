@@ -34,6 +34,7 @@ class SettingEditMenu extends WatchUi.CustomMenu {
 
         var items = gopro.getAvailableSettings(setting);
         var selected = gopro.getSetting(setting);
+        System.println("Available settings: "+items+", selected: "+selected);
         for (var i=0; i<items.size(); i++) {
             CustomMenu.addItem(new SettingEditItem(setting, items[i], selected));
         }

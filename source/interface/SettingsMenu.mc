@@ -108,22 +108,27 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
                 case PSET1:
                     label = WatchUi.loadResource(Rez.Strings.Cinema);
                     icon = WatchUi.loadResource(Rez.Drawables.Cinema);
+                    break;
                 case PSET2:
                     label = WatchUi.loadResource(Rez.Strings.Sport);
                     icon = WatchUi.loadResource(Rez.Drawables.Sport);
+                    break;
                 case PSET3:
                     label = WatchUi.loadResource(Rez.Strings.Eco);
                     icon = WatchUi.loadResource(Rez.Drawables.Eco);
+                    break;
                 case CAM:
                     label = WatchUi.loadResource(Rez.Strings.Manually);
                     icon = WatchUi.loadResource(Rez.Drawables.Camera);
+                    break;
                 case SAVEP7:
                     label = WatchUi.loadResource(Rez.Strings.SaveP7);
                     icon = WatchUi.loadResource(Rez.Drawables.Edit);
+                    break;
                 default:
-                    System.println("Unknown Editable id");
+                    System.println("Unknown Editable id: "+item);
                     throw new Exception();
-            }
+            } 
         } else if (menuType==SettingsMenu.SM_PSETS) {
             System.println("Editable SM_P7 should not be used");
             throw new Exception();
@@ -132,15 +137,19 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
                 case GoProSettings.RESOLUTION:
                     label = WatchUi.loadResource(Rez.Strings.Resolution);
                     icon = WatchUi.loadResource(Rez.Drawables.Resolution);
+                    break;
                 case GoProSettings.RATIO:
                     label = WatchUi.loadResource(Rez.Strings.Ratio);
                     icon = WatchUi.loadResource(Rez.Drawables.Ratio);
+                    break;
                 case GoProSettings.LENS:
                     label = WatchUi.loadResource(Rez.Strings.Lens);
                     icon = WatchUi.loadResource(Rez.Drawables.Lens);
+                    break;
                 case GoProSettings.FRAMERATE:
                     label = WatchUi.loadResource(Rez.Strings.Framerate);
                     icon = WatchUi.loadResource(Rez.Drawables.Framerate);
+                    break;
                 default:
                     System.println("Unknown Setting id");
                     throw new Exception();

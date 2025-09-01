@@ -15,6 +15,7 @@ class GoProRemoteApp extends Application.AppBase {
 
     // onStart() is called on application start up
     function onStart(state as Dictionary?) as Void {
+        System.println("App started");
         InterfaceComponentsManager.computeInterfaceConstants();
         InterfaceComponentsManager.loadFonts();
         timerController = new TimerController();
@@ -23,6 +24,7 @@ class GoProRemoteApp extends Application.AppBase {
 
     // onStop() is called when your application is exiting
     function onStop(state as Dictionary?) as Void {
+        System.println("App stopped");
         viewController.returnHome(null, null);
         timerController.stopAll();
     }

@@ -16,7 +16,7 @@ class GoProPreset extends GoProSettings {
             // Not an exception on every watch, therefore separate initiation below
             System.println(exception.getErrorMessage());
         }
-        if (self.settings.isEmpty()) {
+        if (self.settings==null or self.settings.isEmpty()) {
             // Default presets defined below
             self.settings = [
                 // 4K 16:9, linear, 24fps

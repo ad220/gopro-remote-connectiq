@@ -129,28 +129,33 @@ class GoProSettings {
         return settings;
     }
 
-    public static function getLabel(settingId as Number, setting as Number) as String{
-         switch (settingId) {
-            case RESOLUTION:
-                var resolution = RESOLUTION_MAP.get(setting);
-                if (resolution instanceof Array) {
-                    return RESOLUTION_LABELS.get(resolution[0]);
-                }
-                return "";
-            case LENS:
-                return LENS_LABELS.get(setting);
-            case FRAMERATE:
-                return FRAMERATE_MAP.get(setting) + FRAMERATE_LABEL;
-            case RATIO:
-                var ratio = RESOLUTION_MAP.get(setting);
-                System.println(ratio);
-                if (ratio instanceof Array) {
-                    return RATIO_LABELS.get(ratio[1]);
-                }
-                return "";
-            default:
-                System.println("Unknown setting ID requested for label");
-                return "";
+    public static function getLabel(settingId as Number, setting as Number) as String {
+        // System.println("getLabel => settingId: "+settingId+", setting: "+setting);
+        try {
+            switch (settingId) {
+                case RESOLUTION:
+                    var resolution = RESOLUTION_MAP.get(setting);
+                    if (resolution instanceof Array) {
+                        return RESOLUTION_LABELS.get(resolution[0]);
+                    }
+                    return "";
+                case LENS:
+                    return LENS_LABELS.get(setting);
+                case FRAMERATE:
+                    return FRAMERATE_MAP.get(setting) + FRAMERATE_LABEL;
+                case RATIO:
+                    var ratio = RESOLUTION_MAP.get(setting);
+                    if (ratio instanceof Array) {
+                        return RATIO_LABELS.get(ratio[1]);
+                    }
+                    return "";
+                default:
+                    System.println("Unknown setting ID requested for label");
+                    return "";
+            }
+        } catch (ex) {
+            System.println("Error while retrieving setting label");
+            return "...";
         }
     }
 
