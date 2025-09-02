@@ -20,13 +20,13 @@ class GoProCamera extends GoProSettings {
         KEEP_ALIVE  = 0x5B,
     }
 
-    private var timer;
+    protected var timer;
     private var goproRequestQueue;
-    private var disconnectCallback;
-    private var statuses as Dictionary;
-    private var availableSettings as Dictionary;
+    protected var disconnectCallback;
+    protected var statuses as Dictionary;
+    protected var availableSettings as Dictionary;
     private var tmpAvailableSettings as Dictionary;
-    private var progressTimer as TimerCallback?;
+    protected var progressTimer as TimerCallback?;
 
 
     public function initialize(timer as TimerController, requestQueue as GattRequestQueue, disconnectCallback as Method() as Void) {
@@ -63,7 +63,6 @@ class GoProCamera extends GoProSettings {
                 request.addAll([keys[i], 0x01, preset.get(keys[i])]);
             }
         }
-        settings = preset;
         request[0] = request.size()-1;
         goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.SETTINGS_CHARACTERISTIC, request);        
     }

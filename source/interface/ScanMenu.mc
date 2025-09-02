@@ -29,10 +29,10 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     private var scanState as Ble.ScanState?;
     private var scanTimer as TimerCallback?;
     private var animTimer as TimerCallback?;
-    private var scanResultCallback as Method(device as Ble.ScanResult) as Void;
+    private var scanResultCallback as Method(device as Ble.ScanResult?) as Void;
 
 
-    public function initialize(menu as Menu2, viewController as ViewController, timerController as TimerController, callback as Method(device as Ble.ScanResult) as Void) {
+    public function initialize(menu as Menu2, viewController as ViewController, timerController as TimerController, callback as Method(device as Ble.ScanResult?) as Void) {
         Menu2InputDelegate.initialize();
         self.menu = menu;
         self.viewController = viewController;

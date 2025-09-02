@@ -6,9 +6,9 @@ using Toybox.BluetoothLowEnergy as Ble;
 class GattRequestQueue {
 
     private var service as Ble.Service;
-    private var timer as TimerController;
-    private var queue as Array<GattRequest>;
-    private var isProcessing as Boolean;
+    protected var timer as TimerController;
+    protected var queue as Array<GattRequest>;
+    protected var isProcessing as Boolean;
 
 
     public function initialize(service as Ble.Service, timer as TimerController) {

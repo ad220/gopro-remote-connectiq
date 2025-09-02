@@ -20,15 +20,15 @@ class GoProDelegate extends Ble.BleDelegate {
         NOTIF_AVAILABLE         = 0xA2,
     }
 
-    private var timerController as TimerController;
-    private var viewController as ViewController;
-    private var isConnected as Boolean;
+    protected var timerController as TimerController;
+    protected var viewController as ViewController;
+    protected var isConnected as Boolean;
 
     private var scanStateChangeCallback as Method(state as Ble.ScanState) as Void?;
     private var scanResultCallback as Method(scanResults as [Ble.ScanResult]) as Void?;
 
-    private var gopro as GoProCamera?;
-    private var requestQueue as GattRequestQueue?;
+    protected var gopro as GoProCamera?;
+    protected var requestQueue as GattRequestQueue?;
 
     private var queryReplyLength as Number?;
     private var queryReplyBuffer as ByteArray?;
@@ -80,6 +80,10 @@ class GoProDelegate extends Ble.BleDelegate {
         } else {
             System.println("scanResultCallback is null");
         }
+    }
+
+    public function pair(device as Ble.ScanResult?) as Void {
+        Ble.pairDevice(device);
     }
 
     public function onConnectedStateChanged(device as Ble.Device, state as Ble.ConnectionState) as Void {
@@ -183,7 +187,7 @@ class GoProDelegate extends Ble.BleDelegate {
         }
     }
 
-    private function decodeQuery(response as ByteArray) as Void {
+    protected function decodeQuery(response as ByteArray) as Void {
         if (response[0] & 0xe0 == 0x00) { // 5-bit length packets
             readTLVMessage(response.slice(1, null));
         } else if (response[0] & 0xe0 == 0x20) { // 13-bit length packet

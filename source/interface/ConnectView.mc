@@ -71,22 +71,23 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         // viewController.push(new NotifView(connectingLabel, notifView.NOTIF_INFO), new NotifDelegate(), WatchUi.SLIDE_BLINK, false);
         var scanMenu = new WatchUi.Menu2({});
         var menuDelegate = new ScanMenuDelegate(scanMenu, viewController, timerController, method(:onScanResult));
-        delegate = new GoProDelegate(timerController, viewController);
+        delegate = new GoProDelegateStub(timerController, viewController);
         Ble.setDelegate(delegate);
         GattProfileManager.registerProfiles();
         delegate.setScanStateChangeCallback(menuDelegate.method(:setScanState));
         delegate.setScanResultCallback(menuDelegate.method(:onScanResults));
         // Ble.setConnectionStrategy(Ble.CONNECTION_STRATEGY_SECURE_PAIR_BOND);
 
-        viewController.push(scanMenu, menuDelegate, WatchUi.SLIDE_IMMEDIATE);
+        // viewController.push(scanMenu, menuDelegate, WatchUi.SLIDE_IMMEDIATE);
+        onScanResult(null);
         return true;
     }
 
-    public function onScanResult(device as Ble.ScanResult) as Void {
+    public function onScanResult(device as Ble.ScanResult?) as Void {
         delegate.setScanStateChangeCallback(null);
         delegate.setScanResultCallback(null);
         Ble.setScanState(Ble.SCAN_STATE_SCANNING);
-        Ble.pairDevice(device);
+        delegate.pair(device);
         viewController.push(new NotifView(connectingLabel, NotifView.NOTIF_INFO), new NotifDelegate(), WatchUi.SLIDE_DOWN);
     }
 }
