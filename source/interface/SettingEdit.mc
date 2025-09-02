@@ -13,18 +13,25 @@ class SettingEditMenu extends WatchUi.CustomMenu {
         self.gopro = gopro;
 
         var title;
+        var items = gopro.getAvailableSettings(setting);
+        var selected = gopro.getSetting(setting);
         switch (setting) {
             case GoProSettings.RESOLUTION:
                 title = WatchUi.loadResource(Rez.Strings.Resolution);
+                items.sort(new ResolutionComparator() as Lang.Comparator);
                 break;
             case GoProSettings.RATIO:
                 title = WatchUi.loadResource(Rez.Strings.Ratio);
+                System.println(items);
+                items.sort(new ResolutionComparator() as Lang.Comparator);
                 break;
             case GoProSettings.LENS:
                 title = WatchUi.loadResource(Rez.Strings.Lens);
+                items.sort(new LensComparator() as Lang.Comparator);
                 break;
             case GoProSettings.FRAMERATE:
                 title = WatchUi.loadResource(Rez.Strings.Framerate);
+                items.sort(new FramerateComparator() as Lang.Comparator);
                 break;
             default:
                 System.println("Unknown Setting id");
@@ -32,11 +39,9 @@ class SettingEditMenu extends WatchUi.CustomMenu {
         }
         CustomMenu.initialize((70*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {:title=> new $.CustomMenuTitle(title)});
 
-        var items = gopro.getAvailableSettings(setting);
-        var selected = gopro.getSetting(setting);
         System.println("Available settings: "+items+", selected: "+selected);
         for (var i=0; i<items.size(); i++) {
-            CustomMenu.addItem(new SettingEditItem(setting, items[i], selected));
+            CustomMenu.addItem(new SettingEditItem(setting, items[i] as Char, selected));
         }
     }
 }
@@ -44,13 +49,13 @@ class SettingEditMenu extends WatchUi.CustomMenu {
 
 class SettingEditItem extends WatchUi.CustomMenuItem {
 
-    private static var selected as Number;
+    private static var selected as Char;
 
-    private var id as Number;
+    private var id as Char;
     private var label as String;
 
 
-    public function initialize(setting as GoProSettings.SettingId, id as Number, selected as Number) {
+    public function initialize(setting as GoProSettings.SettingId, id as Char, selected as Char) {
         self.selected = selected;
 
         self.id = id;
@@ -96,7 +101,11 @@ class SettingEditDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     public function onSelect(item) {
-        gopro.sendSetting(setting, item.getId() as Number);
+        if (setting == GoProSettings.RATIO) {
+            gopro.sendSetting(GoProSettings.RESOLUTION, item.getId() as Char);
+        } else {
+            gopro.sendSetting(setting, item.getId() as Char);
+        }
         (item as SettingEditItem).select();
         WatchUi.requestUpdate();
     }

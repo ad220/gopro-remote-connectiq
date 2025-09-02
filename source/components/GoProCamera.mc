@@ -25,6 +25,7 @@ class GoProCamera extends GoProSettings {
     protected var disconnectCallback;
     protected var statuses as Dictionary;
     protected var availableSettings as Dictionary;
+    private var availableRatios as Dictionary;
     private var tmpAvailableSettings as Dictionary;
     protected var progressTimer as TimerCallback?;
 
@@ -37,11 +38,12 @@ class GoProCamera extends GoProSettings {
         self.disconnectCallback = disconnectCallback;
         self.statuses = {};
         self.availableSettings = {};
+        self.availableRatios = {};
         self.tmpAvailableSettings = {};
     }
 
     public function sendCommand(command as CommandId) as Void {
-        var request = [0xFF, command as Number]b;
+        var request = [0xFF, command as Char]b;
         if (command==SHUTTER) {
             request.addAll([0x01, isRecording() ? 0x00 : 0x01]);
         }
@@ -49,8 +51,8 @@ class GoProCamera extends GoProSettings {
         goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.COMMAND_CHARACTERISTIC, request);
     }
 
-    public function sendSetting(id as GoProSettings.SettingId, value as Number) as Void {
-        var request = [0x03, id as Number, 0x01, value]b;
+    public function sendSetting(id as GoProSettings.SettingId, value as Char) as Void {
+        var request = [0x03, id as Char, 0x01, value]b;
         settings.put(id, value);
         goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.SETTINGS_CHARACTERISTIC, request);
     }
@@ -59,7 +61,7 @@ class GoProCamera extends GoProSettings {
         var request = [0xff]b;
         var keys = preset.keys();
         for (var i=0; i<keys.size(); i++) {
-            if (settings.get(keys[i]) != preset.get(keys[i])) {
+            if (settings.get(keys[i]) != preset.get(keys[i]) and keys[i]!=RATIO) {
                 request.addAll([keys[i], 0x01, preset.get(keys[i])]);
             }
         }
@@ -67,14 +69,18 @@ class GoProCamera extends GoProSettings {
         goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.SETTINGS_CHARACTERISTIC, request);        
     }
 
-    public function onReceiveSetting(id as Number, value as ByteArray) as Void {
+    public function onReceiveSetting(id as Char, value as ByteArray) as Void {
         settings.put(id, value[0]);
         if (id==RESOLUTION) {
             settings.put(RATIO, value[0]);
+            if (availableRatios!={}) {
+                availableSettings.put(RATIO, availableRatios.get((RESOLUTION_MAP.get(settings.get(RESOLUTION)) as Array)[0]));
+                System.println("set available ratios: "+availableSettings.get(RATIO));
+            }
         }
     }
 
-    public function onReceiveStatus(id as Number, value as ByteArray) as Void {
+    public function onReceiveStatus(id as Char, value as ByteArray) as Void {
         if (id==ENCODING) {
             if (value[0]==1) {
                 var request = [0x02, GoProDelegate.GET_STATUS, ENCODING_DURATION]b;
@@ -94,10 +100,10 @@ class GoProCamera extends GoProSettings {
         if (statuses[ENCODING]==null) {statuses[ENCODING] = 0;}
     }
 
-    public function onReceiveAvailable(id as Number, value as ByteArray) as Void {
-        var bytes = tmpAvailableSettings.get(id);
-        if (bytes instanceof ByteArray) {
-            bytes.add(value[0]);
+    public function onReceiveAvailable(id as Char, value as ByteArray) as Void {
+        var available = tmpAvailableSettings.get(id);
+        if (available instanceof Array) {
+            available.add(value[0]);
         }
     }
 
@@ -105,18 +111,17 @@ class GoProCamera extends GoProSettings {
         return statuses.get(id);
     }
 
-    public function getAvailableSettings(id as GoProSettings.SettingId) as ByteArray? {
+    public function getAvailableSettings(id as GoProSettings.SettingId) as Array? {
         return availableSettings.get(id);
     }
 
     public function resetAvailableSettings() as Void {
         tmpAvailableSettings = {
-            RESOLUTION  => []b,
-            LENS        => []b,
-            FRAMERATE   => []b,
-            FLICKER     => []b,
+            RESOLUTION  => [],
+            LENS        => [],
+            FRAMERATE   => [],
+            FLICKER     => [],
         };
-        tmpAvailableSettings.put(RATIO, availableSettings.get(RESOLUTION));
     }
 
     public function applyAvailableSettings() as Void {
@@ -124,10 +129,36 @@ class GoProCamera extends GoProSettings {
         var tmpValues;
         for (var i=0; i<tmpKeys.size(); i++) {
             tmpValues = tmpAvailableSettings.get(tmpKeys[i]);
-            if (tmpValues instanceof ByteArray and !tmpValues.equals([]b)) {
-                availableSettings.put(tmpKeys[i], tmpValues);
+            if (tmpValues instanceof Array and tmpValues.size()>0) {
+                if (tmpKeys[i]==RESOLUTION) {
+                    availableRatios = {};
+                    tmpValues.sort(new ResolutionComparator() as Lang.Comparator);
+                    var currentRes = -1;
+                    var currentMap = [];
+                    var availableResolutions = [];
+                    for (var j=0; j<tmpValues.size(); j++) {
+                        if (currentRes==(RESOLUTION_MAP.get(tmpValues[j]) as Array)[0]) {
+                            currentMap.add(tmpValues[j]);
+                        } else {
+                            currentRes=(RESOLUTION_MAP.get(tmpValues[j]) as Array)[0];
+                            currentMap = [tmpValues[j]];
+                            availableRatios.put(currentRes, currentMap);
+                            availableResolutions.add(tmpValues[j]);
+                        }
+                    }
+                    System.println("available res: "+availableResolutions+"");
+                    availableSettings.put(RESOLUTION, availableResolutions);
+                    var res = settings.get(RESOLUTION);
+                    if (res != null) {
+                        availableSettings.put(RATIO, availableRatios.get((RESOLUTION_MAP.get(res) as Array)[0]));
+                    }
+                } else {
+                    availableSettings.put(tmpKeys[i], tmpValues);
+                }
             }
         }
+        System.println("available settings: "+availableSettings);
+        System.println("availanle ratios: "+availableRatios);
         resetAvailableSettings();
     }
 
@@ -136,11 +167,8 @@ class GoProCamera extends GoProSettings {
     }
 
     public function incrementEncodingDuration() as Void {
-        System.println("incr");
         if (isRecording()) {
-            System.println(statuses.get(ENCODING_DURATION));
             statuses[ENCODING_DURATION]++;
-            System.println(statuses.get(ENCODING_DURATION));
             WatchUi.requestUpdate();
         }
     }

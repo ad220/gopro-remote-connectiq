@@ -22,7 +22,7 @@ class GoProSettings {
         12  => [:_720, :_16R9],
         18  => [:_4K, :_4R3],
         24  => [:_5K, :_16R9],
-        25  => [:_5, :_4R3],
+        25  => [:_5K, :_4R3],
         26  => [:_5K3, :_8R7],
         27  => [:_5K3, :_4R3],
         28  => [:_4K, :_8R7],
@@ -38,6 +38,33 @@ class GoProSettings {
         111 => [:_2K7, :_4R3],
         112 => [:_4K, :_4R3],
         113 => [:_5K3, :_4R3],
+    };
+
+    public static const RESOLUTION_SORT_MAP = {
+        26  => 0,   // 5K3, 8R7
+        107 => 1,   // 5K3, 8R7
+        27  => 2,   // 5K3, 4R3
+        113 => 3,   // 5K3, 4R3
+        100 => 4,   // 5K3, 16R9
+        35  => 5,   // 5K3, 21R9
+        25  => 6,   // 5K, 4R3
+        24  => 7,   // 5K, 16R9
+        37  => 8,   // 4K, 1R1
+        28  => 9,   // 4K, 8R7
+        108 => 10,  // 4K, 8R7
+        18  => 11,  // 4K, 4R3
+        112 => 12,  // 4K, 4R3
+        1   => 13,  // 4K, 16R9
+        109 => 14,  // 4K, 9R16
+        36  => 15,  // 4K, 21R9
+        6   => 16,  // 2K7, 4R3
+        111 => 17,  // 2K7, 4R3
+        4   => 18,  // 2K7, 16R9
+        7   => 19,  // 1440, 16R9
+        9   => 20,  // 1080, 16R9
+        110 => 21,  // 1080, 9R16
+        38  => 22,  // 900, 16R9
+        12  => 23,  // 720, 16R9
     };
 
     public static const RESOLUTION_LABELS = {
@@ -121,7 +148,7 @@ class GoProSettings {
         self.settings = {};
     }
 
-    public function getSetting(id as Number) as Number? {
+    public function getSetting(id as SettingId) as Char? {
         return settings.get(id);
     }
 
@@ -129,7 +156,7 @@ class GoProSettings {
         return settings;
     }
 
-    public static function getLabel(settingId as Number, setting as Number) as String {
+    public static function getLabel(settingId as GoProSettings.SettingId, setting as Char) as String {
         // System.println("getLabel => settingId: "+settingId+", setting: "+setting);
         try {
             switch (settingId) {
@@ -172,5 +199,23 @@ class GoProSettings {
 
     public function save() {
         // Implemented in subclasses
+    }
+}
+
+class ResolutionComparator {
+    public function compare(resolutionA as Char, resolutionB as Char) as Number {
+        return GoProSettings.RESOLUTION_SORT_MAP.get(resolutionA) as Number - GoProSettings.RESOLUTION_SORT_MAP.get(resolutionB) as Number;
+    }
+}
+
+class LensComparator {
+    public function compare(lensA as Char, lensB as Char) as Number {
+        return (GoProSettings.LENS_LABELS.get(lensA) as String).compareTo(GoProSettings.LENS_LABELS.get(lensB) as String);
+    }
+}
+
+class FramerateComparator {
+    public function compare(framerateA as Char, framerateB as Char) {
+        return GoProSettings.FRAMERATE_MAP.get(framerateA) as Number - GoProSettings.FRAMERATE_MAP.get(framerateB) as Number;
     }
 }

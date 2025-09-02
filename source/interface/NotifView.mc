@@ -13,7 +13,7 @@ class NotifView extends WatchUi.View{
     }
 
     private var message as String;
-    private var type as Number;
+    private var type as NotifType;
 
 
     function initialize(message as String, type as NotifType) {

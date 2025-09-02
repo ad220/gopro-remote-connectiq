@@ -81,7 +81,7 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
         var m_halfW = dc.getWidth()/2;
         var m_halfH = dc.getHeight()/2;
         var isEdit = (presetId == -1);
-        var id = getId() as Number;
+        var id = getId() as GoProSettings.SettingId;
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.fillRoundedRectangle(m_halfW-100*ICM.kMult, m_halfH-30*ICM.kMult, 200*ICM.kMult, 60*ICM.kMult, 30*ICM.kMult);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);

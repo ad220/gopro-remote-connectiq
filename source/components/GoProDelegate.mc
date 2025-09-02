@@ -242,10 +242,10 @@ class GoProDelegate extends Ble.BleDelegate {
         var value;
 
         for (var i=0; i<data.size(); i+=2+length) {
-            type = data[i];
+            type = data[i] as Char;
             length = data[i+1];
             value = data.slice(i+2, i+2+length);
-            (decoder as Method(id as Number, value as ByteArray) as Void).invoke(type, value);
+            (decoder as Method(id as Char, value as ByteArray) as Void).invoke(type, value);
         }
         if (queryId==REGISTER_STATUS) {
             viewController.push(new RemoteView(gopro), new RemoteDelegate(viewController, gopro), WatchUi.SLIDE_LEFT);
