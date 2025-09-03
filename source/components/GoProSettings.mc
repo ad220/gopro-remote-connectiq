@@ -157,7 +157,6 @@ class GoProSettings {
     }
 
     public static function getLabel(settingId as GoProSettings.SettingId, setting as Char) as String {
-        // System.println("getLabel => settingId: "+settingId+", setting: "+setting);
         try {
             switch (settingId) {
                 case RESOLUTION:
@@ -187,14 +186,12 @@ class GoProSettings {
     }
 
     public function getDescription() as String {
-        try {
-            return getLabel(RESOLUTION, settings.get(RESOLUTION)) \
-                    + "@" + FRAMERATE_MAP.get(settings.get(FRAMERATE)) \
-                    + " " + getLabel(RATIO, settings.get(RATIO));
-        } catch (ex) {
-            System.println(ex.getErrorMessage());
+        if (settings.isEmpty()) {
             return "...";
         }
+        return getLabel(RESOLUTION, settings.get(RESOLUTION)) \
+                + "@" + FRAMERATE_MAP.get(settings.get(FRAMERATE)) \
+                + " " + getLabel(RATIO, settings.get(RATIO));
     }
 
     public function save() {

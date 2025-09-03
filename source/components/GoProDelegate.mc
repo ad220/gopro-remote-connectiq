@@ -149,7 +149,7 @@ class GoProDelegate extends Ble.BleDelegate {
         );
 
         keepAliveTimer = timerController.start(method(:keepAlive), 8, true);
-        // viewController.push(new RemoteView(gopro), new RemoteDelegate(viewController, gopro), WatchUi.SLIDE_LEFT);
+        viewController.push(new RemoteView(gopro), new RemoteDelegate(viewController, gopro), WatchUi.SLIDE_LEFT);
     }
 
     public function keepAlive() as Void {
@@ -247,9 +247,7 @@ class GoProDelegate extends Ble.BleDelegate {
             value = data.slice(i+2, i+2+length);
             (decoder as Method(id as Char, value as ByteArray) as Void).invoke(type, value);
         }
-        if (queryId==REGISTER_STATUS) {
-            viewController.push(new RemoteView(gopro), new RemoteDelegate(viewController, gopro), WatchUi.SLIDE_LEFT);
-        } else if (queryId == REGISTER_AVAILABLE or queryId == NOTIF_AVAILABLE) {
+        if (queryId == REGISTER_AVAILABLE or queryId == NOTIF_AVAILABLE) {
             gopro.applyAvailableSettings();
         }
         WatchUi.requestUpdate();

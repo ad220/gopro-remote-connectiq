@@ -288,6 +288,7 @@ using Toybox.BluetoothLowEnergy as Ble;
             GattProfileManager.QUERY_CHARACTERISTIC,
             [0x04, REGISTER_AVAILABLE, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.LENS]b
         );
+        viewController.push(new RemoteView(gopro), new RemoteDelegate(viewController, gopro), WatchUi.SLIDE_LEFT);
     }
 
     
