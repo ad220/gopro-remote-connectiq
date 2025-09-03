@@ -193,10 +193,6 @@ class GoProSettings {
                 + "@" + FRAMERATE_MAP.get(settings.get(FRAMERATE)) \
                 + " " + getLabel(RATIO, settings.get(RATIO));
     }
-
-    public function save() {
-        // Implemented in subclasses
-    }
 }
 
 class ResolutionComparator {

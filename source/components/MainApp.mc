@@ -35,7 +35,3 @@ class GoProRemoteApp extends Application.AppBase {
     }
 
 }
-
-function getApp() as GoProRemoteApp {
-    return Application.getApp() as GoProRemoteApp;
-}
