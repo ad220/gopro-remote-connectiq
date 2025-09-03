@@ -7,10 +7,7 @@ using InterfaceComponentsManager as ICM;
 
 class SettingEditMenu extends WatchUi.CustomMenu {
 
-    private var gopro;
-
     public function initialize(setting as GoProSettings.SettingId, gopro as GoProCamera) {
-        self.gopro = gopro;
 
         var title;
         var items = gopro.getAvailableSettings(setting);
@@ -101,11 +98,7 @@ class SettingEditDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     public function onSelect(item) {
-        if (setting == GoProSettings.RATIO) {
-            gopro.sendSetting(GoProSettings.RESOLUTION, item.getId() as Char);
-        } else {
-            gopro.sendSetting(setting, item.getId() as Char);
-        }
+        gopro.sendSetting(setting==GoProSettings.RATIO ? GoProSettings.RESOLUTION : setting, item.getId() as Char);
         (item as SettingEditItem).select();
         WatchUi.requestUpdate();
     }

@@ -83,17 +83,14 @@ class RemoteView extends WatchUi.View {
 class RemoteDelegate extends WatchUi.BehaviorDelegate {
     private var viewController as ViewController;
     private var gopro as GoProCamera;
-    private var actionIsSelect as Boolean;
 
     public function initialize(viewController as ViewController, gopro as GoProCamera) {
         self.viewController = viewController;
         self.gopro = gopro;
-        self.actionIsSelect = false;
         BehaviorDelegate.initialize();
     }
 
     public function onTap(tap as ClickEvent) as Boolean {
-        actionIsSelect = false;
         var coord = tap.getCoordinates();
         if (coord[0]<ICM.halfW+75*ICM.kMult and coord[0]>ICM.halfW-35*ICM.kMult and coord[1]<ICM.halfH+25*ICM.kMult and coord[1]>ICM.halfH-75*ICM.kMult) {
             gopro.sendCommand(GoProCamera.SHUTTER);
@@ -118,7 +115,8 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
 
     public function onMenu() as Boolean {
         if (!gopro.isRecording()) {
-            viewController.push(new SettingsMenu(SettingsMenu.SM_MENU, -1, gopro), new SettingsMenuDelegate(SettingsMenu.SM_MENU, gopro, viewController), WatchUi.SLIDE_UP);
+            var menu = new CustomMenu((80*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {});
+            viewController.push(menu, new SettingsMenuDelegate(menu, SettingsMenuItem.MAIN, gopro, [], viewController), WatchUi.SLIDE_UP);
             return true;
         }
         return false;

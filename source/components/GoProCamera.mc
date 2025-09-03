@@ -57,12 +57,13 @@ class GoProCamera extends GoProSettings {
         goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.SETTINGS_CHARACTERISTIC, request);
     }
 
-    public function sendPreset(preset as Dictionary) as Void {
+    public function sendPreset(preset as GoProPreset) as Void {
         var request = [0xff]b;
-        var keys = preset.keys();
+        var presetSettings = preset.getSettings();
+        var keys = presetSettings.keys();
         for (var i=0; i<keys.size(); i++) {
-            if (settings.get(keys[i]) != preset.get(keys[i]) and keys[i]!=RATIO) {
-                request.addAll([keys[i], 0x01, preset.get(keys[i])]);
+            if (settings.get(keys[i]) != presetSettings.get(keys[i]) and keys[i]!=RATIO) {
+                request.addAll([keys[i], 0x01, presetSettings.get(keys[i])]);
             }
         }
         request[0] = request.size()-1;
