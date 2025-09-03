@@ -92,42 +92,43 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
         BehaviorDelegate.initialize();
     }
 
-    public function onTap(tap as ClickEvent) {
+    public function onTap(tap as ClickEvent) as Boolean {
         actionIsSelect = false;
         var coord = tap.getCoordinates();
         if (coord[0]<ICM.halfW+75*ICM.kMult and coord[0]>ICM.halfW-35*ICM.kMult and coord[1]<ICM.halfH+25*ICM.kMult and coord[1]>ICM.halfH-75*ICM.kMult) {
             gopro.sendCommand(GoProCamera.SHUTTER);
         } else if (gopro.isRecording() and coord[0]<ICM.halfW-45*ICM.kMult and coord[0]>ICM.halfW-100*ICM.kMult and coord[1]<ICM.halfH+5*ICM.kMult and coord[1]>ICM.halfH-55*ICM.kMult) {
             gopro.sendCommand(GoProCamera.HILIGHT);
-        } else if (!gopro.isRecording() and coord[0]<ICM.halfW+80*ICM.kMult and coord[0]>ICM.halfW-80*ICM.kMult and coord[1]<ICM.halfH+100*ICM.kMult and coord[1]>ICM.halfH+40*ICM.kMult) {
+        } else if (coord[0]<ICM.halfW+80*ICM.kMult and coord[0]>ICM.halfW-80*ICM.kMult and coord[1]<ICM.halfH+100*ICM.kMult and coord[1]>ICM.halfH+40*ICM.kMult) {
             return onMenu();
         }
         return true;
     }
 
-    public function onSelect() {
-        actionIsSelect = true;
+    public function onKeyPressed(keyEvent as WatchUi.KeyEvent) as Boolean {
+        if (keyEvent.getKey()==WatchUi.KEY_ENTER) {
+            gopro.sendCommand(GoProCamera.SHUTTER);
+            return true;
+        } else if (keyEvent.getKey()==WatchUi.KEY_UP and gopro.isRecording()) {
+            gopro.sendCommand(GoProCamera.HILIGHT);
+            return true;
+        }
         return false;
     }
 
-    public function onKeyPressed(keyEvent) {
-        if (actionIsSelect) {
-            actionIsSelect = false;
-            gopro.sendCommand(GoProCamera.SHUTTER);
+    public function onMenu() as Boolean {
+        if (!gopro.isRecording()) {
+            viewController.push(new SettingsMenu(SettingsMenu.SM_MENU, -1, gopro), new SettingsMenuDelegate(SettingsMenu.SM_MENU, gopro, viewController), WatchUi.SLIDE_UP);
+            return true;
         }
-        return true;
+        return false;
     }
 
-    public function onMenu() {
-        viewController.push(new SettingsMenu(SettingsMenu.SM_MENU, -1, gopro), new SettingsMenuDelegate(SettingsMenu.SM_MENU, gopro, viewController), WatchUi.SLIDE_UP);
-        return true;
-    }
-
-    public function onNextPage() {
+    public function onNextPage() as Boolean {
         return onMenu();
     }
 
-    public function onBack() {
+    public function onBack() as Boolean {
         gopro.disconnect();
         viewController.pop(WatchUi.SLIDE_DOWN);
         return true;

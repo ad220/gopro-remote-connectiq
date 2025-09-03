@@ -38,6 +38,7 @@ class ViewController {
     public function pop(slide as WatchUi.SlideType) as Void {
         if (currentDelegate instanceof NotifDelegate) {
             currentDelegate.pop();
+            currentDelegate = null;
         } else if (viewLayersCount > 0) {
             currentDelegate = null;
             WatchUi.popView(slide);

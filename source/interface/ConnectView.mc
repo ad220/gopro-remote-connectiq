@@ -66,9 +66,6 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onSelect() {
-        // mobile.connect();
-        // mobile.send([MobileDevice.COM_CONNECT, 0]);
-        // viewController.push(new NotifView(connectingLabel, notifView.NOTIF_INFO), new NotifDelegate(), WatchUi.SLIDE_BLINK, false);
         var scanMenu = new WatchUi.Menu2({});
         var menuDelegate = new ScanMenuDelegate(scanMenu, viewController, timerController, method(:onScanResult));
         delegate = new GoProDelegateStub(timerController, viewController);
@@ -87,7 +84,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         delegate.setScanStateChangeCallback(null);
         delegate.setScanResultCallback(null);
         Ble.setScanState(Ble.SCAN_STATE_SCANNING);
-        delegate.pair(device);
         viewController.push(new NotifView(connectingLabel, NotifView.NOTIF_INFO), new NotifDelegate(), WatchUi.SLIDE_DOWN);
+        delegate.pair(device);
     }
 }
