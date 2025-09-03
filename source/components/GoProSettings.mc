@@ -209,6 +209,6 @@ class LensComparator {
 
 class FramerateComparator {
     public function compare(framerateA as Char, framerateB as Char) {
-        return GoProSettings.FRAMERATE_MAP.get(framerateA) as Number - GoProSettings.FRAMERATE_MAP.get(framerateB) as Number;
+        return GoProSettings.FRAMERATE_MAP.get(framerateB) as Number - GoProSettings.FRAMERATE_MAP.get(framerateA) as Number;
     }
 }
