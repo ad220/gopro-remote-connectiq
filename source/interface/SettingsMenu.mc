@@ -93,7 +93,7 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
                     throw new Exception();
             } 
         } else if (menuId==PRESET) {
-            System.println("Editable SM_P7 should not be used");
+            System.println("SettingsItemId PRESET should not be used to loadResources");
             throw new Exception();
         } else {
             switch (item as GoProSettings.SettingId) {
@@ -136,7 +136,7 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
         self.items = items;
         self.viewController = viewController;
 
-        var title = menuId == SettingsMenuItem.CAMERA ? "GoPro" : WatchUi.loadResource(Rez.Strings.Settings);
+        var title = menuId == SettingsMenuItem.CAMERA ? WatchUi.loadResource(Rez.Strings.GoPro) : WatchUi.loadResource(Rez.Strings.Settings);
         menu.setTitle(new OptionPickerTitle(title));
         
         if (menuId != SettingsMenuItem.CAMERA) {

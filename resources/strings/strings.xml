@@ -1,12 +1,30 @@
 <strings>
-    <string id="AppName" translatable="false">GoProRemote</string>
+    <string id="AppName">GoPro Remote</string>
+    <string id="GoPro" translatable="false">GoPro</string>
+
+    <!-- GoPro Models -->
+    <string id="GP55" translatable="false">HERO9 Black</string>
+    <string id="GP57" translatable="false">HERO10 Black</string>
+    <string id="GP58" translatable="false">HERO11 Black</string>
+    <string id="GP60" translatable="false">HERO11 Black Mini</string>
+    <string id="GP62" translatable="false">HERO12 Black</string>
+    <string id="GP65" translatable="false">HERO13 Black</string>
+    <string id="GPFF">Unknown GoPro Model</string>
+
+    <!-- ScanMenu -->
+    <string id="ScanTitle">Scanning\nfor GoPros...</string>
+    <string id="ScanCancel">Cancel scan</string>
+    <string id="ScanRestart">Restart scan</string>
+    <string id="Exit">Exit</string>
+    <string id="DevicesFound"> devices\nfound</string>
 
     <!-- ConnectView -->
+    <string id="Scan">SCAN</string>
     <string id="Connect">CONNECT</string>
-    <string id="Connecting">Connecting to GoPro ...</string>
+    <string id="Connecting">Connecting to GoPro...</string>
     <string id="ConnectFail">Unable to connect to GoPro</string>
 
-    <!-- PresetPick -->
+    <!-- SettingsMenu -->
     <string id="Cinema">Cinema</string>
     <string id="Sport">Sport</string>
     <string id="Eco">Eco</string>

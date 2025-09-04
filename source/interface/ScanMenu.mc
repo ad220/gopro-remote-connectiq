@@ -9,14 +9,20 @@ class ScanMenuDelegate extends Menu2InputDelegate {
 
     typedef ScanEntry as {:name as String, :device as Ble.ScanResult, :menuid as Char};
 
-    public const goproModelTable = {
-        55 => "HERO9 Black",
-        57 => "HERO10 Black",
-        58 => "HERO11 Black",
-        60 => "HERO11 Black Mini",
-        62 => "HERO12 Black",
-        65 => "HERO13 Black",
+    private const goproModelTable = {
+        55      => WatchUi.loadResource(Rez.Strings.GP55),
+        57      => WatchUi.loadResource(Rez.Strings.GP57),
+        58      => WatchUi.loadResource(Rez.Strings.GP58),
+        60      => WatchUi.loadResource(Rez.Strings.GP60),
+        62      => WatchUi.loadResource(Rez.Strings.GP62),
+        65      => WatchUi.loadResource(Rez.Strings.GP65),
+        0xFF    => WatchUi.loadResource(Rez.Strings.GPFF),
     };
+    private const SCAN_TITLE    = WatchUi.loadResource(Rez.Strings.ScanTitle);
+    private const SCAN_CANCEL   = WatchUi.loadResource(Rez.Strings.ScanCancel);
+    private const SCAN_RESTART  = WatchUi.loadResource(Rez.Strings.ScanRestart);
+    private const EXIT          = WatchUi.loadResource(Rez.Strings.Exit);
+    private const DEVICES_FOUND = WatchUi.loadResource(Rez.Strings.DevicesFound);
 
     private var menu as CustomMenu;
     private var viewController as ViewController;
@@ -42,7 +48,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
         self.cancelItem = new OptionPickerItem("cancel", 0xF8 as Char, 0xFF as Char);
         self.scanResults = [];
         self.scanResultCallback = callback;
-        self.title = new OptionPickerTitle("Bluetooth Scan");
+        self.title = new OptionPickerTitle("scan");
         menu.setTitle(title);
         menu.addItem(self.statusItem);
         menu.addItem(self.cancelItem);
@@ -56,8 +62,8 @@ class ScanMenuDelegate extends Menu2InputDelegate {
             animTimer = timerController.start(method(:animate), 2, true);
 
             statusItem.setLabel("...");
-            cancelItem.setLabel("Cancel scan");
-            title.setTitle("Scanning\nfor GoPros");
+            cancelItem.setLabel(SCAN_CANCEL);
+            title.setTitle(SCAN_TITLE);
             WatchUi.requestUpdate();
         }
     }
@@ -68,9 +74,9 @@ class ScanMenuDelegate extends Menu2InputDelegate {
             timerController.stop(scanTimer);
             timerController.stop(animTimer);
 
-            statusItem.setLabel("Restart scan");
-            cancelItem.setLabel("Exit");
-            title.setTitle(scanResults.size()+" devices\nfound");
+            statusItem.setLabel(SCAN_RESTART);
+            cancelItem.setLabel(EXIT);
+            title.setTitle(scanResults.size()+DEVICES_FOUND);
             WatchUi.requestUpdate();
         }
     }
@@ -93,8 +99,10 @@ class ScanMenuDelegate extends Menu2InputDelegate {
             if (!isDeviceInMenu(results[i])) {
                 // from Open GoPro documentation, Model ID is given in byte 13
                 var modelId = results[i].getRawData()[13];
-                var label = goproModelTable.get(modelId) == null ? "Unknown GoPro Model" : goproModelTable.get(modelId);
                 var id = scanResults.size() as Char;
+                var label = goproModelTable.get(modelId);
+                if (label==null) { label = goproModelTable.get(0xFF); }
+
                 var entryItem = new OptionPickerItem(label, id, 0xFF as Char);
                 menu.updateItem(entryItem, scanResults.size());
                 menu.updateItem(statusItem, scanResults.size()+1);

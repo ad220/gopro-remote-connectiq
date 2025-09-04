@@ -1,6 +1,18 @@
 <strings>
+    <string id="AppName">Télécommande GoPro</string>
+
+    <!-- GoPro Models -->
+    <string id="GPFF">Modèle de GoPro inconnu</string>
+
+    <!-- ScanMenu -->
+    <string id="ScanTitle">Recherche\nen cours...</string>
+    <string id="ScanCancel">Annuler la recherche</string>
+    <string id="ScanRestart">Relancer la recherche</string>
+    <string id="Exit">Quitter</string>
+    <string id="DevicesFound"> caméras\ntrouvées</string>
 
     <!-- ConnectView -->
+    <string id="Scan">SCAN</string>
     <string id="Connect">CONNEXION</string>
     <string id="Connecting">Connexion à la caméra...</string>
     <string id="ConnectFail">Connexion échouée</string>
