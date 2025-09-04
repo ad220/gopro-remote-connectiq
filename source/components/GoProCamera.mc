@@ -58,16 +58,12 @@ class GoProCamera extends GoProSettings {
     }
 
     public function sendPreset(preset as GoProPreset) as Void {
-        var request = [0xff]b;
-        var presetSettings = preset.getSettings();
-        var keys = presetSettings.keys();
-        for (var i=0; i<keys.size(); i++) {
-            if (settings.get(keys[i]) != presetSettings.get(keys[i]) and keys[i]!=RATIO) {
-                request.addAll([keys[i], 0x01, presetSettings.get(keys[i])]);
+        var keys = [RESOLUTION, LENS, FRAMERATE];
+        for (var i=0; i<3; i++) {
+            if (settings.get(keys[i]) != preset.getSetting(keys[i])) {
+                sendSetting(keys[i], preset.getSetting(keys[i]));
             }
-        }
-        request[0] = request.size()-1;
-        goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.SETTINGS_CHARACTERISTIC, request);        
+        }  
     }
 
     public function onReceiveSetting(id as Char, value as ByteArray) as Void {
@@ -159,7 +155,7 @@ class GoProCamera extends GoProSettings {
             }
         }
         System.println("available settings: "+availableSettings);
-        System.println("availanle ratios: "+availableRatios);
+        System.println("available ratios: "+availableRatios);
         resetAvailableSettings();
     }
 
