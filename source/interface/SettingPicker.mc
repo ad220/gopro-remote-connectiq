@@ -41,7 +41,7 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
                 System.println("Unknown Setting id");
                 throw new Exception();
         }
-        menu.setTitle(new CustomMenuTitle(title));
+        menu.setTitle(new OptionPickerTitle(title));
         for (var i=0; i<items.size(); i++) {
             menu.addItem(new OptionPickerItem(GoProSettings.getLabel(setting, items[i]), items[i] as Char, selected));
         }

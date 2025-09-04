@@ -5,6 +5,25 @@ import Toybox.WatchUi;
 using InterfaceComponentsManager as ICM;
 
 
+class OptionPickerTitle extends WatchUi.Drawable {
+    
+    private var title as String;
+
+
+    public function initialize(title as String) {
+        self.title = title;
+        Drawable.initialize({});
+    }
+
+    public function draw(dc as Dc) as Void {
+        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
+        dc.clear();
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(dc.getWidth()/2, dc.getHeight()/2+8, ICM.fontLarge, title, ICM.JTEXT_MID);
+    }
+}
+
+
 class OptionPickerItem extends WatchUi.CustomMenuItem {
 
     private static var selected as Char;

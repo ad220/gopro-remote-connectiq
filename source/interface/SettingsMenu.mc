@@ -137,7 +137,7 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
         self.viewController = viewController;
 
         var title = menuId == SettingsMenuItem.CAMERA ? "GoPro" : WatchUi.loadResource(Rez.Strings.Settings);
-        menu.setTitle(new CustomMenuTitle(title));
+        menu.setTitle(new OptionPickerTitle(title));
         
         if (menuId != SettingsMenuItem.CAMERA) {
             if (menuId == SettingsMenuItem.MAIN) {
