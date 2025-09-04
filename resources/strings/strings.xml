@@ -19,7 +19,7 @@
     <string id="DevicesFound"> devices\nfound</string>
 
     <!-- ConnectView -->
-    <string id="Scan">SCAN</string>
+    <string id="Pair">PAIR</string>
     <string id="Connect">CONNECT</string>
     <string id="Connecting">Connecting to GoPro...</string>
     <string id="ConnectFail">Unable to connect to GoPro</string>

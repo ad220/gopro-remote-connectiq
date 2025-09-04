@@ -12,7 +12,7 @@
     <string id="DevicesFound"> caméras\ntrouvées</string>
 
     <!-- ConnectView -->
-    <string id="Scan">SCAN</string>
+    <string id="Pair">APPAIRER</string>
     <string id="Connect">CONNEXION</string>
     <string id="Connecting">Connexion à la caméra...</string>
     <string id="ConnectFail">Connexion échouée</string>
