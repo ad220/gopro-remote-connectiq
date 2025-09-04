@@ -160,27 +160,23 @@ class GoProSettings {
         try {
             switch (settingId) {
                 case RESOLUTION:
+                case RATIO:
                     var resolution = RESOLUTION_MAP.get(setting);
                     if (resolution instanceof Array) {
-                        return RESOLUTION_LABELS.get(resolution[0]);
+                        return settingId==RESOLUTION ? RESOLUTION_LABELS.get(resolution[0]) : RATIO_LABELS.get(resolution[1]);
                     }
                     return "";
                 case LENS:
                     return LENS_LABELS.get(setting);
                 case FRAMERATE:
                     return FRAMERATE_MAP.get(setting) + FRAMERATE_LABEL;
-                case RATIO:
-                    var ratio = RESOLUTION_MAP.get(setting);
-                    if (ratio instanceof Array) {
-                        return RATIO_LABELS.get(ratio[1]);
-                    }
-                    return "";
                 default:
                     System.println("Unknown setting ID requested for label");
                     return "";
             }
         } catch (ex) {
             System.println("Error while retrieving setting label");
+            System.println(ex.getErrorMessage());
             return "...";
         }
     }

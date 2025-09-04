@@ -160,7 +160,7 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
         var id = item.getId() as Number;
         if (menuId == SettingsMenuItem.CAMERA) {
             var newMenu = new CustomMenu((70*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {});
-            viewController.push(newMenu, new OptionsPickerDelegate(newMenu, id as GoProSettings.SettingId, gopro, viewController), WatchUi.SLIDE_UP);
+            viewController.push(newMenu, new SettingPickerDelegate(newMenu, id as GoProSettings.SettingId, gopro, viewController), WatchUi.SLIDE_UP);
         } else if (id == SettingsMenuItem.MANUALLY) {
             var newMenu = new CustomMenu((80*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {});
             viewController.push(newMenu, new SettingsMenuDelegate(newMenu, SettingsMenuItem.CAMERA, gopro, [], viewController), WatchUi.SLIDE_LEFT);
