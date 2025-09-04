@@ -66,17 +66,17 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onSelect() {
-        var scanMenu = new WatchUi.Menu2({});
+        var scanMenu = new CustomMenu((50*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {:titleItemHeight => (80*ICM.kMult).toNumber()});
         var menuDelegate = new ScanMenuDelegate(scanMenu, viewController, timerController, method(:onScanResult));
-        delegate = new GoProDelegateStub(timerController, viewController);
+        delegate = new GoProDelegate(timerController, viewController);
         Ble.setDelegate(delegate);
         GattProfileManager.registerProfiles();
         delegate.setScanStateChangeCallback(menuDelegate.method(:setScanState));
         delegate.setScanResultCallback(menuDelegate.method(:onScanResults));
         // Ble.setConnectionStrategy(Ble.CONNECTION_STRATEGY_SECURE_PAIR_BOND);
 
-        // viewController.push(scanMenu, menuDelegate, WatchUi.SLIDE_IMMEDIATE);
-        onScanResult(null);
+        viewController.push(scanMenu, menuDelegate, WatchUi.SLIDE_IMMEDIATE);
+        // onScanResult(null);
         return true;
     }
 

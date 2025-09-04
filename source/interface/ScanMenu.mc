@@ -7,7 +7,7 @@ using Toybox.BluetoothLowEnergy as Ble;
 
 class ScanMenuDelegate extends Menu2InputDelegate {
 
-    typedef ScanEntry as {:name as String, :device as Ble.ScanResult, :menuid as Number};
+    typedef ScanEntry as {:name as String, :device as Ble.ScanResult, :menuid as Char};
 
     public const goproModelTable = {
         55 => "HERO9 Black",
@@ -18,11 +18,11 @@ class ScanMenuDelegate extends Menu2InputDelegate {
         65 => "HERO13 Black",
     };
 
-    private var menu as Menu2;
+    private var menu as CustomMenu;
     private var viewController as ViewController;
     private var timerController as TimerController;
-    private var statusItem as MenuItem;
-    private var cancelItem as MenuItem;
+    private var statusItem as OptionPickerItem;
+    private var cancelItem as OptionPickerItem;
 
 
     private var scanResults as Array<ScanEntry>;
@@ -30,17 +30,20 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     private var scanTimer as TimerCallback?;
     private var animTimer as TimerCallback?;
     private var scanResultCallback as Method(device as Ble.ScanResult?) as Void;
+    private var title as OptionPickerTitle;
 
 
-    public function initialize(menu as Menu2, viewController as ViewController, timerController as TimerController, callback as Method(device as Ble.ScanResult?) as Void) {
+    public function initialize(menu as CustomMenu, viewController as ViewController, timerController as TimerController, callback as Method(device as Ble.ScanResult?) as Void) {
         Menu2InputDelegate.initialize();
         self.menu = menu;
         self.viewController = viewController;
         self.timerController = timerController;
-        self.statusItem = new MenuItem("", null, "status", null);
-        self.cancelItem = new MenuItem("", null, "cancel", null);
+        self.statusItem = new OptionPickerItem("status", 0xF0 as Char, 0xFF as Char);
+        self.cancelItem = new OptionPickerItem("cancel", 0xF8 as Char, 0xFF as Char);
         self.scanResults = [];
         self.scanResultCallback = callback;
+        self.title = new OptionPickerTitle("Bluetooth Scan");
+        menu.setTitle(title);
         menu.addItem(self.statusItem);
         menu.addItem(self.cancelItem);
         startScan();
@@ -54,7 +57,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
 
             statusItem.setLabel("...");
             cancelItem.setLabel("Cancel scan");
-            menu.setTitle("Scanning for GoPros");
+            title.setTitle("Scanning\nfor GoPros");
             WatchUi.requestUpdate();
         }
     }
@@ -67,7 +70,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
 
             statusItem.setLabel("Restart scan");
             cancelItem.setLabel("Exit");
-            menu.setTitle(scanResults.size()+" devices found");
+            title.setTitle(scanResults.size()+" devices\nfound");
             WatchUi.requestUpdate();
         }
     }
@@ -90,12 +93,13 @@ class ScanMenuDelegate extends Menu2InputDelegate {
             if (!isDeviceInMenu(results[i])) {
                 // from Open GoPro documentation, Model ID is given in byte 13
                 var modelId = results[i].getRawData()[13];
-                var label = goproModelTable.get(modelId) == null ? "Unkown GoPro Model" : goproModelTable.get(modelId);
-                var entryItem = new MenuItem(label, null, "device"+scanResults.size(), null);
+                var label = goproModelTable.get(modelId) == null ? "Unknown GoPro Model" : goproModelTable.get(modelId);
+                var id = scanResults.size() as Char;
+                var entryItem = new OptionPickerItem(label, id, 0xFF as Char);
                 menu.updateItem(entryItem, scanResults.size());
                 menu.updateItem(statusItem, scanResults.size()+1);
                 menu.addItem(cancelItem);
-                scanResults.add({:name => label, :device => results[i], :menuid => "device"+scanResults.size()});    
+                scanResults.add({:name => label, :device => results[i], :menuid => id});    
                 WatchUi.requestUpdate();       
             }
         }
@@ -113,23 +117,22 @@ class ScanMenuDelegate extends Menu2InputDelegate {
 
     public function onSelect(item as MenuItem) as Void {
         switch (item.getId()) {
-            case "status":
+            case 0xF0: // status
                 if (scanState==Ble.SCAN_STATE_OFF) {
                     startScan();
                 }
                 break;
-            case "cancel":
+            case 0xF8: // cancel
                 if (scanState==Ble.SCAN_STATE_SCANNING) {
                     stopScan();
                 } else {
-                    // exit
                     viewController.pop(SLIDE_LEFT);
                 }
                 break;            
             default:
                 // pair device and quit menu
                 for (var i=0; i<scanResults.size(); i++) {
-                    if (scanResults[i].get(:menuid).equals(item.getId())) {
+                    if (scanResults[i].get(:menuid)==item.getId()) {
                         stopScan();
                         var device = scanResults[i].get(:device);
                         try {
