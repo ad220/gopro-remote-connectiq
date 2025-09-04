@@ -1,29 +1,25 @@
 <drawables>
-    <bitmap id="LauncherIcon" filename="gopro.png">
+    <bitmap id="LauncherIcon" filename="remote.png">
         <palette>
-            <color>000000</color>
-            <color>444444</color>
+            <color>FFFFFF</color>
             <color>AAAAAA</color>
             <color>00AAFF</color>
-            <color>FF5500</color>
+            <color>0055AA</color>
         </palette>
     </bitmap>
 
-    <!-- HILIGHT -->
     <bitmap id="Hilight" filename="hilight2.png" scaleY="9.17%" scaleRelativeTo="screen">
         <palette>
             <color>00AAFF</color>
         </palette>
     </bitmap>
 
-    <!-- MODES -->
     <bitmap id="Wheel" filename="wheel2.png" scaleY="10%" scaleRelativeTo="screen">
         <palette>
             <color>AAAAAA</color>
         </palette>
     </bitmap>
     
-    <!-- EDITABLES -->
     <bitmap id="Edit" filename="edit.png" scaleY="10%" scaleRelativeTo="screen">
         <palette>
             <color>AAAAAA</color>
@@ -49,8 +45,6 @@
             <color>FF5500</color>
         </palette>
     </bitmap>
-
-
 
     <bitmap id="Resolution" filename="resolution.png" scaleY="10%" scaleRelativeTo="screen">
         <palette>

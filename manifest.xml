@@ -5,7 +5,7 @@
         Use "Monkey C: Edit Application" from the Visual Studio Code command palette
         to update the application attributes.
     -->
-    <iq:application id="ede98b81-5b9e-4b9b-b14a-3b46b8185ade" type="widget" name="@Strings.AppName" entry="GoProRemoteApp" launcherIcon="@Drawables.LauncherIcon" minApiLevel="2.4.0">
+    <iq:application id="ede98b81-5b9e-4b9b-b14a-3b46b8185ade" type="widget" name="@Strings.AppName" entry="GoProRemoteApp" launcherIcon="@Drawables.LauncherIcon" minApiLevel="3.2.0">
         <!--
             Use the following from the Visual Studio Code comand palette to edit
             the build targets:
@@ -14,17 +14,26 @@
             "Monkey C: Edit Products" - Lets you add or remove any product
         -->
         <iq:products>
+            <iq:product id="approachs50"/>
+            <iq:product id="approachs7042mm"/>
+            <iq:product id="approachs7047mm"/>
+            <iq:product id="d2air"/>
+            <iq:product id="d2airx10"/>
+            <iq:product id="d2mach1"/>
+            <iq:product id="descentg1"/>
+            <iq:product id="descentg2"/>
+            <iq:product id="descentmk2"/>
+            <iq:product id="descentmk2s"/>
+            <iq:product id="descentmk343mm"/>
+            <iq:product id="descentmk351mm"/>
             <iq:product id="enduro"/>
             <iq:product id="enduro3"/>
             <iq:product id="epix2"/>
             <iq:product id="epix2pro42mm"/>
             <iq:product id="epix2pro47mm"/>
             <iq:product id="epix2pro51mm"/>
-            <iq:product id="fenix5"/>
             <iq:product id="fenix5plus"/>
-            <iq:product id="fenix5s"/>
             <iq:product id="fenix5splus"/>
-            <iq:product id="fenix5x"/>
             <iq:product id="fenix5xplus"/>
             <iq:product id="fenix6"/>
             <iq:product id="fenix6pro"/>
@@ -41,9 +50,9 @@
             <iq:product id="fenix7xpronowifi"/>
             <iq:product id="fenix843mm"/>
             <iq:product id="fenix847mm"/>
+            <iq:product id="fenix8pro47mm"/>
             <iq:product id="fenix8solar47mm"/>
             <iq:product id="fenix8solar51mm"/>
-            <iq:product id="fenixchronos"/>
             <iq:product id="fenixe"/>
             <iq:product id="fr165"/>
             <iq:product id="fr165m"/>
@@ -56,18 +65,28 @@
             <iq:product id="fr265"/>
             <iq:product id="fr265s"/>
             <iq:product id="fr55"/>
-            <iq:product id="fr645"/>
+            <iq:product id="fr57042mm"/>
+            <iq:product id="fr57047mm"/>
             <iq:product id="fr645m"/>
             <iq:product id="fr745"/>
-            <iq:product id="fr935"/>
             <iq:product id="fr945"/>
             <iq:product id="fr945lte"/>
             <iq:product id="fr955"/>
             <iq:product id="fr965"/>
+            <iq:product id="fr970"/>
             <iq:product id="instinct2"/>
             <iq:product id="instinct2s"/>
             <iq:product id="instinct2x"/>
+            <iq:product id="instinct3amoled45mm"/>
+            <iq:product id="instinct3amoled50mm"/>
+            <iq:product id="instinct3solar45mm"/>
             <iq:product id="instinctcrossover"/>
+            <iq:product id="instincte40mm"/>
+            <iq:product id="instincte45mm"/>
+            <iq:product id="legacyherocaptainmarvel"/>
+            <iq:product id="legacyherofirstavenger"/>
+            <iq:product id="legacysagadarthvader"/>
+            <iq:product id="legacysagarey"/>
             <iq:product id="marq2"/>
             <iq:product id="marq2aviator"/>
             <iq:product id="marqadventurer"/>
@@ -89,13 +108,12 @@
             <iq:product id="venusq2"/>
             <iq:product id="venusq2m"/>
             <iq:product id="venusqm"/>
-            <iq:product id="vivoactive3"/>
-            <iq:product id="vivoactive3d"/>
+            <iq:product id="venux1"/>
             <iq:product id="vivoactive3m"/>
-            <iq:product id="vivoactive3mlte"/>
             <iq:product id="vivoactive4"/>
             <iq:product id="vivoactive4s"/>
             <iq:product id="vivoactive5"/>
+            <iq:product id="vivoactive6"/>
         </iq:products>
         <!--
             Use "Monkey C: Edit Permissions" from the Visual Studio Code command
@@ -103,7 +121,6 @@
         -->
         <iq:permissions>
             <iq:uses-permission id="BluetoothLowEnergy"/>
-            <iq:uses-permission id="Communications"/>
         </iq:permissions>
         <!--
             Use "Monkey C: Edit Languages" from the Visual Studio Code command

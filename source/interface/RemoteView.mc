@@ -1,121 +1,58 @@
 import Toybox.Graphics;
 import Toybox.WatchUi;
 import Toybox.System;
-import Toybox.Timer;
 import Toybox.Lang;
 
-
-class RemoteDelegate extends WatchUi.BehaviorDelegate {
-    var view;
-    var actionIsSelect = false;
-
-    public function initialize(_view) {
-        BehaviorDelegate.initialize();
-        view = _view;
-    }
-
-    public function onTap(tap as ClickEvent) {
-        actionIsSelect = false;
-        var coord = tap.getCoordinates();
-        if (coord[0]<halfW+75*kMult and coord[0]>halfW-35*kMult and coord[1]<halfH+25*kMult and coord[1]>halfH-75*kMult) {
-            mobile.send([COM_SHUTTER, 0]);
-        } else if (cam.isRecording() and coord[0]<halfW-45*kMult and coord[0]>halfW-100*kMult and coord[1]<halfH+5*kMult and coord[1]>halfH-55*kMult) {
-            mobile.send([COM_HIGHLIGHT, 0]);
-        } else if (!cam.isRecording() and coord[0]<halfW+80*kMult and coord[0]>halfW-80*kMult and coord[1]<halfH+100*kMult and coord[1]>halfH+40*kMult) {
-            return onMenu();
-        }
-        return true;
-    }
-
-    public function onSelect() {
-        actionIsSelect = true;
-        return false;
-    }
-
-    public function onKeyPressed(keyEvent) {
-        if (actionIsSelect) {
-            actionIsSelect = false;
-            mobile.send([COM_SHUTTER, 0]);
-        }
-        return true;
-    }
-
-    public function onMenu() {
-        GoProRemoteApp.pushView(new SettingsMenu(SettingsMenu.SM_MENU, -1), new SettingsMenuDelegate(SettingsMenu.SM_MENU), WatchUi.SLIDE_UP, false);
-        return true;
-    }
-
-    public function onNextPage() {
-        return onMenu();
-    }
-
-    public function onBack() {
-        mobile.send([COM_CONNECT, 1]);
-        GoProRemoteApp.popView(WatchUi.SLIDE_DOWN);
-        return true;
-    }
-}
+using InterfaceComponentsManager as ICM;
 
 
 class RemoteView extends WatchUi.View {
-    var settingsButton;
-    var recordingTimer as Timer.Timer?;
 
-    function initialize() {
+    private var gopro as GoProCamera;
+    private var hilightIcon as BitmapResource?;
+    private var settingsIcon as BitmapResource?;
+
+
+    function initialize(gopro as GoProCamera) {
+        self.gopro = gopro;
         View.initialize();
-        recordingTimer = new Timer.Timer();
-    }
-    
-    function onLayout(dc as Dc) as Void {
-        setLayout(Rez.Layouts.MainLayout(dc));
-        MainResources.loadSettingLabels();
     }
 
     function onShow() as Void {
-        MainResources.loadIcons(UI_HILIGHT);
-        MainResources.loadIcons(UI_MENUS);
-        MainResources.freeIcons(UI_SETTINGSMENU);
-        MainResources.freeIcons(UI_SETTINGEDIT);
-        MainResources.freeIcons(UI_STATES);
-        MainResources.freeLabels(UI_MENUS);
-        MainResources.freeLabels(UI_SETTINGSMENU);
-        MainResources.freeLabels(UI_SETTINGEDIT);
+        hilightIcon = WatchUi.loadResource(Rez.Drawables.Hilight);
+        settingsIcon = WatchUi.loadResource(Rez.Drawables.Wheel);
     }
 
     // Update the view
     function onUpdate(dc as Dc) as Void {
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLACK);
         dc.clear();
-        dc.fillCircle(halfW-72*kMult, halfH-25*kMult, 22*kMult);
-        dc.fillRoundedRectangle(halfW-30*kMult, halfH-70*kMult, 90*kMult, 90*kMult, 18*kMult);
-        if (!cam.isRecording()) {
-            dc.fillRoundedRectangle(halfW-80*kMult, halfH+45*kMult, 160*kMult, 40*kMult, 20*kMult);
+        dc.fillCircle(ICM.halfW-72*ICM.kMult, ICM.halfH-25*ICM.kMult, 22*ICM.kMult);
+        dc.fillRoundedRectangle(ICM.halfW-30*ICM.kMult, ICM.halfH-70*ICM.kMult, 90*ICM.kMult, 90*ICM.kMult, 18*ICM.kMult);
+        if (!gopro.isRecording()) {
+            dc.fillRoundedRectangle(ICM.halfW-80*ICM.kMult, ICM.halfH+45*ICM.kMult, 160*ICM.kMult, 40*ICM.kMult, 20*ICM.kMult);
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         } else {
             dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
         }
-        dc.drawText(halfW+12*kMult, halfH+65*kMult, adaptFontSmall(), cam.getDescription(), JTEXT_MID);
-        dc.drawBitmap(halfW-83*kMult-imgOff, halfH-36*kMult-imgOff, MainResources.icons[UI_HILIGHT] as WatchUi.BitmapResource);
-        dc.drawBitmap(halfW-71*kMult-imgOff, halfH+53*kMult-imgOff, MainResources.icons[UI_MENUS][SETTINGS]);
+        dc.drawText(ICM.halfW+12*ICM.kMult, ICM.halfH+65*ICM.kMult, ICM.adaptFontSmall(), gopro.getDescription(), ICM.JTEXT_MID);
+        dc.drawBitmap(ICM.halfW-83*ICM.kMult-ICM.imgOff, ICM.halfH-36*ICM.kMult-ICM.imgOff, hilightIcon);
+        dc.drawBitmap(ICM.halfW-71*ICM.kMult-ICM.imgOff, ICM.halfH+53*ICM.kMult-ICM.imgOff, settingsIcon);
         dc.setColor(0xFF0000, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(8*kMult);
-        dc.drawCircle(halfW+15*kMult, halfH-25*kMult, 28*kMult);
+        dc.setPenWidth(8*ICM.kMult);
+        dc.drawCircle(ICM.halfW+15*ICM.kMult, ICM.halfH-25*ICM.kMult, 28*ICM.kMult);
         dc.setPenWidth(1);
 
 
         // Preset Button
-        if (cam.isRecording()) {
-            var recDurationSeconds = cam.getProgress();
-            if (recordingTimer==null) {
-                recordingTimer = new Timer.Timer();
-                recordingTimer.start(method(:recordingTimerCallback), 1000, true);
-            }
-            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-            // Draw the recording duration 
+        if (gopro.isRecording()) {
+            // Draw the recording duration
+            var recDurationSeconds = gopro.getStatus(GoProCamera.ENCODING_DURATION);
             var minutes = Math.floor(recDurationSeconds / 60);
             var seconds = recDurationSeconds % 60;
             var timeString = (minutes/100).toString() + (minutes%60).toString() + ":" + (seconds/10).toString() + (seconds%10).toString();
-            dc.drawText(halfW, halfH/6, MainResources.fontTiny, timeString, JTEXT_MID);
+            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+            dc.drawText(ICM.halfW, ICM.halfH/6, ICM.fontTiny, timeString, ICM.JTEXT_MID);
 
             // Draw the recording circle, blinks every second
             if (recDurationSeconds % 2 == 0) {
@@ -123,31 +60,75 @@ class RemoteView extends WatchUi.View {
             } else {
                 dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
             }
-            dc.fillCircle(halfW-35*kMult, halfH/6, 6*kMult);
+            dc.fillCircle(ICM.halfW-35*ICM.kMult, ICM.halfH/6, 6*ICM.kMult);
 
         } else {
-            if (recordingTimer!=null) {
-                recordingTimer.stop();
-                recordingTimer = null;
-            }
             // For v2, would open states menu on swipe down
 
             // dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-            // dc.setPenWidth(6*kMult);
-            // dc.drawArc(halfW, halfH, 108*kMult, Graphics.ARC_CLOCKWISE, 100, 80);
-            // dc.fillCircle(halfW-18*kMult, halfH-107*kMult, round(3*kMult));
-            // dc.fillCircle(halfW+18*kMult, halfH-107*kMult, round(3*kMult));
+            // dc.setPenWidth(6*ICM.kMult);
+            // dc.drawArc(ICM.halfW, ICM.halfH, 108*ICM.kMult, Graphics.ARC_CLOCKWISE, 100, 80);
+            // dc.fillCircle(ICM.halfW-18*ICM.kMult, ICM.halfH-107*ICM.kMult, round(3*ICM.kMult));
+            // dc.fillCircle(ICM.halfW+18*ICM.kMult, ICM.halfH-107*ICM.kMult, round(3*ICM.kMult));
             // dc.setPenWidth(1);
         }
     }
  
     function onHide() as Void {
-        settingsButton = null;
+        hilightIcon = null;
+        settingsIcon = null;
+    }
+}
+
+class RemoteDelegate extends WatchUi.BehaviorDelegate {
+    private var viewController as ViewController;
+    private var gopro as GoProCamera;
+
+    public function initialize(viewController as ViewController, gopro as GoProCamera) {
+        self.viewController = viewController;
+        self.gopro = gopro;
+        BehaviorDelegate.initialize();
     }
 
-    function recordingTimerCallback() as Void {
-        cam.incrementProgress();
-        WatchUi.requestUpdate();
+    public function onTap(tap as ClickEvent) as Boolean {
+        var coord = tap.getCoordinates();
+        if (coord[0]<ICM.halfW+75*ICM.kMult and coord[0]>ICM.halfW-35*ICM.kMult and coord[1]<ICM.halfH+25*ICM.kMult and coord[1]>ICM.halfH-75*ICM.kMult) {
+            gopro.sendCommand(GoProCamera.SHUTTER);
+        } else if (gopro.isRecording() and coord[0]<ICM.halfW-45*ICM.kMult and coord[0]>ICM.halfW-100*ICM.kMult and coord[1]<ICM.halfH+5*ICM.kMult and coord[1]>ICM.halfH-55*ICM.kMult) {
+            gopro.sendCommand(GoProCamera.HILIGHT);
+        } else if (coord[0]<ICM.halfW+80*ICM.kMult and coord[0]>ICM.halfW-80*ICM.kMult and coord[1]<ICM.halfH+100*ICM.kMult and coord[1]>ICM.halfH+40*ICM.kMult) {
+            return onMenu();
+        }
+        return true;
     }
 
+    public function onKeyPressed(keyEvent as WatchUi.KeyEvent) as Boolean {
+        if (keyEvent.getKey()==WatchUi.KEY_ENTER) {
+            gopro.sendCommand(GoProCamera.SHUTTER);
+            return true;
+        } else if (keyEvent.getKey()==WatchUi.KEY_UP and gopro.isRecording()) {
+            gopro.sendCommand(GoProCamera.HILIGHT);
+            return true;
+        }
+        return false;
+    }
+
+    public function onMenu() as Boolean {
+        if (!gopro.isRecording()) {
+            var menu = new CustomMenu((80*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {});
+            viewController.push(menu, new SettingsMenuDelegate(menu, SettingsMenuItem.MAIN, gopro, [], viewController), WatchUi.SLIDE_UP);
+            return true;
+        }
+        return false;
+    }
+
+    public function onNextPage() as Boolean {
+        return onMenu();
+    }
+
+    public function onBack() as Boolean {
+        gopro.disconnect();
+        viewController.pop(WatchUi.SLIDE_DOWN);
+        return true;
+    }
 }
