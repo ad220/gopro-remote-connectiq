@@ -1,4 +1,4 @@
-# GoPro remote for Garmin watch
+# <p align="center"> <br/> <img src="documentation/remote128.png" alt="remote icon" width="128"/> <br/> <br/> GoPro Remote for Garmin<br/> </p>
 A ConnectIQ widget to control your GoPro from your wrist. It uses the [Open GoPro Bluetooth Low Energy API](https://gopro.github.io/OpenGoPro/ble/index.html) and the [Garmin ConnectIQ SDK](https://developer.garmin.com/connect-iq/overview/).
 
 The widget should support every watch with API level 3.2.0 and above and every GoPro camera supporting the Open GoPro API (HERO9+). However, it has only been tested with a HERO11 Black Mini. A previous version of this app for smartwatches without BLE capabilities can be found and built with the [legacy branch](https://github.com/ad220/gopro-remote-connectiq/tree/legacy) or in the GitHub releases versions prior to 3.0.
