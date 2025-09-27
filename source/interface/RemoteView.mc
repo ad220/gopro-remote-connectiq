@@ -106,8 +106,12 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
         if (keyEvent.getKey()==WatchUi.KEY_ENTER) {
             gopro.sendCommand(GoProCamera.SHUTTER);
             return true;
-        } else if (keyEvent.getKey()==WatchUi.KEY_UP and gopro.isRecording()) {
-            gopro.sendCommand(GoProCamera.HILIGHT);
+        } else if (keyEvent.getKey()==WatchUi.KEY_UP) {
+            if (gopro.isRecording()) {
+                gopro.sendCommand(GoProCamera.HILIGHT);
+            } else {
+                viewController.push(new TogglablesMenu(), new TogglablesDelegate(), SLIDE_DOWN);
+            }
             return true;
         }
         return false;

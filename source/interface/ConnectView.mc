@@ -56,19 +56,19 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         self.lastPairedDevice = lastPairedDevice;
         self.timerController = timerController;
         self.viewController = viewController;
-        // self.delegate = new GoProDelegateStub(timerController, viewController);
-        self.delegate = new GoProDelegate(timerController, viewController);
+        self.delegate = new GoProDelegateStub(timerController, viewController);
+        // self.delegate = new GoProDelegate(timerController, viewController);
         Ble.setDelegate(delegate);
         GattProfileManager.registerProfiles();
     }
 
     public function onSelect() {
-        // onScanResult(null);
-        if (lastPairedDevice instanceof Ble.ScanResult) {
-            onScanResult(lastPairedDevice);
-        } else {
-            startScan();
-        }
+        onScanResult(null);
+        // if (lastPairedDevice instanceof Ble.ScanResult) {
+        //     onScanResult(lastPairedDevice);
+        // } else {
+        //     startScan();
+        // }
         return true;
     }
 
