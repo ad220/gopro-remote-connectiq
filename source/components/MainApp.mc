@@ -20,7 +20,7 @@ class GoProRemoteApp extends Application.AppBase {
         System.println("App started");
         InterfaceComponentsManager.computeInterfaceConstants();
         InterfaceComponentsManager.loadFonts();
-        timerController = new TimerController();
+        timerController = new TimerController(500);
         viewController = new ViewController(timerController);
         lastPairedDevice = Storage.getValue("lastPairedDevice");
     }
