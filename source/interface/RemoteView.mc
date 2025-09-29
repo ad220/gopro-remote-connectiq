@@ -110,7 +110,8 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
             if (gopro.isRecording()) {
                 gopro.sendCommand(GoProCamera.HILIGHT);
             } else {
-                viewController.push(new TogglablesMenu(), new TogglablesDelegate(), SLIDE_DOWN);
+                var view = new TogglablesView();
+                viewController.push(view, new TogglablesDelegate(view, gopro), SLIDE_DOWN);
             }
             return true;
         }
