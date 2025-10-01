@@ -50,10 +50,17 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
         dc.drawBitmap(m_halfW-84*ICM.kMult-ICM.imgOff, m_halfH-14*ICM.kMult-ICM.imgOff, icon);
         
         if (isMenuCamera or id<3) {
+            var subText;
+            if (isMenuCamera) {
+                subText = GoProSettings.getLabel(id as GoProSettings.SettingId, gopro.getSetting(id as GoProSettings.SettingId));
+                if (subText instanceof ResourceId) {
+                    subText = loadResource(subText);
+                }
+            } else {
+                subText = gopro.getDescription();
+            }
             dc.drawText(m_halfW+22*ICM.kMult, m_halfH-14*ICM.kMult, ICM.adaptFontMid(), label, ICM.JTEXT_MID);
-            dc.drawText(m_halfW+22*ICM.kMult, m_halfH+16*ICM.kMult, ICM.adaptFontSmall(), \
-                        isMenuCamera ? GoProSettings.getLabel(id as GoProSettings.SettingId, gopro.getSetting(id as GoProSettings.SettingId)) \
-                                     : gopro.getDescription(), ICM.JTEXT_MID);
+            dc.drawText(m_halfW+22*ICM.kMult, m_halfH+16*ICM.kMult, ICM.adaptFontSmall(), subText, ICM.JTEXT_MID);
             dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
             dc.drawLine(m_halfW-36*ICM.kMult, m_halfH+2*ICM.kMult, m_halfW+80*ICM.kMult, m_halfH+2*ICM.kMult);
         } else {
@@ -69,24 +76,24 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
         if (menuId==MAIN) {
             switch (item as MenuItemId) {
                 case PRESET1:
-                    label = WatchUi.loadResource(Rez.Strings.Cinema);
-                    icon = WatchUi.loadResource(Rez.Drawables.Cinema);
+                    label = loadResource(Rez.Strings.Cinema);
+                    icon = loadResource(Rez.Drawables.Cinema);
                     break;
                 case PRESET2:
-                    label = WatchUi.loadResource(Rez.Strings.Sport);
-                    icon = WatchUi.loadResource(Rez.Drawables.Sport);
+                    label = loadResource(Rez.Strings.Sport);
+                    icon = loadResource(Rez.Drawables.Sport);
                     break;
                 case PRESET3:
-                    label = WatchUi.loadResource(Rez.Strings.Eco);
-                    icon = WatchUi.loadResource(Rez.Drawables.Eco);
+                    label = loadResource(Rez.Strings.Eco);
+                    icon = loadResource(Rez.Drawables.Eco);
                     break;
                 case MANUALLY:
-                    label = WatchUi.loadResource(Rez.Strings.Manually);
-                    icon = WatchUi.loadResource(Rez.Drawables.Camera);
+                    label = loadResource(Rez.Strings.Manually);
+                    icon = loadResource(Rez.Drawables.Camera);
                     break;
                 case SAVEAS:
-                    label = WatchUi.loadResource(Rez.Strings.SaveP7);
-                    icon = WatchUi.loadResource(Rez.Drawables.Edit);
+                    label = loadResource(Rez.Strings.SaveP7);
+                    icon = loadResource(Rez.Drawables.Edit);
                     break;
                 default:
                     System.println("Unknown Editable id: "+item);
@@ -98,20 +105,20 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
         } else {
             switch (item as GoProSettings.SettingId) {
                 case GoProSettings.RESOLUTION:
-                    label = WatchUi.loadResource(Rez.Strings.Resolution);
-                    icon = WatchUi.loadResource(Rez.Drawables.Resolution);
+                    label = loadResource(Rez.Strings.Resolution);
+                    icon = loadResource(Rez.Drawables.Resolution);
                     break;
                 case GoProSettings.RATIO:
-                    label = WatchUi.loadResource(Rez.Strings.Ratio);
-                    icon = WatchUi.loadResource(Rez.Drawables.Ratio);
+                    label = loadResource(Rez.Strings.Ratio);
+                    icon = loadResource(Rez.Drawables.Ratio);
                     break;
                 case GoProSettings.LENS:
-                    label = WatchUi.loadResource(Rez.Strings.Lens);
-                    icon = WatchUi.loadResource(Rez.Drawables.Lens);
+                    label = loadResource(Rez.Strings.Lens);
+                    icon = loadResource(Rez.Drawables.Lens);
                     break;
                 case GoProSettings.FRAMERATE:
-                    label = WatchUi.loadResource(Rez.Strings.Framerate);
-                    icon = WatchUi.loadResource(Rez.Drawables.Framerate);
+                    label = loadResource(Rez.Strings.Framerate);
+                    icon = loadResource(Rez.Drawables.Framerate);
                     break;
                 default:
                     System.println("Unknown Setting id");
@@ -136,7 +143,7 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
         self.items = items;
         self.viewController = viewController;
 
-        var title = menuId == SettingsMenuItem.CAMERA ? WatchUi.loadResource(Rez.Strings.GoPro) : WatchUi.loadResource(Rez.Strings.Settings);
+        var title = menuId == SettingsMenuItem.CAMERA ? loadResource(Rez.Strings.GoPro) : loadResource(Rez.Strings.Settings);
         menu.setTitle(new OptionPickerTitle(title));
         
         if (menuId != SettingsMenuItem.CAMERA) {
@@ -160,24 +167,24 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
         var id = item.getId() as Number;
         if (menuId == SettingsMenuItem.CAMERA) {
             var newMenu = new CustomMenu((50*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {:titleItemHeight => (80*ICM.kMult).toNumber()});
-            viewController.push(newMenu, new SettingPickerDelegate(newMenu, id as GoProSettings.SettingId, gopro, viewController), WatchUi.SLIDE_UP);
+            viewController.push(newMenu, new SettingPickerDelegate(newMenu, id as GoProSettings.SettingId, gopro, viewController), SLIDE_UP);
         } else if (id == SettingsMenuItem.MANUALLY) {
             var newMenu = new CustomMenu((80*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {});
-            viewController.push(newMenu, new SettingsMenuDelegate(newMenu, SettingsMenuItem.CAMERA, gopro, [], viewController), WatchUi.SLIDE_LEFT);
+            viewController.push(newMenu, new SettingsMenuDelegate(newMenu, SettingsMenuItem.CAMERA, gopro, [], viewController), SLIDE_LEFT);
         } else if (id == SettingsMenuItem.SAVEAS) {
             var newMenu = new CustomMenu((80*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {});
-            viewController.switchTo(newMenu, new SettingsMenuDelegate(newMenu, SettingsMenuItem.PRESET, gopro, items, viewController), WatchUi.SLIDE_LEFT);
+            viewController.switchTo(newMenu, new SettingsMenuDelegate(newMenu, SettingsMenuItem.PRESET, gopro, items, viewController), SLIDE_LEFT);
         } else if (menuId == SettingsMenuItem.PRESET) {
             (item as SettingsMenuItem).getPreset().sync(gopro);
-            viewController.pop(WatchUi.SLIDE_DOWN);
+            viewController.pop(SLIDE_DOWN);
         } else {
             gopro.sendPreset((item as SettingsMenuItem).getPreset());
-            viewController.pop(WatchUi.SLIDE_DOWN);
+            viewController.pop(SLIDE_DOWN);
         }
     }
 
     public function onBack() as Void {
-        viewController.pop(WatchUi.SLIDE_DOWN);
+        viewController.pop(SLIDE_DOWN);
     }
 
     public function onWrap(key as Key) as Boolean {

@@ -135,7 +135,7 @@ class GoProDelegate extends Ble.BleDelegate {
         requestQueue.add(
             GattRequest.WRITE_CHARACTERISTIC,
             GattProfileManager.QUERY_CHARACTERISTIC,
-            [0x05, REGISTER_SETTING, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.LENS, GoProSettings.FLICKER]b
+            [0x08, REGISTER_SETTING, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b
         );
         requestQueue.add(
             GattRequest.WRITE_CHARACTERISTIC,
@@ -145,7 +145,7 @@ class GoProDelegate extends Ble.BleDelegate {
         requestQueue.add(
             GattRequest.WRITE_CHARACTERISTIC,
             GattProfileManager.QUERY_CHARACTERISTIC,
-            [0x04, REGISTER_AVAILABLE, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.LENS]b
+            [0x08, REGISTER_AVAILABLE, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b
         );
 
         keepAliveTimer = timerController.start(method(:keepAlive), 8, true);
@@ -163,8 +163,8 @@ class GoProDelegate extends Ble.BleDelegate {
     public function onDisconnect() as Void {
         // put camera to sleep and close connection
         if (isConnected) {
-            requestQueue.close();
             timerController.stop(keepAliveTimer);
+            requestQueue.close();
             viewController.returnHome(null, null);
         }
     }

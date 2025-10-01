@@ -7,6 +7,7 @@
 
         <button id="PowerButton" class="Togglable" x="40.0%" y="68.0%" width="20%" height="20%" behavior="onPower">
             <param name="defaultBmpId">Rez.Drawables.PowerOn</param>
+            <param name="activatedBmpId">Rez.Drawables.PowerOff</param>
         </button>
 
         <button id="LedButton" class="Togglable" x="13.37%" y="48.65%" width="20%" height="20%" behavior="onLed">
@@ -23,15 +24,12 @@
             <param name="defaultBmpId">Rez.Drawables.StabilizeOff</param>
             <param name="activatedBmpId">Rez.Drawables.StabilizeOn</param>
         </button>
-    </layout>   
-
-    <drawable-list id="Hilighted" background="Gfx.COLOR_TRANSPARENT" width="20%" height="20%">
-        <shape type="circle" x="center" y="center" radius="50%" color="Gfx.COLOR_TRANSPARENT" border_width="2" border_color="Gfx.COLOR_WHITE"/>
-    </drawable-list>
+    </layout>
     
     <bitmap id="LedOff" filename="../drawables/led_off.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
     <bitmap id="LedOn" filename="../drawables/led_on.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
     
+    <bitmap id="PowerOff" filename="../drawables/power_off.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
     <bitmap id="PowerOn" filename="../drawables/power_on.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
     
     <bitmap id="Flicker60" filename="../drawables/flicker_60.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>

@@ -19,8 +19,8 @@ class RemoteView extends WatchUi.View {
     }
 
     function onShow() as Void {
-        hilightIcon = WatchUi.loadResource(Rez.Drawables.Hilight);
-        settingsIcon = WatchUi.loadResource(Rez.Drawables.Wheel);
+        hilightIcon = loadResource(Rez.Drawables.Hilight);
+        settingsIcon = loadResource(Rez.Drawables.Wheel);
     }
 
     // Update the view
@@ -102,17 +102,9 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
         return true;
     }
 
-    public function onKeyPressed(keyEvent as WatchUi.KeyEvent) as Boolean {
-        if (keyEvent.getKey()==WatchUi.KEY_ENTER) {
+    public function onKeyPressed(keyEvent as KeyEvent) as Boolean {
+        if (keyEvent.getKey()==KEY_ENTER) {
             gopro.sendCommand(GoProCamera.SHUTTER);
-            return true;
-        } else if (keyEvent.getKey()==WatchUi.KEY_UP) {
-            if (gopro.isRecording()) {
-                gopro.sendCommand(GoProCamera.HILIGHT);
-            } else {
-                var view = new TogglablesView();
-                viewController.push(view, new TogglablesDelegate(view, gopro), SLIDE_DOWN);
-            }
             return true;
         }
         return false;
@@ -121,7 +113,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
     public function onMenu() as Boolean {
         if (!gopro.isRecording()) {
             var menu = new CustomMenu((80*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {});
-            viewController.push(menu, new SettingsMenuDelegate(menu, SettingsMenuItem.MAIN, gopro, [], viewController), WatchUi.SLIDE_UP);
+            viewController.push(menu, new SettingsMenuDelegate(menu, SettingsMenuItem.MAIN, gopro, [], viewController), SLIDE_UP);
             return true;
         }
         return false;
@@ -131,9 +123,21 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
         return onMenu();
     }
 
+    public function onPreviousPage() as Boolean {
+        if (gopro.isRecording()) {
+            gopro.sendCommand(GoProCamera.HILIGHT);
+            return true;
+        } else if (!gopro.getDescription().equals("...")) {
+            var view = new TogglablesView(gopro);
+            viewController.push(view, new TogglablesDelegate(view, gopro, viewController), SLIDE_DOWN);
+            return true;
+        }
+        return false;
+    }
+
     public function onBack() as Boolean {
         gopro.disconnect();
-        viewController.pop(WatchUi.SLIDE_DOWN);
+        viewController.pop(SLIDE_RIGHT);
         return true;
     }
 }

@@ -59,6 +59,28 @@ using Toybox.BluetoothLowEnergy as Ble;
         }
     };
 
+    private static const AVAILABLE_FLICKER_H11 = [
+        GoProSettings.HZ50,
+        GoProSettings.HZ60
+    ];
+
+    private static const AVAILABLE_LED_H11 = [
+        GoProSettings.LED_ON,
+        GoProSettings.LED_OFF,
+        // GoProSettings.LED_ALL_ON,
+        // GoProSettings.LED_ALL_OFF,
+        // GoProSettings.LED_BACK_ONLY,
+    ];
+
+    private static const AVAILABLE_HYPERSMOOTH_H11 = [
+        GoProSettings.HS_OFF,
+        GoProSettings.HS_LOW,
+        GoProSettings.HS_BOOST,
+        GoProSettings.HS_AUTO_BOOST,
+    ];
+
+    private static const AVAILABLE_GPS_H11 = [];
+
     // private static const AVAILABLE_RATIOS_H11 = {
     //     26  => [26,27,100],
     //     27  => [26,27,100],
@@ -83,6 +105,9 @@ using Toybox.BluetoothLowEnergy as Ble;
             GoProSettings.LENS          => GoProSettings.WIDE,
             GoProSettings.FRAMERATE     => 6,
             GoProSettings.FLICKER       => GoProSettings.HZ50,
+            GoProSettings.LED           => GoProSettings.LED_ON,
+            GoProSettings.HYPERSMOOTH   => GoProSettings.HS_LOW,
+            GoProSettings.GPS           => 0,
         };
         self.statuses = {
             GoProCamera.ENCODING            => 0,
@@ -212,6 +237,18 @@ using Toybox.BluetoothLowEnergy as Ble;
             case GoProSettings.FRAMERATE:
                 available = (AVAILABLE_MAP_H11.get(settings.get(GoProSettings.RESOLUTION)) as Dictionary).get(settings.get(GoProSettings.LENS));
                 break;
+            case GoProSettings.LED:
+                available = AVAILABLE_LED_H11;
+                break;
+            case GoProSettings.GPS:
+                available = AVAILABLE_GPS_H11;
+                break;
+            case GoProSettings.FLICKER:
+                available = AVAILABLE_FLICKER_H11;
+                break;
+            case GoProSettings.HYPERSMOOTH:
+                available = AVAILABLE_HYPERSMOOTH_H11;
+                break;
             default:
                 available = [];
                 System.println("Wrong id");
@@ -276,7 +313,7 @@ using Toybox.BluetoothLowEnergy as Ble;
         requestQueue.add(
             GattRequest.WRITE_CHARACTERISTIC,
             GattProfileManager.QUERY_CHARACTERISTIC,
-            [0x05, REGISTER_SETTING, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.LENS, GoProSettings.FLICKER]b
+            [0x08, REGISTER_SETTING, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b
         );
         requestQueue.add(
             GattRequest.WRITE_CHARACTERISTIC,
@@ -286,7 +323,7 @@ using Toybox.BluetoothLowEnergy as Ble;
         requestQueue.add(
             GattRequest.WRITE_CHARACTERISTIC,
             GattProfileManager.QUERY_CHARACTERISTIC,
-            [0x04, REGISTER_AVAILABLE, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.LENS]b
+            [0x08, REGISTER_AVAILABLE, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b
         );
         viewController.push(new RemoteView(gopro), new RemoteDelegate(viewController, gopro), WatchUi.SLIDE_LEFT);
     }
