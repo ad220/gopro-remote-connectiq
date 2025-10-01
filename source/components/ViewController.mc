@@ -48,7 +48,7 @@ class ViewController {
     }
 
     public function returnHome(message as String?, messageType as NotifView.NotifType?) as Void {
-        for (; viewLayersCount>1; viewLayersCount--) {
+        for (; viewLayersCount>1;) {
             pop(WatchUi.SLIDE_IMMEDIATE);
         }
         if (viewLayersCount>0) {
