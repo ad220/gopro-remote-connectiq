@@ -76,7 +76,11 @@ class GattRequestQueue {
             queue = queue.slice(1, queue.size());
         }
         isProcessing = false;
-        Ble.unpairDevice(service.getDevice());
+        try {
+            Ble.unpairDevice(service.getDevice());
+        } catch (ex) {
+            System.println("Error while closing GattRequestQueue: "+ex.getErrorMessage());
+        }
     }
 }
 
