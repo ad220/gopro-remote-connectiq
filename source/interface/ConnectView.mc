@@ -10,7 +10,7 @@ using InterfaceComponentsManager as ICM;
 class ConnectView extends WatchUi.View {
 
     private var label as String;
-
+    private var icon as BitmapResource?;
 
     function initialize(label as String) {
         View.initialize();
@@ -19,28 +19,21 @@ class ConnectView extends WatchUi.View {
     }
 
     function onShow() as Void {
+        icon = loadResource(Rez.Drawables.ConnectIcon);
     }
 
     function onUpdate(dc as Dc) as Void {
+        View.onUpdate(dc);
         dc.setColor(0x00AAFF, Graphics.COLOR_BLACK);
         dc.clear();
         dc.fillRoundedRectangle(ICM.halfW-75*ICM.kMult, ICM.halfH+50*ICM.kMult, 150*ICM.kMult, 40*ICM.kMult, 20*ICM.kMult);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         dc.drawText(ICM.halfW, ICM.halfH+70*ICM.kMult, ICM.adaptFontMid(), label, ICM.JTEXT_MID);
-        drawRectWithBorder(dc, -32, -63, 26, 10, 4, 2, Graphics.COLOR_DK_GRAY);
-        drawRectWithBorder(dc, -51, -58, 102, 92, 16, 4, Graphics.COLOR_DK_GRAY);
-        drawRectWithBorder(dc, -7, -58, 58, 58, 16, 4, Graphics.COLOR_DK_GRAY);
-        drawRectWithBorder(dc, -40, -25, 25, 25, 6, 3, Graphics.COLOR_DK_GRAY);
-        drawRectWithBorder(dc, -39, -46, 20, 9, 4, 3, 0xFF5500);
-        drawRectWithBorder(dc, +4, +7, 36, 16, 8, 3, 0x00AAFF);
-        drawRectWithBorder(dc, +6, -45, 32, 32, 16, 10, Graphics.COLOR_LT_GRAY);
+        dc.drawBitmap(ICM.halfW*0.6, ICM.halfH*0.6-15*ICM.kMult, icon);
     }
 
-    private function drawRectWithBorder(dc, offx, offy, w, h, rad, thick, color) as Void{
-        dc.setColor(Graphics.COLOR_BLACK,Graphics.COLOR_TRANSPARENT);
-        dc.fillRoundedRectangle(ICM.halfW+offx*ICM.kMult, ICM.halfH+offy*ICM.kMult, w*ICM.kMult, h*ICM.kMult, rad*ICM.kMult);
-        dc.setColor(color,Graphics.COLOR_TRANSPARENT);
-        dc.fillRoundedRectangle(ICM.halfW+(offx+thick)*ICM.kMult, ICM.halfH+(offy+thick)*ICM.kMult, (w-2*thick)*ICM.kMult, (h-2*thick)*ICM.kMult, (rad-thick)*ICM.kMult);
+    public function onHide() as Void {
+        icon = null;
     }
 }
 
@@ -48,8 +41,8 @@ var delegate as GoProDelegate?;
 
 
 class ConnectDelegate extends WatchUi.BehaviorDelegate {
-    private const CONNECTING_NOTIF      = WatchUi.loadResource(Rez.Strings.Connecting);
-    private const CONNECT_ERROR_NOTIF   = WatchUi.loadResource(Rez.Strings.ConnectFail);
+    private const CONNECTING_NOTIF      = loadResource(Rez.Strings.Connecting);
+    private const CONNECT_ERROR_NOTIF   = loadResource(Rez.Strings.ConnectFail);
 
     private var lastPairedDevice as Ble.ScanResult?;
     private var timerController as TimerController;

@@ -10,9 +10,14 @@ class OptionPickerTitle extends WatchUi.Drawable {
     private var title as String;
 
 
-    public function initialize(title as String) {
-        self.title = title;
+    public function initialize(title as String or ResourceId) {
         Drawable.initialize({});
+
+        if (title instanceof ResourceId) {
+            self.title = loadResource(title);
+        } else {
+            self.title = title;
+        }
     }
 
     public function draw(dc as Dc) as Void {
@@ -33,7 +38,7 @@ class OptionPickerItem extends WatchUi.CustomMenuItem {
     private static var selected as Char;
 
 
-    public function initialize(label as String, id as Char, selected as Char) {
+    public function initialize(label as String or ResourceId, id as Char, selected as Char) {
         CustomMenuItem.initialize(id, {});
         self.selected = selected;
 

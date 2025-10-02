@@ -44,4 +44,20 @@
     <string id="_NARROW">Étroit</string>
     <string id="_ULTRAWIDE">Ultra Large</string>
     <string id="_ULTRALINEAR">Ultra Linéaire</string>
+
+    <!-- LED -->
+    <string id="Off">Éteinte</string>
+    <string id="On">Allumée</string>
+    <string id="AllOn">Toutes allumées</string>
+    <string id="AllOff">Toutes éteintes</string>
+    <string id="FrontOffOnly">Avant éteinte</string>
+    <string id="BackOnly">Arrière uniquement</string>
+
+    <!-- Hypersmooth -->
+    <string id="Disabled">Désactivé</string>
+    <string id="Low">Bas</string>
+    <string id="High">Haut</string>
+    <string id="Boost">Boost</string>
+    <string id="AutoBoost">Auto Boost</string>
+    <string id="Standard">Standard</string>
 </strings>

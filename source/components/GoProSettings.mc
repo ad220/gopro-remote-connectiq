@@ -7,8 +7,11 @@ class GoProSettings {
     public enum SettingId {
         RESOLUTION  = 2,
         FRAMERATE   = 3,
+        GPS         = 83,
+        LED         = 91,
         LENS        = 121,
         FLICKER     = 134,
+        HYPERSMOOTH = 135,
 
         RATIO = -1
     }
@@ -103,6 +106,24 @@ class GoProSettings {
 
     public static const FRAMERATE_LABEL = WatchUi.loadResource(Rez.Strings._FPS);
 
+    public enum LedId {
+        LED_OFF         = 0,
+        LED_ON          = 2,
+        LED_ALL_ON      = 3,
+        LED_ALL_OFF     = 4,
+        LED_FRONT_OFF   = 5,
+        LED_BACK_ONLY   = 100,
+    }
+
+    public static const LED_LABELS = {
+        LED_OFF         => Rez.Strings.Off,
+        LED_ON          => Rez.Strings.On,
+        LED_ALL_ON      => Rez.Strings.AllOn,
+        LED_ALL_OFF     => Rez.Strings.AllOff,
+        LED_FRONT_OFF   => Rez.Strings.FrontOffOnly,
+        LED_BACK_ONLY   => Rez.Strings.BackOnly,
+    };
+
     public enum LensId {
         WIDE            = 0,
         NARROW          = 2,
@@ -120,27 +141,45 @@ class GoProSettings {
     }
 
     public static const LENS_LABELS = {
-        WIDE            => WatchUi.loadResource(Rez.Strings._WIDE),
-        NARROW          => WatchUi.loadResource(Rez.Strings._NARROW),
-        SUPERVIEW       => WatchUi.loadResource(Rez.Strings._SUPERVIEW),
-        LINEAR          => WatchUi.loadResource(Rez.Strings._LINEAR),
-        MAXSUPERVIEW    => WatchUi.loadResource(Rez.Strings._MAXSUPERVIEW),
-        LINEARLEVEL     => WatchUi.loadResource(Rez.Strings._LINEARLEVEL),
-        HYPERVIEW       => WatchUi.loadResource(Rez.Strings._HYPERVIEW),
-        LINEARLOCK      => WatchUi.loadResource(Rez.Strings._LINEARLOCK),
-        MAXHYPERVIEW    => WatchUi.loadResource(Rez.Strings._MAXHYPERVIEW),
-        ULTRASUPERVIEW  => WatchUi.loadResource(Rez.Strings._ULTRASUPERVIEW),
-        ULTRAWIDE       => WatchUi.loadResource(Rez.Strings._ULTRAWIDE),
-        ULTRALINEAR     => WatchUi.loadResource(Rez.Strings._ULTRALINEAR),
-        ULTRAHYPERVIEW  => WatchUi.loadResource(Rez.Strings._ULTRAHYPERVIEW),
+        WIDE            => Rez.Strings._WIDE,
+        NARROW          => Rez.Strings._NARROW,
+        SUPERVIEW       => Rez.Strings._SUPERVIEW,
+        LINEAR          => Rez.Strings._LINEAR,
+        MAXSUPERVIEW    => Rez.Strings._MAXSUPERVIEW,
+        LINEARLEVEL     => Rez.Strings._LINEARLEVEL,
+        HYPERVIEW       => Rez.Strings._HYPERVIEW,
+        LINEARLOCK      => Rez.Strings._LINEARLOCK,
+        MAXHYPERVIEW    => Rez.Strings._MAXHYPERVIEW,
+        ULTRASUPERVIEW  => Rez.Strings._ULTRASUPERVIEW,
+        ULTRAWIDE       => Rez.Strings._ULTRAWIDE,
+        ULTRALINEAR     => Rez.Strings._ULTRALINEAR,
+        ULTRAHYPERVIEW  => Rez.Strings._ULTRAHYPERVIEW,
     };
 
-    public enum Flicker {
+    public enum FlickerId {
         NTSC,
         PAL,
-        HZ50,
-        HZ60
+        HZ60,
+        HZ50
     }
+
+    public enum HypersmoothId {
+        HS_OFF          = 0,
+        HS_LOW,
+        HS_HIGH,
+        HS_BOOST,
+        HS_AUTO_BOOST,
+        HS_STANDARD     = 100,
+    }
+
+    public static const HYPERSMOOTH_LABELS = {
+        HS_OFF          => Rez.Strings.Disabled,
+        HS_LOW          => Rez.Strings.Low,
+        HS_HIGH         => Rez.Strings.High,
+        HS_BOOST        => Rez.Strings.Boost,
+        HS_AUTO_BOOST   => Rez.Strings.AutoBoost,
+        HS_STANDARD     => Rez.Strings.Standard,
+    };
 
     protected var settings = {} as Dictionary;
 
@@ -156,7 +195,7 @@ class GoProSettings {
         return settings;
     }
 
-    public static function getLabel(settingId as GoProSettings.SettingId, setting as Char) as String {
+    public static function getLabel(settingId as GoProSettings.SettingId, setting as Char) as String or ResourceId {
         try {
             switch (settingId) {
                 case RESOLUTION:
@@ -170,6 +209,10 @@ class GoProSettings {
                     return LENS_LABELS.get(setting);
                 case FRAMERATE:
                     return FRAMERATE_MAP.get(setting) + FRAMERATE_LABEL;
+                case LED:
+                    return LED_LABELS.get(setting);
+                case HYPERSMOOTH:
+                    return HYPERSMOOTH_LABELS.get(setting);
                 default:
                     System.println("Unknown setting ID requested for label");
                     return "";

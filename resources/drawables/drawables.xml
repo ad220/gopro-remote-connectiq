@@ -1,12 +1,7 @@
 <drawables>
-    <bitmap id="LauncherIcon" filename="remote.png">
-        <palette>
-            <color>FFFFFF</color>
-            <color>AAAAAA</color>
-            <color>00AAFF</color>
-            <color>0055AA</color>
-        </palette>
-    </bitmap>
+    <bitmap id="LauncherIcon" filename="remote_small.png"/>
+    
+    <bitmap id="ConnectIcon" filename="remote.png" scaleY="40%" scaleRelativeTo="screen"/>
 
     <bitmap id="Hilight" filename="hilight2.png" scaleY="9.17%" scaleRelativeTo="screen">
         <palette>

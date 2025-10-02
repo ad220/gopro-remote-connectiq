@@ -118,6 +118,9 @@ class GoProCamera extends GoProSettings {
             LENS        => [],
             FRAMERATE   => [],
             FLICKER     => [],
+            GPS         => [],
+            LED         => [],
+            HYPERSMOOTH => [],
         };
     }
 

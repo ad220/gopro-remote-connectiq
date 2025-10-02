@@ -6,13 +6,16 @@ import Toybox.BluetoothLowEnergy;
 
 
 class GoProRemoteApp extends Application.AppBase {
-    private var timerController as TimerController?;
-    private var viewController as ViewController?;
+
+    public var timerController as TimerController;
+    public var viewController as ViewController;
+
     private var lastPairedDevice as BluetoothLowEnergy.ScanResult?;
 
     function initialize() {
         AppBase.initialize();
-        
+        timerController = new TimerController(500);
+        viewController = new ViewController(timerController);
     }
 
     // onStart() is called on application start up
@@ -20,8 +23,6 @@ class GoProRemoteApp extends Application.AppBase {
         System.println("App started");
         InterfaceComponentsManager.computeInterfaceConstants();
         InterfaceComponentsManager.loadFonts();
-        timerController = new TimerController();
-        viewController = new ViewController(timerController);
         lastPairedDevice = Storage.getValue("lastPairedDevice");
     }
 
@@ -38,4 +39,8 @@ class GoProRemoteApp extends Application.AppBase {
         return [ new ConnectView(label), new ConnectDelegate(lastPairedDevice, timerController, viewController) ];
     }
 
+}
+
+public function getApp() as GoProRemoteApp {
+    return Application.getApp();
 }

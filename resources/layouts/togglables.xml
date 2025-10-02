@@ -1,0 +1,44 @@
+<resources>
+    <layout id="TogglablesLayout" background="Gfx.COLOR_BLACK">
+        <button id="FlickerButton" class="Togglable" x="66.63%" y="48.65%" width="20%" height="20%" behavior="onFlicker">
+            <param name="defaultBmpId">Rez.Drawables.Flicker60</param>
+            <param name="activatedBmpId">Rez.Drawables.Flicker50</param>
+        </button>
+
+        <button id="PowerButton" class="Togglable" x="40.0%" y="68.0%" width="20%" height="20%" behavior="onPower">
+            <param name="defaultBmpId">Rez.Drawables.PowerOn</param>
+            <param name="activatedBmpId">Rez.Drawables.PowerOff</param>
+        </button>
+
+        <button id="LedButton" class="Togglable" x="13.37%" y="48.65%" width="20%" height="20%" behavior="onLed">
+            <param name="defaultBmpId">Rez.Drawables.LedOff</param>
+            <param name="activatedBmpId">Rez.Drawables.LedOn</param>
+        </button>
+        
+        <button id="GpsButton" class="Togglable" x="23.54%" y="17.35%" width="20%" height="20%" behavior="onGps">
+            <param name="defaultBmpId">Rez.Drawables.GpsOff</param>
+            <param name="activatedBmpId">Rez.Drawables.GpsOn</param>
+        </button>
+
+        <button id="StabilizeButton" class="Togglable" x="56.46%" y="17.35%" width="20%" height="20%" behavior="onStabilize">
+            <param name="defaultBmpId">Rez.Drawables.StabilizeOff</param>
+            <param name="activatedBmpId">Rez.Drawables.StabilizeOn</param>
+        </button>
+    </layout>
+    
+    <bitmap id="LedOff" filename="../drawables/led_off.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
+    <bitmap id="LedOn" filename="../drawables/led_on.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
+    
+    <bitmap id="PowerOff" filename="../drawables/power_off.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
+    <bitmap id="PowerOn" filename="../drawables/power_on.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
+    
+    <bitmap id="Flicker60" filename="../drawables/flicker_60.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
+    <bitmap id="Flicker50" filename="../drawables/flicker_50.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
+    
+    <bitmap id="StabilizeOff" filename="../drawables/stabilize_off.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
+    <bitmap id="StabilizeOn" filename="../drawables/stabilize_on.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
+    
+    <bitmap id="GpsOff" filename="../drawables/gps_off.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
+    <bitmap id="GpsOn" filename="../drawables/gps_on.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
+    
+</resources>

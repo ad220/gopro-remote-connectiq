@@ -39,6 +39,9 @@
     <string id="Lens">Lens</string>
     <string id="Resolution">Resolution</string>
     <string id="Ratio">Aspect ratio</string>
+    <string id="Gps" translatable="false">GPS</string>
+    <string id="Led" translatable="false">LED</string>
+    <string id="HyperSmooth" translatable="false">HyperSmooth</string>
     
     <!-- Framerate -->
     <string id="_FPS"> fps</string>
@@ -74,5 +77,21 @@
     <string id="_16R9" translatable="false">16:9</string>
     <string id="_9R16" translatable="false">9:16</string>
     <string id="_21R9" translatable="false">21:9</string>
+
+    <!-- LED -->
+    <string id="Off">Disabled</string>
+    <string id="On">Enabled</string>
+    <string id="AllOn">All On</string>
+    <string id="AllOff">All Off</string>
+    <string id="FrontOffOnly">Front Off Only</string>
+    <string id="BackOnly">Back Only</string>
+
+    <!-- Hypersmooth -->
+    <string id="Disabled">Disabled</string>
+    <string id="Low">Low</string>
+    <string id="High">High</string>
+    <string id="Boost">Boost</string>
+    <string id="AutoBoost">AutoBoost</string>
+    <string id="Standard">Standard</string>
 
 </strings>
