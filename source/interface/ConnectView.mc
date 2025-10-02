@@ -19,7 +19,7 @@ class ConnectView extends WatchUi.View {
     }
 
     function onShow() as Void {
-        icon = WatchUi.loadResource(Rez.Drawables.ConnectIcon);
+        icon = loadResource(Rez.Drawables.ConnectIcon);
     }
 
     function onUpdate(dc as Dc) as Void {
@@ -41,8 +41,8 @@ var delegate as GoProDelegate?;
 
 
 class ConnectDelegate extends WatchUi.BehaviorDelegate {
-    private const CONNECTING_NOTIF      = WatchUi.loadResource(Rez.Strings.Connecting);
-    private const CONNECT_ERROR_NOTIF   = WatchUi.loadResource(Rez.Strings.ConnectFail);
+    private const CONNECTING_NOTIF      = loadResource(Rez.Strings.Connecting);
+    private const CONNECT_ERROR_NOTIF   = loadResource(Rez.Strings.ConnectFail);
 
     private var lastPairedDevice as Ble.ScanResult?;
     private var timerController as TimerController;
@@ -56,19 +56,19 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         self.lastPairedDevice = lastPairedDevice;
         self.timerController = timerController;
         self.viewController = viewController;
-        self.delegate = new GoProDelegateStub(timerController, viewController);
-        // self.delegate = new GoProDelegate(timerController, viewController);
+        // self.delegate = new GoProDelegateStub(timerController, viewController);
+        self.delegate = new GoProDelegate(timerController, viewController);
         Ble.setDelegate(delegate);
         GattProfileManager.registerProfiles();
     }
 
     public function onSelect() {
-        onScanResult(null);
-        // if (lastPairedDevice instanceof Ble.ScanResult) {
-        //     onScanResult(lastPairedDevice);
-        // } else {
-        //     startScan();
-        // }
+        // onScanResult(null);
+        if (lastPairedDevice instanceof Ble.ScanResult) {
+            onScanResult(lastPairedDevice);
+        } else {
+            startScan();
+        }
         return true;
     }
 
