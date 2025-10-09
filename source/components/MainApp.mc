@@ -39,6 +39,10 @@ class GoProRemoteApp extends Application.AppBase {
         return [ new ConnectView(label), new ConnectDelegate(lastPairedDevice, timerController, viewController) ];
     }
 
+    function getGlanceView() as [GlanceView] or [GlanceView, GlanceViewDelegate] or Null {
+        return null;
+    }
+
 }
 
 public function getApp() as GoProRemoteApp {

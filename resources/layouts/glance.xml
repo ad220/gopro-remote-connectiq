@@ -1,0 +1,6 @@
+<resources>
+    <layout id="GlanceLayout" background="Gfx.COLOR_BLACK">
+        <bitmap id="GlanceLogo" x="10%" y="center" filename="../drawables/remote.png" scaleX="12%" scaleRelativeTo="screen" dithering="none" automaticPalette="true"/>
+        <label id="GlanceTitle" x="10%" y="center" text="@Strings.AppName" justification="Gfx.TEXT_JUSTIFY_LEFT | Gfx.TEXT_JUSTIFY_VCENTER"/>
+    </layout>    
+</resources>
