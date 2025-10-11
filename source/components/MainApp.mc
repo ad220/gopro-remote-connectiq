@@ -40,7 +40,13 @@ class GoProRemoteApp extends Application.AppBase {
     }
 
     function getGlanceView() as [GlanceView] or [GlanceView, GlanceViewDelegate] or Null {
-        return null;
+        var label;
+        if (lastPairedDevice==null) {
+            label = WatchUi.loadResource(Rez.Strings.GlanceScan);
+        } else {
+            label = WatchUi.loadResource(Rez.Strings.GlanceConnect) + lastPairedDevice.getDeviceName();
+        }
+        return [new RemoteGlance(label)];
     }
 
 }

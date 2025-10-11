@@ -1,5 +1,10 @@
 <strings>
     <string id="AppName">Télécommande GoPro</string>
+    
+    <!-- Glance -->
+    <string id="GlanceTitle">Télécom. GoPro</string>
+    <string id="GlanceConnect">Connex. </string>
+    <string id="GlanceScan">Chercher caméra</string>
 
     <!-- GoPro Models -->
     <string id="GPFF">Modèle de GoPro inconnu</string>
