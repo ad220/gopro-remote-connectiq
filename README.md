@@ -15,9 +15,10 @@ Please note that this app was mainly developed for personal use, it should now b
 
 
 ### Planned [(*)](#disclaimer)
+- UI update + battery and storage indicators
+- QR Code generator for GoPro Labs support
 - add photo and timelapse support
 - better info and error pop-ups message
-- QR Code generator for GoPro Labs support
 
 ## Installation
 The widget is available on the [Garmin Connect IQ store](https://apps.garmin.com/apps/f9e09224-1c60-4e94-a616-f9ef10932fdf). You can install it directly from your Garmin Connect app on your smartphone.
@@ -27,7 +28,7 @@ You can also build the widget for your specific device with the Garmin SDK and t
 ## How to use it
 On the first launch, press the pair button on the main screen of the widget and put your GoPro in pairing mode. After being scanned by the watch, select the camera and wait for it to validate pairing. Once it is done, you should see the remote screen with the shutter button and the GoPro current settings.
 
-On this view, press the select button on your watch to start recording and the up button to hilight during capture. Using the up button when the camera is idle will open the camera settings menu and while the down down button will open the video settings menu. In this menu, you can apply a defined preset, manually change video settings or save the current applied video settings as a preset.
+On this view, press the select button on your watch to start recording and the up button to hilight during capture. Using the up button when the camera is idle will open the camera settings menu and while the down down button will open the video settings menu. In this menu, you can apply a defined preset, manually change video settings or save the current applied video settings as a preset. Be careful as applying a preset with another anti-flicker setting than the current one (i.e. 50/60 fps) won't work properly.
 
 ## Screenshots gallery
 ![](documentation/screenshots/connect.png)
@@ -37,6 +38,9 @@ On this view, press the select button on your watch to start recording and the u
 ![](documentation/screenshots/presets.png)
 
 ## Changelog
+
+### v3.2
+- Add glance view
 
 ### v3.1
 - Add camera settings togglables menu
