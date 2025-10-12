@@ -25,6 +25,10 @@ class RemoteView extends WatchUi.View {
 
     // Update the view
     function onUpdate(dc as Dc) as Void {
+        if (dc has :setAntiAlias) {
+            dc.setAntiAlias(true);
+        }
+
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLACK);
         dc.clear();
         dc.fillCircle(ICM.halfW-72*ICM.kMult, ICM.halfH-25*ICM.kMult, 22*ICM.kMult);
@@ -38,7 +42,7 @@ class RemoteView extends WatchUi.View {
         dc.drawText(ICM.halfW+12*ICM.kMult, ICM.halfH+65*ICM.kMult, ICM.adaptFontSmall(), gopro.getDescription(), ICM.JTEXT_MID);
         dc.drawBitmap(ICM.halfW-83*ICM.kMult-ICM.imgOff, ICM.halfH-36*ICM.kMult-ICM.imgOff, hilightIcon);
         dc.drawBitmap(ICM.halfW-71*ICM.kMult-ICM.imgOff, ICM.halfH+53*ICM.kMult-ICM.imgOff, settingsIcon);
-        dc.setColor(0xFF0000, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(8*ICM.kMult);
         dc.drawCircle(ICM.halfW+15*ICM.kMult, ICM.halfH-25*ICM.kMult, 28*ICM.kMult);
         dc.setPenWidth(1);
