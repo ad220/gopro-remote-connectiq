@@ -10,16 +10,22 @@ using InterfaceComponentsManager as ICM;
 class ConnectView extends WatchUi.View {
 
     private var label as String;
+    private var delegate as ConnectDelegate;
     private var icon as BitmapResource?;
 
-    function initialize(label as String) {
+    function initialize(label as String, delegate as ConnectDelegate) {
         View.initialize();
 
         self.label = label;
+        self.delegate = delegate;
     }
 
     function onShow() as Void {
         icon = loadResource(Rez.Drawables.ConnectIcon);
+        if (getApp().fromGlance) {
+            delegate.onSelect();
+            getApp().fromGlance = false;
+        }
     }
 
     function onUpdate(dc as Dc) as Void {
@@ -62,7 +68,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         GattProfileManager.registerProfiles();
     }
 
-    public function onSelect() {
+    public function onSelect() as Boolean {
         // onScanResult(null);
         if (lastPairedDevice instanceof Ble.ScanResult) {
             onScanResult(lastPairedDevice);
@@ -72,7 +78,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         return true;
     }
 
-    public function onMenu() {
+    public function onMenu() as Boolean {
         startScan();
         return true;
     }
