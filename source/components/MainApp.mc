@@ -9,13 +9,15 @@ class GoProRemoteApp extends Application.AppBase {
 
     public var timerController as TimerController;
     public var viewController as ViewController;
+    public var fromGlance as Boolean;
 
     private var lastPairedDevice as BluetoothLowEnergy.ScanResult?;
 
     function initialize() {
         AppBase.initialize();
-        timerController = new TimerController(500);
-        viewController = new ViewController(timerController);
+        self.timerController = new TimerController(500);
+        self.viewController = new ViewController(timerController);
+        self.fromGlance = false;
     }
 
     // onStart() is called on application start up
@@ -24,6 +26,9 @@ class GoProRemoteApp extends Application.AppBase {
         InterfaceComponentsManager.computeInterfaceConstants();
         InterfaceComponentsManager.loadFonts();
         lastPairedDevice = Storage.getValue("lastPairedDevice");
+        if (state!=null) {
+            fromGlance = state.get(:launchedFromGlance) == true;
+        }
     }
 
     // onStop() is called when your application is exiting
@@ -36,7 +41,8 @@ class GoProRemoteApp extends Application.AppBase {
     // Return the initial view of your application here
     function getInitialView() {
         var label = lastPairedDevice==null ? WatchUi.loadResource(Rez.Strings.Pair) : WatchUi.loadResource(Rez.Strings.Connect);
-        return [ new ConnectView(label), new ConnectDelegate(lastPairedDevice, timerController, viewController) ];
+        var delegate = new ConnectDelegate(lastPairedDevice, timerController, viewController);
+        return [ new ConnectView(label, delegate), delegate ];
     }
 
     function getGlanceView() as [GlanceView] or [GlanceView, GlanceViewDelegate] or Null {
@@ -48,7 +54,6 @@ class GoProRemoteApp extends Application.AppBase {
         }
         return [new RemoteGlance(label)];
     }
-
 }
 
 public function getApp() as GoProRemoteApp {
