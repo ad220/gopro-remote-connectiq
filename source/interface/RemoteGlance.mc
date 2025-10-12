@@ -6,6 +6,7 @@ import Toybox.Application;
 
 using InterfaceComponentsManager as ICM;
 
+(:glance)
 class RemoteGlance extends WatchUi.GlanceView {
 
     private var title as String;

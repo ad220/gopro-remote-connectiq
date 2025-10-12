@@ -1,8 +1,8 @@
 <strings>
     <string id="AppName">GoPro Remote</string>
-    <string id="GlanceTitle">GoPro Remote</string>
-    <string id="GlanceConnect">Find </string>
-    <string id="GlanceScan">Scan for camera</string>
+    <string id="GlanceTitle" scope="glance">GoPro Remote</string>
+    <string id="GlanceConnect" scope="glance">Find </string>
+    <string id="GlanceScan" scope="glance">Scan for camera</string>
     <string id="GoPro" translatable="false">GoPro</string>
 
     <!-- GoPro Models -->
