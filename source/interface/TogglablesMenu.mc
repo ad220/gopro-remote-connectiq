@@ -104,6 +104,9 @@ class TogglablesView extends WatchUi.View {
     }
 
     public function onUpdate(dc as Dc) as Void {
+        if (dc has :setAntiAlias) {
+            dc.setAntiAlias(true);
+        }
         View.onUpdate(dc);
     }
 

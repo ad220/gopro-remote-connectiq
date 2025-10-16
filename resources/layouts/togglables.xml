@@ -26,19 +26,19 @@
         </button>
     </layout>
     
-    <bitmap id="LedOff" filename="../drawables/led_off.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
-    <bitmap id="LedOn" filename="../drawables/led_on.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
+    <bitmap id="LedOff" filename="../drawables/led_off.png" scaleX="20%"  dithering="none"/>
+    <bitmap id="LedOn" filename="../drawables/led_on.png" scaleX="20%"  dithering="none"/>
     
-    <bitmap id="PowerOff" filename="../drawables/power_off.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
-    <bitmap id="PowerOn" filename="../drawables/power_on.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
+    <bitmap id="PowerOff" filename="../drawables/power_off.png" scaleX="20%"  dithering="none"/>
+    <bitmap id="PowerOn" filename="../drawables/power_on.png" scaleX="20%"  dithering="none"/>
     
-    <bitmap id="Flicker60" filename="../drawables/flicker_60.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
-    <bitmap id="Flicker50" filename="../drawables/flicker_50.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
+    <bitmap id="Flicker60" filename="../drawables/flicker_60.png" scaleX="20%"  dithering="none"/>
+    <bitmap id="Flicker50" filename="../drawables/flicker_50.png" scaleX="20%"  dithering="none"/>
     
-    <bitmap id="StabilizeOff" filename="../drawables/stabilize_off.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
-    <bitmap id="StabilizeOn" filename="../drawables/stabilize_on.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
+    <bitmap id="StabilizeOff" filename="../drawables/stabilize_off.png" scaleX="20%"  dithering="none"/>
+    <bitmap id="StabilizeOn" filename="../drawables/stabilize_on.png" scaleX="20%"  dithering="none"/>
     
-    <bitmap id="GpsOff" filename="../drawables/gps_off.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
-    <bitmap id="GpsOn" filename="../drawables/gps_on.png" scaleX="20%" scaleRelativeTo="screen" dithering="none"/>
+    <bitmap id="GpsOff" filename="../drawables/gps_off.png" scaleX="20%"  dithering="none"/>
+    <bitmap id="GpsOn" filename="../drawables/gps_on.png" scaleX="20%"  dithering="none"/>
     
 </resources>

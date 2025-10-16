@@ -2,6 +2,7 @@ import Toybox.Lang;
 import Toybox.System;
 import Toybox.WatchUi;
 import Toybox.Graphics;
+import Toybox.Math;
 
 
 module InterfaceComponentsManager {
@@ -46,6 +47,14 @@ module InterfaceComponentsManager {
 
     public function adaptFontMid() as FontResource {
         return kMult<=1 ? fontSmall : fontMedium;
+    }
+
+    function scaleX(xRel as Float) as Number {
+        return Math.round(xRel*screenW).toNumber();
+    }
+    
+    function scaleY(yRel as Float) as Number {
+        return Math.round(yRel*screenH).toNumber();
     }
 }
 

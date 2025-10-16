@@ -1,0 +1,21 @@
+<resources>
+<layout id="ConnectLayout">
+    <drawable id="ConnectButton"/>
+    <label id="ConnectLabel" x="50%" y="78%" font="@Fonts.Small" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER"/>
+    <bitmap id="ConnectIcon" filename="../drawables/remote.png" x="30%" y="23.75%" scaleX="40%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="MenuHint" personality="system_icon_dark__hint_button_left_middle system_loc__hint_button_left_middle"/>
+    <bitmap id="StartHint" personality="system_icon_dark__hint_button_right_top system_loc__hint_button_right_top"/>
+    <drawable id="ConnectDots"/>
+</layout>
+
+<drawable-list id="ConnectButton">
+    <shape type="rectangle" color="0x00AAFF" x="20%" y="70%" width="60%" height="16%" corner_radius="255"/>
+</drawable-list>
+
+<drawable-list id="ConnectDots">
+    <shape type="circle" radius="0.7%" color="Gfx.COLOR_WHITE" x="6%" y="46.5%"/>
+    <shape type="circle" radius="0.7%" color="Gfx.COLOR_WHITE" x="6%" y="50%"/>
+    <shape type="circle" radius="0.7%" color="Gfx.COLOR_WHITE" x="6%" y="53.5%"/>
+</drawable-list> 
+
+</resources>

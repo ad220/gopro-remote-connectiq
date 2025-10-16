@@ -1,20 +1,14 @@
 <drawables>
     <bitmap id="LauncherIcon" filename="remote_small.png" automaticPalette="true"/>
-    
-    <bitmap id="ConnectIcon" filename="remote.png" scaleY="40%" scaleRelativeTo="screen" dithering="none" automaticPalette="true"/>
 
-    <bitmap id="Hilight" filename="hilight.png" scaleY="9.17%" scaleRelativeTo="screen" dithering="none" automaticPalette="true"/>
+    <bitmap id="Edit" filename="save.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Camera" filename="camera.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Eco" filename="battery.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Sport" filename="sport.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Cinema" filename="cinema.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
 
-    <bitmap id="Wheel" filename="wheel.png" scaleY="10%" scaleRelativeTo="screen" dithering="none" automaticPalette="true"/>
-    
-    <bitmap id="Edit" filename="save.png" scaleY="10%" scaleRelativeTo="screen" dithering="none" automaticPalette="true"/>
-    <bitmap id="Camera" filename="camera.png" scaleY="10%" scaleRelativeTo="screen" dithering="none" automaticPalette="true"/>
-    <bitmap id="Eco" filename="battery.png" scaleY="10%" scaleRelativeTo="screen" dithering="none" automaticPalette="true"/>
-    <bitmap id="Sport" filename="sport.png" scaleY="10%" scaleRelativeTo="screen" dithering="none" automaticPalette="true"/>
-    <bitmap id="Cinema" filename="cinema.png" scaleY="10%" scaleRelativeTo="screen" dithering="none" automaticPalette="true"/>
-
-    <bitmap id="Resolution" filename="resolution.png" scaleY="10%" scaleRelativeTo="screen" dithering="none" automaticPalette="true"/>
-    <bitmap id="Ratio" filename="ratio.png" scaleY="10%" scaleRelativeTo="screen" dithering="none" automaticPalette="true"/>
-    <bitmap id="Lens" filename="lens.png" scaleY="10%" scaleRelativeTo="screen" dithering="none" automaticPalette="true"/>
-    <bitmap id="Framerate" filename="framerate.png" scaleY="10%" scaleRelativeTo="screen" dithering="none" automaticPalette="true"/>
+    <bitmap id="Resolution" filename="resolution.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Ratio" filename="ratio.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Lens" filename="lens.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Framerate" filename="framerate.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
 </drawables>

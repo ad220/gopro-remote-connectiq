@@ -11,7 +11,6 @@ class ConnectView extends WatchUi.View {
 
     private var label as String;
     private var delegate as ConnectDelegate;
-    private var icon as BitmapResource?;
 
     function initialize(label as String, delegate as ConnectDelegate) {
         View.initialize();
@@ -20,8 +19,12 @@ class ConnectView extends WatchUi.View {
         self.delegate = delegate;
     }
 
+    public function onLayout(dc as Dc) as Void {
+        setLayout(Rez.Layouts.ConnectLayout(dc));
+    }
+
+
     function onShow() as Void {
-        icon = loadResource(Rez.Drawables.ConnectIcon);
         if (getApp().fromGlance) {
             delegate.onSelect();
             getApp().fromGlance = false;
@@ -29,21 +32,13 @@ class ConnectView extends WatchUi.View {
     }
 
     function onUpdate(dc as Dc) as Void {
+        if (dc has :setAntiAlias) {
+            dc.setAntiAlias(true);
+        }
         View.onUpdate(dc);
-        dc.setColor(0x00AAFF, Graphics.COLOR_BLACK);
-        dc.clear();
-        dc.fillRoundedRectangle(ICM.halfW-75*ICM.kMult, ICM.halfH+50*ICM.kMult, 150*ICM.kMult, 40*ICM.kMult, 20*ICM.kMult);
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(ICM.halfW, ICM.halfH+70*ICM.kMult, ICM.adaptFontMid(), label, ICM.JTEXT_MID);
-        dc.drawBitmap(ICM.halfW*0.6, ICM.halfH*0.6-15*ICM.kMult, icon);
-    }
-
-    public function onHide() as Void {
-        icon = null;
+        (findDrawableById("ConnectLabel") as Text).setText(label);
     }
 }
-
-var delegate as GoProDelegate?;
 
 
 class ConnectDelegate extends WatchUi.BehaviorDelegate {
@@ -62,19 +57,19 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         self.lastPairedDevice = lastPairedDevice;
         self.timerController = timerController;
         self.viewController = viewController;
-        // self.delegate = new GoProDelegateStub(timerController, viewController);
-        self.delegate = new GoProDelegate(timerController, viewController);
+        self.delegate = new GoProDelegateStub(timerController, viewController);
+        // self.delegate = new GoProDelegate(timerController, viewController);
         Ble.setDelegate(delegate);
         GattProfileManager.registerProfiles();
     }
 
     public function onSelect() as Boolean {
-        // onScanResult(null);
-        if (lastPairedDevice instanceof Ble.ScanResult) {
-            onScanResult(lastPairedDevice);
-        } else {
-            startScan();
-        }
+        onScanResult(null);
+        // if (lastPairedDevice instanceof Ble.ScanResult) {
+        //     onScanResult(lastPairedDevice);
+        // } else {
+        //     startScan();
+        // }
         return true;
     }
 
