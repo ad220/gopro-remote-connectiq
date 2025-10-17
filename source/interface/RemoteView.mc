@@ -22,11 +22,7 @@ class RecordButton extends WatchUi.Button {
 
 class RemoteView extends WatchUi.View {
 
-    private var gopro as GoProCamera;
-
-
-    function initialize(gopro as GoProCamera) {
-        self.gopro = gopro;
+    function initialize() {
         View.initialize();
     }
 
@@ -40,6 +36,7 @@ class RemoteView extends WatchUi.View {
             dc.setAntiAlias(true);
         }
         
+        var gopro = getApp().gopro;
         var isRecording = gopro.isRecording();
         var recDuration = gopro.getStatus(GoProCamera.ENCODING_DURATION);
         var timeLabel = findDrawableById("RecordTime") as Text;
@@ -63,12 +60,10 @@ class RemoteView extends WatchUi.View {
 }
 
 class RemoteDelegate extends WatchUi.BehaviorDelegate {
-    private var viewController as ViewController;
     private var gopro as GoProCamera;
 
-    public function initialize(viewController as ViewController, gopro as GoProCamera) {
-        self.viewController = viewController;
-        self.gopro = gopro;
+    public function initialize() {
+        self.gopro = getApp().gopro;
         BehaviorDelegate.initialize();
     }
 
@@ -83,7 +78,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
     public function onMenu() as Boolean {
         if (!gopro.isRecording()) {
             var menu = new CustomMenu((80*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {});
-            viewController.push(menu, new SettingsMenuDelegate(menu, SettingsMenuItem.MAIN, gopro, [], viewController), SLIDE_UP);
+            getApp().viewController.push(menu, new SettingsMenuDelegate(menu, SettingsMenuItem.MAIN, []), SLIDE_UP);
             return true;
         }
         return false;
@@ -98,8 +93,8 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
             hilight();
             return true;
         } else if (!gopro.getDescription().equals("...")) {
-            var view = new TogglablesView(gopro);
-            viewController.push(view, new TogglablesDelegate(view, gopro, viewController), SLIDE_DOWN);
+            var view = new TogglablesView();
+            getApp().viewController.push(view, new TogglablesDelegate(view), SLIDE_DOWN);
             return true;
         }
         return false;
@@ -107,7 +102,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
 
     public function onBack() as Boolean {
         gopro.disconnect();
-        viewController.pop(SLIDE_RIGHT);
+        getApp().viewController.pop(SLIDE_RIGHT);
         return true;
     }
 

@@ -20,23 +20,18 @@ class GoProDelegate extends Ble.BleDelegate {
         NOTIF_AVAILABLE         = 0xA2,
     }
 
-    protected var timerController as TimerController;
-    protected var viewController as ViewController;
     protected var isConnected as Boolean;
 
     private var scanStateChangeCallback as Method(state as Ble.ScanState) as Void?;
     private var scanResultCallback as Method(scanResults as [Ble.ScanResult]) as Void?;
 
-    protected var gopro as GoProCamera?;
     protected var requestQueue as GattRequestQueue?;
 
     private var queryReplyLength as Number?;
     private var queryReplyBuffer as ByteArray?;
     private var keepAliveTimer as TimerCallback?;
 
-    public function initialize(timerController as TimerController, viewController as ViewController) {
-        self.timerController = timerController;
-        self.viewController = viewController;
+    public function initialize() {
         self.isConnected = false;
         BleDelegate.initialize();
     }
@@ -125,9 +120,9 @@ class GoProDelegate extends Ble.BleDelegate {
         Ble.setScanState(Ble.SCAN_STATE_OFF);
         var service = device.getService(GattProfileManager.GOPRO_CONTROL_SERVICE);
         if (service != null) {
-            requestQueue = new GattRequestQueue(service, timerController);
+            requestQueue = new GattRequestQueue(service);
         }
-        gopro = new GoProCamera(timerController, requestQueue, method(:onDisconnect));
+        getApp().gopro = new GoProCamera(requestQueue, method(:onDisconnect));
         
         requestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.COMMAND_RESPONSE_CHARACTERISTIC, [0x01, 0x00]b);
         requestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.SETTINGS_RESPONSE_CHARACTERISTIC, [0x01, 0x00]b);
@@ -148,8 +143,8 @@ class GoProDelegate extends Ble.BleDelegate {
             [0x08, REGISTER_AVAILABLE, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b
         );
 
-        keepAliveTimer = timerController.start(method(:keepAlive), 8, true);
-        viewController.push(new RemoteView(gopro), new RemoteDelegate(viewController, gopro), WatchUi.SLIDE_LEFT);
+        keepAliveTimer = getApp().timerController.start(method(:keepAlive), 8, true);
+        getApp().viewController.push(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
     }
 
     public function keepAlive() as Void {
@@ -163,9 +158,9 @@ class GoProDelegate extends Ble.BleDelegate {
     public function onDisconnect() as Void {
         // put camera to sleep and close connection
         if (isConnected) {
-            timerController.stop(keepAliveTimer);
+            getApp().timerController.stop(keepAliveTimer);
             requestQueue.close();
-            viewController.returnHome(null, null);
+            getApp().viewController.returnHome(null, null);
         }
     }
 
@@ -209,6 +204,7 @@ class GoProDelegate extends Ble.BleDelegate {
             System.println("TLV Message too short");
             return;
         }
+        var gopro = getApp().gopro;
         var queryId = message[0];
         var status = message[1];
         var data = message.slice(2, null);

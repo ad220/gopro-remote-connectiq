@@ -11,6 +11,7 @@ class GoProRemoteApp extends Application.AppBase {
 
     (:initialized) public var timerController as TimerController;
     (:initialized) public var viewController as ViewController;
+    (:initialized) public var gopro as GoProCamera;
     (:initialized) private var lastPairedDevice as BluetoothLowEnergy.ScanResult;
 
     function initialize() {

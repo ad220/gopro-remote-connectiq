@@ -29,8 +29,8 @@ class GoProPreset extends GoProSettings {
         } 
     }
 
-    public function sync(settings as GoProSettings) {
-        self.settings = settings.getSettings();
+    public function sync() {
+        self.settings = getApp().gopro.getSettings();
         Application.Storage.setValue(id, self.settings);
     }
 }

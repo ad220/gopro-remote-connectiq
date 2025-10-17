@@ -20,7 +20,6 @@ class GoProCamera extends GoProSettings {
         KEEP_ALIVE  = 0x5B,
     }
 
-    protected var timer;
     private var goproRequestQueue;
     protected var disconnectCallback;
     protected var statuses as Dictionary;
@@ -30,10 +29,9 @@ class GoProCamera extends GoProSettings {
     protected var progressTimer as TimerCallback?;
 
 
-    public function initialize(timer as TimerController, requestQueue as GattRequestQueue, disconnectCallback as Method() as Void) {
+    public function initialize(requestQueue as GattRequestQueue, disconnectCallback as Method() as Void) {
         GoProSettings.initialize();
         
-        self.timer = timer;
         self.goproRequestQueue = requestQueue;
         self.disconnectCallback = disconnectCallback;
         self.statuses = {};
@@ -84,9 +82,9 @@ class GoProCamera extends GoProSettings {
                 statuses.put(ENCODING_DURATION, 0);
                 goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.QUERY_CHARACTERISTIC, request);
                 System.println("starting progress timer");
-                progressTimer = timer.start(method(:incrementEncodingDuration), 2, true);
+                progressTimer = getApp().timerController.start(method(:incrementEncodingDuration), 2, true);
             } else {
-                timer.stop(progressTimer);
+                getApp().timerController.stop(progressTimer);
             }
         }
         if (id==ENCODING_DURATION) {

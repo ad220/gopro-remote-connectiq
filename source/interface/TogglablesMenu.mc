@@ -61,15 +61,13 @@ class Togglable extends WatchUi.Button {
 
 class TogglablesView extends WatchUi.View {
 
-    private var camera as GoProSettings;
     private var buttons as Array<Togglable>;
     private var buttonsCount as Number;
     private var currentHilight as Number;
 
-    public function initialize(camera as GoProSettings) {
+    public function initialize() {
         View.initialize();
 
-        self.camera = camera;
         self.buttons = [];
         self.buttonsCount = 0;
         self.currentHilight = 0;
@@ -85,7 +83,8 @@ class TogglablesView extends WatchUi.View {
 
     public function onShow() as Void {
         View.onShow();
-        
+        var camera = getApp().gopro;
+
         var flicker = camera.getSetting(GoProSettings.FLICKER) as Number;
         (findDrawableById("FlickerButton") as Togglable).toggleState(flicker & 0x01 != 0);
         
@@ -136,14 +135,12 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
 
     private var view as TogglablesView;
     private var camera as GoProCamera;
-    private var viewController as ViewController;
 
-    public function initialize(view as TogglablesView, camera as GoProCamera, viewController as ViewController) {
+    public function initialize(view as TogglablesView) {
         BehaviorDelegate.initialize();
 
         self.view = view;
-        self.camera = camera;
-        self.viewController = viewController;
+        self.camera = getApp().gopro;
     }
 
     public function onKey(keyEvent as KeyEvent) as Boolean {
@@ -191,7 +188,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
         var available = camera.getAvailableSettings(GoProSettings.LED);
         if (available.size()>2) {
             var menu = new CustomMenu((50*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {:titleItemHeight => (80*ICM.kMult).toNumber()});
-            viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.LED, camera, viewController), SLIDE_LEFT);
+            getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.LED), SLIDE_LEFT);
         } else {
             var ledStatus = camera.getSetting(GoProSettings.LED);
             view.getHilighted().toggleState(ledStatus==0 or ledStatus==100);
@@ -209,11 +206,11 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
 
     public function onStabilize() as Void {
         var menu = new CustomMenu((50*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {:titleItemHeight => (80*ICM.kMult).toNumber()});
-        viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.HYPERSMOOTH, camera, viewController), SLIDE_LEFT);
+        getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.HYPERSMOOTH), SLIDE_LEFT);
     }
 
     public function onBack() as Boolean {
-        viewController.pop(SLIDE_UP);
+        getApp().viewController.pop(SLIDE_UP);
         return true;
     }
 }

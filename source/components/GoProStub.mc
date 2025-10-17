@@ -265,8 +265,7 @@ using Toybox.BluetoothLowEnergy as Ble;
 
     private var fakeDevice as FakeGoProDevice?;
    
-    public function initialize(timer as TimerController, fakeDevice as FakeGoProDevice) {
-        self.timer = timer;
+    public function initialize(fakeDevice as FakeGoProDevice) {
         self.fakeDevice = fakeDevice;
         self.queue = [];
         self.isProcessing = false;
@@ -301,15 +300,15 @@ using Toybox.BluetoothLowEnergy as Ble;
 
 (:debug) class GoProDelegateStub extends GoProDelegate {
 
-    public function initialize(timerController, viewController) {
-        GoProDelegate.initialize(timerController, viewController);
+    public function initialize() {
+        GoProDelegate.initialize();
     }
     
     public function pair(device as Ble.ScanResult?) as Void {
         System.println("Initiating fake connection");
         Ble.setScanState(Ble.SCAN_STATE_OFF);
-        requestQueue = new GattRequestQueueStub(timerController, new FakeGoProDevice(self));
-        gopro = new GoProCamera(timerController, requestQueue, method(:onDisconnect));
+        requestQueue = new GattRequestQueueStub(new FakeGoProDevice(self));
+        getApp().gopro = new GoProCamera(requestQueue, method(:onDisconnect));
         requestQueue.add(
             GattRequest.WRITE_CHARACTERISTIC,
             GattProfileManager.QUERY_CHARACTERISTIC,
@@ -325,7 +324,7 @@ using Toybox.BluetoothLowEnergy as Ble;
             GattProfileManager.QUERY_CHARACTERISTIC,
             [0x08, REGISTER_AVAILABLE, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b
         );
-        viewController.push(new RemoteView(gopro), new RemoteDelegate(viewController, gopro), WatchUi.SLIDE_LEFT);
+        getApp().viewController.push(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
     }
 
     
@@ -354,7 +353,7 @@ using Toybox.BluetoothLowEnergy as Ble;
     public function onDisconnect() as Void {
         // put camera to sleep and close connection
         if (isConnected) {
-            viewController.returnHome(null, null);
+            getApp().viewController.returnHome(null, null);
         }
     }
 }
