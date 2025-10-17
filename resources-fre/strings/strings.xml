@@ -26,7 +26,7 @@
     <string id="Cinema">Cinéma</string>
     <string id="Sport">Sport</string>
     <string id="Eco">Éco</string>
-    <string id="Manually">Paramétrage\n manuel</string>
+    <string id="Manually">Paramétrage\nmanuel</string>
     <string id="SaveP7">Sauvegarder\ncomme mode</string>
 
     <!-- Menus -->
@@ -34,7 +34,7 @@
     
     <!-- Paramètres -->
     <string id="Resolution">Résolution</string>
-    <string id="Ratio">Format d'image</string>
+    <string id="Ratio">Format</string>
     <string id="Lens">Objectif</string>
     <string id="Framerate">Fréq. d'image</string>
 
@@ -53,10 +53,10 @@
     <!-- LED -->
     <string id="Off">Éteinte</string>
     <string id="On">Allumée</string>
-    <string id="AllOn">Toutes allumées</string>
-    <string id="AllOff">Toutes éteintes</string>
-    <string id="FrontOffOnly">Avant éteinte</string>
-    <string id="BackOnly">Arrière uniquement</string>
+    <string id="AllOn">Tout allumé</string>
+    <string id="AllOff">Tout éteint</string>
+    <string id="FrontOffOnly">Avant éteint</string>
+    <string id="BackOnly">Arrière uniq.</string>
 
     <!-- Hypersmooth -->
     <string id="Disabled">Désactivé</string>
