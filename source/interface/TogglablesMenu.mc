@@ -78,12 +78,16 @@ class TogglablesView extends WatchUi.View {
         buttonsCount = buttons.size();
         currentHilight = buttonsCount-1;
         buttons[currentHilight].hilight();
-        setLayout(buttons as Array<Drawable>);
+        
+        var layout = Rez.Layouts.TogglablesInfos(dc);
+        layout.addAll(buttons as Array<Drawable>);
+        setLayout(layout);
     }
 
     public function onShow() as Void {
         View.onShow();
         var camera = getApp().gopro;
+        camera.requestStatuses([GoProCamera.BATTERY, GoProCamera.SD_REMAINING]b);
 
         var flicker = camera.getSetting(GoProSettings.FLICKER) as Number;
         (findDrawableById("FlickerButton") as Togglable).toggleState(flicker & 0x01 != 0);
@@ -106,6 +110,18 @@ class TogglablesView extends WatchUi.View {
         if (dc has :setAntiAlias) {
             dc.setAntiAlias(true);
         }
+
+        var camera = getApp().gopro;
+
+        var sdRemaining = camera.getStatus(GoProCamera.SD_REMAINING);
+        if (sdRemaining!=null) {
+            (findDrawableById("SdLevel") as Text).setText(sdRemaining/3600+":"+sdRemaining%3600/60);
+        }
+        var battery = camera.getStatus(GoProCamera.BATTERY);
+        if (battery!=null) {
+            (findDrawableById("BatteryLevel") as Text).setText(battery+"%");
+        }
+
         View.onUpdate(dc);
     }
 

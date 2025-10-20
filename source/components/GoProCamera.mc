@@ -3,14 +3,14 @@ import Toybox.Lang;
 class GoProCamera extends GoProSettings {
 
     public enum StatusId {
-        BATTERY             = 2,
         OVERHEATING         = 6,
         BUSY                = 8,
         ENCODING            = 10,
         ENCODING_DURATION   = 13,
+        SD_REMAINING        = 35,
+        BATTERY             = 70,
         READY               = 82,
         COLD                = 85,
-
     }
 
     public enum CommandId {
@@ -20,8 +20,8 @@ class GoProCamera extends GoProSettings {
         KEEP_ALIVE  = 0x5B,
     }
 
-    private var goproRequestQueue;
-    protected var disconnectCallback;
+    private var goproRequestQueue as GattRequestQueue;
+    protected var disconnectCallback as Method() as Void;
     protected var statuses as Dictionary;
     protected var availableSettings as Dictionary;
     private var availableRatios as Dictionary;
@@ -64,6 +64,12 @@ class GoProCamera extends GoProSettings {
         }  
     }
 
+    public function requestStatuses(ids as ByteArray) as Void {
+        var request = [ids.size()+1, GoProDelegate.GET_STATUS]b;
+        request.addAll(ids);
+        goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.QUERY_CHARACTERISTIC, request);
+    }
+
     public function onReceiveSetting(id as Char, value as ByteArray) as Void {
         settings.put(id, value[0]);
         if (id==RESOLUTION) {
@@ -87,7 +93,7 @@ class GoProCamera extends GoProSettings {
                 getApp().timerController.stop(progressTimer);
             }
         }
-        if (id==ENCODING_DURATION) {
+        if (id==ENCODING_DURATION or id==SD_REMAINING) {
             statuses.put(id, value.decodeNumber(Lang.NUMBER_FORMAT_UINT32, {:endianness => Lang.ENDIAN_BIG}));
         } else {
             statuses.put(id, value[0]);

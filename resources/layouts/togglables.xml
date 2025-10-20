@@ -1,4 +1,6 @@
-<resources>
+<resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://developer.garmin.com/downloads/connect-iq/resources.xsd">
+
     <layout id="TogglablesLayout" background="Gfx.COLOR_BLACK">
         <button id="FlickerButton" class="Togglable" x="66.63%" y="48.65%" width="20%" height="20%" behavior="onFlicker">
             <param name="defaultBmpId">Rez.Drawables.Flicker60</param>
@@ -25,6 +27,11 @@
             <param name="activatedBmpId">Rez.Drawables.StabilizeOn</param>
         </button>
     </layout>
+
+    <layout id="TogglablesInfos">
+        <label id="BatteryLevel" x="48%" y="46%" text="0%" color="Gfx.COLOR_WHITE" font="@Fonts.Tiny" justification="Gfx.TEXT_JUSTIFY_VCENTER | Gfx.TEXT_JUSTIFY_LEFT"/>
+        <label id="SdLevel" x="48%" y="54%" text="0:00" color="Gfx.COLOR_WHITE" font="@Fonts.Tiny" justification="Gfx.TEXT_JUSTIFY_VCENTER | Gfx.TEXT_JUSTIFY_LEFT"/>
+    </layout>
     
     <bitmap id="LedOff" filename="../drawables/led_off.png" scaleX="20%"  dithering="none"/>
     <bitmap id="LedOn" filename="../drawables/led_on.png" scaleX="20%"  dithering="none"/>
@@ -36,7 +43,7 @@
     <bitmap id="Flicker50" filename="../drawables/flicker_50.png" scaleX="20%"  dithering="none"/>
     
     <bitmap id="StabilizeOff" filename="../drawables/stabilize_off.png" scaleX="20%"  dithering="none"/>
-    <bitmap id="StabilizeOn" filename="../drawables/stabilize_on.png" scaleX="20%"  dithering="none"/>
+    <bitmap id="StabilizeOn" filename="../drawables/stabilize_on2.png" scaleX="20%"  dithering="none"/>
     
     <bitmap id="GpsOff" filename="../drawables/gps_off.png" scaleX="20%"  dithering="none"/>
     <bitmap id="GpsOn" filename="../drawables/gps_on.png" scaleX="20%"  dithering="none"/>

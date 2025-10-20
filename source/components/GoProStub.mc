@@ -112,6 +112,8 @@ using Toybox.BluetoothLowEnergy as Ble;
         self.statuses = {
             GoProCamera.ENCODING            => 0,
             GoProCamera.ENCODING_DURATION   => 0,
+            GoProCamera.BATTERY             => 50,
+            GoProCamera.SD_REMAINING        => 4269
         };
 
     }
@@ -222,7 +224,14 @@ using Toybox.BluetoothLowEnergy as Ble;
     }
 
     public function onReceiveStatus(id as Char, response as ByteArray) as Void {
-        response.addAll([id, 0x01, statuses.get(id) as Char]b);
+        if (id==GoProCamera.SD_REMAINING or id==GoProCamera.ENCODING_DURATION) {
+            response.addAll([id, 0x04]b);
+            var value = [0,0,0,0]b;
+            value.encodeNumber(statuses.get(id) as Number, Lang.NUMBER_FORMAT_UINT32, {:endianness => Lang.ENDIAN_BIG});
+            response.addAll(value);
+        } else {
+            response.addAll([id, 0x01, statuses.get(id) as Char]b);
+        }
     }
     
     public function onReceiveAvailable(id as Char, response as ByteArray) as Void {

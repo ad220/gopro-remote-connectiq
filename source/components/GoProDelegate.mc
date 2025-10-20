@@ -219,6 +219,7 @@ class GoProDelegate extends Ble.BleDelegate {
             case NOTIF_SETTING:
                 decoder = gopro.method(:onReceiveSetting);
                 break;
+            case GET_STATUS:
             case REGISTER_STATUS:
             case NOTIF_STATUS:
                 decoder = gopro.method(:onReceiveStatus);
