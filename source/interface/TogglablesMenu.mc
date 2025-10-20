@@ -35,7 +35,7 @@ class Togglable extends WatchUi.Button {
             }
 
             var radius = width/2;
-            dc.setPenWidth(2*ICM.kMult);
+            dc.setPenWidth(0.008*dc.getWidth());
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
             dc.drawCircle(locX+radius, locY+radius, radius);
         }
@@ -203,7 +203,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     public function onLed() as Void {
         var available = camera.getAvailableSettings(GoProSettings.LED);
         if (available.size()>2) {
-            var menu = new CustomMenu((50*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {:titleItemHeight => (80*ICM.kMult).toNumber()});
+            var menu = new CustomMenu((0.1*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.15*ICM.screenH).toNumber()<<1});
             getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.LED), SLIDE_LEFT);
         } else {
             var ledStatus = camera.getSetting(GoProSettings.LED);
@@ -221,7 +221,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onStabilize() as Void {
-        var menu = new CustomMenu((50*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {:titleItemHeight => (80*ICM.kMult).toNumber()});
+        var menu = new CustomMenu((0.1*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.15*ICM.screenH).toNumber()<<1});
         getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.HYPERSMOOTH), SLIDE_LEFT);
     }
 

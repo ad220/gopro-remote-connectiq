@@ -7,18 +7,22 @@ using InterfaceComponentsManager as ICM;
 
 
 class RecordButton extends WatchUi.Button {
+
     public function initialize(options) {
         Button.initialize(options);
     }
 
     public function draw(dc as Dc) as Void {
+        var height = dc.getHeight();
+        var width = dc.getWidth();
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLACK);
-        dc.fillRoundedRectangle(ICM.halfW-30*ICM.kMult, ICM.halfH-70*ICM.kMult, 90*ICM.kMult, 90*ICM.kMult, 18*ICM.kMult);
+        dc.fillRoundedRectangle(0.385*width, 0.231*height, 0.346*width, 0.346*height, 0.07*width);
         dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(8*ICM.kMult);
-        dc.drawCircle(ICM.halfW+15*ICM.kMult, ICM.halfH-25*ICM.kMult, 28*ICM.kMult);
+        dc.setPenWidth(0.03*width);
+        dc.drawCircle(0.558*width, 0.404*height, 0.1*width);
     }
 }
+
 
 class RemoteView extends WatchUi.View {
 
@@ -51,8 +55,8 @@ class RemoteView extends WatchUi.View {
         descLabel.setText(gopro.getDescription());
         descLabel.setColor(isRecording ? 0xAAAAAA : 0xFFFFFF);
         findDrawableById("RecordSettingsButton").setVisible(!isRecording);
-        findDrawableById("RecordRed").setVisible(isRecording and recDuration%2==0);
-        findDrawableById("RecordGray").setVisible(isRecording and recDuration%2==1);
+        findDrawableById("RecordRed").setVisible(isRecording and recDuration&1==0);
+        findDrawableById("RecordGray").setVisible(isRecording and recDuration&1==1);
 
         View.onUpdate(dc);
     }
@@ -77,7 +81,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
 
     public function onMenu() as Boolean {
         if (!gopro.isRecording()) {
-            var menu = new CustomMenu((80*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {});
+            var menu = new CustomMenu((0.15*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {});
             getApp().viewController.push(menu, new SettingsMenuDelegate(menu, SettingsMenuItem.MAIN, []), SLIDE_UP);
             return true;
         }

@@ -1,7 +1,7 @@
 <drawables>
     <bitmap id="LauncherIcon" filename="remote_small.png" automaticPalette="true"/>
 
-    <bitmap id="Edit" filename="save.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Save" filename="save.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
     <bitmap id="Camera" filename="camera.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
     <bitmap id="Eco" filename="battery.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
     <bitmap id="Sport" filename="sport.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
