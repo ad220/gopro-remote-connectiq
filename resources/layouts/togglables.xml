@@ -2,35 +2,38 @@
     xsi:noNamespaceSchemaLocation="http://developer.garmin.com/downloads/connect-iq/resources.xsd">
 
     <layout id="TogglablesLayout" background="Gfx.COLOR_BLACK">
-        <button id="FlickerButton" class="Togglable" x="66.63%" y="48.65%" width="20%" height="20%" behavior="onFlicker">
+        <button id="FlickerButton" class="Togglable" x="68.53%" y="49.27%" width="20%" height="20%" behavior="onFlicker">
             <param name="defaultBmpId">Rez.Drawables.Flicker60</param>
             <param name="activatedBmpId">Rez.Drawables.Flicker50</param>
         </button>
 
-        <button id="PowerButton" class="Togglable" x="40.0%" y="68.0%" width="20%" height="20%" behavior="onPower">
+        <button id="PowerButton" class="Togglable" x="40.0%" y="70.0%" width="20%" height="20%" behavior="onPower">
             <param name="defaultBmpId">Rez.Drawables.PowerOn</param>
             <param name="activatedBmpId">Rez.Drawables.PowerOff</param>
         </button>
 
-        <button id="LedButton" class="Togglable" x="13.37%" y="48.65%" width="20%" height="20%" behavior="onLed">
+        <button id="LedButton" class="Togglable" x="11.47%" y="49.27%" width="20%" height="20%" behavior="onLed">
             <param name="defaultBmpId">Rez.Drawables.LedOff</param>
             <param name="activatedBmpId">Rez.Drawables.LedOn</param>
         </button>
         
-        <button id="GpsButton" class="Togglable" x="23.54%" y="17.35%" width="20%" height="20%" behavior="onGps">
+        <button id="GpsButton" class="Togglable" x="22.37%" y="15.73%" width="20%" height="20%" behavior="onGps">
             <param name="defaultBmpId">Rez.Drawables.GpsOff</param>
             <param name="activatedBmpId">Rez.Drawables.GpsOn</param>
         </button>
 
-        <button id="StabilizeButton" class="Togglable" x="56.46%" y="17.35%" width="20%" height="20%" behavior="onStabilize">
+        <button id="StabilizeButton" class="Togglable" x="57.63%" y="15.73%" width="20%" height="20%" behavior="onStabilize">
             <param name="defaultBmpId">Rez.Drawables.StabilizeOff</param>
             <param name="activatedBmpId">Rez.Drawables.StabilizeOn</param>
         </button>
     </layout>
 
     <layout id="TogglablesInfos">
-        <label id="BatteryLevel" x="48%" y="46%" text="0%" color="Gfx.COLOR_WHITE" font="@Fonts.Tiny" justification="Gfx.TEXT_JUSTIFY_VCENTER | Gfx.TEXT_JUSTIFY_LEFT"/>
-        <label id="SdLevel" x="48%" y="54%" text="0:00" color="Gfx.COLOR_WHITE" font="@Fonts.Tiny" justification="Gfx.TEXT_JUSTIFY_VCENTER | Gfx.TEXT_JUSTIFY_LEFT"/>
+        <label id="BatteryLevel" x="50%" y="46.5%" text="0%" color="Gfx.COLOR_WHITE" font="@Fonts.Tiny" justification="Gfx.TEXT_JUSTIFY_VCENTER | Gfx.TEXT_JUSTIFY_LEFT"/>
+        <bitmap id="BatteryIcon" x="41%" y="44%" filename="../drawables/bolt.png" scaleY="6%"  dithering="none"/>
+
+        <label id="SdLevel" x="50%" y="54.5%" text="0:00" color="Gfx.COLOR_WHITE" font="@Fonts.Tiny" justification="Gfx.TEXT_JUSTIFY_VCENTER | Gfx.TEXT_JUSTIFY_LEFT"/>
+        <bitmap id="SdIcon" x="41%" y="52%" filename="../drawables/sd.png" scaleX="6%"  dithering="none"/>
     </layout>
     
     <bitmap id="LedOff" filename="../drawables/led_off.png" scaleX="20%"  dithering="none"/>
@@ -43,7 +46,7 @@
     <bitmap id="Flicker50" filename="../drawables/flicker_50.png" scaleX="20%"  dithering="none"/>
     
     <bitmap id="StabilizeOff" filename="../drawables/stabilize_off.png" scaleX="20%"  dithering="none"/>
-    <bitmap id="StabilizeOn" filename="../drawables/stabilize_on2.png" scaleX="20%"  dithering="none"/>
+    <bitmap id="StabilizeOn" filename="../drawables/stabilize_on.png" scaleX="20%"  dithering="none"/>
     
     <bitmap id="GpsOff" filename="../drawables/gps_off.png" scaleX="20%"  dithering="none"/>
     <bitmap id="GpsOn" filename="../drawables/gps_on.png" scaleX="20%"  dithering="none"/>
