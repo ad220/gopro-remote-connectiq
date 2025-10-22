@@ -17,7 +17,7 @@ module InterfaceComponentsManager {
     var fontTiny as FontResource?;
     var fontSmall as FontResource?;
     var fontMedium as FontResource?;
-    var fontLarge as FontResource?;
+    // var fontLarge as FontResource?;
     
     const JTEXT_MID = Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER;
 
@@ -37,7 +37,7 @@ module InterfaceComponentsManager {
         fontTiny = WatchUi.loadResource(Rez.Fonts.Tiny);
         fontSmall = WatchUi.loadResource(Rez.Fonts.Small);
         fontMedium = WatchUi.loadResource(Rez.Fonts.Medium);
-        fontLarge = WatchUi.loadResource(Rez.Fonts.Large);
+        // fontLarge = WatchUi.loadResource(Rez.Fonts.Large);
     }
     
     // TODO: replace with font resource override by screen size

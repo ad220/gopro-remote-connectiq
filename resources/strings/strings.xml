@@ -3,9 +3,11 @@
     <string id="GlanceTitle" scope="glance">GoPro Remote</string>
     <string id="GlanceConnect" scope="glance">Find </string>
     <string id="GlanceScan" scope="glance">Scan for camera</string>
+    <!-- $$$ Medium -->
     <string id="GoPro" translatable="false">GoPro</string>
 
     <!-- GoPro Models -->
+    <!-- $$$ Small -->
     <string id="GP55" translatable="false">HERO9 Black</string>
     <string id="GP57" translatable="false">HERO10 Black</string>
     <string id="GP58" translatable="false">HERO11 Black</string>
@@ -15,19 +17,24 @@
     <string id="GPFF">Unknown GoPro Model</string>
 
     <!-- ScanMenu -->
+    <!-- $$$ Small -->
     <string id="ScanTitle">Scanning\nfor GoPros...</string>
     <string id="ScanCancel">Cancel scan</string>
     <string id="ScanRestart">Restart scan</string>
     <string id="Exit">Exit</string>
+    <!-- $$$ Medium -->
     <string id="DevicesFound"> devices\nfound</string>
 
     <!-- ConnectView -->
+    <!-- $$$ Small -->
     <string id="Pair">PAIR</string>
     <string id="Connect">CONNECT</string>
+    <!-- $$$ Tiny -->
     <string id="Connecting">Connecting to GoPro...</string>
     <string id="ConnectFail">Unable to connect to GoPro</string>
 
     <!-- SettingsMenu -->
+    <!-- $$$ Small -->
     <string id="Cinema">Cinema</string>
     <string id="Sport">Sport</string>
     <string id="Eco">Eco</string>
@@ -35,9 +42,11 @@
     <string id="SaveP7">Save current\n settings as preset</string>
 
     <!-- Menus -->
+    <!-- $$$ Medium -->
     <string id="Settings">Settings</string>
     
     <!-- Settings -->
+    <!-- $$$ Small Medium -->
     <string id="Framerate">Framerate</string>
     <string id="Lens">Lens</string>
     <string id="Resolution">Resolution</string>
@@ -47,9 +56,11 @@
     <string id="HyperSmooth" translatable="false">HyperSmooth</string>
     
     <!-- Framerate -->
+    <!-- $$$ Small Tiny-->
     <string id="_FPS"> fps</string>
 
     <!-- Lenses -->
+    <!-- $$$ Small Tiny -->
     <string id="_HYPERVIEW" translatable="false">HyperView</string>
     <string id="_SUPERVIEW" translatable="false">SuperView</string>
     <string id="_WIDE">Wide</string>
@@ -65,6 +76,7 @@
     <string id="_ULTRALINEAR">Ultra Linear</string>
 
     <!-- Resolutions -->
+    <!-- $$$ Small Tiny -->
     <string id="_5K3" translatable="false">5.3K</string>
     <string id="_5K" translatable="false">5K</string>
     <string id="_4K" translatable="false">4K</string>
@@ -75,6 +87,7 @@
     <string id="_720" translatable="false">720p</string>
 
     <!-- Aspect Ratios -->
+    <!-- $$$ Small Tiny -->
     <string id="_8R7" translatable="false">8:7</string>
     <string id="_4R3" translatable="false">4:3</string>
     <string id="_16R9" translatable="false">16:9</string>
@@ -82,6 +95,7 @@
     <string id="_21R9" translatable="false">21:9</string>
 
     <!-- LED -->
+    <!-- $$$ Small -->
     <string id="Off">Disabled</string>
     <string id="On">Enabled</string>
     <string id="AllOn">All On</string>
@@ -90,6 +104,7 @@
     <string id="BackOnly">Back Only</string>
 
     <!-- Hypersmooth -->
+    <!-- $$$ Small -->
     <string id="Disabled">Disabled</string>
     <string id="Low">Low</string>
     <string id="High">High</string>
