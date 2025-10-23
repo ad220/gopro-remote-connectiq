@@ -106,6 +106,9 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
 
     public function onBack() as Boolean {
         gopro.disconnect();
+        if (getApp().fromGlance) {
+            return BehaviorDelegate.onBack();
+        }
         getApp().viewController.pop(SLIDE_RIGHT);
         return true;
     }

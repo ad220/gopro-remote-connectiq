@@ -12,7 +12,7 @@ class ViewController {
         self.viewLayersCount = 0;
     } 
 
-    public function push(view as WatchUi.View, delegate as WatchUi.BehaviorDelegate or WatchUi.Menu2InputDelegate, slide as WatchUi.SlideType) as Void {
+    public function push(view as WatchUi.View, delegate as WatchUi.BehaviorDelegate or WatchUi.Menu2InputDelegate or Null, slide as WatchUi.SlideType) as Void {
         if (currentDelegate instanceof NotifDelegate) { currentDelegate.pop(); }
 
         currentDelegate = delegate;
@@ -24,7 +24,7 @@ class ViewController {
         }
     }
 
-    public function switchTo(view as WatchUi.View, delegate as WatchUi.BehaviorDelegate or WatchUi.Menu2InputDelegate, slide as WatchUi.SlideType) as Void {
+    public function switchTo(view as WatchUi.View, delegate as WatchUi.BehaviorDelegate or WatchUi.Menu2InputDelegate or Null, slide as WatchUi.SlideType) as Void {
         if (currentDelegate instanceof NotifDelegate) { currentDelegate.pop(); }
 
         currentDelegate = delegate;

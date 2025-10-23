@@ -144,7 +144,8 @@ class GoProDelegate extends Ble.BleDelegate {
         );
 
         keepAliveTimer = getApp().timerController.start(method(:keepAlive), 8, true);
-        getApp().viewController.push(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
+        var pushView = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
+        pushView.invoke(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
     }
 
     public function keepAlive() as Void {

@@ -27,7 +27,6 @@ class ConnectView extends WatchUi.View {
     function onShow() as Void {
         if (getApp().fromGlance) {
             delegate.onSelect();
-            getApp().fromGlance = false;
         }
     }
 
@@ -102,7 +101,11 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         delegate.setScanStateChangeCallback(null);
         delegate.setScanResultCallback(null);
         Ble.setScanState(Ble.SCAN_STATE_SCANNING);
-        getApp().viewController.push(new NotifView(CONNECTING_NOTIF, NotifView.NOTIF_INFO), new NotifDelegate(), SLIDE_DOWN);
+        if (getApp().fromGlance) {
+            getApp().viewController.switchTo(new NotifView(CONNECTING_NOTIF, NotifView.NOTIF_INFO), null, SLIDE_DOWN);
+        } else {
+            getApp().viewController.push(new NotifView(CONNECTING_NOTIF, NotifView.NOTIF_INFO), new NotifDelegate(), SLIDE_DOWN);
+        }
         delegate.pair(device);
     }
 }

@@ -337,7 +337,8 @@ using Toybox.BluetoothLowEnergy as Ble;
     }
 
     public function pushRemote() as Void {
-        getApp().viewController.push(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
+        var pushView = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
+        pushView.invoke(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
     }
 
     
