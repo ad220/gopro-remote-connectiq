@@ -30,9 +30,9 @@ class NotifView extends WatchUi.View{
         dc.fillRectangle(0, 0, ICM.screenW, 90*ICM.kMult);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         dc.fillCircle(ICM.halfW, 20*ICM.kMult, 10*ICM.kMult);
-        dc.drawText(ICM.halfW, 60*ICM.kMult, ICM.adaptFontSmall(), message, ICM.JTEXT_MID);
+        dc.drawText(ICM.halfW, 60*ICM.kMult, ICM.fontTiny, message, ICM.JTEXT_MID);
         dc.setColor(type ? 0xFF5500 : Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(ICM.halfW, 20*ICM.kMult, ICM.adaptFontMid() , type ? "!" : "i", ICM.JTEXT_MID);
+        dc.drawText(ICM.halfW, 20*ICM.kMult, ICM.fontSmall , type ? "!" : "i", ICM.JTEXT_MID);
     }
 
     function onHide() as Void {

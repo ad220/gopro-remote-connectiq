@@ -1,8 +1,0 @@
-<fonts>
-    <!-- Tiny special characters : ":!@%" -->
-    <font id="Tiny" filename="tiny.fnt" antialias="true" filter=" +.0123456789:ACGHKLMNPSUVWXabcdeghiklmnoprstuvwxyÉàé@!%"/>
-    <!-- Small special characters : "@" -->
-    <font id="Small" filename="small.fnt" antialias="true" filter=" '+.0123456789:ABCDEFGHIKLMNOPQRSTUVWXabcdefghijklmnopqrstuvwxyÉèé@"/>
-    <!-- Medium special characters : "" -->
-    <font id="Medium" filename="medium.fnt" antialias="true" filter=" '.ADEFGHLOPRSabcdefghijlmnopqrstuvyèé"/>
-</fonts>

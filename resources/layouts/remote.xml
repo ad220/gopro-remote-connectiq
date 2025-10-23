@@ -9,7 +9,7 @@
 
         <button x="17.5%" y="68.65%" width="65%" height="16.7%" behavior="onMenu"/>
         <drawable id="RecordSettingsButton"/>
-        <label id="RecordSettingsLabel" x="55%" y="77%" font="@Fonts.Tiny" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER"/>
+        <label id="RecordSettingsLabel" x="55%" y="76.5%" font="@Fonts.Tiny" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER"/>
 
         <drawable id="RecordRed"/>
         <drawable id="RecordGray"/>

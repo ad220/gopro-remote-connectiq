@@ -1,1 +1,12 @@
 project.manifest = manifest.xml
+
+round-218x218.resourcePath = resources; resources-scalable/resources-round-218x218
+round-240x240.resourcePath = resources; resources-scalable/resources-round-240x240
+round-260x260.resourcePath = resources; resources-scalable/resources-round-260x260
+round-280x280.resourcePath = resources; resources-scalable/resources-round-280x280
+round-360x360.resourcePath = resources; resources-scalable/resources-round-360x360
+round-390x390.resourcePath = resources; resources-scalable/resources-round-390x390
+round-416x416.resourcePath = resources; resources-scalable/resources-round-416x416
+round-454x454.resourcePath = resources; resources-scalable/resources-round-454x454
+
+venux1.resourcePath = $(round-454x454.resourcePath)
