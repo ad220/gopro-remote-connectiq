@@ -15,6 +15,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
         58      => WatchUi.loadResource(Rez.Strings.GP58),
         60      => WatchUi.loadResource(Rez.Strings.GP60),
         62      => WatchUi.loadResource(Rez.Strings.GP62),
+        64      => WatchUi.loadResource(Rez.Strings.GP64),
         65      => WatchUi.loadResource(Rez.Strings.GP65),
         0xFF    => WatchUi.loadResource(Rez.Strings.GPFF),
     };

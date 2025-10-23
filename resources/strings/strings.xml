@@ -13,6 +13,7 @@
     <string id="GP58" translatable="false">HERO11 Black</string>
     <string id="GP60" translatable="false">HERO11 Black Mini</string>
     <string id="GP62" translatable="false">HERO12 Black</string>
+    <string id="GP64" translatable="false">GoPro MAX2</string>
     <string id="GP65" translatable="false">HERO13 Black</string>
     <string id="GPFF">Unknown GoPro Model</string>
 
@@ -76,6 +77,8 @@
 
     <!-- Resolutions -->
     <!-- $$$ Small Tiny -->
+    <string id="_8K" translatable="false">8K</string>
+    <string id="_5K6" translatable="false">5.6K</string>
     <string id="_5K3" translatable="false">5.3K</string>
     <string id="_5K" translatable="false">5K</string>
     <string id="_4K" translatable="false">4K</string>
@@ -87,6 +90,7 @@
 
     <!-- Aspect Ratios -->
     <!-- $$$ Small Tiny -->
+    <string id="_360d" translatable="false">360°</string>
     <string id="_8R7" translatable="false">8:7</string>
     <string id="_4R3" translatable="false">4:3</string>
     <string id="_16R9" translatable="false">16:9</string>
