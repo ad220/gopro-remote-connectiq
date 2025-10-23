@@ -27,7 +27,6 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
                 break;
             case GoProSettings.LENS:
                 titleId = Rez.Strings.Lens;
-                comparator = new LensComparator();
                 break;
             case GoProSettings.FRAMERATE:
                 titleId = Rez.Strings.Framerate;

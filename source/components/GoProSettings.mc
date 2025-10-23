@@ -240,12 +240,6 @@ class ResolutionComparator {
     }
 }
 
-class LensComparator {
-    public function compare(lensA as Char, lensB as Char) as Number {
-        return (GoProSettings.LENS_LABELS.get(lensA) as String).compareTo(GoProSettings.LENS_LABELS.get(lensB) as String);
-    }
-}
-
 class FramerateComparator {
     public function compare(framerateA as Char, framerateB as Char) {
         return GoProSettings.FRAMERATE_MAP.get(framerateB) as Number - GoProSettings.FRAMERATE_MAP.get(framerateA) as Number;
