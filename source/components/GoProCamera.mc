@@ -105,6 +105,8 @@ class GoProCamera extends GoProSettings {
         var available = tmpAvailableSettings.get(id);
         if (available instanceof Array) {
             available.add(value[0]);
+        } else {
+            tmpAvailableSettings.put(id, [value[0]]);
         }
     }
 
@@ -114,18 +116,6 @@ class GoProCamera extends GoProSettings {
 
     public function getAvailableSettings(id as GoProSettings.SettingId) as Array? {
         return availableSettings.get(id);
-    }
-
-    public function resetAvailableSettings() as Void {
-        tmpAvailableSettings = {
-            RESOLUTION  => [],
-            LENS        => [],
-            FRAMERATE   => [],
-            FLICKER     => [],
-            GPS         => [],
-            LED         => [],
-            HYPERSMOOTH => [],
-        };
     }
 
     public function applyAvailableSettings() as Void {
@@ -161,9 +151,7 @@ class GoProCamera extends GoProSettings {
                 }
             }
         }
-        System.println("available settings: "+availableSettings);
-        System.println("available ratios: "+availableRatios);
-        resetAvailableSettings();
+        tmpAvailableSettings = {};
     }
 
     public function isRecording() as Boolean {

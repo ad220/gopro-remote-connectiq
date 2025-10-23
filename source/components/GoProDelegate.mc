@@ -226,7 +226,6 @@ class GoProDelegate extends Ble.BleDelegate {
                 break;
             case REGISTER_AVAILABLE:
             case NOTIF_AVAILABLE:
-                gopro.resetAvailableSettings();
                 decoder = gopro.method(:onReceiveAvailable);
                 break;
             default:
