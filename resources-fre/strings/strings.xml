@@ -23,7 +23,6 @@
     <!-- $$$ Small -->
     <string id="Pair">APPAIRER</string>
     <string id="Connect">CONNEXION</string>
-    <!-- $$$ Tiny -->
     <string id="Connecting">Connexion à la caméra...</string>
     <string id="ConnectFail">Connexion échouée</string>
 

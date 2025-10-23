@@ -29,7 +29,6 @@
     <!-- $$$ Small -->
     <string id="Pair">PAIR</string>
     <string id="Connect">CONNECT</string>
-    <!-- $$$ Tiny -->
     <string id="Connecting">Connecting to GoPro...</string>
     <string id="ConnectFail">Unable to connect to GoPro</string>
 
