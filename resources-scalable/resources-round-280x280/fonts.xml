@@ -1,8 +1,8 @@
 <fonts>
-    <!-- Tiny special characters : ":!@%" -->
+    <!-- Tiny special characters : ":@%" -->
     <font id="Tiny" filename="../fonts/semibold/semibold_17.fnt" antialias="true" filter=" +.0123456789:ACGHKLMNPSUVWXabcdefghiklmnoprstuvwxyÉàé!@%"/>
-    <!-- Small special characters : "@" -->
-    <font id="Small" filename="../fonts/bold/bold_22_fix.fnt" antialias="true" filter=" '+.0123456789:ABCDEFGHIKLMNOPQRSTUVWXabcdefghijklmnopqrstuvwxyÉèé@"/>
-    <!-- Medium special characters : "" -->
-    <font id="Medium" filename="../fonts/extrabold/extrabold_30_fix.fnt" antialias="true" filter=" '.ADEFGHLOPRSabcdefghijlmnopqrstuvyèé"/>
+    <!-- Small special characters : "" -->
+    <font id="Small" filename="../fonts/bold/bold_22_fix.fnt" antialias="true" filter=" '+.0123456789:ABCDEFGHIKLMNOPQRSTUVWXabcdefghijklmnopqrstuvwxyÉèé"/>
+    <!-- Medium special characters : "i!0123456789" -->
+    <font id="Medium" filename="../fonts/extrabold/extrabold_30_fix.fnt" antialias="true" filter=" '.0123456789ADEFGHLOPRSabcdefghijlmnopqrstuvyèé!"/>
 </fonts>
