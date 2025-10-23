@@ -34,10 +34,20 @@ On this view, press the select button on your watch to start recording and the u
 ![](documentation/screenshots/connect.png)
 ![](documentation/screenshots/remote_off.png)
 ![](documentation/screenshots/remote_on.png)
-![](documentation/screenshots/settings.png)
+![](documentation/screenshots/togglables.png)
 ![](documentation/screenshots/presets.png)
+![](documentation/screenshots/settings.png)
 
 ## Changelog
+
+### v3.3
+- Update icons and add antialiasing
+- Add battery and sd card status in the camera settings menu
+- Add fonts that scale with every support device screen
+- Update notif look
+- Direct app exit when started from glance
+- Auto camera shutdown on app exit if it's not recording
+- Optimize the user interface performance
 
 ### v3.2
 - Add glance view
