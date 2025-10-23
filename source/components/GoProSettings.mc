@@ -220,13 +220,13 @@ class GoProSettings {
         } catch (ex) {
             System.println("Error while retrieving setting label");
             System.println(ex.getErrorMessage());
-            return "...";
+            return ". . .";
         }
     }
 
     public function getDescription() as String {
         if (settings.isEmpty()) {
-            return "...";
+            return ". . .";
         }
         return getLabel(RESOLUTION, settings.get(RESOLUTION)) \
                 + "@" + FRAMERATE_MAP.get(settings.get(FRAMERATE)) \

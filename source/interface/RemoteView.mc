@@ -96,7 +96,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
         if (gopro.isRecording()) {
             hilight();
             return true;
-        } else if (!gopro.getDescription().equals("...")) {
+        } else if (!gopro.getDescription().equals(". . .")) {
             var view = new TogglablesView();
             getApp().viewController.push(view, new TogglablesDelegate(view), SLIDE_DOWN);
             return true;
@@ -109,7 +109,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
             gopro.sendCommand(GoProCamera.SLEEP);
             getApp().timerController.start(gopro.method(:disconnect), 1, false);
         } else {
-        gopro.disconnect();
+            gopro.disconnect();
         }
         getApp().viewController.pop(SLIDE_RIGHT);
         return true;
