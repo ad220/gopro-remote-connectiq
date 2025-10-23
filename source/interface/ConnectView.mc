@@ -46,17 +46,13 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
     private const CONNECT_ERROR_NOTIF   = loadResource(Rez.Strings.ConnectFail);
 
     private var lastPairedDevice as Ble.ScanResult?;
-    private var timerController as TimerController;
-    private var viewController as ViewController;
     private var delegate as GoProDelegate;
 
 
-    public function initialize(lastPairedDevice as Ble.ScanResult?, timerController as TimerController, viewController as ViewController) {
+    public function initialize(lastPairedDevice as Ble.ScanResult?) {
         BehaviorDelegate.initialize();
 
         self.lastPairedDevice = lastPairedDevice;
-        self.timerController = timerController;
-        self.viewController = viewController;
         self.delegate = new GoProDelegateStub();
         // self.delegate = new GoProDelegate();
         Ble.setDelegate(delegate);
@@ -80,10 +76,10 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
 
     private function startScan() as Void {
         var scanMenu = new CustomMenu((0.1*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.30*ICM.screenH).toNumber()});
-        var menuDelegate = new ScanMenuDelegate(scanMenu, viewController, timerController, method(:onScanResult));
+        var menuDelegate = new ScanMenuDelegate(scanMenu, method(:onScanResult));
         delegate.setScanStateChangeCallback(menuDelegate.method(:setScanState));
         delegate.setScanResultCallback(menuDelegate.method(:onScanResults));
-        viewController.push(scanMenu, menuDelegate, WatchUi.SLIDE_IMMEDIATE);
+        getApp().viewController.push(scanMenu, menuDelegate, WatchUi.SLIDE_IMMEDIATE);
     }
 
     public function onScanResult(device as Ble.ScanResult?) as Void {
@@ -93,7 +89,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         delegate.setScanStateChangeCallback(null);
         delegate.setScanResultCallback(null);
         Ble.setScanState(Ble.SCAN_STATE_SCANNING);
-        viewController.push(new NotifView(CONNECTING_NOTIF, NotifView.NOTIF_INFO), new NotifDelegate(), SLIDE_DOWN);
+        getApp().viewController.push(new NotifView(CONNECTING_NOTIF, NotifView.NOTIF_INFO), new NotifDelegate(), SLIDE_DOWN);
         delegate.pair(device);
     }
 }

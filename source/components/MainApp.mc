@@ -12,7 +12,7 @@ class GoProRemoteApp extends Application.AppBase {
     (:initialized) public var timerController as TimerController;
     (:initialized) public var viewController as ViewController;
     (:initialized) public var gopro as GoProCamera;
-    (:initialized) private var lastPairedDevice as BluetoothLowEnergy.ScanResult;
+    private var lastPairedDevice as BluetoothLowEnergy.ScanResult?;
 
     function initialize() {
         AppBase.initialize();
@@ -40,11 +40,11 @@ class GoProRemoteApp extends Application.AppBase {
     // Return the initial view of your application here
     function getInitialView() {
         self.timerController = new TimerController(500);
-        self.viewController = new ViewController(timerController);        
+        self.viewController = new ViewController();
         InterfaceComponentsManager.computeInterfaceConstants();
         InterfaceComponentsManager.loadFonts();
         var label = lastPairedDevice==null ? WatchUi.loadResource(Rez.Strings.Pair) : WatchUi.loadResource(Rez.Strings.Connect);
-        var delegate = new ConnectDelegate(lastPairedDevice, timerController, viewController);
+        var delegate = new ConnectDelegate(lastPairedDevice);
         return [ new ConnectView(label, delegate), delegate ];
     }
 

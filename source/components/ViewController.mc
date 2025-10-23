@@ -4,14 +4,11 @@ import Toybox.WatchUi;
 
 class ViewController {
 
-    private var timer as TimerController;
     private var viewLayersCount as Number;
-    // private var currentView as WatchUi.View;
     private var currentDelegate as WatchUi.BehaviorDelegate or WatchUi.Menu2InputDelegate or Null;
 
 
-    public function initialize(timer as TimerController) {
-        self.timer = timer;
+    public function initialize() {
         self.viewLayersCount = 0;
     } 
 
@@ -21,10 +18,9 @@ class ViewController {
         currentDelegate = delegate;
         WatchUi.pushView(view, delegate, slide);
         if (delegate instanceof NotifDelegate) {
-            timer.start(delegate.method(:pop), 8, false);
+            getApp().timerController.start(delegate.method(:pop), 8, false);
         } else {
             viewLayersCount++;
-            System.println("viewLayersCount: " + viewLayersCount.toString());
         }
     }
 
