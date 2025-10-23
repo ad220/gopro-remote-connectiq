@@ -64,12 +64,12 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onSelect() as Boolean {
-        onScanResult(null);
-        // if (lastPairedDevice instanceof Ble.ScanResult) {
-        //     onScanResult(lastPairedDevice);
-        // } else {
-        //     startScan();
-        // }
+        // onScanResult(null);
+        if (lastPairedDevice instanceof Ble.ScanResult) {
+            onScanResult(lastPairedDevice);
+        } else {
+            startScan();
+        }
         return true;
     }
 
@@ -93,7 +93,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         delegate.setScanStateChangeCallback(null);
         delegate.setScanResultCallback(null);
         Ble.setScanState(Ble.SCAN_STATE_SCANNING);
-        viewController.push(new NotifView(CONNECTING_NOTIF, NotifView.NOTIF_INFO), new NotifDelegate(), WatchUi.SLIDE_DOWN);
+        viewController.push(new NotifView(CONNECTING_NOTIF, NotifView.NOTIF_INFO), new NotifDelegate(), SLIDE_DOWN);
         delegate.pair(device);
     }
 }

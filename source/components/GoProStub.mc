@@ -333,6 +333,10 @@ using Toybox.BluetoothLowEnergy as Ble;
             GattProfileManager.QUERY_CHARACTERISTIC,
             [0x08, REGISTER_AVAILABLE, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b
         );
+        getApp().timerController.start(method(:pushRemote), 4, false);
+    }
+
+    public function pushRemote() as Void {
         getApp().viewController.push(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
     }
 

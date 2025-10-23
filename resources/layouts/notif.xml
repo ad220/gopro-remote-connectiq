@@ -1,0 +1,25 @@
+<resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://developer.garmin.com/downloads/connect-iq/resources.xsd">
+    
+    <layout id="NotifInfoLayout">
+        <drawable id="NotifCircle"/>
+        <label id="NotifIcon" text="i" x="center" y="30%" font="@Fonts.Medium" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER"/>
+        <label id="NotifMsg" x="center" y="center" font="@Fonts.Small" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER"/>
+    </layout>
+
+    <layout id="NotifErrorLayout">
+        <drawable id="ErrorBackground"/>
+        <drawable id="NotifCircle"/>
+        <label id="NotifIcon" text="!" x="center" y="30%" font="@Fonts.Medium" color="0xFFAA00" justification="Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER"/>
+        <label id="NotifMsg" x="center" y="center" font="@Fonts.Small" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER"/>
+    </layout> 
+
+    <drawable-list id="NotifCircle">
+        <shape type="circle" color="Gfx.COLOR_WHITE" x="center" y="30%" radius="8%" />
+    </drawable-list>
+    
+    <drawable-list id="ErrorBackground">
+        <shape type="rectangle" color="0xFF5500"/>
+    </drawable-list>
+
+</resources>

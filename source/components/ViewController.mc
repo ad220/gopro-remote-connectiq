@@ -29,7 +29,7 @@ class ViewController {
     }
 
     public function switchTo(view as WatchUi.View, delegate as WatchUi.BehaviorDelegate or WatchUi.Menu2InputDelegate, slide as WatchUi.SlideType) as Void {
-        if (currentDelegate instanceof NotifDelegate) { push(view, delegate, slide); }
+        if (currentDelegate instanceof NotifDelegate) { currentDelegate.pop(); }
 
         currentDelegate = delegate;
         WatchUi.switchToView(view, delegate, slide);
@@ -38,13 +38,11 @@ class ViewController {
     public function pop(slide as WatchUi.SlideType) as Void {
         if (currentDelegate instanceof NotifDelegate) {
             currentDelegate.pop();
-            currentDelegate = null;
         } else if (viewLayersCount > 0) {
-            currentDelegate = null;
             WatchUi.popView(slide);
             viewLayersCount--;
-            System.println("viewLayersCount: " + viewLayersCount.toString());
         }
+        currentDelegate = null;
     }
 
     public function returnHome(message as String?, messageType as NotifView.NotifType?) as Void {
