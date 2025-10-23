@@ -42,11 +42,16 @@ class ViewController {
     }
 
     public function returnHome(message as String?, messageType as NotifView.NotifType?) as Void {
-        for (; viewLayersCount>1;) {
-            pop(WatchUi.SLIDE_IMMEDIATE);
-        }
-        if (viewLayersCount>0) {
-            pop(WatchUi.SLIDE_LEFT);
+        if (getApp().fromGlance) {
+            getApp().fromGlance = false;
+            System.exit();
+        } else {
+            for (; viewLayersCount>1;) {
+                pop(WatchUi.SLIDE_IMMEDIATE);
+            }
+            if (viewLayersCount>0) {
+                pop(WatchUi.SLIDE_LEFT);
+            }
         }
     }
 }

@@ -159,6 +159,7 @@ class GoProDelegate extends Ble.BleDelegate {
     public function onDisconnect() as Void {
         // put camera to sleep and close connection
         if (isConnected) {
+            isConnected = false;
             getApp().timerController.stop(keepAliveTimer);
             requestQueue.close();
             getApp().viewController.returnHome(null, null);

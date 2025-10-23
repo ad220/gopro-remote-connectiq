@@ -315,6 +315,7 @@ using Toybox.BluetoothLowEnergy as Ble;
     
     public function pair(device as Ble.ScanResult?) as Void {
         System.println("Initiating fake connection");
+        isConnected = true;
         Ble.setScanState(Ble.SCAN_STATE_OFF);
         requestQueue = new GattRequestQueueStub(new FakeGoProDevice(self));
         getApp().gopro = new GoProCamera(requestQueue, method(:onDisconnect));
@@ -367,6 +368,7 @@ using Toybox.BluetoothLowEnergy as Ble;
     public function onDisconnect() as Void {
         // put camera to sleep and close connection
         if (isConnected) {
+            requestQueue.close();
             getApp().viewController.returnHome(null, null);
         }
     }
