@@ -24,7 +24,7 @@ class OptionPickerTitle extends WatchUi.Drawable {
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
         dc.clear();
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(dc.getWidth()/2, dc.getHeight()/2+8, ICM.fontMedium, title, ICM.JTEXT_MID);
+        dc.drawText(0.5*dc.getWidth(), 0.6*dc.getHeight(), ICM.fontMedium, title, ICM.JTEXT_MID);
     }
 
     public function setTitle(title as String) as Void {
@@ -46,10 +46,12 @@ class OptionPickerItem extends WatchUi.CustomMenuItem {
     }
 
     public function draw(dc as Dc) as Void {
+        var width = dc.getWidth();
+        var height = dc.getHeight();
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.fillRoundedRectangle(dc.getWidth()/2-90*ICM.kMult, dc.getHeight()/2-20*ICM.kMult, 180*ICM.kMult, 40*ICM.kMult, 20*ICM.kMult);
+        dc.fillRoundedRectangle(0.08*width, 0.1*height, 0.84*width, 0.8*height, 0xFF);
         dc.setColor(getId()==selected ? Graphics.COLOR_BLUE : Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(dc.getWidth()/2, dc.getHeight()/2-2*ICM.kMult, ICM.fontSmall, getLabel(), ICM.JTEXT_MID);
+        dc.drawText(0.5*width, 0.46*height, ICM.fontSmall, getLabel(), ICM.JTEXT_MID);
     }
 
     public function select() as Void {

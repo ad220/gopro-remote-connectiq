@@ -3,14 +3,14 @@ import Toybox.Lang;
 class GoProCamera extends GoProSettings {
 
     public enum StatusId {
-        BATTERY             = 2,
         OVERHEATING         = 6,
         BUSY                = 8,
         ENCODING            = 10,
         ENCODING_DURATION   = 13,
+        SD_REMAINING        = 35,
+        BATTERY             = 70,
         READY               = 82,
         COLD                = 85,
-
     }
 
     public enum CommandId {
@@ -20,9 +20,8 @@ class GoProCamera extends GoProSettings {
         KEEP_ALIVE  = 0x5B,
     }
 
-    protected var timer;
-    private var goproRequestQueue;
-    protected var disconnectCallback;
+    private var goproRequestQueue as GattRequestQueue;
+    protected var disconnectCallback as Method() as Void;
     protected var statuses as Dictionary;
     protected var availableSettings as Dictionary;
     private var availableRatios as Dictionary;
@@ -30,10 +29,9 @@ class GoProCamera extends GoProSettings {
     protected var progressTimer as TimerCallback?;
 
 
-    public function initialize(timer as TimerController, requestQueue as GattRequestQueue, disconnectCallback as Method() as Void) {
+    public function initialize(requestQueue as GattRequestQueue, disconnectCallback as Method() as Void) {
         GoProSettings.initialize();
         
-        self.timer = timer;
         self.goproRequestQueue = requestQueue;
         self.disconnectCallback = disconnectCallback;
         self.statuses = {};
@@ -66,6 +64,12 @@ class GoProCamera extends GoProSettings {
         }  
     }
 
+    public function requestStatuses(ids as ByteArray) as Void {
+        var request = [ids.size()+1, GoProDelegate.GET_STATUS]b;
+        request.addAll(ids);
+        goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.QUERY_CHARACTERISTIC, request);
+    }
+
     public function onReceiveSetting(id as Char, value as ByteArray) as Void {
         settings.put(id, value[0]);
         if (id==RESOLUTION) {
@@ -84,12 +88,12 @@ class GoProCamera extends GoProSettings {
                 statuses.put(ENCODING_DURATION, 0);
                 goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.QUERY_CHARACTERISTIC, request);
                 System.println("starting progress timer");
-                progressTimer = timer.start(method(:incrementEncodingDuration), 2, true);
+                progressTimer = getApp().timerController.start(method(:incrementEncodingDuration), 2, true);
             } else {
-                timer.stop(progressTimer);
+                getApp().timerController.stop(progressTimer);
             }
         }
-        if (id==ENCODING_DURATION) {
+        if (id==ENCODING_DURATION or id==SD_REMAINING) {
             statuses.put(id, value.decodeNumber(Lang.NUMBER_FORMAT_UINT32, {:endianness => Lang.ENDIAN_BIG}));
         } else {
             statuses.put(id, value[0]);
@@ -101,6 +105,8 @@ class GoProCamera extends GoProSettings {
         var available = tmpAvailableSettings.get(id);
         if (available instanceof Array) {
             available.add(value[0]);
+        } else {
+            tmpAvailableSettings.put(id, [value[0]]);
         }
     }
 
@@ -110,18 +116,6 @@ class GoProCamera extends GoProSettings {
 
     public function getAvailableSettings(id as GoProSettings.SettingId) as Array? {
         return availableSettings.get(id);
-    }
-
-    public function resetAvailableSettings() as Void {
-        tmpAvailableSettings = {
-            RESOLUTION  => [],
-            LENS        => [],
-            FRAMERATE   => [],
-            FLICKER     => [],
-            GPS         => [],
-            LED         => [],
-            HYPERSMOOTH => [],
-        };
     }
 
     public function applyAvailableSettings() as Void {
@@ -157,9 +151,7 @@ class GoProCamera extends GoProSettings {
                 }
             }
         }
-        System.println("available settings: "+availableSettings);
-        System.println("available ratios: "+availableRatios);
-        resetAvailableSettings();
+        tmpAvailableSettings = {};
     }
 
     public function isRecording() as Boolean {

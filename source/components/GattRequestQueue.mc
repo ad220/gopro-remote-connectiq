@@ -6,20 +6,18 @@ using Toybox.BluetoothLowEnergy as Ble;
 class GattRequestQueue {
 
     private var service as Ble.Service;
-    protected var timer as TimerController;
     protected var queue as Array<GattRequest>;
     protected var isProcessing as Boolean;
 
 
-    public function initialize(service as Ble.Service, timer as TimerController) {
+    public function initialize(service as Ble.Service) {
         self.service = service;
-        self.timer = timer;
         self.queue = [];
         self.isProcessing = false;
     }
 
     public function add(type as GattRequest.RequestType, uuid as Ble.Uuid, data as ByteArray) {
-        var request = new GattRequest(type, uuid, data, timer);
+        var request = new GattRequest(type, uuid, data);
         System.println("Message added to queue, data: "+data);
         request.setCallbacks(method(:sendRequest), method(:onRequestFail));
         queue.add(request);
@@ -93,7 +91,6 @@ class GattRequest {
     private var type as RequestType;
     private var uuid as Ble.Uuid;
     private var data as ByteArray;
-    private var timer as TimerController;
     private var done as Boolean;
     private var failCounter as Number;
 
@@ -101,11 +98,10 @@ class GattRequest {
     private var tooManyFailsCallback as (Method() as Void)?;
 
 
-    public function initialize(type as RequestType, uuid as Ble.Uuid, data as ByteArray, timer as TimerController) {
+    public function initialize(type as RequestType, uuid as Ble.Uuid, data as ByteArray) {
         self.type = type;
         self.uuid = uuid;
         self.data = data;
-        self.timer = timer;
         self.done = false;
         self.failCounter = 0;
     }
@@ -133,7 +129,7 @@ class GattRequest {
 
     public function startTimer() as Void {
         if (failCounter==0) {
-            timer.start(method(:onTimeOut), 2, false);
+            getApp().timerController.start(method(:onTimeOut), 2, false);
         }
     }
 

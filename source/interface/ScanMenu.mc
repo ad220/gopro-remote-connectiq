@@ -25,8 +25,6 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     private const DEVICES_FOUND = WatchUi.loadResource(Rez.Strings.DevicesFound);
 
     private var menu as CustomMenu;
-    private var viewController as ViewController;
-    private var timerController as TimerController;
     private var statusItem as OptionPickerItem;
     private var cancelItem as OptionPickerItem;
 
@@ -39,11 +37,9 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     private var title as OptionPickerTitle;
 
 
-    public function initialize(menu as CustomMenu, viewController as ViewController, timerController as TimerController, callback as Method(device as Ble.ScanResult?) as Void) {
+    public function initialize(menu as CustomMenu, callback as Method(device as Ble.ScanResult?) as Void) {
         Menu2InputDelegate.initialize();
         self.menu = menu;
-        self.viewController = viewController;
-        self.timerController = timerController;
         self.statusItem = new OptionPickerItem("status", 0xF0 as Char, 0xFF as Char);
         self.cancelItem = new OptionPickerItem("cancel", 0xF8 as Char, 0xFF as Char);
         self.scanResults = [];
@@ -58,8 +54,8 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     public function startScan() as Void {
         if (scanState!=Ble.SCAN_STATE_SCANNING) {
             Ble.setScanState(Ble.SCAN_STATE_SCANNING);
-            scanTimer = timerController.start(method(:stopScan), 40, false);
-            animTimer = timerController.start(method(:animate), 2, true);
+            scanTimer = getApp().timerController.start(method(:stopScan), 40, false);
+            animTimer = getApp().timerController.start(method(:animate), 2, true);
 
             statusItem.setLabel("...");
             cancelItem.setLabel(SCAN_CANCEL);
@@ -71,8 +67,8 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     public function stopScan() as Void {
         if (scanState!=Ble.SCAN_STATE_OFF) {
             Ble.setScanState(Ble.SCAN_STATE_OFF);
-            timerController.stop(scanTimer);
-            timerController.stop(animTimer);
+            scanTimer.stop();
+            animTimer.stop();
 
             statusItem.setLabel(SCAN_RESTART);
             cancelItem.setLabel(EXIT);
@@ -134,7 +130,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
                 if (scanState==Ble.SCAN_STATE_SCANNING) {
                     stopScan();
                 } else {
-                    viewController.pop(SLIDE_LEFT);
+                    getApp().viewController.pop(SLIDE_LEFT);
                 }
                 break;            
             default:
@@ -144,7 +140,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
                         stopScan();
                         var device = scanResults[i].get(:device);
                         try {
-                            viewController.pop(SLIDE_IMMEDIATE);
+                            getApp().viewController.pop(SLIDE_IMMEDIATE);
                             WatchUi.requestUpdate();
                             scanResultCallback.invoke(device);
                         } catch (ex) {
@@ -159,6 +155,6 @@ class ScanMenuDelegate extends Menu2InputDelegate {
 
     public function onBack() as Void {
         stopScan();
-        viewController.pop(SLIDE_RIGHT);
+        getApp().viewController.pop(SLIDE_RIGHT);
     }
 }

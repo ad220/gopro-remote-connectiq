@@ -1,6 +1,0 @@
-<fonts>
-    <font id="Tiny" filename="tiny.fnt" antialias="true" filter=" '+.0123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÉàèé@!"/>
-    <font id="Small" filename="small.fnt" antialias="true" filter=" '+.0123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÉàèé@!"/>
-    <font id="Medium" filename="medium.fnt" antialias="true" filter=" '+.0123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÉàèé@!"/>
-    <font id="Large" filename="large.fnt" antialias="true" filter=" '+.0123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÉàèé@!"/>
-</fonts>

@@ -35,7 +35,7 @@ class Togglable extends WatchUi.Button {
             }
 
             var radius = width/2;
-            dc.setPenWidth(2*ICM.kMult);
+            dc.setPenWidth(0.008*dc.getWidth());
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
             dc.drawCircle(locX+radius, locY+radius, radius);
         }
@@ -61,15 +61,13 @@ class Togglable extends WatchUi.Button {
 
 class TogglablesView extends WatchUi.View {
 
-    private var camera as GoProSettings;
     private var buttons as Array<Togglable>;
     private var buttonsCount as Number;
     private var currentHilight as Number;
 
-    public function initialize(camera as GoProSettings) {
+    public function initialize() {
         View.initialize();
 
-        self.camera = camera;
         self.buttons = [];
         self.buttonsCount = 0;
         self.currentHilight = 0;
@@ -80,12 +78,17 @@ class TogglablesView extends WatchUi.View {
         buttonsCount = buttons.size();
         currentHilight = buttonsCount-1;
         buttons[currentHilight].hilight();
-        setLayout(buttons as Array<Drawable>);
+        
+        var layout = Rez.Layouts.TogglablesInfos(dc);
+        layout.addAll(buttons as Array<Drawable>);
+        setLayout(layout);
     }
 
     public function onShow() as Void {
         View.onShow();
-        
+        var camera = getApp().gopro;
+        camera.requestStatuses([GoProCamera.BATTERY, GoProCamera.SD_REMAINING]b);
+
         var flicker = camera.getSetting(GoProSettings.FLICKER) as Number;
         (findDrawableById("FlickerButton") as Togglable).toggleState(flicker & 0x01 != 0);
         
@@ -104,6 +107,21 @@ class TogglablesView extends WatchUi.View {
     }
 
     public function onUpdate(dc as Dc) as Void {
+        if (dc has :setAntiAlias) {
+            dc.setAntiAlias(true);
+        }
+
+        var camera = getApp().gopro;
+
+        var sdRemaining = camera.getStatus(GoProCamera.SD_REMAINING);
+        if (sdRemaining!=null) {
+            (findDrawableById("SdLevel") as Text).setText(sdRemaining/3600+":"+sdRemaining%3600/60);
+        }
+        var battery = camera.getStatus(GoProCamera.BATTERY);
+        if (battery!=null) {
+            (findDrawableById("BatteryLevel") as Text).setText(battery+"%");
+        }
+
         View.onUpdate(dc);
     }
 
@@ -133,14 +151,12 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
 
     private var view as TogglablesView;
     private var camera as GoProCamera;
-    private var viewController as ViewController;
 
-    public function initialize(view as TogglablesView, camera as GoProCamera, viewController as ViewController) {
+    public function initialize(view as TogglablesView) {
         BehaviorDelegate.initialize();
 
         self.view = view;
-        self.camera = camera;
-        self.viewController = viewController;
+        self.camera = getApp().gopro;
     }
 
     public function onKey(keyEvent as KeyEvent) as Boolean {
@@ -187,8 +203,8 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     public function onLed() as Void {
         var available = camera.getAvailableSettings(GoProSettings.LED);
         if (available.size()>2) {
-            var menu = new CustomMenu((50*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {:titleItemHeight => (80*ICM.kMult).toNumber()});
-            viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.LED, camera, viewController), SLIDE_LEFT);
+            var menu = new CustomMenu((0.1*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.15*ICM.screenH).toNumber()<<1});
+            getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.LED), SLIDE_LEFT);
         } else {
             var ledStatus = camera.getSetting(GoProSettings.LED);
             view.getHilighted().toggleState(ledStatus==0 or ledStatus==100);
@@ -205,12 +221,12 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onStabilize() as Void {
-        var menu = new CustomMenu((50*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {:titleItemHeight => (80*ICM.kMult).toNumber()});
-        viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.HYPERSMOOTH, camera, viewController), SLIDE_LEFT);
+        var menu = new CustomMenu((0.1*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.15*ICM.screenH).toNumber()<<1});
+        getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.HYPERSMOOTH), SLIDE_LEFT);
     }
 
     public function onBack() as Boolean {
-        viewController.pop(SLIDE_UP);
+        getApp().viewController.pop(SLIDE_UP);
         return true;
     }
 }

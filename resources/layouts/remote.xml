@@ -1,0 +1,38 @@
+<resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://developer.garmin.com/downloads/connect-iq/resources.xsd">
+    
+    <layout id="RemoteLayout">
+        <button class="RecordButton" x="38%" y="22.5%" width="35%" height="35%" behavior="shutter"/>
+        
+        <button x="11%" y="31%" width="18%" height="18%" behavior="hilight"/>
+        <drawable id="RecordHilightButton"/>
+
+        <button x="17.5%" y="68.65%" width="65%" height="16.7%" behavior="onMenu"/>
+        <drawable id="RecordSettingsButton"/>
+        <label id="RecordSettingsLabel" x="55%" y="76.5%" font="@Fonts.Tiny" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER"/>
+
+        <drawable id="RecordRed"/>
+        <drawable id="RecordGray"/>
+        <label id="RecordTime" x="45%" y="10%" font="@Fonts.Tiny" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_LEFT | Gfx.TEXT_JUSTIFY_VCENTER"/>
+    </layout>   
+
+    
+    <drawable-list id="RecordHilightButton">
+        <shape type="circle" x="20%" y="40%" radius="9%" color="Gfx.COLOR_DK_GRAY"/>
+        <bitmap id="hilight" x="15.6%" y="35.6%" filename="../drawables/hilight.png" scaleX="9.2%"  dithering="none" automaticPalette="true"/>
+    </drawable-list>
+
+    <drawable-list id="RecordSettingsButton">
+        <shape type="rectangle" x="17.5%" y="68.65%" width="65%" height="16.7%" corner_radius="255" color="Gfx.COLOR_DK_GRAY"/>
+        <bitmap id="settings" x="21%" y="72%" filename="../drawables/wheel.png" scaleY="10%" dithering="none" automaticPalette="true"/>
+    </drawable-list>
+
+    <drawable-list id="RecordRed">
+        <shape type="circle" x="38%" y="10%" radius="2.5%" color="Gfx.COLOR_RED"/>
+    </drawable-list>
+    
+    <drawable-list id="RecordGray">
+        <shape type="circle" x="38%" y="10%" radius="2.5%" color="Gfx.COLOR_LT_GRAY"/>
+    </drawable-list>
+
+</resources>

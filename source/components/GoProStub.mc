@@ -112,6 +112,8 @@ using Toybox.BluetoothLowEnergy as Ble;
         self.statuses = {
             GoProCamera.ENCODING            => 0,
             GoProCamera.ENCODING_DURATION   => 0,
+            GoProCamera.BATTERY             => 50,
+            GoProCamera.SD_REMAINING        => 4269
         };
 
     }
@@ -222,7 +224,14 @@ using Toybox.BluetoothLowEnergy as Ble;
     }
 
     public function onReceiveStatus(id as Char, response as ByteArray) as Void {
-        response.addAll([id, 0x01, statuses.get(id) as Char]b);
+        if (id==GoProCamera.SD_REMAINING or id==GoProCamera.ENCODING_DURATION) {
+            response.addAll([id, 0x04]b);
+            var value = [0,0,0,0]b;
+            value.encodeNumber(statuses.get(id) as Number, Lang.NUMBER_FORMAT_UINT32, {:endianness => Lang.ENDIAN_BIG});
+            response.addAll(value);
+        } else {
+            response.addAll([id, 0x01, statuses.get(id) as Char]b);
+        }
     }
     
     public function onReceiveAvailable(id as Char, response as ByteArray) as Void {
@@ -265,8 +274,7 @@ using Toybox.BluetoothLowEnergy as Ble;
 
     private var fakeDevice as FakeGoProDevice?;
    
-    public function initialize(timer as TimerController, fakeDevice as FakeGoProDevice) {
-        self.timer = timer;
+    public function initialize(fakeDevice as FakeGoProDevice) {
         self.fakeDevice = fakeDevice;
         self.queue = [];
         self.isProcessing = false;
@@ -301,15 +309,16 @@ using Toybox.BluetoothLowEnergy as Ble;
 
 (:debug) class GoProDelegateStub extends GoProDelegate {
 
-    public function initialize(timerController, viewController) {
-        GoProDelegate.initialize(timerController, viewController);
+    public function initialize() {
+        GoProDelegate.initialize();
     }
     
     public function pair(device as Ble.ScanResult?) as Void {
         System.println("Initiating fake connection");
+        isConnected = true;
         Ble.setScanState(Ble.SCAN_STATE_OFF);
-        requestQueue = new GattRequestQueueStub(timerController, new FakeGoProDevice(self));
-        gopro = new GoProCamera(timerController, requestQueue, method(:onDisconnect));
+        requestQueue = new GattRequestQueueStub(new FakeGoProDevice(self));
+        getApp().gopro = new GoProCamera(requestQueue, method(:onDisconnect));
         requestQueue.add(
             GattRequest.WRITE_CHARACTERISTIC,
             GattProfileManager.QUERY_CHARACTERISTIC,
@@ -325,7 +334,12 @@ using Toybox.BluetoothLowEnergy as Ble;
             GattProfileManager.QUERY_CHARACTERISTIC,
             [0x08, REGISTER_AVAILABLE, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b
         );
-        viewController.push(new RemoteView(gopro), new RemoteDelegate(viewController, gopro), WatchUi.SLIDE_LEFT);
+        getApp().timerController.start(method(:pushRemote), 4, false);
+    }
+
+    public function pushRemote() as Void {
+        var pushView = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
+        pushView.invoke(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
     }
 
     
@@ -354,7 +368,8 @@ using Toybox.BluetoothLowEnergy as Ble;
     public function onDisconnect() as Void {
         // put camera to sleep and close connection
         if (isConnected) {
-            viewController.returnHome(null, null);
+            requestQueue.close();
+            getApp().viewController.returnHome(null, null);
         }
     }
 }

@@ -220,13 +220,13 @@ class GoProSettings {
         } catch (ex) {
             System.println("Error while retrieving setting label");
             System.println(ex.getErrorMessage());
-            return "...";
+            return ". . .";
         }
     }
 
     public function getDescription() as String {
         if (settings.isEmpty()) {
-            return "...";
+            return ". . .";
         }
         return getLabel(RESOLUTION, settings.get(RESOLUTION)) \
                 + "@" + FRAMERATE_MAP.get(settings.get(FRAMERATE)) \
@@ -237,12 +237,6 @@ class GoProSettings {
 class ResolutionComparator {
     public function compare(resolutionA as Char, resolutionB as Char) as Number {
         return GoProSettings.RESOLUTION_SORT_MAP.get(resolutionA) as Number - GoProSettings.RESOLUTION_SORT_MAP.get(resolutionB) as Number;
-    }
-}
-
-class LensComparator {
-    public function compare(lensA as Char, lensB as Char) as Number {
-        return (GoProSettings.LENS_LABELS.get(lensA) as String).compareTo(GoProSettings.LENS_LABELS.get(lensB) as String);
     }
 }
 

@@ -6,20 +6,16 @@ import Toybox.WatchUi;
 class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
 
     private var setting as GoProSettings.SettingId;
-    private var viewController as ViewController;
-    private var gopro as GoProCamera;
 
 
-    public function initialize(menu as CustomMenu, setting as GoProSettings.SettingId, gopro as GoProCamera, viewController as ViewController) {
+    public function initialize(menu as CustomMenu, setting as GoProSettings.SettingId) {
 
         self.setting = setting;
-        self.gopro = gopro;
-        self.viewController = viewController;
 
         var titleId;
         var comparator = null;
-        var items = gopro.getAvailableSettings(setting);
-        var selected = gopro.getSetting(setting);
+        var items = getApp().gopro.getAvailableSettings(setting);
+        var selected = getApp().gopro.getSetting(setting);
         switch (setting) {
             case GoProSettings.RESOLUTION:
                 titleId = Rez.Strings.Resolution;
@@ -31,7 +27,6 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
                 break;
             case GoProSettings.LENS:
                 titleId = Rez.Strings.Lens;
-                comparator = new LensComparator();
                 break;
             case GoProSettings.FRAMERATE:
                 titleId = Rez.Strings.Framerate;
@@ -52,18 +47,19 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
         for (var i=0; i<items.size(); i++) {
             menu.addItem(new OptionPickerItem(GoProSettings.getLabel(setting, items[i]), items[i] as Char, selected));
         }
+        menu.setFocus(items.indexOf(selected));
 
         Menu2InputDelegate.initialize();
     }
 
     public function onSelect(item) {
-        gopro.sendSetting(setting==GoProSettings.RATIO ? GoProSettings.RESOLUTION : setting, item.getId() as Char);
+        getApp().gopro.sendSetting(setting==GoProSettings.RATIO ? GoProSettings.RESOLUTION : setting, item.getId() as Char);
         (item as OptionPickerItem).select();
         requestUpdate();
     }
 
     public function onBack() as Void {
-        viewController.pop(SLIDE_RIGHT);
+        getApp().viewController.pop(SLIDE_RIGHT);
     }
 
     public function onWrap(key as Key) as Boolean {

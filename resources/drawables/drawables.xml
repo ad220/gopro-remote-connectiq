@@ -1,64 +1,14 @@
 <drawables>
-    <bitmap id="LauncherIcon" filename="remote_small.png"/>
-    
-    <bitmap id="ConnectIcon" filename="remote.png" scaleY="40%" scaleRelativeTo="screen"/>
+    <bitmap id="LauncherIcon" filename="remote_small.png" automaticPalette="true"/>
 
-    <bitmap id="Hilight" filename="hilight2.png" scaleY="9.17%" scaleRelativeTo="screen">
-        <palette>
-            <color>00AAFF</color>
-        </palette>
-    </bitmap>
+    <bitmap id="Save" filename="save.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Camera" filename="camera.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Eco" filename="battery.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Sport" filename="sport.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Cinema" filename="cinema.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
 
-    <bitmap id="Wheel" filename="wheel2.png" scaleY="10%" scaleRelativeTo="screen">
-        <palette>
-            <color>AAAAAA</color>
-        </palette>
-    </bitmap>
-    
-    <bitmap id="Edit" filename="edit.png" scaleY="10%" scaleRelativeTo="screen">
-        <palette>
-            <color>AAAAAA</color>
-        </palette>
-    </bitmap>
-    <bitmap id="Camera" filename="camera.png" scaleY="10%" scaleRelativeTo="screen">
-        <palette>
-            <color>AAAAAA</color>
-        </palette>
-    </bitmap>
-    <bitmap id="Eco" filename="eco5.png" scaleY="10%" scaleRelativeTo="screen">
-        <palette>
-            <color>55FF55</color>
-        </palette>
-    </bitmap>
-    <bitmap id="Sport" filename="sport.png" scaleY="10%" scaleRelativeTo="screen">
-        <palette>
-            <color>FFFF55</color>
-        </palette>
-    </bitmap>
-    <bitmap id="Cinema" filename="cinema3.png" scaleY="10%" scaleRelativeTo="screen">
-        <palette>
-            <color>FF5500</color>
-        </palette>
-    </bitmap>
-
-    <bitmap id="Resolution" filename="resolution.png" scaleY="10%" scaleRelativeTo="screen">
-        <palette>
-            <color>AAAAAA</color>
-        </palette>
-    </bitmap>
-    <bitmap id="Ratio" filename="ratio.png" scaleY="10%" scaleRelativeTo="screen">
-        <palette>
-            <color>AAAAAA</color>
-        </palette>
-    </bitmap>
-    <bitmap id="Lens" filename="lens2.png" scaleY="10%" scaleRelativeTo="screen">
-        <palette>
-            <color>AAAAAA</color>
-        </palette>
-    </bitmap>
-    <bitmap id="Framerate" filename="framerate2.png" scaleY="10%" scaleRelativeTo="screen">
-        <palette>
-            <color>AAAAAA</color>
-        </palette>
-    </bitmap>
+    <bitmap id="Resolution" filename="resolution.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Ratio" filename="ratio.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Lens" filename="lens.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Framerate" filename="framerate.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
 </drawables>

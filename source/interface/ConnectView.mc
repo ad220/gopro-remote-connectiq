@@ -11,7 +11,6 @@ class ConnectView extends WatchUi.View {
 
     private var label as String;
     private var delegate as ConnectDelegate;
-    private var icon as BitmapResource?;
 
     function initialize(label as String, delegate as ConnectDelegate) {
         View.initialize();
@@ -20,30 +19,25 @@ class ConnectView extends WatchUi.View {
         self.delegate = delegate;
     }
 
+    public function onLayout(dc as Dc) as Void {
+        setLayout(Rez.Layouts.ConnectLayout(dc));
+    }
+
+
     function onShow() as Void {
-        icon = loadResource(Rez.Drawables.ConnectIcon);
         if (getApp().fromGlance) {
             delegate.onSelect();
-            getApp().fromGlance = false;
         }
     }
 
     function onUpdate(dc as Dc) as Void {
+        if (dc has :setAntiAlias) {
+            dc.setAntiAlias(true);
+        }
         View.onUpdate(dc);
-        dc.setColor(0x00AAFF, Graphics.COLOR_BLACK);
-        dc.clear();
-        dc.fillRoundedRectangle(ICM.halfW-75*ICM.kMult, ICM.halfH+50*ICM.kMult, 150*ICM.kMult, 40*ICM.kMult, 20*ICM.kMult);
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(ICM.halfW, ICM.halfH+70*ICM.kMult, ICM.adaptFontMid(), label, ICM.JTEXT_MID);
-        dc.drawBitmap(ICM.halfW*0.6, ICM.halfH*0.6-15*ICM.kMult, icon);
-    }
-
-    public function onHide() as Void {
-        icon = null;
+        (findDrawableById("ConnectLabel") as Text).setText(label);
     }
 }
-
-var delegate as GoProDelegate?;
 
 
 class ConnectDelegate extends WatchUi.BehaviorDelegate {
@@ -51,25 +45,34 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
     private const CONNECT_ERROR_NOTIF   = loadResource(Rez.Strings.ConnectFail);
 
     private var lastPairedDevice as Ble.ScanResult?;
-    private var timerController as TimerController;
-    private var viewController as ViewController;
     private var delegate as GoProDelegate;
 
-
-    public function initialize(lastPairedDevice as Ble.ScanResult?, timerController as TimerController, viewController as ViewController) {
+    (:debug)
+    public function initialize(lastPairedDevice as Ble.ScanResult?) {
         BehaviorDelegate.initialize();
-
         self.lastPairedDevice = lastPairedDevice;
-        self.timerController = timerController;
-        self.viewController = viewController;
-        // self.delegate = new GoProDelegateStub(timerController, viewController);
-        self.delegate = new GoProDelegate(timerController, viewController);
+        self.delegate = new GoProDelegateStub();
         Ble.setDelegate(delegate);
         GattProfileManager.registerProfiles();
     }
 
+    (:release)
+    public function initialize(lastPairedDevice as Ble.ScanResult?) {
+        BehaviorDelegate.initialize();
+        self.lastPairedDevice = lastPairedDevice;
+        self.delegate = new GoProDelegate();
+        Ble.setDelegate(delegate);
+        GattProfileManager.registerProfiles();
+    }
+
+    (:debug)
     public function onSelect() as Boolean {
-        // onScanResult(null);
+        onScanResult(null);
+        return true;
+    }
+    
+    (:release)
+    public function onSelect() as Boolean {
         if (lastPairedDevice instanceof Ble.ScanResult) {
             onScanResult(lastPairedDevice);
         } else {
@@ -84,11 +87,11 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
     }
 
     private function startScan() as Void {
-        var scanMenu = new CustomMenu((50*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {:titleItemHeight => (80*ICM.kMult).toNumber()});
-        var menuDelegate = new ScanMenuDelegate(scanMenu, viewController, timerController, method(:onScanResult));
+        var scanMenu = new CustomMenu((0.1*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.30*ICM.screenH).toNumber()});
+        var menuDelegate = new ScanMenuDelegate(scanMenu, method(:onScanResult));
         delegate.setScanStateChangeCallback(menuDelegate.method(:setScanState));
         delegate.setScanResultCallback(menuDelegate.method(:onScanResults));
-        viewController.push(scanMenu, menuDelegate, WatchUi.SLIDE_IMMEDIATE);
+        getApp().viewController.push(scanMenu, menuDelegate, WatchUi.SLIDE_IMMEDIATE);
     }
 
     public function onScanResult(device as Ble.ScanResult?) as Void {
@@ -98,7 +101,11 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         delegate.setScanStateChangeCallback(null);
         delegate.setScanResultCallback(null);
         Ble.setScanState(Ble.SCAN_STATE_SCANNING);
-        viewController.push(new NotifView(CONNECTING_NOTIF, NotifView.NOTIF_INFO), new NotifDelegate(), WatchUi.SLIDE_DOWN);
+        if (getApp().fromGlance) {
+            getApp().viewController.switchTo(new NotifView(CONNECTING_NOTIF, NotifView.NOTIF_INFO), null, SLIDE_DOWN);
+        } else {
+            getApp().viewController.push(new NotifView(CONNECTING_NOTIF, NotifView.NOTIF_INFO), new NotifDelegate(), SLIDE_DOWN);
+        }
         delegate.pair(device);
     }
 }
