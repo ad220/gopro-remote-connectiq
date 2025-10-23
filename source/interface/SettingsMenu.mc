@@ -62,13 +62,13 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
             } else {
                 subText = gopro.getDescription();
             }
-            dc.drawText(0.6*width, 0.325*height, ICM.adaptFontMid(), label, ICM.JTEXT_MID);
-            dc.drawText(0.6*width, 0.7*height, ICM.adaptFontSmall(), subText, ICM.JTEXT_MID);
+            dc.drawText(0.6*width, 0.325*height, ICM.fontSmall, label, ICM.JTEXT_MID);
+            dc.drawText(0.6*width, 0.675*height, ICM.fontTiny, subText, ICM.JTEXT_MID);
             dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-            dc.setPenWidth(0.014*height);
+            dc.setPenWidth(0.016*height);
             dc.drawLine(0.35*width, 0.525*height, 0.85*width, 0.525*height);
         } else {
-            dc.drawText(0.6*width, 0.5*height, ICM.adaptFontMid(), label, ICM.JTEXT_MID);
+            dc.drawText(0.6*width, 0.5*height, ICM.fontSmall, label, ICM.JTEXT_MID);
         }
     }
 
@@ -113,7 +113,7 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
         var id = item.getId() as Number;
         
         if (menuId == SettingsMenuItem.CAMERA) {
-            var newMenu = new CustomMenu((0.1*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (80*ICM.kMult).toNumber()});
+            var newMenu = new CustomMenu((0.1*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.30*ICM.screenH).toNumber()});
             viewController.push(newMenu, new SettingPickerDelegate(newMenu, id as GoProSettings.SettingId), SLIDE_UP);
         } else if (id == SettingsMenuItem.MANUALLY) {
             var newMenu = new CustomMenu((0.15*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {});

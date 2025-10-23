@@ -79,7 +79,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
     }
 
     private function startScan() as Void {
-        var scanMenu = new CustomMenu((50*ICM.kMult).toNumber(), Graphics.COLOR_BLACK, {:titleItemHeight => (80*ICM.kMult).toNumber()});
+        var scanMenu = new CustomMenu((0.1*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.30*ICM.screenH).toNumber()});
         var menuDelegate = new ScanMenuDelegate(scanMenu, viewController, timerController, method(:onScanResult));
         delegate.setScanStateChangeCallback(menuDelegate.method(:setScanState));
         delegate.setScanResultCallback(menuDelegate.method(:onScanResults));
