@@ -8,14 +8,9 @@
 
     <!-- GoPro Models -->
     <!-- $$$ Small -->
-    <string id="GP55" translatable="false">HERO9 Black</string>
-    <string id="GP57" translatable="false">HERO10 Black</string>
-    <string id="GP58" translatable="false">HERO11 Black</string>
-    <string id="GP60" translatable="false">HERO11 Black Mini</string>
-    <string id="GP62" translatable="false">HERO12 Black</string>
-    <string id="GP64" translatable="false">GoPro MAX2</string>
-    <string id="GP65" translatable="false">HERO13 Black</string>
-    <string id="GPFF">Unknown GoPro Model</string>
+    <string id="HERO" translatable="false">GoPro HERO</string>
+    <string id="MAX2" translatable="false">GoPro MAX2</string>
+    <string id="UnknownGP">Unknown GoPro Model</string>
 
     <!-- ScanMenu -->
     <!-- $$$ Small -->
