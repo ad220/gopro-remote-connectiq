@@ -8,7 +8,7 @@
 
     <!-- GoPro Models -->
     <!-- $$$ Small -->
-    <string id="GPFF">Modèle de GoPro inconnu</string>
+    <string id="UnknownGP">Modèle de GoPro inconnu</string>
 
     <!-- ScanMenu -->
     <!-- $$$ Small -->

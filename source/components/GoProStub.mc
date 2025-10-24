@@ -115,13 +115,12 @@ using Toybox.BluetoothLowEnergy as Ble;
             GoProCamera.BATTERY             => 50,
             GoProCamera.SD_REMAINING        => 4269
         };
-
     }
 
     public function send(uuid as Ble.Uuid, data as ByteArray) {
         var response;
-        switch (uuid) {
-            case GattProfileManager.QUERY_CHARACTERISTIC:
+        switch (uuid.toString().substring(4,8).toNumber()) {
+            case GattProfileManager.UUID_QUERY_CHAR:
                 System.println("query :"+data);
                 var queryId = data[1];
                 var decoder = null;
@@ -142,29 +141,29 @@ using Toybox.BluetoothLowEnergy as Ble;
                         break;
                     default:
                         System.println("Unknown queryId: " + queryId.toNumber());
-                        return;
                 }
-
-                response = [queryId, 0x00]b;
-                for (var i=0; i<data.size(); i++) {
-                    (decoder as Method(id as Char, response as ByteArray) as Void).invoke(data[i] as Char, response);
+                if (decoder instanceof Method) {
+                    response = [queryId, 0x00]b;
+                    for (var i=0; i<data.size(); i++) {
+                        decoder.invoke(data[i] as Char, response);
+                    }
+                    responseSplitter(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR), response);
                 }
-                responseSplitter(GattProfileManager.QUERY_RESPONSE_CHARACTERISTIC, response);
                 break;
 
-            case GattProfileManager.COMMAND_CHARACTERISTIC:
+            case GattProfileManager.UUID_COMMAND_CHAR:
                 var commandId = data[1];
                 switch (commandId) {
                     case GoProCamera.SHUTTER:
                         statuses.put(GoProCamera.ENCODING, data[3]);
-                        garminDevice.whenCharacteristicChanged(GattProfileManager.QUERY_RESPONSE_CHARACTERISTIC, [0x03, GoProDelegate.NOTIF_STATUS, 0x00, GoProCamera.ENCODING, 0x01, data[3]]b);
+                        garminDevice.whenCharacteristicChanged(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR), [0x03, GoProDelegate.NOTIF_STATUS, 0x00, GoProCamera.ENCODING, 0x01, data[3]]b);
                         break;
                     default:
                         break;
                 }
                 break;
 
-            case GattProfileManager.SETTINGS_CHARACTERISTIC:
+            case GattProfileManager.UUID_SETTINGS_CHAR:
                 var minSettingChanged = 0xFF;
                 response = [GoProDelegate.NOTIF_SETTING, 0x00]b;
                 for (var i=1; i<data.size(); i+=2+data[i+1]) {
@@ -174,7 +173,7 @@ using Toybox.BluetoothLowEnergy as Ble;
                                         data[i]==GoProSettings.LENS and minSettingChanged!=GoProSettings.RESOLUTION ? data[i] : \
                                         data[i]==GoProSettings.FRAMERATE and minSettingChanged==0xFF ? data[i] : minSettingChanged;
                 }
-                responseSplitter(GattProfileManager.QUERY_RESPONSE_CHARACTERISTIC, response);
+                responseSplitter(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR), response);
 
                 response = [GoProDelegate.NOTIF_AVAILABLE, 0x00]b;
                 var iter;
@@ -195,7 +194,7 @@ using Toybox.BluetoothLowEnergy as Ble;
                     default:
                         break;
                 }
-                responseSplitter(GattProfileManager.QUERY_RESPONSE_CHARACTERISTIC, response);
+                responseSplitter(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR), response);
                 break;
 
             default:
@@ -289,9 +288,7 @@ using Toybox.BluetoothLowEnergy as Ble;
         }
         System.println("Sending request");
         try {
-            if (request.getType() == GattRequest.WRITE_CHARACTERISTIC) { // ignore register notif, fakeDevice sends notif anyway
-                fakeDevice.send(request.getUuid(), request.getData());
-            }
+            fakeDevice.send(request.getUuid(), request.getData());
         } catch (ex) {
             System.println(ex.getErrorMessage());
         }
@@ -315,25 +312,13 @@ using Toybox.BluetoothLowEnergy as Ble;
     
     public function pair(device as Ble.ScanResult?) as Void {
         System.println("Initiating fake connection");
+        
+        // pairingTimer = getApp().timerController.start(method(:onPairingFailed), 9, false);
         isConnected = true;
         Ble.setScanState(Ble.SCAN_STATE_OFF);
         requestQueue = new GattRequestQueueStub(new FakeGoProDevice(self));
         getApp().gopro = new GoProCamera(requestQueue, method(:onDisconnect));
-        requestQueue.add(
-            GattRequest.WRITE_CHARACTERISTIC,
-            GattProfileManager.QUERY_CHARACTERISTIC,
-            [0x08, REGISTER_SETTING, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b
-        );
-        requestQueue.add(
-            GattRequest.WRITE_CHARACTERISTIC,
-            GattProfileManager.QUERY_CHARACTERISTIC,
-            [0x02, REGISTER_STATUS, GoProCamera.ENCODING]b
-        );
-        requestQueue.add(
-            GattRequest.WRITE_CHARACTERISTIC,
-            GattProfileManager.QUERY_CHARACTERISTIC,
-            [0x08, REGISTER_AVAILABLE, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b
-        );
+        getApp().gopro.registerSettings();
         getApp().timerController.start(method(:pushRemote), 4, false);
     }
 
@@ -341,11 +326,10 @@ using Toybox.BluetoothLowEnergy as Ble;
         var pushView = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
         pushView.invoke(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
     }
-
     
     public function whenCharacteristicChanged(uuid as Ble.Uuid, value as ByteArray) as Void {
         System.println("Characteristic changed, uuid: " + uuid.toString());
-        if (uuid.equals(GattProfileManager.QUERY_RESPONSE_CHARACTERISTIC)) {
+        if (uuid.equals(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR))) {
             decodeQuery(value);
         }
     }
@@ -356,7 +340,7 @@ using Toybox.BluetoothLowEnergy as Ble;
             System.println("Error while reading characteristic");
             return;
         }
-        if (uuid.equals(GattProfileManager.QUERY_RESPONSE_CHARACTERISTIC)) {
+        if (uuid.equals(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR))) {
             decodeQuery(value);
         }
     }

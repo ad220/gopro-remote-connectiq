@@ -41,8 +41,8 @@ class ConnectView extends WatchUi.View {
 
 
 class ConnectDelegate extends WatchUi.BehaviorDelegate {
-    private const CONNECTING_NOTIF      = loadResource(Rez.Strings.Connecting);
-    private const CONNECT_ERROR_NOTIF   = loadResource(Rez.Strings.ConnectFail);
+    static const CONNECTING_NOTIF      = WatchUi.loadResource(Rez.Strings.Connecting);
+    static const CONNECT_ERROR_NOTIF   = WatchUi.loadResource(Rez.Strings.ConnectFail);
 
     private var lastPairedDevice as Ble.ScanResult?;
     private var delegate as GoProDelegate;
@@ -53,7 +53,6 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         self.lastPairedDevice = lastPairedDevice;
         self.delegate = new GoProDelegateStub();
         Ble.setDelegate(delegate);
-        GattProfileManager.registerProfiles();
     }
 
     (:release)
@@ -62,7 +61,16 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         self.lastPairedDevice = lastPairedDevice;
         self.delegate = new GoProDelegate();
         Ble.setDelegate(delegate);
-        GattProfileManager.registerProfiles();
+        GattProfileManager.registerProfile(
+            Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE),
+            GattProfileManager.UUID_COMMAND_CHAR, 
+            GattProfileManager.UUID_CONTROL_MAX
+        );
+        GattProfileManager.registerProfile(
+            GattProfileManager.getUuid(GattProfileManager.UUID_MANAGE_SERVICE),
+            GattProfileManager.UUID_NETWORK_CHAR,
+            GattProfileManager.UUID_MANAGE_MAX
+        );
     }
 
     (:debug)
@@ -74,7 +82,9 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
     (:release)
     public function onSelect() as Boolean {
         if (lastPairedDevice instanceof Ble.ScanResult) {
-            onScanResult(lastPairedDevice);
+            if (!delegate.isPairing()) {
+                onScanResult(lastPairedDevice);
+            }
         } else {
             startScan();
         }

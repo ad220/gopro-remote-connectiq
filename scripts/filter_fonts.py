@@ -1,6 +1,10 @@
 import sys
 import glob
 
+TINY_SPECIAL_CHAR = ".Kp:°@%0123456789"
+SMALL_SPECIAL_CHAR = ".Kp:°0123456789"
+MEDIUM_SPECIAL_CHAR = "i!0123456789"
+
 
 def sort_filter(filter):
     return "".join(sorted(set("".join(filter))))
@@ -14,9 +18,9 @@ def extract_word(line:str):
 def filter(filename:str, translatable:bool):
     with open(filename, 'r', encoding="utf-8") as f:
         lines = f.readlines()
-        tiny_filter = []
-        small_filter = []
-        medium_filter = []
+        tiny_filter = [TINY_SPECIAL_CHAR]
+        small_filter = [SMALL_SPECIAL_CHAR]
+        medium_filter = [MEDIUM_SPECIAL_CHAR]
         current_filters = []
         for line in lines:
             if '$$$' in line:

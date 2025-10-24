@@ -8,13 +8,9 @@
 
     <!-- GoPro Models -->
     <!-- $$$ Small -->
-    <string id="GP55" translatable="false">HERO9 Black</string>
-    <string id="GP57" translatable="false">HERO10 Black</string>
-    <string id="GP58" translatable="false">HERO11 Black</string>
-    <string id="GP60" translatable="false">HERO11 Black Mini</string>
-    <string id="GP62" translatable="false">HERO12 Black</string>
-    <string id="GP65" translatable="false">HERO13 Black</string>
-    <string id="GPFF">Unknown GoPro Model</string>
+    <string id="HERO" translatable="false">GoPro HERO</string>
+    <string id="MAX2" translatable="false">GoPro MAX2</string>
+    <string id="UnknownGP">Unknown GoPro Model</string>
 
     <!-- ScanMenu -->
     <!-- $$$ Small -->
@@ -73,25 +69,6 @@
     <string id="_ULTRASUPERVIEW" translatable="false">Ultra Superview</string>
     <string id="_ULTRAWIDE">Ultra Wide</string>
     <string id="_ULTRALINEAR">Ultra Linear</string>
-
-    <!-- Resolutions -->
-    <!-- $$$ Small Tiny -->
-    <string id="_5K3" translatable="false">5.3K</string>
-    <string id="_5K" translatable="false">5K</string>
-    <string id="_4K" translatable="false">4K</string>
-    <string id="_2K7" translatable="false">2.7K</string>
-    <string id="_1440" translatable="false">1440p</string>
-    <string id="_1080" translatable="false">1080p</string>
-    <string id="_900" translatable="false">900p</string>
-    <string id="_720" translatable="false">720p</string>
-
-    <!-- Aspect Ratios -->
-    <!-- $$$ Small Tiny -->
-    <string id="_8R7" translatable="false">8:7</string>
-    <string id="_4R3" translatable="false">4:3</string>
-    <string id="_16R9" translatable="false">16:9</string>
-    <string id="_9R16" translatable="false">9:16</string>
-    <string id="_21R9" translatable="false">21:9</string>
 
     <!-- LED -->
     <!-- $$$ Small -->

@@ -13,9 +13,7 @@ Please note that this app was mainly developed for personal use, it should now b
 - change video settings with customizable presets
 - edit camera settings (hypersmooth, gps, leds, anti-flicker)
 
-
 ### Planned [(*)](#disclaimer)
-- UI update + battery and storage indicators
 - QR Code generator for GoPro Labs support
 - add photo and timelapse support
 - better info and error pop-ups message
@@ -30,7 +28,7 @@ On the first launch, press the pair button on the main screen of the widget and 
 
 On this view, press the select button on your watch to start recording and the up button to hilight during capture. Using the up button when the camera is idle will open the camera settings menu and while the down down button will open the video settings menu. In this menu, you can apply a defined preset, manually change video settings or save the current applied video settings as a preset. Be careful as applying a preset with another anti-flicker setting than the current one (i.e. 50/60 fps) won't work properly.
 
-## Screenshots gallery
+## Screenshot gallery
 ![](documentation/screenshots/connect.png)
 ![](documentation/screenshots/remote_off.png)
 ![](documentation/screenshots/remote_on.png)
@@ -40,10 +38,14 @@ On this view, press the select button on your watch to start recording and the u
 
 ## Changelog
 
+### v3.4
+- Add support for MAX2 camera
+- Optimize memory usage of the app
+
 ### v3.3
 - Update icons and add antialiasing
 - Add battery and sd card status in the camera settings menu
-- Add fonts that scale with every support device screen
+- Add fonts that scale with any screen size
 - Update notif look
 - Direct app exit when started from glance
 - Auto camera shutdown on app exit if it's not recording

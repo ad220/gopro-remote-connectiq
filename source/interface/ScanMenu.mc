@@ -10,14 +10,16 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     typedef ScanEntry as {:name as String, :device as Ble.ScanResult, :menuid as Char};
 
     private const goproModelTable = {
-        55      => WatchUi.loadResource(Rez.Strings.GP55),
-        57      => WatchUi.loadResource(Rez.Strings.GP57),
-        58      => WatchUi.loadResource(Rez.Strings.GP58),
-        60      => WatchUi.loadResource(Rez.Strings.GP60),
-        62      => WatchUi.loadResource(Rez.Strings.GP62),
-        65      => WatchUi.loadResource(Rez.Strings.GP65),
-        0xFF    => WatchUi.loadResource(Rez.Strings.GPFF),
+        55      => 9,
+        57      => 10,
+        58      => 11,
+        60      => 11,
+        62      => 12,
+        64      => Rez.Strings.MAX2,
+        65      => 13,
+        0xFF    => Rez.Strings.UnknownGP,
     };
+
     private const SCAN_TITLE    = WatchUi.loadResource(Rez.Strings.ScanTitle);
     private const SCAN_CANCEL   = WatchUi.loadResource(Rez.Strings.ScanCancel);
     private const SCAN_RESTART  = WatchUi.loadResource(Rez.Strings.ScanRestart);
@@ -93,18 +95,25 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     public function onScanResults(results as [Ble.ScanResult]) as Void{
         for(var i=0; i<results.size(); i++) {
             if (!isDeviceInMenu(results[i])) {
-                // from Open GoPro documentation, Model ID is given in byte 13
-                var modelId = results[i].getRawData()[13];
                 var id = scanResults.size() as Char;
-                var label = goproModelTable.get(modelId);
-                if (label==null) { label = goproModelTable.get(0xFF); }
+                var label = results[i].getDeviceName();
+                if (label==null) {
+                // from Open GoPro documentation, Model ID is given in byte 13
+                    label = goproModelTable.get(results[i].getRawData()[13]);
+                    if (label==null) { label = goproModelTable.get(0xFF); }
+                    if (label instanceof Number) {
+                        label = loadResource(Rez.Strings.HERO) + label;
+                    } else if (label instanceof ResourceId) {
+                        label = loadResource(label);
+                    }
+                }
 
                 var entryItem = new OptionPickerItem(label, id, 0xFF as Char);
                 menu.updateItem(entryItem, scanResults.size());
                 menu.updateItem(statusItem, scanResults.size()+1);
                 menu.addItem(cancelItem);
                 scanResults.add({:name => label, :device => results[i], :menuid => id});    
-                WatchUi.requestUpdate();       
+                WatchUi.requestUpdate();
             }
         }
     }
