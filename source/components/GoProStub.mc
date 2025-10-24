@@ -312,6 +312,8 @@ using Toybox.BluetoothLowEnergy as Ble;
     
     public function pair(device as Ble.ScanResult?) as Void {
         System.println("Initiating fake connection");
+        
+        // pairingTimer = getApp().timerController.start(method(:onPairingFailed), 9, false);
         isConnected = true;
         Ble.setScanState(Ble.SCAN_STATE_OFF);
         requestQueue = new GattRequestQueueStub(new FakeGoProDevice(self));
@@ -324,7 +326,6 @@ using Toybox.BluetoothLowEnergy as Ble;
         var pushView = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
         pushView.invoke(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
     }
-
     
     public function whenCharacteristicChanged(uuid as Ble.Uuid, value as ByteArray) as Void {
         System.println("Characteristic changed, uuid: " + uuid.toString());

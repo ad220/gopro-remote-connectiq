@@ -29,6 +29,8 @@ class GoProDelegate extends Ble.BleDelegate {
 
     private var queryReplyLength as Number?;
     private var queryReplyBuffer as ByteArray?;
+    protected var pairingTimer as TimerCallback?;
+    protected var pairingDevice as Ble.Device?;
     private var keepAliveTimer as TimerCallback?;
 
     public function initialize() {
@@ -78,7 +80,20 @@ class GoProDelegate extends Ble.BleDelegate {
     }
 
     public function pair(device as Ble.ScanResult?) as Void {
-        Ble.pairDevice(device);
+        pairingTimer = getApp().timerController.start(method(:onPairingFailed), 20, false);
+        pairingDevice = Ble.pairDevice(device);
+    }
+
+    public function isPairing() as Boolean {
+        return pairingDevice!=null;
+    }
+
+    public function onPairingFailed() as Void {
+        if (!isConnected and pairingDevice!=null) {
+            unpairDevice(pairingDevice);
+        }
+        Ble.setScanState(Ble.SCAN_STATE_OFF);
+        getApp().viewController.push(new NotifView(ConnectDelegate.CONNECT_ERROR_NOTIF, NotifView.NOTIF_ERROR), new NotifDelegate(), WatchUi.SLIDE_DOWN);
     }
 
     public function onConnectedStateChanged(device as Ble.Device, state as Ble.ConnectionState) as Void {
@@ -91,7 +106,7 @@ class GoProDelegate extends Ble.BleDelegate {
                 } else {
                     isConnected = false;
                     device.requestBond();
-                }                
+                }
             } else {
                 System.println("Device disconnected");
                 onDisconnect();
@@ -118,6 +133,10 @@ class GoProDelegate extends Ble.BleDelegate {
     private function initiateConnection(device as Ble.Device) as Void {
         System.println("Initiating connection");
         Ble.setScanState(Ble.SCAN_STATE_OFF);
+        pairingTimer.stop();
+        pairingTimer = null;
+        pairingDevice = null;
+        
         var service = device.getService(Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE));
         if (service != null) {
             requestQueue = new GattRequestQueue(service);

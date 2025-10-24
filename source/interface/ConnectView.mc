@@ -41,8 +41,8 @@ class ConnectView extends WatchUi.View {
 
 
 class ConnectDelegate extends WatchUi.BehaviorDelegate {
-    private const CONNECTING_NOTIF      = loadResource(Rez.Strings.Connecting);
-    private const CONNECT_ERROR_NOTIF   = loadResource(Rez.Strings.ConnectFail);
+    static const CONNECTING_NOTIF      = WatchUi.loadResource(Rez.Strings.Connecting);
+    static const CONNECT_ERROR_NOTIF   = WatchUi.loadResource(Rez.Strings.ConnectFail);
 
     private var lastPairedDevice as Ble.ScanResult?;
     private var delegate as GoProDelegate;
@@ -82,7 +82,9 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
     (:release)
     public function onSelect() as Boolean {
         if (lastPairedDevice instanceof Ble.ScanResult) {
-            onScanResult(lastPairedDevice);
+            if (!delegate.isPairing()) {
+                onScanResult(lastPairedDevice);
+            }
         } else {
             startScan();
         }
