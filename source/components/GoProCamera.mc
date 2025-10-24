@@ -46,13 +46,13 @@ class GoProCamera extends GoProSettings {
             request.addAll([0x01, isRecording() ? 0x00 : 0x01]);
         }
         request[0] = request.size()-1;
-        goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.COMMAND_CHARACTERISTIC, request);
+        goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_COMMAND_CHAR), request);
     }
 
     public function sendSetting(id as GoProSettings.SettingId, value as Char) as Void {
         var request = [0x03, id as Char, 0x01, value]b;
         settings.put(id, value);
-        goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.SETTINGS_CHARACTERISTIC, request);
+        goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_SETTINGS_CHAR), request);
     }
 
     public function sendPreset(preset as GoProPreset) as Void {
@@ -67,7 +67,7 @@ class GoProCamera extends GoProSettings {
     public function requestStatuses(ids as ByteArray) as Void {
         var request = [ids.size()+1, GoProDelegate.GET_STATUS]b;
         request.addAll(ids);
-        goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.QUERY_CHARACTERISTIC, request);
+        goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_CHAR), request);
     }
 
     public function onReceiveSetting(id as Char, value as ByteArray) as Void {
@@ -86,7 +86,7 @@ class GoProCamera extends GoProSettings {
             if (value[0]==1) {
                 var request = [0x02, GoProDelegate.GET_STATUS, ENCODING_DURATION]b;
                 statuses.put(ENCODING_DURATION, 0);
-                goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.QUERY_CHARACTERISTIC, request);
+                goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_CHAR), request);
                 System.println("starting progress timer");
                 progressTimer = getApp().timerController.start(method(:incrementEncodingDuration), 2, true);
             } else {

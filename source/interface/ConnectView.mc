@@ -53,7 +53,6 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         self.lastPairedDevice = lastPairedDevice;
         self.delegate = new GoProDelegateStub();
         Ble.setDelegate(delegate);
-        GattProfileManager.registerProfiles();
     }
 
     (:release)
@@ -62,7 +61,16 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         self.lastPairedDevice = lastPairedDevice;
         self.delegate = new GoProDelegate();
         Ble.setDelegate(delegate);
-        GattProfileManager.registerProfiles();
+        GattProfileManager.registerProfile(
+            Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE),
+            GattProfileManager.UUID_COMMAND_CHAR, 
+            GattProfileManager.UUID_CONTROL_MAX
+        );
+        GattProfileManager.registerProfile(
+            GattProfileManager.getUuid(GattProfileManager.UUID_MANAGE_SERVICE),
+            GattProfileManager.UUID_NETWORK_CHAR,
+            GattProfileManager.UUID_MANAGE_MAX
+        );
     }
 
     (:debug)

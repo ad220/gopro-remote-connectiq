@@ -65,7 +65,7 @@ class GoProDelegate extends Ble.BleDelegate {
                 System.println(device.getDeviceName());
                 for (var uuid = uuids.next() as Ble.Uuid; uuid!=null; uuid = uuids.next()) {
                     System.println(uuid.toString());
-                    if (uuid.equals(GattProfileManager.GOPRO_CONTROL_SERVICE)) {
+                    if (uuid.toString().equals(GattProfileManager.GOPRO_CONTROL_SERVICE)) {
                         scanResultsArray.add(device);
                         break;
                     }
@@ -118,28 +118,28 @@ class GoProDelegate extends Ble.BleDelegate {
     private function initiateConnection(device as Ble.Device) as Void {
         System.println("Initiating connection");
         Ble.setScanState(Ble.SCAN_STATE_OFF);
-        var service = device.getService(GattProfileManager.GOPRO_CONTROL_SERVICE);
+        var service = device.getService(Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE));
         if (service != null) {
             requestQueue = new GattRequestQueue(service);
         }
         getApp().gopro = new GoProCamera(requestQueue, method(:onDisconnect));
         
-        requestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.COMMAND_RESPONSE_CHARACTERISTIC, [0x01, 0x00]b);
-        requestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.SETTINGS_RESPONSE_CHARACTERISTIC, [0x01, 0x00]b);
-        requestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.QUERY_RESPONSE_CHARACTERISTIC, [0x01, 0x00]b);
+        requestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.getUuid(GattProfileManager.UUID_COMMAND_RESPONSE_CHAR), [0x01, 0x00]b);
+        requestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.getUuid(GattProfileManager.UUID_SETTINGS_RESPONSE_CHAR), [0x01, 0x00]b);
+        requestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR), [0x01, 0x00]b);
         requestQueue.add(
             GattRequest.WRITE_CHARACTERISTIC,
-            GattProfileManager.QUERY_CHARACTERISTIC,
+            GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_CHAR),
             [0x08, REGISTER_SETTING, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b
         );
         requestQueue.add(
             GattRequest.WRITE_CHARACTERISTIC,
-            GattProfileManager.QUERY_CHARACTERISTIC,
+            GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_CHAR),
             [0x02, REGISTER_STATUS, GoProCamera.ENCODING]b
         );
         requestQueue.add(
             GattRequest.WRITE_CHARACTERISTIC,
-            GattProfileManager.QUERY_CHARACTERISTIC,
+            GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_CHAR),
             [0x08, REGISTER_AVAILABLE, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b
         );
 
@@ -152,7 +152,7 @@ class GoProDelegate extends Ble.BleDelegate {
         System.println("KeepAlive, isConnected: "+isConnected);
         if (isConnected) {
             var data = [0x03, 0x5b, 0x01, 0x42]b;
-            requestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.SETTINGS_CHARACTERISTIC, data);
+            requestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_SETTINGS_CHAR), data);
         }
     }
 
@@ -168,7 +168,7 @@ class GoProDelegate extends Ble.BleDelegate {
 
     public function onCharacteristicChanged(characteristic as Ble.Characteristic, value as ByteArray) as Void {
         System.println("Characteristic changed, uuid: " + characteristic.getUuid().toString());
-        if (characteristic.getUuid().equals(GattProfileManager.QUERY_RESPONSE_CHARACTERISTIC)) {
+        if (characteristic.getUuid().equals(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR))) {
             decodeQuery(value);
         }
     }
@@ -179,7 +179,7 @@ class GoProDelegate extends Ble.BleDelegate {
             System.println("Error while reading characteristic");
             return;
         }
-        if (characteristic.getUuid().equals(GattProfileManager.QUERY_RESPONSE_CHARACTERISTIC)) {
+        if (characteristic.getUuid().equals(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR))) {
             decodeQuery(value);
         }
     }
