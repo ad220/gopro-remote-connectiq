@@ -123,25 +123,7 @@ class GoProDelegate extends Ble.BleDelegate {
             requestQueue = new GattRequestQueue(service);
         }
         getApp().gopro = new GoProCamera(requestQueue, method(:onDisconnect));
-        
-        requestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.getUuid(GattProfileManager.UUID_COMMAND_RESPONSE_CHAR), [0x01, 0x00]b);
-        requestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.getUuid(GattProfileManager.UUID_SETTINGS_RESPONSE_CHAR), [0x01, 0x00]b);
-        requestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR), [0x01, 0x00]b);
-        requestQueue.add(
-            GattRequest.WRITE_CHARACTERISTIC,
-            GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_CHAR),
-            [0x08, REGISTER_SETTING, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b
-        );
-        requestQueue.add(
-            GattRequest.WRITE_CHARACTERISTIC,
-            GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_CHAR),
-            [0x02, REGISTER_STATUS, GoProCamera.ENCODING]b
-        );
-        requestQueue.add(
-            GattRequest.WRITE_CHARACTERISTIC,
-            GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_CHAR),
-            [0x08, REGISTER_AVAILABLE, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b
-        );
+        getApp().gopro.registerSettings();
 
         keepAliveTimer = getApp().timerController.start(method(:keepAlive), 8, true);
         var pushView = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);

@@ -115,7 +115,6 @@ using Toybox.BluetoothLowEnergy as Ble;
             GoProCamera.BATTERY             => 50,
             GoProCamera.SD_REMAINING        => 4269
         };
-
     }
 
     public function send(uuid as Ble.Uuid, data as ByteArray) {
@@ -142,14 +141,14 @@ using Toybox.BluetoothLowEnergy as Ble;
                         break;
                     default:
                         System.println("Unknown queryId: " + queryId.toNumber());
-                        return;
                 }
-
-                response = [queryId, 0x00]b;
-                for (var i=0; i<data.size(); i++) {
-                    (decoder as Method(id as Char, response as ByteArray) as Void).invoke(data[i] as Char, response);
+                if (decoder instanceof Method) {
+                    response = [queryId, 0x00]b;
+                    for (var i=0; i<data.size(); i++) {
+                        decoder.invoke(data[i] as Char, response);
+                    }
+                    responseSplitter(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR), response);
                 }
-                responseSplitter(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR), response);
                 break;
 
             case GattProfileManager.UUID_COMMAND_CHAR:
@@ -289,9 +288,7 @@ using Toybox.BluetoothLowEnergy as Ble;
         }
         System.println("Sending request");
         try {
-            if (request.getType() == GattRequest.WRITE_CHARACTERISTIC) { // ignore register notif, fakeDevice sends notif anyway
-                fakeDevice.send(request.getUuid(), request.getData());
-            }
+            fakeDevice.send(request.getUuid(), request.getData());
         } catch (ex) {
             System.println(ex.getErrorMessage());
         }
@@ -319,21 +316,7 @@ using Toybox.BluetoothLowEnergy as Ble;
         Ble.setScanState(Ble.SCAN_STATE_OFF);
         requestQueue = new GattRequestQueueStub(new FakeGoProDevice(self));
         getApp().gopro = new GoProCamera(requestQueue, method(:onDisconnect));
-        requestQueue.add(
-            GattRequest.WRITE_CHARACTERISTIC,
-            GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_CHAR),
-            [0x08, REGISTER_SETTING, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b
-        );
-        requestQueue.add(
-            GattRequest.WRITE_CHARACTERISTIC,
-            GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_CHAR),
-            [0x02, REGISTER_STATUS, GoProCamera.ENCODING]b
-        );
-        requestQueue.add(
-            GattRequest.WRITE_CHARACTERISTIC,
-            GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_CHAR),
-            [0x08, REGISTER_AVAILABLE, GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b
-        );
+        getApp().gopro.registerSettings();
         getApp().timerController.start(method(:pushRemote), 4, false);
     }
 

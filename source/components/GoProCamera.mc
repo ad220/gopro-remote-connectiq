@@ -40,6 +40,14 @@ class GoProCamera extends GoProSettings {
         self.tmpAvailableSettings = {};
     }
 
+    public function registerSettings() as Void {
+        goproRequestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.getUuid(GattProfileManager.UUID_COMMAND_RESPONSE_CHAR), [0x01, 0x00]b);
+        goproRequestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.getUuid(GattProfileManager.UUID_SETTINGS_RESPONSE_CHAR), [0x01, 0x00]b);
+        goproRequestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR), [0x01, 0x00]b);
+        subscribeChanges(GoProDelegate.REGISTER_SETTING, [GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b);
+        subscribeChanges(GoProDelegate.REGISTER_STATUS, [ENCODING]b);
+    }
+
     public function sendCommand(command as CommandId) as Void {
         var request = [0xFF, command as Char]b;
         if (command==SHUTTER) {
@@ -68,6 +76,16 @@ class GoProCamera extends GoProSettings {
         var request = [ids.size()+1, GoProDelegate.GET_STATUS]b;
         request.addAll(ids);
         goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_CHAR), request);
+    }
+
+    public function subscribeChanges(queryId as GoProDelegate.QueryId, values as ByteArray) {
+        var request = [values.size()+1, queryId as Char]b;
+        request.addAll(values);
+        goproRequestQueue.add(
+            GattRequest.WRITE_CHARACTERISTIC,
+            GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_CHAR),
+            request
+        );
     }
 
     public function onReceiveSetting(id as Char, value as ByteArray) as Void {

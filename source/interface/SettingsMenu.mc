@@ -7,12 +7,6 @@ using InterfaceComponentsManager as ICM;
 
 class SettingsMenuItem extends WatchUi.CustomMenuItem {
 
-    public enum MenuId {
-        MAIN,
-        CAMERA,
-        PRESET,
-    }
-
     public enum MenuItemId {
         PRESET1,
         PRESET2,
@@ -21,19 +15,19 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
         SAVEAS,
     }
 
-    private var menuId as MenuId;
+    private var menuId as SettingsMenuDelegate.MenuId;
     private var label as String;
     private var icon as BitmapResource;
     
     public var gopro as GoProSettings?;
 
 
-    public function initialize(menuId as MenuId, itemId as Char, labelId as ResourceId, iconId as ResourceId) {
+    public function initialize(menuId as SettingsMenuDelegate.MenuId, itemId as Char, labelId as ResourceId, iconId as ResourceId) {
         self.menuId = menuId;
         self.label = loadResource(labelId);
         self.icon = loadResource(iconId);
 
-        if (menuId == CAMERA) {
+        if (menuId == SettingsMenuDelegate.CAMERA) {
             self.gopro = getApp().gopro;
         } else if (itemId<3) {
             self.gopro = new GoProPreset(itemId);
@@ -46,7 +40,7 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
         var width = dc.getWidth();
         var height = dc.getHeight();
         var id = getId() as Char;
-        var isMenuCamera = menuId == CAMERA;
+        var isMenuCamera = menuId == SettingsMenuDelegate.CAMERA;
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.fillRoundedRectangle(0.05*width, 0.125*height, 0.9*width, 0.75*height, 0xFF);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
@@ -76,29 +70,35 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
 
 class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
 
-    private var menuId as SettingsMenuItem.MenuId;
+    public enum MenuId {
+        MAIN,
+        CAMERA,
+        PRESET,
+    }
+
+    private var menuId as MenuId;
     private var items as Array<SettingsMenuItem>;
     private var viewController as ViewController;
 
-    public function initialize(menu as CustomMenu, menuId as SettingsMenuItem.MenuId, items as Array<SettingsMenuItem>) {
+    public function initialize(menu as CustomMenu, menuId as MenuId, items as Array<SettingsMenuItem>) {
         Menu2InputDelegate.initialize();
 
         self.menuId = menuId;
         self.items = items;
         self.viewController = getApp().viewController;
 
-        var title = menuId == SettingsMenuItem.CAMERA ? loadResource(Rez.Strings.GoPro) : loadResource(Rez.Strings.Settings);
+        var title = menuId == CAMERA ? loadResource(Rez.Strings.GoPro) : loadResource(Rez.Strings.Settings);
         menu.setTitle(new OptionPickerTitle(title));
         
-        if (menuId != SettingsMenuItem.CAMERA) {
-            if (menuId == SettingsMenuItem.MAIN) {
+        if (menuId != CAMERA) {
+            if (menuId == MAIN) {
                 var labels = [Rez.Strings.Cinema, Rez.Strings.Sport, Rez.Strings.Eco, Rez.Strings.Manually, Rez.Strings.SaveP7];
                 var icons = [Rez.Drawables.Cinema, Rez.Drawables.Sport, Rez.Drawables.Eco, Rez.Drawables.Camera, Rez.Drawables.Save];
                 for (var id=0; id<5; id++) {
                     items.add(new SettingsMenuItem(menuId, id as Char, labels[id], icons[id]));
                 }
             }
-            for (var id=0; id < (menuId==SettingsMenuItem.PRESET ? 3 : 5); id++) {
+            for (var id=0; id < (menuId==PRESET ? 3 : 5); id++) {
                 menu.addItem(items[id]);
             }
         } else {
@@ -112,29 +112,39 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
     public function onSelect(item) {
         var id = item.getId() as Number;
         
-        if (menuId == SettingsMenuItem.CAMERA) {
+        if (menuId == CAMERA) {
             var newMenu = new CustomMenu((0.1*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.30*ICM.screenH).toNumber()});
             viewController.push(newMenu, new SettingPickerDelegate(newMenu, id as GoProSettings.SettingId), SLIDE_UP);
         } else if (id == SettingsMenuItem.MANUALLY) {
             var newMenu = new CustomMenu((0.15*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {});
-            viewController.push(newMenu, new SettingsMenuDelegate(newMenu, SettingsMenuItem.CAMERA, []), SLIDE_LEFT);
+            viewController.push(newMenu, new SettingsMenuDelegate(newMenu, CAMERA, []), SLIDE_LEFT);
         } else if (id == SettingsMenuItem.SAVEAS) {
             var newMenu = new CustomMenu((0.15*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {});
-            viewController.switchTo(newMenu, new SettingsMenuDelegate(newMenu, SettingsMenuItem.PRESET, items), SLIDE_LEFT);
-        } else if (menuId == SettingsMenuItem.PRESET) {
+            viewController.switchTo(newMenu, new SettingsMenuDelegate(newMenu, PRESET, items), SLIDE_LEFT);
+        } else if (menuId == PRESET) {
             ((item as SettingsMenuItem).gopro as GoProPreset).sync();
+            unsubscribeAvailable();
             viewController.pop(SLIDE_DOWN);
         } else {
             getApp().gopro.sendPreset((item as SettingsMenuItem).gopro as GoProPreset);
+            unsubscribeAvailable();
             viewController.pop(SLIDE_DOWN);
         }
     }
 
     public function onBack() as Void {
+        if (menuId==MAIN) {
+            unsubscribeAvailable();
+        }
         viewController.pop(SLIDE_DOWN);
     }
 
     public function onWrap(key as Key) as Boolean {
         return false;
+    }
+
+    (:inline)
+    private function unsubscribeAvailable() as Void {
+        getApp().gopro.subscribeChanges(GoProDelegate.UNREGISTER_AVAILABLE, [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE]b);
     }
 }
