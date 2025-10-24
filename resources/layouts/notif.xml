@@ -10,7 +10,7 @@
     <layout id="NotifErrorLayout">
         <drawable id="ErrorBackground"/>
         <drawable id="NotifCircle"/>
-        <label id="NotifIcon" text="!" x="center" y="30%" font="@Fonts.Medium" color="0xFFAA00" justification="Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER"/>
+        <label id="NotifIcon" text="!" x="center" y="30%" font="@Fonts.Medium" color="0xFF5500" justification="Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER"/>
         <label id="NotifMsg" x="center" y="center" font="@Fonts.Small" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER"/>
     </layout> 
 
