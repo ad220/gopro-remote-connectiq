@@ -15,10 +15,10 @@ class GattProfileManager {
         UUID_QUERY_RESPONSE_CHAR,
         UUID_CONTROL_MAX,
 
-        UUID_MANAGE_SERVICE         = 90,
-        UUID_NETWORK_CHAR,
-        UUID_NETWORK_RESPONSE_CHAR,
-        UUID_MANAGE_MAX,
+        // UUID_MANAGE_SERVICE         = 90,
+        // UUID_NETWORK_CHAR,
+        // UUID_NETWORK_RESPONSE_CHAR,
+        // UUID_MANAGE_MAX,
     }
     
     (:inline)

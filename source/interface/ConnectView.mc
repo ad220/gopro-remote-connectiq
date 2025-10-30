@@ -66,11 +66,11 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
             GattProfileManager.UUID_COMMAND_CHAR, 
             GattProfileManager.UUID_CONTROL_MAX
         );
-        GattProfileManager.registerProfile(
-            GattProfileManager.getUuid(GattProfileManager.UUID_MANAGE_SERVICE),
-            GattProfileManager.UUID_NETWORK_CHAR,
-            GattProfileManager.UUID_MANAGE_MAX
-        );
+        // GattProfileManager.registerProfile(
+        //     GattProfileManager.getUuid(GattProfileManager.UUID_MANAGE_SERVICE),
+        //     GattProfileManager.UUID_NETWORK_CHAR,
+        //     GattProfileManager.UUID_MANAGE_MAX
+        // );
     }
 
     (:release :mobile)
