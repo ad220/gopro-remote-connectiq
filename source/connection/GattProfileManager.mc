@@ -26,6 +26,7 @@ class GattProfileManager {
         return Ble.stringToUuid("B5F9" + gpxx.format("%04d") + "-AA8D-11E3-9046-0002A5D5C51B");
     }
 
+    (:ble)
     public static function registerProfile(serviceUuid as Ble.Uuid, charMin as Number, charMax as Number) as Void {
         var profile = {
             :uuid => serviceUuid

@@ -4,7 +4,7 @@ import Toybox.WatchUi;
 
 using Toybox.BluetoothLowEnergy as Ble;
 
-
+(:ble)
 class ScanMenuDelegate extends Menu2InputDelegate {
 
     typedef ScanEntry as {:name as String, :device as Ble.ScanResult, :menuid as Char};

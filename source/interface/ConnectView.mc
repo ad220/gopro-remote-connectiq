@@ -45,7 +45,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
     static const CONNECT_ERROR_NOTIF   = WatchUi.loadResource(Rez.Strings.ConnectFail);
 
     private var lastPairedDevice as Ble.ScanResult?;
-    private var delegate as CameraDelegate;
+    private var delegate as CameraDelegate or MobileDelegate;
 
     (:debug)
     public function initialize(lastPairedDevice as Ble.ScanResult?) {
@@ -55,7 +55,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         Ble.setDelegate(delegate);
     }
 
-    (:release)
+    (:release :ble)
     public function initialize(lastPairedDevice as Ble.ScanResult?) {
         BehaviorDelegate.initialize();
         self.lastPairedDevice = lastPairedDevice;
@@ -73,13 +73,19 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         );
     }
 
+    (:release :mobile)
+    public function initialize(lastPairedDevice as Ble.ScanResult?) {
+        BehaviorDelegate.initialize();
+        self.delegate = new MobileDelegate();
+    }
+
     (:debug)
     public function onSelect() as Boolean {
         onScanResult(null);
         return true;
     }
     
-    (:release)
+    (:release :ble)
     public function onSelect() as Boolean {
         if (lastPairedDevice instanceof Ble.ScanResult) {
             if (!delegate.isPairing()) {
@@ -91,11 +97,24 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         return true;
     }
 
+    (:release :mobile)
+    public function onSelect() as Boolean {
+        if (getApp().fromGlance) {
+            getApp().viewController.switchTo(new NotifView(CONNECTING_NOTIF, NotifView.NOTIF_INFO), null, SLIDE_DOWN);
+        } else if (!delegate.isPairing()){
+            delegate.connect();
+            getApp().viewController.push(new NotifView(CONNECTING_NOTIF, NotifView.NOTIF_INFO), new NotifDelegate(), SLIDE_DOWN);
+        }
+        return true;
+    }
+
+    (:release :ble)
     public function onMenu() as Boolean {
         startScan();
         return true;
     }
 
+    (:ble)
     private function startScan() as Void {
         var scanMenu = new CustomMenu((0.1*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.30*ICM.screenH).toNumber()});
         var menuDelegate = new ScanMenuDelegate(scanMenu, method(:onScanResult));
@@ -104,6 +123,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         getApp().viewController.push(scanMenu, menuDelegate, WatchUi.SLIDE_IMMEDIATE);
     }
 
+    (:ble)
     public function onScanResult(device as Ble.ScanResult?) as Void {
         if (device!=null and !device.equals(lastPairedDevice)) {
             Storage.setValue("lastPairedDevice", device as Application.PropertyValueType);

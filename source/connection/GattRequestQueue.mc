@@ -3,6 +3,7 @@ import Toybox.Lang;
 
 using Toybox.BluetoothLowEnergy as Ble;
 
+(:ble)
 class GattRequestQueue {
 
     private var service as Ble.Service;
@@ -78,6 +79,7 @@ class GattRequestQueue {
         }
     }
 }
+
 
 class GattRequest {
     public enum RequestType {

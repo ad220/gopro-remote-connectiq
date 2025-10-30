@@ -20,7 +20,7 @@ class GoProCamera extends GoProSettings {
         KEEP_ALIVE  = 0x5B,
     }
 
-    private var goproRequestQueue as GattRequestQueue;
+    private var goproRequestQueue as GattRequestQueue or MobileDelegate;
     protected var disconnectCallback as Method() as Void;
     protected var statuses as Dictionary;
     protected var availableSettings as Dictionary;
@@ -29,7 +29,7 @@ class GoProCamera extends GoProSettings {
     protected var progressTimer as TimerCallback?;
 
 
-    public function initialize(requestQueue as GattRequestQueue, disconnectCallback as Method() as Void) {
+    public function initialize(requestQueue as GattRequestQueue or MobileDelegate, disconnectCallback as Method() as Void) {
         GoProSettings.initialize();
         
         self.goproRequestQueue = requestQueue;
