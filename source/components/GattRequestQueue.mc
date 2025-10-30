@@ -18,7 +18,6 @@ class GattRequestQueue {
 
     public function add(type as GattRequest.RequestType, uuid as Ble.Uuid, data as ByteArray) {
         var request = new GattRequest(type, uuid, data);
-        System.println("Message added to queue, data: "+data);
         request.setCallbacks(method(:sendRequest), method(:onRequestFail));
         queue.add(request);
         if (!isProcessing) {
@@ -34,7 +33,6 @@ class GattRequestQueue {
             onRequestProcessed(request.getType(), request.getUuid(), Ble.STATUS_SUCCESS);
         }
         var characteristic = service.getCharacteristic(request.getUuid());
-        System.println("Sending request");
         try {
             if (request.getType() == GattRequest.REGISTER_NOTIFICATION) {
                 var descriptor = characteristic.getDescriptor(Ble.cccdUuid());
@@ -51,7 +49,6 @@ class GattRequestQueue {
     public function onRequestProcessed(type as GattRequest.RequestType, uuid as Ble.Uuid, status as Ble.Status) {
         var request = queue[0];
         if (request != null and (type==GattRequest.REGISTER_NOTIFICATION or uuid.equals(request.getUuid())) and status==Ble.STATUS_SUCCESS) {
-            System.println("Write op went successfully");
             request.onResponse();
             queue = queue.slice(1, queue.size());
             if (queue.size()>0) {

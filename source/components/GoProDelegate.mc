@@ -38,16 +38,11 @@ class GoProDelegate extends Ble.BleDelegate {
         BleDelegate.initialize();
     }
 
-    public function onProfileRegister(uuid as Ble.Uuid, status as Ble.Status) as Void {
-        System.println("Profile register, status: "+ status);
-    }
-
     public function setScanStateChangeCallback(callback as Method(state as Ble.ScanState) as Void?) as Void {
         scanStateChangeCallback = callback;
     }
 
     public function onScanStateChange(scanState as Ble.ScanState, status as Ble.Status) as Void {
-        System.println("BLE scan state changed : " + scanState + " / " + status);
         if (status == Ble.STATUS_SUCCESS and scanStateChangeCallback!=null) {
             scanStateChangeCallback.invoke(scanState);
         }
@@ -60,13 +55,10 @@ class GoProDelegate extends Ble.BleDelegate {
     public function onScanResults(scanResults as Ble.Iterator) as Void {
         if (scanResultCallback!=null) {
             var scanResultsArray = [];
-            System.println("onScanResults");
             // filter results with GoPro 0xFEA6 UUID
             for (var device = scanResults.next() as Ble.ScanResult; device!=null; device = scanResults.next()) {
                 var uuids = device.getServiceUuids();
-                System.println(device.getDeviceName());
                 for (var uuid = uuids.next() as Ble.Uuid; uuid!=null; uuid = uuids.next()) {
-                    System.println(uuid.toString());
                     if (uuid.toString().equals(GattProfileManager.GOPRO_CONTROL_SERVICE)) {
                         scanResultsArray.add(device);
                         break;
@@ -99,7 +91,6 @@ class GoProDelegate extends Ble.BleDelegate {
     public function onConnectedStateChanged(device as Ble.Device, state as Ble.ConnectionState) as Void {
         if (device!=null) {
             if (state == Ble.CONNECTION_STATE_CONNECTED) {
-                System.println("Device connected");
                 if (device.isBonded()) {
                     isConnected = true;
                     initiateConnection(device);
@@ -108,7 +99,6 @@ class GoProDelegate extends Ble.BleDelegate {
                     device.requestBond();
                 }
             } else {
-                System.println("Device disconnected");
                 onDisconnect();
             }
         } else {
@@ -120,7 +110,6 @@ class GoProDelegate extends Ble.BleDelegate {
     public function onEncryptionStatus(device as Ble.Device, status as Ble.Status) as Void {
         if (device!=null and status == Ble.STATUS_SUCCESS) {
             if (!isConnected) {
-                System.println("Device bonded");
                 isConnected = true;
                 initiateConnection(device);
             }
@@ -131,7 +120,6 @@ class GoProDelegate extends Ble.BleDelegate {
     }
 
     private function initiateConnection(device as Ble.Device) as Void {
-        System.println("Initiating connection");
         Ble.setScanState(Ble.SCAN_STATE_OFF);
         pairingTimer.stop();
         pairingTimer = null;
@@ -150,7 +138,6 @@ class GoProDelegate extends Ble.BleDelegate {
     }
 
     public function keepAlive() as Void {
-        System.println("KeepAlive, isConnected: "+isConnected);
         if (isConnected) {
             var data = [0x03, 0x5b, 0x01, 0x42]b;
             requestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_SETTINGS_CHAR), data);
@@ -168,14 +155,12 @@ class GoProDelegate extends Ble.BleDelegate {
     }
 
     public function onCharacteristicChanged(characteristic as Ble.Characteristic, value as ByteArray) as Void {
-        System.println("Characteristic changed, uuid: " + characteristic.getUuid().toString());
         if (characteristic.getUuid().equals(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR))) {
             decodeQuery(value);
         }
     }
 
     public function onCharacteristicRead(characteristic as Ble.Characteristic, status as Ble.Status, value as ByteArray) as Void {
-        System.println("Characteristic read, uuid: " + characteristic.getUuid().toString());
         if (status != Ble.STATUS_SUCCESS) {
             System.println("Error while reading characteristic");
             return;
@@ -216,7 +201,7 @@ class GoProDelegate extends Ble.BleDelegate {
         if (status != 0) {
             System.println("Wrong query status received from camera, value: " + status.toNumber());
         }
-        System.println("Received TLV message, query: "+queryId+", data: "+data);
+        
         switch (queryId) {
             case REGISTER_SETTING:
             case NOTIF_SETTING:

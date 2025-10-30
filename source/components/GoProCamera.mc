@@ -94,7 +94,6 @@ class GoProCamera extends GoProSettings {
             settings.put(RATIO, value[0]);
             if (availableRatios!={}) {
                 availableSettings.put(RATIO, availableRatios.get((RESOLUTION_MAP.get(settings.get(RESOLUTION)) as Array)[0]));
-                System.println("set available ratios: "+availableSettings.get(RATIO));
             }
         }
     }
@@ -105,7 +104,6 @@ class GoProCamera extends GoProSettings {
                 var request = [0x02, GoProDelegate.GET_STATUS, ENCODING_DURATION]b;
                 statuses.put(ENCODING_DURATION, 0);
                 goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_CHAR), request);
-                System.println("starting progress timer");
                 progressTimer = getApp().timerController.start(method(:incrementEncodingDuration), 2, true);
             } else {
                 getApp().timerController.stop(progressTimer);
@@ -158,7 +156,6 @@ class GoProCamera extends GoProSettings {
                             availableResolutions.add(tmpValues[j]);
                         }
                     }
-                    System.println("available res: "+availableResolutions+"");
                     availableSettings.put(RESOLUTION, availableResolutions);
                     var res = settings.get(RESOLUTION);
                     if (res != null) {
