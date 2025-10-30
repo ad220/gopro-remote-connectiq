@@ -3,7 +3,7 @@ import Toybox.Lang;
 
 using Toybox.BluetoothLowEnergy as Ble;
 
-class GoProDelegate extends Ble.BleDelegate {
+class CameraDelegate extends Ble.BleDelegate {
 
     public enum QueryId {
         GET_SETTING             = 0x12,
