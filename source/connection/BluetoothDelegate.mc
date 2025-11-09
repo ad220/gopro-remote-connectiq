@@ -3,7 +3,7 @@ import Toybox.Lang;
 
 using Toybox.BluetoothLowEnergy as Ble;
 
-class CameraDelegate extends Ble.BleDelegate {
+class BluetoothDelegate extends Ble.BleDelegate {
 
     public enum QueryId {
         GET_SETTING             = 0x12,
@@ -242,6 +242,6 @@ class CameraDelegate extends Ble.BleDelegate {
     }
 
     public function onDescriptorWrite(descriptor as Ble.Descriptor, status as Ble.Status) as Void {
-        requestQueue.onRequestProcessed(GattRequest.REGISTER_NOTIFICATION, descriptor.getUuid(), status);        
+        requestQueue.onRequestProcessed(GattRequest.REGISTER_NOTIFICATION, descriptor.getUuid(), status);
     }
 }

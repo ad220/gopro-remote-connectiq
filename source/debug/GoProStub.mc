@@ -93,12 +93,12 @@ using Toybox.BluetoothLowEnergy as Ble;
     //     9   => [9],
     // };
 
-    private var garminDevice as GoProDelegateStub;
+    private var garminDevice as BluetoothDelegateStub;
 
     private var settings as Dictionary;
     private var statuses as Dictionary;
 
-    public function initialize(garminDevice as GoProDelegateStub) {
+    public function initialize(garminDevice as BluetoothDelegateStub) {
         self.garminDevice = garminDevice;
         self.settings = {
             GoProSettings.RESOLUTION    => 28,
@@ -127,16 +127,16 @@ using Toybox.BluetoothLowEnergy as Ble;
                 data = data.slice(2, null);
 
                 switch (queryId) {
-                    case CameraDelegate.GET_SETTING:
-                    case CameraDelegate.REGISTER_SETTING:
+                    case BluetoothDelegate.GET_SETTING:
+                    case BluetoothDelegate.REGISTER_SETTING:
                         decoder = method(:onReceiveSetting);
                         break;
-                    case CameraDelegate.GET_STATUS:
-                    case CameraDelegate.REGISTER_STATUS:
+                    case BluetoothDelegate.GET_STATUS:
+                    case BluetoothDelegate.REGISTER_STATUS:
                         decoder = method(:onReceiveStatus);
                         break;
-                    case CameraDelegate.GET_AVAILABLE:
-                    case CameraDelegate.REGISTER_AVAILABLE:
+                    case BluetoothDelegate.GET_AVAILABLE:
+                    case BluetoothDelegate.REGISTER_AVAILABLE:
                         decoder = method(:onReceiveAvailable);
                         break;
                     default:
@@ -156,7 +156,10 @@ using Toybox.BluetoothLowEnergy as Ble;
                 switch (commandId) {
                     case GoProCamera.SHUTTER:
                         statuses.put(GoProCamera.ENCODING, data[3]);
-                        garminDevice.whenCharacteristicChanged(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR), [0x03, CameraDelegate.NOTIF_STATUS, 0x00, GoProCamera.ENCODING, 0x01, data[3]]b);
+                        garminDevice.whenCharacteristicChanged(
+                            GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR),
+                            [0x03, BluetoothDelegate.NOTIF_STATUS, 0x00, GoProCamera.ENCODING, 0x01, data[3]]b
+                        );
                         break;
                     default:
                         break;
@@ -165,7 +168,7 @@ using Toybox.BluetoothLowEnergy as Ble;
 
             case GattProfileManager.UUID_SETTINGS_CHAR:
                 var minSettingChanged = 0xFF;
-                response = [CameraDelegate.NOTIF_SETTING, 0x00]b;
+                response = [BluetoothDelegate.NOTIF_SETTING, 0x00]b;
                 for (var i=1; i<data.size(); i+=2+data[i+1]) {
                     settings.put(data[i], data[i+2]);
                     response.addAll([data[i], 0x01, data[i+2]]);
@@ -175,7 +178,7 @@ using Toybox.BluetoothLowEnergy as Ble;
                 }
                 responseSplitter(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR), response);
 
-                response = [CameraDelegate.NOTIF_AVAILABLE, 0x00]b;
+                response = [BluetoothDelegate.NOTIF_AVAILABLE, 0x00]b;
                 var iter;
                 var j;
                 switch (minSettingChanged) {
@@ -304,10 +307,10 @@ using Toybox.BluetoothLowEnergy as Ble;
     }
 }
 
-(:debug) class GoProDelegateStub extends CameraDelegate {
+(:debug) class BluetoothDelegateStub extends BluetoothDelegate {
 
     public function initialize() {
-        CameraDelegate.initialize();
+        BluetoothDelegate.initialize();
     }
     
     public function pair(device as Ble.ScanResult?) as Void {

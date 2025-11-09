@@ -226,7 +226,10 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onBack() as Boolean {
-        getApp().gopro.subscribeChanges(CameraDelegate.UNREGISTER_AVAILABLE, [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.GPS, GoProSettings.HYPERSMOOTH]b);   
+        getApp().gopro.subscribeChanges(
+            BluetoothDelegate.UNREGISTER_AVAILABLE,
+            [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.GPS, GoProSettings.HYPERSMOOTH]b
+        );   
         getApp().viewController.pop(SLIDE_UP);
         return true;
     }

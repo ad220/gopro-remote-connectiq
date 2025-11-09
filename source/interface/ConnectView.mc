@@ -45,13 +45,13 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
     static const CONNECT_ERROR_NOTIF   = WatchUi.loadResource(Rez.Strings.ConnectFail);
 
     private var lastPairedDevice as Ble.ScanResult?;
-    private var delegate as CameraDelegate or MobileDelegate;
+    private var delegate as BluetoothDelegate or MobileDelegate;
 
     (:debug)
     public function initialize(lastPairedDevice as Ble.ScanResult?) {
         BehaviorDelegate.initialize();
         self.lastPairedDevice = lastPairedDevice;
-        self.delegate = new GoProDelegateStub();
+        self.delegate = new BluetoothDelegateStub();
         Ble.setDelegate(delegate);
     }
 
@@ -59,7 +59,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
     public function initialize(lastPairedDevice as Ble.ScanResult?) {
         BehaviorDelegate.initialize();
         self.lastPairedDevice = lastPairedDevice;
-        self.delegate = new CameraDelegate();
+        self.delegate = new BluetoothDelegate();
         Ble.setDelegate(delegate);
         GattProfileManager.registerProfile(
             Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE),

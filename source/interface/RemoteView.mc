@@ -83,7 +83,10 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
         if (!gopro.isRecording()) {
             var menu = new CustomMenu((0.15*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {});
             getApp().viewController.push(menu, new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, []), SLIDE_UP);
-            getApp().gopro.subscribeChanges(CameraDelegate.REGISTER_AVAILABLE, [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE]b);
+            getApp().gopro.subscribeChanges(
+                BluetoothDelegate.REGISTER_AVAILABLE,
+                [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE]b
+            );
             return true;
         }
         return false;
@@ -100,7 +103,10 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
         } else if (!gopro.getDescription().equals(". . .")) {
             var view = new TogglablesView();
             getApp().viewController.push(view, new TogglablesDelegate(view), SLIDE_DOWN);
-            getApp().gopro.subscribeChanges(CameraDelegate.REGISTER_AVAILABLE, [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.GPS, GoProSettings.HYPERSMOOTH]b);
+            getApp().gopro.subscribeChanges(
+                BluetoothDelegate.REGISTER_AVAILABLE,
+                [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.GPS, GoProSettings.HYPERSMOOTH]b
+            );
             return true;
         }
         return false;

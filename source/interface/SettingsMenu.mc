@@ -145,6 +145,9 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     (:inline)
     private function unsubscribeAvailable() as Void {
-        getApp().gopro.subscribeChanges(CameraDelegate.UNREGISTER_AVAILABLE, [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE]b);
+        getApp().gopro.subscribeChanges(
+            BluetoothDelegate.UNREGISTER_AVAILABLE,
+            [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE]b
+        );
     }
 }
