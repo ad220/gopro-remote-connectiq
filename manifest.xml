@@ -5,7 +5,7 @@
         Use "Monkey C: Edit Application" from the Visual Studio Code command palette
         to update the application attributes.
     -->
-    <iq:application id="ede98b81-5b9e-4b9b-b14a-3b46b8185ade" type="widget" name="@Strings.AppName" entry="GoProRemoteApp" launcherIcon="@Drawables.LauncherIcon" minApiLevel="5.0.0">
+    <iq:application id="ede98b81-5b9e-4b9b-b14a-3b46b8185ade" type="widget" name="@Strings.AppName" entry="GoProRemoteApp" launcherIcon="@Drawables.LauncherIcon" minApiLevel="3.1.0">
         <!--
             Use the following from the Visual Studio Code comand palette to edit
             the build targets:
@@ -26,6 +26,7 @@
             <iq:product id="epix2pro42mm"/>
             <iq:product id="epix2pro47mm"/>
             <iq:product id="epix2pro51mm"/>
+            <iq:product id="fenix6pro"/>
             <iq:product id="fenix7"/>
             <iq:product id="fenix7pro"/>
             <iq:product id="fenix7pronowifi"/>
