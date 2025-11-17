@@ -43,7 +43,7 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
                 throw new Exception();
         }
         menu.setTitle(new OptionPickerTitle(titleId));
-        items.sort(comparator);
+        Helper.sort(items, comparator as Helper.Comparator);
         for (var i=0; i<items.size(); i++) {
             menu.addItem(new OptionPickerItem(GoProSettings.getLabel(setting, items[i]), items[i] as Char, selected));
         }
