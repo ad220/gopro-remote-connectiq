@@ -1,5 +1,7 @@
 import Toybox.Lang;
 
+using GattProfileManager as GPM;
+
 class GoProCamera extends GoProSettings {
 
     public enum StatusId {
@@ -20,7 +22,7 @@ class GoProCamera extends GoProSettings {
         KEEP_ALIVE  = 0x5B,
     }
 
-    private var goproRequestQueue as GattRequestQueue or MobileDelegate;
+    private var delegate as CameraDelegate;
     protected var disconnectCallback as Method() as Void;
     protected var statuses as Dictionary;
     protected var availableSettings as Dictionary;
@@ -29,10 +31,10 @@ class GoProCamera extends GoProSettings {
     protected var progressTimer as TimerCallback?;
 
 
-    public function initialize(requestQueue as GattRequestQueue or MobileDelegate, disconnectCallback as Method() as Void) {
+    public function initialize(delegate as CameraDelegate, disconnectCallback as Method() as Void) {
         GoProSettings.initialize();
         
-        self.goproRequestQueue = requestQueue;
+        self.delegate = delegate;
         self.disconnectCallback = disconnectCallback;
         self.statuses = {};
         self.availableSettings = {};
@@ -41,11 +43,11 @@ class GoProCamera extends GoProSettings {
     }
 
     public function registerSettings() as Void {
-        goproRequestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.getUuid(GattProfileManager.UUID_COMMAND_RESPONSE_CHAR), [0x01, 0x00]b);
-        goproRequestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.getUuid(GattProfileManager.UUID_SETTINGS_RESPONSE_CHAR), [0x01, 0x00]b);
-        goproRequestQueue.add(GattRequest.REGISTER_NOTIFICATION, GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR), [0x01, 0x00]b);
-        subscribeChanges(BluetoothDelegate.REGISTER_SETTING, [GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b);
-        subscribeChanges(BluetoothDelegate.REGISTER_STATUS, [ENCODING]b);
+        delegate.send(GattRequest.REGISTER_NOTIFICATION, GPM.UUID_COMMAND_RESPONSE_CHAR, [0x01, 0x00]b);
+        delegate.send(GattRequest.REGISTER_NOTIFICATION, GPM.UUID_SETTINGS_RESPONSE_CHAR, [0x01, 0x00]b);
+        delegate.send(GattRequest.REGISTER_NOTIFICATION, GPM.UUID_QUERY_RESPONSE_CHAR, [0x01, 0x00]b);
+        subscribeChanges(CameraDelegate.REGISTER_SETTING, [GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b);
+        subscribeChanges(CameraDelegate.REGISTER_STATUS, [ENCODING]b);
     }
 
     public function sendCommand(command as CommandId) as Void {
@@ -54,13 +56,13 @@ class GoProCamera extends GoProSettings {
             request.addAll([0x01, isRecording() ? 0x00 : 0x01]);
         }
         request[0] = request.size()-1;
-        goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_COMMAND_CHAR), request);
+        delegate.send(GattRequest.WRITE_CHARACTERISTIC, GPM.UUID_COMMAND_CHAR, request);
     }
 
     public function sendSetting(id as GoProSettings.SettingId, value as Char) as Void {
         var request = [0x03, id as Char, 0x01, value]b;
         settings.put(id, value);
-        goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_SETTINGS_CHAR), request);
+        delegate.send(GattRequest.WRITE_CHARACTERISTIC, GPM.UUID_SETTINGS_CHAR, request);
     }
 
     public function sendPreset(preset as GoProPreset) as Void {
@@ -73,19 +75,15 @@ class GoProCamera extends GoProSettings {
     }
 
     public function requestStatuses(ids as ByteArray) as Void {
-        var request = [ids.size()+1, BluetoothDelegate.GET_STATUS]b;
+        var request = [ids.size()+1, CameraDelegate.GET_STATUS]b;
         request.addAll(ids);
-        goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_CHAR), request);
+        delegate.send(GattRequest.WRITE_CHARACTERISTIC, GPM.UUID_QUERY_CHAR, request);
     }
 
-    public function subscribeChanges(queryId as BluetoothDelegate.QueryId, values as ByteArray) {
+    public function subscribeChanges(queryId as CameraDelegate.QueryId, values as ByteArray) {
         var request = [values.size()+1, queryId as Char]b;
         request.addAll(values);
-        goproRequestQueue.add(
-            GattRequest.WRITE_CHARACTERISTIC,
-            GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_CHAR),
-            request
-        );
+        delegate.send(GattRequest.WRITE_CHARACTERISTIC, GPM.UUID_QUERY_CHAR, request);
     }
 
     public function onReceiveSetting(id as Char, value as ByteArray) as Void {
@@ -101,9 +99,9 @@ class GoProCamera extends GoProSettings {
     public function onReceiveStatus(id as Char, value as ByteArray) as Void {
         if (id==ENCODING) {
             if (value[0]==1) {
-                var request = [0x02, BluetoothDelegate.GET_STATUS, ENCODING_DURATION]b;
+                var request = [0x02, CameraDelegate.GET_STATUS, ENCODING_DURATION]b;
                 statuses.put(ENCODING_DURATION, 0);
-                goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_CHAR), request);
+                delegate.send(GattRequest.WRITE_CHARACTERISTIC, GPM.UUID_QUERY_CHAR, request);
                 progressTimer = getApp().timerController.start(method(:incrementEncodingDuration), 2, true);
             } else {
                 getApp().timerController.stop(progressTimer);

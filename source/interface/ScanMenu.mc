@@ -92,7 +92,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
         scanState = state;
     }
 
-    public function onScanResults(results as [Ble.ScanResult]) as Void{
+    public function onScanResults(results as Array<Ble.ScanResult>) as Void{
         for(var i=0; i<results.size(); i++) {
             if (!isDeviceInMenu(results[i])) {
                 var id = scanResults.size() as Char;

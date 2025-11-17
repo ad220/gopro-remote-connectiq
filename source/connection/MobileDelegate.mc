@@ -1,76 +1,124 @@
 import Toybox.Lang;
 import Toybox.System;
 import Toybox.Communications;
+import Toybox.StringUtil;
 
 using Toybox.BluetoothLowEnergy as Ble;
 
-(:mobile)
-class MobileDelegate {
 
-    private var connected as Boolean;
-    private var pairingTimer as TimerCallback?;
+(:mobile)
+class MobileDelegate extends CameraDelegate {
+
+    private var queue = [];
+    private var failCount = 0;
 
     public function initialize() {
-        connected = false;
+        CameraDelegate.initialize();
     }
 
-    public function connect() as Void {
-        pairingTimer = getApp().timerController.start(method(:onPairingFailed), 20, false);
+    public function connect(device as Ble.ScanResult?) as Void {
+        CameraDelegate.connect(device);
         Communications.registerForPhoneAppMessages(method(:onReceive) as Communications.PhoneMessageCallback);
-        send(true);
-        connected = true;
+        transmit(true);
     }
 
-    public function onPairingFailed() as Void {
-        getApp().viewController.push(new NotifView(ConnectDelegate.CONNECT_ERROR_NOTIF, NotifView.NOTIF_ERROR), new NotifDelegate(), WatchUi.SLIDE_DOWN);
-        disconnect();
-    }
-
-    public function disconnect() as Void {
+    protected function onDisconnect() as Void {
+        if (connected) {
+            transmit(false);
+        }
+        queue = [];
         Communications.registerForPhoneAppMessages(null);
-        send(false);
-        connected = false;
+        CameraDelegate.onDisconnect();
     }
-
-    public function isConnected() as Boolean {
-        return connected;
+    
+    protected function onPairingFailed() as Void {
+        CameraDelegate.onPairingFailed();
+        onDisconnect();
     }
 
     public function onReceive(message as Communications.PhoneAppMessage) {
         var data = message.data;
         if (data instanceof Boolean) {
             if (data) {
-                pairingTimer.stop();
-                pairingTimer = null;
-
-                getApp().gopro = new GoProCamera(self, method(:disconnect));
-                getApp().gopro.registerSettings();
-
-                var pushView = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
-                pushView.invoke(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
+                onConnect(null);
             } else {
                 onPairingFailed();
             }
         } else {
-            // TODO: implement reveiving messages from phone comm bridge
+            System.println("Received: " + data);
+            var uuid = data[0];
+            data.remove(uuid);
+            if (uuid == GattProfileManager.UUID_QUERY_RESPONSE_CHAR) {
+                decodeQuery([]b.addAll(data));
+            }
         }
     }
 
-    public function send(data as Object) {
-        Communications.transmit(data, {}, new Communications.ConnectionListener());
+    private function transmit(data as Object) {
+        System.println("sending data: "+data.toString());
+        queue.add(data);
+        if (queue.size() == 1) { processQueue(); }
     }
 
-    public function add(type as GattRequest.RequestType, uuid as Ble.Uuid, data as ByteArray) as Void {
-        send([type.toString(), uuid.toString(), data.toString()]);
+    public function send(
+        type as GattRequest.RequestType,
+        uuid as GattProfileManager.GoProUuid,
+        data as ByteArray
+    ) as Void {
+        var packet = [type, uuid];
+        for (var i=0; i<data.size(); i++) { packet.add(data[i]); }
+        transmit(packet);
+    }
+
+    public function processQueue() as Void {
+        if (queue.size()>0) {
+            if (failCount>3) {
+                connected = false;
+                onDisconnect();
+                return;
+            }
+            failCount++;
+            Communications.transmit(
+                queue[0],
+                {},
+                new MobileConnection(
+                    method(:onSent),
+                    method(:processQueue)
+                )
+            );
+        } 
+    }
+
+    public function onSent() as Void {
+        failCount = 0;
+        queue.remove(queue[0]);
+        processQueue();
     }
 }
 
-// class MobileConnection extends Communications.ConnectionListener {
-//     public function initialize() {
-//         ConnectionListener.initialize();
-//     }
+(:mobile)
+class MobileConnection extends Communications.ConnectionListener {
 
-//     public function onError() {
-//         // getApp().viewController.push(new NotifView(NotifView.))
-//     }
-// }
+    private var completeCallback as Method;
+    private var errorCallback as Method;
+
+    public function initialize(
+        completeCallback as Method,
+        errorCallback as Method
+    ) {
+        ConnectionListener.initialize();
+
+        self.completeCallback = completeCallback;
+        self.errorCallback = errorCallback;
+    }
+
+    public function onComplete() as Void {
+        System.println("Succesfully sent message");
+        getApp().timerController.start(completeCallback, 1, false);
+    }
+
+    public function onError() {
+        System.println("Error while sending message");
+        errorCallback.invoke();
+    }
+}

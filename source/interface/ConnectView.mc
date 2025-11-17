@@ -44,15 +44,14 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
     static const CONNECTING_NOTIF      = WatchUi.loadResource(Rez.Strings.Connecting);
     static const CONNECT_ERROR_NOTIF   = WatchUi.loadResource(Rez.Strings.ConnectFail);
 
-    private var lastPairedDevice as Ble.ScanResult?;
-    private var delegate as BluetoothDelegate or MobileDelegate;
+    (:ble) private var lastPairedDevice as Ble.ScanResult?;
+
+    private var delegate as CameraDelegate;
 
     (:debug)
     public function initialize(lastPairedDevice as Ble.ScanResult?) {
         BehaviorDelegate.initialize();
-        self.lastPairedDevice = lastPairedDevice;
-        self.delegate = new BluetoothDelegateStub();
-        Ble.setDelegate(delegate);
+        self.delegate = new CameraStub();
     }
 
     (:release :ble)
@@ -81,7 +80,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
 
     (:debug)
     public function onSelect() as Boolean {
-        onScanResult(null);
+        delegate.connect(null);
         return true;
     }
     
@@ -99,11 +98,8 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
 
     (:release :mobile)
     public function onSelect() as Boolean {
-        if (getApp().fromGlance) {
-            getApp().viewController.switchTo(new NotifView(CONNECTING_NOTIF, NotifView.NOTIF_INFO), null, SLIDE_DOWN);
-        } else if (!delegate.isPairing()){
-            delegate.connect();
-            getApp().viewController.push(new NotifView(CONNECTING_NOTIF, NotifView.NOTIF_INFO), new NotifDelegate(), SLIDE_DOWN);
+        if (!delegate.isPairing()){
+            delegate.connect(null);
         }
         return true;
     }
@@ -118,8 +114,8 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
     private function startScan() as Void {
         var scanMenu = new CustomMenu((0.1*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.30*ICM.screenH).toNumber()});
         var menuDelegate = new ScanMenuDelegate(scanMenu, method(:onScanResult));
-        delegate.setScanStateChangeCallback(menuDelegate.method(:setScanState));
-        delegate.setScanResultCallback(menuDelegate.method(:onScanResults));
+        (delegate as BluetoothDelegate).setScanStateChangeCallback(menuDelegate.method(:setScanState));
+        (delegate as BluetoothDelegate).setScanResultCallback(menuDelegate.method(:onScanResults));
         getApp().viewController.push(scanMenu, menuDelegate, WatchUi.SLIDE_IMMEDIATE);
     }
 
@@ -128,14 +124,9 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         if (device!=null and !device.equals(lastPairedDevice)) {
             Storage.setValue("lastPairedDevice", device as Application.PropertyValueType);
         }
-        delegate.setScanStateChangeCallback(null);
-        delegate.setScanResultCallback(null);
+        (delegate as BluetoothDelegate).setScanStateChangeCallback(null);
+        (delegate as BluetoothDelegate).setScanResultCallback(null);
         Ble.setScanState(Ble.SCAN_STATE_SCANNING);
-        if (getApp().fromGlance) {
-            getApp().viewController.switchTo(new NotifView(CONNECTING_NOTIF, NotifView.NOTIF_INFO), null, SLIDE_DOWN);
-        } else {
-            getApp().viewController.push(new NotifView(CONNECTING_NOTIF, NotifView.NOTIF_INFO), new NotifDelegate(), SLIDE_DOWN);
-        }
-        delegate.pair(device);
+        delegate.connect(device);
     }
 }

@@ -3,10 +3,11 @@ import Toybox.System;
 
 using Toybox.BluetoothLowEnergy as Ble;
 
-class GattProfileManager {
-    public static const GOPRO_CONTROL_SERVICE   = "0000FEA6-0000-1000-8000-00805F9B34FB";
+module GattProfileManager {
 
-    public enum GP_UUID {
+    const GOPRO_CONTROL_SERVICE = "0000FEA6-0000-1000-8000-00805F9B34FB";
+
+    public enum GoProUuid {
         UUID_COMMAND_CHAR           = 72,
         UUID_COMMAND_RESPONSE_CHAR,
         UUID_SETTINGS_CHAR,
@@ -22,12 +23,12 @@ class GattProfileManager {
     }
     
     (:inline)
-    public static function getUuid(gpxx as Number) as Ble.Uuid {
+    function getUuid(gpxx as Number) as Ble.Uuid {
         return Ble.stringToUuid("B5F9" + gpxx.format("%04d") + "-AA8D-11E3-9046-0002A5D5C51B");
     }
 
     (:ble)
-    public static function registerProfile(serviceUuid as Ble.Uuid, charMin as Number, charMax as Number) as Void {
+    function registerProfile(serviceUuid as Ble.Uuid, charMin as Number, charMax as Number) as Void {
         var profile = {
             :uuid => serviceUuid
         };
