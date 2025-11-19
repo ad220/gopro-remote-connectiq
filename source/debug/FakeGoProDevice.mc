@@ -94,12 +94,12 @@ using GattProfileManager as GPM;
     //     9   => [9],
     // };
 
-    private var garminDevice as WeakReference<CameraStub>;
+    private var garminDevice as WeakReference<FakeDelegate>;
 
     private var settings as Dictionary;
     private var statuses as Dictionary;
 
-    public function initialize(garminDevice as WeakReference<CameraStub>) {
+    public function initialize(garminDevice as WeakReference<FakeDelegate>) {
         self.garminDevice = garminDevice;
         self.settings = {
             GoProSettings.RESOLUTION    => 28,
@@ -271,33 +271,5 @@ using GattProfileManager as GPM;
         for (var i=0; i<available.size(); i++) {
             response.addAll([id, 0x01, available[i] as Char]b);
         }
-    }
-}
-
-
-(:debug) class CameraStub extends CameraDelegate {
-
-    private var fakeDevice as FakeGoProDevice?;
-   
-    public function initialize() {
-        CameraDelegate.initialize();
-        self.fakeDevice = new FakeGoProDevice(weak());
-    }
-
-    public function connect(device as Ble.ScanResult?) as Void {
-        CameraDelegate.connect(device);
-        onConnect(null);
-    }
-
-    public function send(
-        type as GattRequest.RequestType,
-        uuid as GattProfileManager.GoProUuid,
-        data as ByteArray
-    ) as Void {
-        fakeDevice.send(GPM.getUuid(uuid), data);        
-    }
-
-    public function onReceive(uuid as Ble.Uuid, request as ByteArray) {
-        decodeQuery(request);
     }
 }

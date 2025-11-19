@@ -51,7 +51,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
     (:debug)
     public function initialize(lastPairedDevice as Ble.ScanResult?) {
         BehaviorDelegate.initialize();
-        self.delegate = new CameraStub();
+        self.delegate = new FakeDelegate();
     }
 
     (:release :ble)
