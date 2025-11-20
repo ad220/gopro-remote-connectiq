@@ -1,6 +1,6 @@
-import Toybox.System;
-import Toybox.Lang;
 import Toybox.WatchUi;
+import Toybox.Lang;
+import Toybox.System;
 
 using Toybox.BluetoothLowEnergy as Ble;
 
