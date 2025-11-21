@@ -1,6 +1,6 @@
 import Toybox.Lang;
-import Toybox.System;
 import Toybox.WatchUi;
+import Toybox.System;
 
 
 class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
@@ -42,10 +42,10 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
                 System.println("Unknown Setting id");
                 throw new Exception();
         }
-        menu.setTitle(new OptionPickerTitle(titleId));
+        menu.setTitle(new PickerTitle(titleId));
         Helper.sort(items, comparator as Helper.Comparator);
         for (var i=0; i<items.size(); i++) {
-            menu.addItem(new OptionPickerItem(GoProSettings.getLabel(setting, items[i]), items[i] as Char, selected));
+            menu.addItem(new PickerItem(GoProSettings.getLabel(setting, items[i]), items[i] as Char, selected));
         }
         menu.setFocus(items.indexOf(selected));
 
@@ -54,7 +54,7 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
 
     public function onSelect(item) {
         getApp().gopro.sendSetting(setting==GoProSettings.RATIO ? GoProSettings.RESOLUTION : setting, item.getId() as Char);
-        (item as OptionPickerItem).select();
+        (item as PickerItem).select();
         requestUpdate();
     }
 

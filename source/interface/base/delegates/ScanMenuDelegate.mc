@@ -1,5 +1,5 @@
-import Toybox.WatchUi;
 import Toybox.Lang;
+import Toybox.WatchUi;
 import Toybox.System;
 
 using Toybox.BluetoothLowEnergy as Ble;
@@ -27,8 +27,8 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     private const DEVICES_FOUND = WatchUi.loadResource(Rez.Strings.DevicesFound);
 
     private var menu as CustomMenu;
-    private var statusItem as OptionPickerItem;
-    private var cancelItem as OptionPickerItem;
+    private var statusItem as PickerItem;
+    private var cancelItem as PickerItem;
 
 
     private var scanResults as Array<ScanEntry>;
@@ -36,17 +36,17 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     private var scanTimer as TimerCallback?;
     private var animTimer as TimerCallback?;
     private var scanResultCallback as Method(device as Ble.ScanResult?) as Void;
-    private var title as OptionPickerTitle;
+    private var title as PickerTitle;
 
 
     public function initialize(menu as CustomMenu, callback as Method(device as Ble.ScanResult?) as Void) {
         Menu2InputDelegate.initialize();
         self.menu = menu;
-        self.statusItem = new OptionPickerItem("status", 0xF0 as Char, 0xFF as Char);
-        self.cancelItem = new OptionPickerItem("cancel", 0xF8 as Char, 0xFF as Char);
+        self.statusItem = new PickerItem("status", 0xF0 as Char, 0xFF as Char);
+        self.cancelItem = new PickerItem("cancel", 0xF8 as Char, 0xFF as Char);
         self.scanResults = [];
         self.scanResultCallback = callback;
-        self.title = new OptionPickerTitle("scan");
+        self.title = new PickerTitle("scan");
         menu.setTitle(title);
         menu.addItem(self.statusItem);
         menu.addItem(self.cancelItem);
@@ -108,7 +108,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
                     }
                 }
 
-                var entryItem = new OptionPickerItem(label, id, 0xFF as Char);
+                var entryItem = new PickerItem(label, id, 0xFF as Char);
                 menu.updateItem(entryItem, scanResults.size());
                 menu.updateItem(statusItem, scanResults.size()+1);
                 menu.addItem(cancelItem);

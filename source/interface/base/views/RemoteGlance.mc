@@ -1,10 +1,7 @@
-import Toybox.System;
 import Toybox.Lang;
-import Toybox.Graphics;
 import Toybox.WatchUi;
-import Toybox.Application;
+import Toybox.Graphics;
 
-using InterfaceComponentsManager as ICM;
 
 (:glance)
 class RemoteGlance extends WatchUi.GlanceView {
