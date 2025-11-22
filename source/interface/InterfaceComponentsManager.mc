@@ -1,6 +1,7 @@
+import Toybox.Lang;
+import Toybox.System;
 import Toybox.WatchUi;
 import Toybox.Graphics;
-import Toybox.Lang;
 
 
 module InterfaceComponentsManager {
@@ -10,9 +11,9 @@ module InterfaceComponentsManager {
     (:initialized) var halfH as Number;
     (:initialized) var halfW as Number;
 
-    (:initialized) var fontTiny as FontResource;
-    (:initialized) var fontSmall as FontResource;
-    (:initialized) var fontMedium as FontResource;
+    (:initialized) var fontTiny as FontType;
+    (:initialized) var fontSmall as FontType;
+    (:initialized) var fontMedium as FontType;
     
     const JTEXT_MID = Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER;
 
@@ -25,9 +26,17 @@ module InterfaceComponentsManager {
         halfW = screenW / 2;
     }
 
+    (:highend)
     function loadFonts() as Void{
         fontTiny = WatchUi.loadResource(Rez.Fonts.Tiny);
         fontSmall = WatchUi.loadResource(Rez.Fonts.Small);
+        fontMedium = WatchUi.loadResource(Rez.Fonts.Medium);
+    }
+    
+    (:lowend)
+    function loadFonts() as Void{
+        fontTiny = Graphics.FONT_TINY;
+        fontSmall = Graphics.FONT_SMALL;
         fontMedium = WatchUi.loadResource(Rez.Fonts.Medium);
     }
 }
