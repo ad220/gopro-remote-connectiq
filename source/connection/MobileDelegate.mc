@@ -36,7 +36,7 @@ class MobileDelegate extends CameraDelegate {
         onDisconnect();
     }
 
-    public function onReceive(message as Communications.PhoneAppMessage) {
+    public function onReceive(message as Communications.PhoneAppMessage) as Void {
         var data = message.data;
         if (data instanceof Boolean) {
             if (data) {
@@ -44,8 +44,11 @@ class MobileDelegate extends CameraDelegate {
             } else {
                 onPairingFailed();
             }
-        } else {
-            System.println("Received: " + data);
+            return;
+        }
+        
+        System.println("Received: " + data);
+        if (data instanceof Array) {
             var uuid = data[0];
             data.remove(uuid);
             if (uuid == GattProfileManager.UUID_QUERY_RESPONSE_CHAR) {
