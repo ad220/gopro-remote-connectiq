@@ -1,0 +1,4 @@
+<drawables>
+    <bitmap id="Hilight" filename="../../resources/drawables/hilight.png" scaleX="9.2%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Settings" filename="../../resources/drawables/wheel.png" scaleY="10%" dithering="none" automaticPalette="true"/>
+</drawables>

@@ -3,7 +3,7 @@ import Toybox.WatchUi;
 import Toybox.Graphics;
 
 
-(:glance)
+(:glance :highend)
 class RemoteGlance extends WatchUi.GlanceView {
 
     private var title as String;

@@ -38,6 +38,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
         return onMenu();
     }
 
+    (:highend)
     public function onPreviousPage() as Boolean {
         if (gopro.isRecording()) {
             hilight();
@@ -45,6 +46,24 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
         } else if (!gopro.getDescription().equals(". . .")) {
             var view = new TogglablesView();
             getApp().viewController.push(view, new TogglablesDelegate(view), SLIDE_DOWN);
+            getApp().gopro.subscribeChanges(
+                CameraDelegate.REGISTER_AVAILABLE,
+                [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.GPS, GoProSettings.HYPERSMOOTH]b
+            );
+            return true;
+        }
+        return false;
+    }
+
+    
+    (:lowend)
+    public function onPreviousPage() as Boolean {
+        if (gopro.isRecording()) {
+            hilight();
+            return true;
+        } else if (!gopro.getDescription().equals(". . .")) {
+            var menu = new Menu2(null);
+            getApp().viewController.push(menu, new TogglablesDelegate(menu), SLIDE_DOWN);
             getApp().gopro.subscribeChanges(
                 CameraDelegate.REGISTER_AVAILABLE,
                 [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.GPS, GoProSettings.HYPERSMOOTH]b

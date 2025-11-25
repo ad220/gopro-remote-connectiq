@@ -4,7 +4,7 @@ import Toybox.Graphics;
 
 using InterfaceComponentsManager as ICM;
 
-
+(:highend)
 class TogglablesDelegate extends WatchUi.BehaviorDelegate {
 
     private var view as TogglablesView;

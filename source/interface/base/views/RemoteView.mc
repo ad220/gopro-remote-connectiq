@@ -3,6 +3,7 @@ import Toybox.WatchUi;
 import Toybox.Graphics;
 
 
+(:highend)
 class RemoteView extends WatchUi.View {
 
     function initialize() {
@@ -33,7 +34,7 @@ class RemoteView extends WatchUi.View {
         timeLabel.setVisible(isRecording);
         descLabel.setText(gopro.getDescription());
         descLabel.setColor(isRecording ? 0xAAAAAA : 0xFFFFFF);
-        findDrawableById("RecordSettingsButtonButton").setVisible(!isRecording);
+        findDrawableById("RecordSettingsButton").setVisible(!isRecording);
         findDrawableById("RecordRed").setVisible(isRecording and recDuration&1==0);
         findDrawableById("RecordGray").setVisible(isRecording and recDuration&1==1);
 

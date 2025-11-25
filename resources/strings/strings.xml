@@ -49,6 +49,11 @@
     <string id="Gps" translatable="false">GPS</string>
     <string id="Led" translatable="false">LED</string>
     <string id="HyperSmooth" translatable="false">HyperSmooth</string>
+
+    <!-- Low end devices settings menu -->
+     <!-- $$$ -->
+    <string id="AntiFlicker">Anti-flicker</string>
+    <string id="PowerOff">Power off</string>
     
     <!-- Framerate -->
     <!-- $$$ Small Tiny-->

@@ -19,12 +19,12 @@
     
     <drawable-list id="RecordHilightButton">
         <shape type="circle" x="20%" y="40%" radius="9%" color="Gfx.COLOR_DK_GRAY"/>
-        <bitmap id="hilight" x="15.6%" y="35.6%" filename="../drawables/hilight.png" scaleX="9.2%"  dithering="none" automaticPalette="true"/>
+        <bitmap id="hilight" x="15.6%" y="35.6%" filename="../../resources/drawables/hilight.png" scaleX="9.2%"  dithering="none" automaticPalette="true"/>
     </drawable-list>
 
     <drawable-list id="RecordSettingsButton">
         <shape type="rectangle" x="17.5%" y="68.65%" width="65%" height="16.7%" corner_radius="255" color="Gfx.COLOR_DK_GRAY"/>
-        <bitmap id="settings" x="21%" y="72%" filename="../drawables/wheel.png" scaleY="10%" dithering="none" automaticPalette="true"/>
+        <bitmap id="settings" x="21%" y="72%" filename="../../resources/drawables/wheel.png" scaleY="10%" dithering="none" automaticPalette="true"/>
     </drawable-list>
 
     <drawable-list id="RecordRed">

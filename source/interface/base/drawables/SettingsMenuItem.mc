@@ -49,7 +49,7 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
         if (isMenuCamera or id<3) {
             var subText;
             if (isMenuCamera) {
-                subText = GoProSettings.getLabel(id as GoProSettings.SettingId, gopro.getSetting(id as GoProSettings.SettingId));
+                subText = GoProSettings.getLabel(id as GoProSettings.SettingId, null);
                 if (subText instanceof ResourceId) {
                     subText = loadResource(subText);
                 }

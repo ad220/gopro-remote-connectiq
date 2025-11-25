@@ -3,6 +3,7 @@ import Toybox.WatchUi;
 import Toybox.Graphics;
 
 
+(:highend)
 class NotifView extends WatchUi.View {
 
     public enum NotifType {

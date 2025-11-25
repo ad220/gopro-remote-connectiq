@@ -1,14 +1,143 @@
 project.manifest = manifest.xml
 
-base.excludeAnnotations = mobile
+base.excludeAnnotations = ble; highend
+base.resourcePath = resources; resources-lowend
 
-round-218x218.resourcePath = resources; resources-scalable/resources-round-218x218
-round-240x240.resourcePath = resources; resources-scalable/resources-round-240x240
-round-260x260.resourcePath = resources; resources-scalable/resources-round-260x260
-round-280x280.resourcePath = resources; resources-scalable/resources-round-280x280
-round-360x360.resourcePath = resources; resources-scalable/resources-round-360x360
-round-390x390.resourcePath = resources; resources-scalable/resources-round-390x390
-round-416x416.resourcePath = resources; resources-scalable/resources-round-416x416
-round-454x454.resourcePath = resources; resources-scalable/resources-round-454x454
+round-218x218.resourcePath = $(base.resourcePath); resources-scalable/resources-round-218x218
+round-240x240.resourcePath = $(base.resourcePath); resources-scalable/resources-round-240x240
+round-260x260.resourcePath = $(base.resourcePath); resources-scalable/resources-round-260x260
+round-280x280.resourcePath = $(base.resourcePath); resources-scalable/resources-round-280x280
+round-360x360.resourcePath = $(base.resourcePath); resources-scalable/resources-round-360x360
+round-390x390.resourcePath = $(base.resourcePath); resources-scalable/resources-round-390x390
+round-416x416.resourcePath = $(base.resourcePath); resources-scalable/resources-round-416x416
+round-454x454.resourcePath = $(base.resourcePath); resources-scalable/resources-round-454x454
 
 venux1.resourcePath = $(round-454x454.resourcePath)
+
+# BLE devices
+
+# approachs7042mm
+# approachs7047mm
+# d2mach1
+# d2mach2
+# descentg2
+# descentmk343mm
+# descentmk351mm
+# enduro3
+# epix2
+# epix2pro42mm
+# epix2pro47mm
+# epix2pro51mm
+# fenix7
+# fenix7pro
+# fenix7pronowifi
+# fenix7s
+# fenix7spro
+# fenix7x
+# fenix7xpro
+# fenix7xpronowifi
+# fenix843mm
+# fenix847mm
+# fenix8pro47mm
+# fenix8solar47mm
+# fenix8solar51mm
+# fenixe
+# fr255
+# fr255m
+# fr255s
+# fr255sm
+# fr265
+# fr265s
+# fr57042mm
+# fr57047mm
+# fr955
+# fr965
+# fr970
+# instinct3amoled45mm
+# instinct3amoled50mm
+# marq2
+# marq2aviator
+# venu441mm
+# venu445mm
+# venux1
+# vivoactive6
+
+
+# Mobile Devices
+
+# approachs50 +
+# d2air +
+# d2airx10 +
+# d2delta +
+# d2deltapx +
+# d2deltas +
+# descentmk1 +
+# descentmk2 +
+# descentmk2s +
+# enduro --
+# fenix5 --
+# fenix5plus +
+# fenix5s --
+# fenix5splus +
+# fenix5x +
+# fenix5xplus +
+# fenix6 --
+# fenix6pro +
+# fenix6s --
+# fenix6spro +
+# fenix6xpro +
+# fenixchronos --
+# fr165 +
+# fr165m +
+# fr245 --
+# fr245m +
+# fr645 --
+# fr645m +
+# fr745 +
+# fr935 --
+# fr945 +
+# fr945lte +
+# legacyherocaptainmarvel +
+# legacyherofirstavenger +
+# legacysagadarthvader +
+# legacysagarey +
+# marqadventurer +
+# marqathlete +
+# marqaviator +
+# marqcaptain +
+# marqcommander +
+# marqdriver +
+# marqexpedition +
+# marqgolfer
+# venu +
+# venu2 +
+# venu2plus +
+# venu2s +
+# venu3 +
+# venu3s +
+# venud +
+# venusq --
+# venusq2 +
+# venusq2m +
+# venusqm +
+# vivoactive3 --
+# vivoactive3m +
+# vivoactive3mlte +
+# vivoactive4 +
+# vivoactive4s +
+# vivoactive5 +
+
+
+# Low memory (lowend) devices
+
+# enduro 280
+# fenix5 240
+# fenix5s 218
+# fenix6 260
+# fenix6s 240
+# fenixchronos 218
+# fr245 240
+# fr645 240
+# fr935 240
+# venusq 240
+# vivoactive3 240

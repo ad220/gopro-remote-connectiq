@@ -8,7 +8,7 @@ class Togglable extends WatchUi.Button {
     public var defaultState as ResourceId;
     public var activatedState as ResourceId;
     private var isActivated as Boolean;
-    private var isHilighted as Boolean;
+    public var isHilighted as Boolean;
 
     public function initialize(options as Dictionary) {
         Button.initialize(options);
@@ -37,14 +37,6 @@ class Togglable extends WatchUi.Button {
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
             dc.drawCircle(locX+radius, locY+radius, radius);
         }
-    }
-
-    public function hilight() as Void {
-        isHilighted = true;
-    }
-
-    public function unhilight() as Void {
-        isHilighted = false;
     }
 
     public function toggleState(isActivated as Boolean) as Void {

@@ -1,7 +1,11 @@
 import Toybox.Lang;
 
 module Helper {
-    function sort(array as Array, comp as Comparator) {
+    function sort(array as Array, comp as Comparator?) {
+        if (comp == null) {
+            comp = new Comparator();
+        }
+
         var sortedArray = [];
         while (array.size()>0) {
             var j = 0;
@@ -12,8 +16,8 @@ module Helper {
         array.addAll(sortedArray);
     }
 
-
+    // Comparator interface and default comparator
     class Comparator {
-        public function compare(a, b) {}
+        public function compare(a, b) { return b-a; }
     }
 }

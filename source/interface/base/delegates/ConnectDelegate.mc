@@ -1,6 +1,7 @@
 import Toybox.Lang;
 import Toybox.WatchUi;
 import Toybox.Graphics;
+import Toybox.Application;
 
 using Toybox.BluetoothLowEnergy as Ble;
 using InterfaceComponentsManager as ICM;

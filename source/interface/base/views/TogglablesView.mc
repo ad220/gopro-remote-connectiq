@@ -3,6 +3,7 @@ import Toybox.WatchUi;
 import Toybox.Graphics;
 
 
+(:highend)
 class TogglablesView extends WatchUi.View {
 
     private var buttons as Array<Togglable>;
@@ -21,7 +22,7 @@ class TogglablesView extends WatchUi.View {
         buttons = Rez.Layouts.TogglablesLayout(dc) as Array<Togglable>;
         buttonsCount = buttons.size();
         currentHilight = buttonsCount-1;
-        buttons[currentHilight].hilight();
+        buttons[currentHilight].isHilighted = true;
         
         var layout = Rez.Layouts.TogglablesInfos(dc);
         layout.addAll(buttons as Array<Drawable>);
@@ -41,9 +42,8 @@ class TogglablesView extends WatchUi.View {
         
         var led = camera.getSetting(GoProSettings.LED) as Number;
         (findDrawableById("LedButton") as Togglable).toggleState(
-            led==GoProSettings.LED_ON or
-            led==GoProSettings.LED_ALL_ON or
-            led==GoProSettings.LED_FRONT_OFF
+            led!=GoProSettings.LED_OFF and
+            led!=GoProSettings.LED_ALL_OFF
         );
         
         var hypersmooth = camera.getSetting(GoProSettings.HYPERSMOOTH) as Number;
@@ -74,19 +74,19 @@ class TogglablesView extends WatchUi.View {
     }
 
     public function onTouch(button as Togglable) as Void {
-        buttons[currentHilight].unhilight();
+        buttons[currentHilight].isHilighted = false;
         currentHilight = buttons.indexOf(button);
     }
 
     public function nextButton() as Void {
-        buttons[currentHilight].unhilight();
+        buttons[currentHilight].isHilighted = false;
         currentHilight = (currentHilight + buttonsCount - 1) % buttonsCount;
-        buttons[currentHilight].hilight();
+        buttons[currentHilight].isHilighted = true;
     }
 
     public function prevButton() as Void {
-        buttons[currentHilight].unhilight();
+        buttons[currentHilight].isHilighted = false;
         currentHilight = (currentHilight + 1) % buttonsCount;
-        buttons[currentHilight].hilight();
+        buttons[currentHilight].isHilighted = true;
     }
 }

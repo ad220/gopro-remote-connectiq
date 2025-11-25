@@ -35,8 +35,8 @@ module InterfaceComponentsManager {
     
     (:lowend)
     function loadFonts() as Void{
-        fontTiny = Graphics.FONT_TINY;
-        fontSmall = Graphics.FONT_SMALL;
+        fontTiny = Graphics.FONT_XTINY;
+        fontSmall = Graphics.FONT_TINY;
         fontMedium = WatchUi.loadResource(Rez.Fonts.Medium);
     }
 }

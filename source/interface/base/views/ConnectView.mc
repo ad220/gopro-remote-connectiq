@@ -2,7 +2,7 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 import Toybox.Graphics;
 
-
+(:highend)
 class ConnectView extends WatchUi.View {
 
     private var label as String;
@@ -27,10 +27,9 @@ class ConnectView extends WatchUi.View {
     }
 
     function onUpdate(dc as Dc) as Void {
-        if (dc has :setAntiAlias) {
-            dc.setAntiAlias(true);
-        }
-        View.onUpdate(dc);
+        if (dc has :setAntiAlias) { dc.setAntiAlias(true); }
+
         (findDrawableById("ConnectLabel") as Text).setText(label);
+        View.onUpdate(dc);
     }
 }

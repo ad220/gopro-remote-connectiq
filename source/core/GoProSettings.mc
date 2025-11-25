@@ -153,9 +153,12 @@ class GoProSettings {
         return settings;
     }
 
-    public static function getLabel(settingId as GoProSettings.SettingId, setting as Char) as String or ResourceId {
+    public static function getLabel(id as GoProSettings.SettingId, setting as Char?) as String or ResourceId {
         try {
-            switch (settingId) {
+            if (setting == null) {
+                setting = getApp().gopro.getSetting(id);
+            }
+            switch (id) {
                 case RESOLUTION:
                     var res = (RESOLUTION_MAP.get(setting) as Array)[0];
                     if (res < 2000) {
@@ -194,9 +197,9 @@ class GoProSettings {
         if (settings.isEmpty()) {
             return ". . .";
         }
-        return getLabel(RESOLUTION, settings.get(RESOLUTION)) \
+        return getLabel(RESOLUTION, null) \
                 + "@" + FRAMERATE_MAP.get(settings.get(FRAMERATE)) \
-                + " " + getLabel(RATIO, settings.get(RATIO));
+                + " " + getLabel(RATIO, null);
     }
 }
 
