@@ -158,34 +158,33 @@ class GoProSettings {
             if (setting == null) {
                 setting = getApp().gopro.getSetting(id);
             }
-            switch (id) {
-                case RESOLUTION:
-                    var res = (RESOLUTION_MAP.get(setting) as Array)[0];
-                    if (res < 2000) {
-                        return res + "p";
-                    } else {
-                        return res%1000==0 ? res/1000+"K" : (res/1000.0).format("%.1f")+"K"; 
-                    }
-                case RATIO:
-                    var ratio = (RESOLUTION_MAP.get(setting) as Array)[1];
-                    if (ratio<45) {
-                        ratio = ratio.format("%.2f");
-                        return ratio.substring(null, ratio.find(".")) + ":" + ratio.substring(ratio.find(".")+1, ratio.find("0"));
-                    } else {
-                        return ratio + "°";
-                    }
-                case LENS:
-                    return LENS_LABELS.get(setting);
-                case FRAMERATE:
-                    return FRAMERATE_MAP.get(setting) + FRAMERATE_LABEL;
-                case LED:
-                    return LED_LABELS.get(setting);
-                case HYPERSMOOTH:
-                    return HYPERSMOOTH_LABELS.get(setting);
-                default:
-                    System.println("Unknown setting ID requested for label");
-                    return "";
+
+            if (id == RESOLUTION)   {
+                var res = (RESOLUTION_MAP.get(setting) as Array)[0];
+                if (res < 2000) {
+                    return res + "p";
+                } else {
+                    return res%1000==0 ? res/1000+"K" : (res/1000.0).format("%.1f")+"K"; 
+                }
             }
+            if (id == RATIO)        {
+                var ratio = (RESOLUTION_MAP.get(setting) as Array)[1];
+                if (ratio<45) {
+                    ratio = ratio.format("%.2f");
+                    return ratio.substring(null, ratio.find(".")) + ":" + ratio.substring(ratio.find(".")+1, ratio.find("0"));
+                } else {
+                    return ratio + "°";
+                }
+            }
+            if (id == LENS)         { return LENS_LABELS.get(setting); }
+            if (id == FRAMERATE)    { return FRAMERATE_MAP.get(setting) + FRAMERATE_LABEL; }
+            if (id == LED)          { return LED_LABELS.get(setting); }
+            if (id == HYPERSMOOTH)  { return HYPERSMOOTH_LABELS.get(setting); }
+            else {
+                System.println("Unknown setting ID requested for label");
+                return "";
+            }
+            
         } catch (ex) {
             System.println("Error while retrieving setting label");
             System.println(ex.getErrorMessage());

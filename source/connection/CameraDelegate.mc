@@ -115,23 +115,13 @@ class CameraDelegate extends Ble.BleDelegate {
             System.println("Wrong query status received from camera, value: " + status.toNumber());
         }
         
-        switch (queryId) {
-            case REGISTER_SETTING:
-            case NOTIF_SETTING:
-                decoder = gopro.method(:onReceiveSetting);
-                break;
-            case GET_STATUS:
-            case REGISTER_STATUS:
-            case NOTIF_STATUS:
-                decoder = gopro.method(:onReceiveStatus);
-                break;
-            case REGISTER_AVAILABLE:
-            case NOTIF_AVAILABLE:
-                decoder = gopro.method(:onReceiveAvailable);
-                break;
-            default:
-                System.println("Unknown queryId: " + queryId.toNumber());
-                return;
+        var mask = queryId & 0x1F;
+        if      (mask ^ 0x12 == 0) { decoder = gopro.method(:onReceiveSetting); }
+        else if (mask ^ 0x13 == 0) { decoder = gopro.method(:onReceiveStatus); }
+        else if (mask ^ 0x02 == 0) { decoder = gopro.method(:onReceiveAvailable); }
+        else {
+            System.println("Unknown queryId: " + queryId.toNumber());
+            return;
         }
 
         var type;
