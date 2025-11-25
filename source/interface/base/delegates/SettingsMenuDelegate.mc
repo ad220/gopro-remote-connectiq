@@ -54,26 +54,37 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
             viewController.push(newMenu, new SettingPickerDelegate(newMenu, id as GoProSettings.SettingId), SLIDE_UP);
         } else if (id == SettingsMenuItem.MANUALLY) {
             var newMenu = new CustomMenu((0.15*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {});
-            viewController.push(newMenu, new SettingsMenuDelegate(newMenu, CAMERA, []), SLIDE_LEFT);
+            viewController.switchTo(newMenu, new SettingsMenuDelegate(newMenu, CAMERA, []), SLIDE_LEFT);
         } else if (id == SettingsMenuItem.SAVEAS) {
             var newMenu = new CustomMenu((0.15*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {});
             viewController.switchTo(newMenu, new SettingsMenuDelegate(newMenu, PRESET, items), SLIDE_LEFT);
         } else if (menuId == PRESET) {
             ((item as SettingsMenuItem).gopro as GoProPreset).sync();
             unsubscribeAvailable();
-            viewController.pop(SLIDE_DOWN);
+            toRemote();
         } else {
             getApp().gopro.sendPreset((item as SettingsMenuItem).gopro as GoProPreset);
             unsubscribeAvailable();
-            viewController.pop(SLIDE_DOWN);
+            toRemote();
         }
     }
 
     public function onBack() as Void {
         if (menuId==MAIN) {
-            unsubscribeAvailable();
+            toRemote();
         }
-        viewController.pop(SLIDE_DOWN);
+        else if (menuId == CAMERA) {
+            var menu = new CustomMenu((0.15*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {});
+            menu.setFocus(3);
+            viewController.switchTo(menu, new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, []), SLIDE_DOWN);
+        } else {
+            viewController.pop(SLIDE_DOWN);
+        }
+    }
+
+    private function toRemote() as Void {
+        unsubscribeAvailable();
+        viewController.switchTo(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_RIGHT);
     }
 
     public function onWrap(key as Key) as Boolean {
