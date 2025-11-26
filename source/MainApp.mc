@@ -4,6 +4,7 @@ import Toybox.WatchUi;
 import Toybox.System;
 import Toybox.BluetoothLowEnergy;
 
+
 (:glance)
 class GoProRemoteApp extends Application.AppBase {
 
@@ -48,6 +49,7 @@ class GoProRemoteApp extends Application.AppBase {
         return [ new ConnectView(label, delegate), delegate ];
     }
 
+    (:highend)
     function getGlanceView() as [GlanceView] or [GlanceView, GlanceViewDelegate] or Null {
         var label;
         if (lastPairedDevice==null) {
