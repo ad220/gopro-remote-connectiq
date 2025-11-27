@@ -2,7 +2,7 @@ import Toybox.Lang;
 
 using Toybox.BluetoothLowEnergy as Ble;
 
-class CameraDelegate extends Ble.BleDelegate {
+class CameraDelegate {
 
     public enum QueryId {
         GET_SETTING             = 0x12,
@@ -25,7 +25,6 @@ class CameraDelegate extends Ble.BleDelegate {
     private var queryReplyBuffer as ByteArray?;
 
     public function initialize() {
-        BleDelegate.initialize();
         connected = false;
     }
 

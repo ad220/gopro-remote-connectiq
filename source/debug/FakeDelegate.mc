@@ -3,7 +3,7 @@ import Toybox.Lang;
 using Toybox.BluetoothLowEnergy as Ble;
 
 
-(:debugoff) class FakeDelegate extends CameraDelegate {
+(:debug) class FakeDelegate extends CameraDelegate {
 
     private var fakeDevice as FakeGoProDevice?;
    
@@ -22,10 +22,10 @@ using Toybox.BluetoothLowEnergy as Ble;
         uuid as GattProfileManager.GoProUuid,
         data as ByteArray
     ) as Void {
-        fakeDevice.send(GattProfileManager.getUuid(uuid), data);
+        fakeDevice.send(uuid, data);
     }
 
-    public function onReceive(uuid as Ble.Uuid, request as ByteArray) {
+    public function onReceive(uuid as GattProfileManager.GoProUuid, request as ByteArray) {
         decodeQuery(request);
     }
 }

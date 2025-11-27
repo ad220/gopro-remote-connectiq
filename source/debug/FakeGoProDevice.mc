@@ -4,7 +4,7 @@ import Toybox.System;
 using Toybox.BluetoothLowEnergy as Ble;
 using GattProfileManager as GPM;
 
-(:debugoff) class FakeGoProDevice {
+(:debug) class FakeGoProDevice {
 
     private static const AVAILABLE_MAP_H11 = {
         26  => {
@@ -118,9 +118,9 @@ using GattProfileManager as GPM;
         };
     }
 
-    public function send(uuid as Ble.Uuid, data as ByteArray) {
+    public function send(uuid as GattProfileManager.GoProUuid, data as ByteArray) {
         var response;
-        switch (uuid.toString().substring(4,8).toNumber()) {
+        switch (uuid) {
             case GattProfileManager.UUID_QUERY_CHAR:
                 System.println("query :"+data);
                 var queryId = data[1];
@@ -148,7 +148,7 @@ using GattProfileManager as GPM;
                     for (var i=0; i<data.size(); i++) {
                         decoder.invoke(data[i] as Char, response);
                     }
-                    responseSplitter(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR), response);
+                    responseSplitter(GattProfileManager.UUID_QUERY_RESPONSE_CHAR, response);
                 }
                 break;
 
@@ -159,7 +159,7 @@ using GattProfileManager as GPM;
                         statuses.put(GoProCamera.ENCODING, data[3]);
                         var device = garminDevice.get();
                         device.onReceive(
-                            GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR),
+                            GattProfileManager.UUID_QUERY_RESPONSE_CHAR,
                             [0x03, CameraDelegate.NOTIF_STATUS, 0x00, GoProCamera.ENCODING, 0x01, data[3]]b
                         );
                         break;
@@ -178,7 +178,7 @@ using GattProfileManager as GPM;
                                         data[i]==GoProSettings.LENS and minSettingChanged!=GoProSettings.RESOLUTION ? data[i] : \
                                         data[i]==GoProSettings.FRAMERATE and minSettingChanged==0xFF ? data[i] : minSettingChanged;
                 }
-                responseSplitter(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR), response);
+                responseSplitter(GattProfileManager.UUID_QUERY_RESPONSE_CHAR, response);
 
                 response = [CameraDelegate.NOTIF_AVAILABLE, 0x00]b;
                 var iter;
@@ -199,7 +199,7 @@ using GattProfileManager as GPM;
                     default:
                         break;
                 }
-                responseSplitter(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR), response);
+                responseSplitter(GattProfileManager.UUID_QUERY_RESPONSE_CHAR, response);
                 break;
 
             default:
@@ -208,7 +208,7 @@ using GattProfileManager as GPM;
         // garminDevice.whenCharacteristicWrite(uuid, Ble.STATUS_SUCCESS);
     }
 
-    private function responseSplitter(uuid as Ble.Uuid, response as ByteArray) as Void {
+    private function responseSplitter(uuid as GattProfileManager.GoProUuid, response as ByteArray) as Void {
         var length = response.size();
         var device = garminDevice.get();
         if (length<20) {

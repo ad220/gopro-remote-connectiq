@@ -15,18 +15,17 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
 
     private var delegate as CameraDelegate;
 
-    (:debugoff)
+    (:debug)
     public function initialize(lastPairedDevice as Ble.ScanResult?) {
         BehaviorDelegate.initialize();
         self.delegate = new FakeDelegate();
     }
 
-    (:releaseoff :ble)
+    (:release :ble)
     public function initialize(lastPairedDevice as Ble.ScanResult?) {
         BehaviorDelegate.initialize();
         self.lastPairedDevice = lastPairedDevice;
         self.delegate = new BluetoothDelegate();
-        Ble.setDelegate(delegate);
         GattProfileManager.registerProfile(
             Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE),
             GattProfileManager.UUID_COMMAND_CHAR, 
@@ -39,19 +38,19 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         // );
     }
 
-    (:releaseoff :mobile)
+    (:release :mobile)
     public function initialize(lastPairedDevice as Ble.ScanResult?) {
         BehaviorDelegate.initialize();
         self.delegate = new MobileDelegate();
     }
 
-    (:debugoff)
+    (:debug)
     public function onSelect() as Boolean {
         delegate.connect(null);
         return true;
     }
     
-    (:releaseoff :ble)
+    (:release :ble)
     public function onSelect() as Boolean {
         if (lastPairedDevice instanceof Ble.ScanResult) {
             if (!delegate.isPairing()) {
@@ -63,7 +62,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         return true;
     }
 
-    (:releaseoff :mobile)
+    (:release :mobile)
     public function onSelect() as Boolean {
         if (!delegate.isPairing()){
             delegate.connect(null);
@@ -71,7 +70,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         return true;
     }
 
-    (:releaseoff :ble)
+    (:release :ble)
     public function onMenu() as Boolean {
         startScan();
         return true;

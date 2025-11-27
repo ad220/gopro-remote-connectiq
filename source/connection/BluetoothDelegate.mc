@@ -6,6 +6,8 @@ using Toybox.BluetoothLowEnergy as Ble;
 (:ble)
 class BluetoothDelegate extends CameraDelegate {
 
+    private var apiWrapper as BleApiWrapper;
+
     private var scanStateChangeCallback as Method(state as Ble.ScanState) as Void?;
     private var scanResultCallback as Method(scanResults as Array<Ble.ScanResult>) as Void?;
 
@@ -16,6 +18,9 @@ class BluetoothDelegate extends CameraDelegate {
 
     public function initialize() {
         CameraDelegate.initialize();
+
+        self.apiWrapper = new BleApiWrapper(self);
+        Ble.setDelegate(apiWrapper);
     }
 
     public function setScanStateChangeCallback(callback as Method(state as Ble.ScanState) as Void?) as Void {
@@ -60,7 +65,7 @@ class BluetoothDelegate extends CameraDelegate {
 
     public function onPairingFailed() as Void {
         if (!connected and pairingDevice!=null) {
-            unpairDevice(pairingDevice);
+            Ble.unpairDevice(pairingDevice);
         }
         Ble.setScanState(Ble.SCAN_STATE_OFF);
     }
@@ -122,6 +127,14 @@ class BluetoothDelegate extends CameraDelegate {
             requestQueue.close();
         }
         CameraDelegate.onDisconnect();
+    }
+
+    public function send(
+        type as GattRequest.RequestType,
+        uuid as GattProfileManager.GoProUuid,
+        data as ByteArray
+    ) as Void {
+        requestQueue.add(type, GattProfileManager.getUuid(uuid), data);
     }
 
     public function onCharacteristicChanged(characteristic as Ble.Characteristic, value as ByteArray) as Void {
