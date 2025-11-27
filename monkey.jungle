@@ -1,7 +1,12 @@
 project.manifest = manifest.xml
 
-base.excludeAnnotations = ble; highend
-base.resourcePath = resources; resources-lowend
+base.excludeAnnotations = mobile; lowend; debugoff
+base.resourcePath = resources; resources-highend
+
+mobile_excludeAnnotations = ble; lowend; debugoff
+
+mobile-light_excludeAnnotations = ble; highend; debugoff
+mobile-light_resourcePath = resources; resources-lowend; resources-scalable/resources-round-240x240
 
 round-218x218.resourcePath = $(base.resourcePath); resources-scalable/resources-round-218x218
 round-240x240.resourcePath = $(base.resourcePath); resources-scalable/resources-round-240x240
@@ -12,132 +17,93 @@ round-390x390.resourcePath = $(base.resourcePath); resources-scalable/resources-
 round-416x416.resourcePath = $(base.resourcePath); resources-scalable/resources-round-416x416
 round-454x454.resourcePath = $(base.resourcePath); resources-scalable/resources-round-454x454
 
+# Oddly shaped devices with BLE comm
 venux1.resourcePath = $(round-454x454.resourcePath)
 
-# BLE devices
 
-# approachs7042mm
-# approachs7047mm
-# d2mach1
-# d2mach2
-# descentg2
-# descentmk343mm
-# descentmk351mm
-# enduro3
-# epix2
-# epix2pro42mm
-# epix2pro47mm
-# epix2pro51mm
-# fenix7
-# fenix7pro
-# fenix7pronowifi
-# fenix7s
-# fenix7spro
-# fenix7x
-# fenix7xpro
-# fenix7xpronowifi
-# fenix843mm
-# fenix847mm
-# fenix8pro47mm
-# fenix8solar47mm
-# fenix8solar51mm
-# fenixe
-# fr255
-# fr255m
-# fr255s
-# fr255sm
-# fr265
-# fr265s
-# fr57042mm
-# fr57047mm
-# fr955
-# fr965
-# fr970
-# instinct3amoled45mm
-# instinct3amoled50mm
-# marq2
-# marq2aviator
-# venu441mm
-# venu445mm
-# venux1
-# vivoactive6
+# Devices using mobile communication (with enough memory to use the full interface)
 
+approachs50.excludeAnnotations = $(mobile_excludeAnnotations)
+d2air.excludeAnnotations = $(mobile_excludeAnnotations)
+d2airx10.excludeAnnotations = $(mobile_excludeAnnotations)
+d2delta.excludeAnnotations = $(mobile_excludeAnnotations)
+d2deltapx.excludeAnnotations = $(mobile_excludeAnnotations)
+d2deltas.excludeAnnotations = $(mobile_excludeAnnotations)
+descentmk1.excludeAnnotations = $(mobile_excludeAnnotations)
+descentmk2.excludeAnnotations = $(mobile_excludeAnnotations)
+descentmk2s.excludeAnnotations = $(mobile_excludeAnnotations)
+fenix5plus.excludeAnnotations = $(mobile_excludeAnnotations)
+fenix5splus.excludeAnnotations = $(mobile_excludeAnnotations)
+fenix5x.excludeAnnotations = $(mobile_excludeAnnotations)
+fenix5xplus.excludeAnnotations = $(mobile_excludeAnnotations)
+fenix6pro.excludeAnnotations = $(mobile_excludeAnnotations)
+fenix6spro.excludeAnnotations = $(mobile_excludeAnnotations)
+fenix6xpro.excludeAnnotations = $(mobile_excludeAnnotations)
+fr165.excludeAnnotations = $(mobile_excludeAnnotations)
+fr165m.excludeAnnotations = $(mobile_excludeAnnotations)
+fr245m.excludeAnnotations = $(mobile_excludeAnnotations)
+fr645m.excludeAnnotations = $(mobile_excludeAnnotations)
+fr745.excludeAnnotations = $(mobile_excludeAnnotations)
+fr945.excludeAnnotations = $(mobile_excludeAnnotations)
+fr945lte.excludeAnnotations = $(mobile_excludeAnnotations)
+legacyherocaptainmarvel.excludeAnnotations = $(mobile_excludeAnnotations)
+legacyherofirstavenger.excludeAnnotations = $(mobile_excludeAnnotations)
+legacysagadarthvader.excludeAnnotations = $(mobile_excludeAnnotations)
+legacysagarey.excludeAnnotations = $(mobile_excludeAnnotations)
+marqadventurer.excludeAnnotations = $(mobile_excludeAnnotations)
+marqathlete.excludeAnnotations = $(mobile_excludeAnnotations)
+marqaviator.excludeAnnotations = $(mobile_excludeAnnotations)
+marqcaptain.excludeAnnotations = $(mobile_excludeAnnotations)
+marqcommander.excludeAnnotations = $(mobile_excludeAnnotations)
+marqdriver.excludeAnnotations = $(mobile_excludeAnnotations)
+marqexpedition.excludeAnnotations = $(mobile_excludeAnnotations)
+marqgolfer.excludeAnnotations = $(mobile_excludeAnnotations)
+venu.excludeAnnotations = $(mobile_excludeAnnotations)
+venu2.excludeAnnotations = $(mobile_excludeAnnotations)
+venu2plus.excludeAnnotations = $(mobile_excludeAnnotations)
+venu2s.excludeAnnotations = $(mobile_excludeAnnotations)
+venu3.excludeAnnotations = $(mobile_excludeAnnotations)
+venu3s.excludeAnnotations = $(mobile_excludeAnnotations)
+venud.excludeAnnotations = $(mobile_excludeAnnotations)
+venusq2.excludeAnnotations = $(mobile_excludeAnnotations)
+venusq2m.excludeAnnotations = $(mobile_excludeAnnotations)
+venusqm.excludeAnnotations = $(mobile_excludeAnnotations)
+vivoactive3m.excludeAnnotations = $(mobile_excludeAnnotations)
+vivoactive3mlte.excludeAnnotations = $(mobile_excludeAnnotations)
+vivoactive4.excludeAnnotations = $(mobile_excludeAnnotations)
+vivoactive4s.excludeAnnotations = $(mobile_excludeAnnotations)
+vivoactive5.excludeAnnotations = $(mobile_excludeAnnotations)
 
-# Mobile Devices
+# Oddly shaped devices with mobile connection
 
-# approachs50 +
-# d2air +
-# d2airx10 +
-# d2delta +
-# d2deltapx +
-# d2deltas +
-# descentmk1 +
-# descentmk2 +
-# descentmk2s +
-# enduro --
-# fenix5 --
-# fenix5plus +
-# fenix5s --
-# fenix5splus +
-# fenix5x +
-# fenix5xplus +
-# fenix6 --
-# fenix6pro +
-# fenix6s --
-# fenix6spro +
-# fenix6xpro +
-# fenixchronos --
-# fr165 +
-# fr165m +
-# fr245 --
-# fr245m +
-# fr645 --
-# fr645m +
-# fr745 +
-# fr935 --
-# fr945 +
-# fr945lte +
-# legacyherocaptainmarvel +
-# legacyherofirstavenger +
-# legacysagadarthvader +
-# legacysagarey +
-# marqadventurer +
-# marqathlete +
-# marqaviator +
-# marqcaptain +
-# marqcommander +
-# marqdriver +
-# marqexpedition +
-# marqgolfer
-# venu +
-# venu2 +
-# venu2plus +
-# venu2s +
-# venu3 +
-# venu3s +
-# venud +
-# venusq --
-# venusq2 +
-# venusq2m +
-# venusqm +
-# vivoactive3 --
-# vivoactive3m +
-# vivoactive3mlte +
-# vivoactive4 +
-# vivoactive4s +
-# vivoactive5 +
+venu.resourcePath = $(round-240x240.resourcePath)
+venusq2.resourcePath = $(round-360x360.resourcePath)
+venusq2m.resourcePath = $(round-360x360.resourcePath)
+venusqm.resourcePath = $(round-240x240.resourcePath)
 
 
 # Low memory (lowend) devices
 
-# enduro 280
-# fenix5 240
-# fenix5s 218
-# fenix6 260
-# fenix6s 240
-# fenixchronos 218
-# fr245 240
-# fr645 240
-# fr935 240
-# venusq 240
-# vivoactive3 240
+enduro.excludeAnnotations = $(mobile-light_excludeAnnotations)
+fenix5.excludeAnnotations = $(mobile-light_excludeAnnotations)
+fenix5s.excludeAnnotations = $(mobile-light_excludeAnnotations)
+fenix6.excludeAnnotations = $(mobile-light_excludeAnnotations)
+fenix6s.excludeAnnotations = $(mobile-light_excludeAnnotations)
+fenixchronos.excludeAnnotations = $(mobile-light_excludeAnnotations)
+fr245.excludeAnnotations = $(mobile-light_excludeAnnotations)
+fr645.excludeAnnotations = $(mobile-light_excludeAnnotations)
+fr935.excludeAnnotations = $(mobile-light_excludeAnnotations)
+venusq.excludeAnnotations = $(mobile-light_excludeAnnotations)
+vivoactive3.excludeAnnotations = $(mobile-light_excludeAnnotations)
+
+enduro.resourcePath = $(mobile-light_resourcePath)
+fenix5.resourcePath = $(mobile-light_resourcePath)
+fenix5s.resourcePath = $(mobile-light_resourcePath)
+fenix6.resourcePath = $(mobile-light_resourcePath)
+fenix6s.resourcePath = $(mobile-light_resourcePath)
+fenixchronos.resourcePath = $(mobile-light_resourcePath)
+fr245.resourcePath = $(mobile-light_resourcePath)
+fr645.resourcePath = $(mobile-light_resourcePath)
+fr935.resourcePath = $(mobile-light_resourcePath)
+venusq.resourcePath = $(mobile-light_resourcePath)
+vivoactive3.resourcePath = $(mobile-light_resourcePath)
