@@ -9,11 +9,12 @@ using Toybox.BluetoothLowEnergy as Ble;
 (:mobile)
 class MobileDelegate extends CameraDelegate {
 
-    private var queue = [];
+    private var queue as Array<Object>;
     private var failCount = 0;
 
     public function initialize() {
         CameraDelegate.initialize();
+        queue = [];
     }
 
     public function connect(device as Ble.ScanResult?) as Void {

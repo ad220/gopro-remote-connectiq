@@ -25,8 +25,8 @@
     <!-- $$$ Small -->
     <string id="Pair">PAIR</string>
     <string id="Connect">CONNECT</string>
-    <string id="Connecting">Connecting to GoPro...</string>
-    <string id="ConnectFail">Unable to connect to GoPro</string>
+    <string id="Connecting">Connecting\nto GoPro...</string>
+    <string id="ConnectFail">Unable to connect\nto the camera</string>
 
     <!-- SettingsMenu -->
     <!-- $$$ Small -->

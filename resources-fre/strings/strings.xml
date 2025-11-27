@@ -23,8 +23,8 @@
     <!-- $$$ Small -->
     <string id="Pair">APPAIRER</string>
     <string id="Connect">CONNEXION</string>
-    <string id="Connecting">Connexion à la caméra...</string>
-    <string id="ConnectFail">Connexion échouée</string>
+    <string id="Connecting">Connexion à\nla caméra...</string>
+    <string id="ConnectFail">Connexion\néchouée</string>
 
     <!-- PresetPick -->
     <!-- $$$ Small -->
@@ -44,6 +44,11 @@
     <string id="Ratio">Format</string>
     <string id="Lens">Objectif</string>
     <string id="Framerate">Fréq. d'image</string>
+
+    <!-- Paramètres de la caméra pour appareils avec peu de mémoire -->
+     <!-- $$$ -->
+    <string id="AntiFlicker">Anti scintillement</string>
+    <string id="PowerOff">Éteindre la caméra</string>
 
     <!-- Fréquences d'image -->
     <!-- $$$ Small Tiny-->
