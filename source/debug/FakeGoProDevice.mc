@@ -4,7 +4,7 @@ import Toybox.System;
 using Toybox.BluetoothLowEnergy as Ble;
 using GattProfileManager as GPM;
 
-(:debug) class FakeGoProDevice {
+(:debugoff) class FakeGoProDevice {
 
     private static const AVAILABLE_MAP_H11 = {
         26  => {

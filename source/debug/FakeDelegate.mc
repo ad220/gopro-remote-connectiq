@@ -3,7 +3,7 @@ import Toybox.Lang;
 using Toybox.BluetoothLowEnergy as Ble;
 
 
-(:debug) class FakeDelegate extends CameraDelegate {
+(:debugoff) class FakeDelegate extends CameraDelegate {
 
     private var fakeDevice as FakeGoProDevice?;
    

@@ -15,13 +15,13 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
 
     private var delegate as CameraDelegate;
 
-    (:debug)
+    (:debugoff)
     public function initialize(lastPairedDevice as Ble.ScanResult?) {
         BehaviorDelegate.initialize();
         self.delegate = new FakeDelegate();
     }
 
-    (:release :ble)
+    (:releaseoff :ble)
     public function initialize(lastPairedDevice as Ble.ScanResult?) {
         BehaviorDelegate.initialize();
         self.lastPairedDevice = lastPairedDevice;
@@ -39,19 +39,19 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         // );
     }
 
-    (:release :mobile)
+    (:releaseoff :mobile)
     public function initialize(lastPairedDevice as Ble.ScanResult?) {
         BehaviorDelegate.initialize();
         self.delegate = new MobileDelegate();
     }
 
-    (:debug)
+    (:debugoff)
     public function onSelect() as Boolean {
         delegate.connect(null);
         return true;
     }
     
-    (:release :ble)
+    (:releaseoff :ble)
     public function onSelect() as Boolean {
         if (lastPairedDevice instanceof Ble.ScanResult) {
             if (!delegate.isPairing()) {
@@ -63,7 +63,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         return true;
     }
 
-    (:release :mobile)
+    (:releaseoff :mobile)
     public function onSelect() as Boolean {
         if (!delegate.isPairing()){
             delegate.connect(null);
@@ -71,7 +71,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         return true;
     }
 
-    (:release :ble)
+    (:releaseoff :ble)
     public function onMenu() as Boolean {
         startScan();
         return true;
