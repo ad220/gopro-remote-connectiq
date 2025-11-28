@@ -133,7 +133,11 @@ class GoProDelegate extends Ble.BleDelegate {
     private function initiateConnection(device as Ble.Device) as Void {
         System.println("Initiating connection");
         Ble.setScanState(Ble.SCAN_STATE_OFF);
+
+        if (pairingTimer != null) {
         pairingTimer.stop();
+        }
+        
         pairingTimer = null;
         pairingDevice = null;
         
