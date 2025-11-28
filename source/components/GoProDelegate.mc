@@ -81,7 +81,12 @@ class GoProDelegate extends Ble.BleDelegate {
 
     public function pair(device as Ble.ScanResult?) as Void {
         pairingTimer = getApp().timerController.start(method(:onPairingFailed), 20, false);
-        pairingDevice = Ble.pairDevice(device);
+        try {
+            pairingDevice = Ble.pairDevice(device);
+        } catch (ex) {
+            var view = new NotifView(Rez.Strings.PairingFail, NotifView.NOTIF_ERROR);
+            getApp().viewController.push(view, new NotifDelegate(), WatchUi.SLIDE_UP);
+        }
     }
 
     public function isPairing() as Boolean {
@@ -93,7 +98,7 @@ class GoProDelegate extends Ble.BleDelegate {
             unpairDevice(pairingDevice);
         }
         Ble.setScanState(Ble.SCAN_STATE_OFF);
-        getApp().viewController.push(new NotifView(ConnectDelegate.CONNECT_ERROR_NOTIF, NotifView.NOTIF_ERROR), new NotifDelegate(), WatchUi.SLIDE_DOWN);
+        getApp().viewController.push(new NotifView(Rez.Strings.ConnectFail, NotifView.NOTIF_ERROR), new NotifDelegate(), WatchUi.SLIDE_DOWN);
     }
 
     public function onConnectedStateChanged(device as Ble.Device, state as Ble.ConnectionState) as Void {
@@ -135,7 +140,7 @@ class GoProDelegate extends Ble.BleDelegate {
         Ble.setScanState(Ble.SCAN_STATE_OFF);
 
         if (pairingTimer != null) {
-        pairingTimer.stop();
+            pairingTimer.stop();
         }
         
         pairingTimer = null;
@@ -240,16 +245,16 @@ class GoProDelegate extends Ble.BleDelegate {
                 return;
         }
 
-        var type;
-        var length;
-        var value;
+        var i=0;
 
-        for (var i=0; i<data.size(); i+=2+length) {
-            type = data[i] as Char;
-            length = data[i+1];
-            value = data.slice(i+2, i+2+length);
-            (decoder as Method(id as Char, value as ByteArray) as Void).invoke(type, value);
+        while (i < data.size()) {
+            var type = data[i] as Char;
+            var length = data[i+1];
+            var value = data.slice(i+2, i+2+length);
+            decoder.invoke(type, value);
+            i += length+2;
         }
+
         if (queryId == REGISTER_AVAILABLE or queryId == NOTIF_AVAILABLE) {
             gopro.applyAvailableSettings();
         }

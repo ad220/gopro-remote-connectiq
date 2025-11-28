@@ -12,19 +12,19 @@ class NotifView extends WatchUi.View {
         NOTIF_ERROR
     }
 
-    private var message as String;
+    private var msg as String;
     private var type as NotifType;
 
-    function initialize(message as String, type as NotifType) {
+    function initialize(msg as String or ResourceId, type as NotifType) {
         View.initialize();
         
-        self.message = message;
+        self.msg = msg instanceof String ? msg : loadResource(msg);
         self.type = type;
     }
 
     function onLayout(dc as Dc) as Void {
         setLayout(type == NOTIF_INFO ? Rez.Layouts.NotifInfoLayout(dc) : Rez.Layouts.NotifErrorLayout(dc));
-        (findDrawableById("NotifMsg") as Text).setText(message);
+        (findDrawableById("NotifMsg") as Text).setText(msg);
     }
 }
 
