@@ -34,7 +34,7 @@ class CameraDelegate {
         var pushMethod = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
         var delegate = getApp().fromGlance ? null : new NotifDelegate();
         pushMethod.invoke(
-            new NotifView(ConnectDelegate.CONNECTING_NOTIF, NotifView.NOTIF_INFO),
+            new NotifView(Rez.Strings.Connecting, NotifView.NOTIF_INFO),
             delegate, 
             WatchUi.SLIDE_DOWN
         );
@@ -70,7 +70,7 @@ class CameraDelegate {
     }
 
     public function onPairingFailed() as Void {
-        getApp().viewController.push(new NotifView(ConnectDelegate.CONNECT_ERROR_NOTIF, NotifView.NOTIF_ERROR), new NotifDelegate(), WatchUi.SLIDE_DOWN);
+        getApp().viewController.push(new NotifView(Rez.Strings.ConnectFail, NotifView.NOTIF_ERROR), new NotifDelegate(), WatchUi.SLIDE_DOWN);
         pairingTimer = null;
     }
 

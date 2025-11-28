@@ -6,6 +6,12 @@
     <string id="GlanceConnect" scope="glance">Connex. </string>
     <string id="GlanceScan" scope="glance">Chercher caméra</string>
 
+    <!-- Notif messages -->
+    <!-- $$$ Small -->
+    <string id="Connecting">Connexion à\nla caméra...</string>
+    <string id="ConnectFail">Connexion\néchouée</string>
+    <string id="PairingFail">Erreur lors de la\nconnexion, veuillez\n réessayer et/ou redémarrer\nl'application</string>
+
     <!-- GoPro Models -->
     <!-- $$$ Small -->
     <string id="UnknownGP">Modèle de GoPro inconnu</string>
@@ -23,9 +29,7 @@
     <!-- $$$ Small -->
     <string id="Pair">APPAIRER</string>
     <string id="Connect">CONNEXION</string>
-    <string id="Connecting">Connexion à\nla caméra...</string>
-    <string id="ConnectFail">Connexion\néchouée</string>
-
+    
     <!-- PresetPick -->
     <!-- $$$ Small -->
     <string id="Cinema">Cinéma</string>

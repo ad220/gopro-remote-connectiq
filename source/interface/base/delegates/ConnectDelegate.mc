@@ -8,9 +8,7 @@ using InterfaceComponentsManager as ICM;
 
 
 class ConnectDelegate extends WatchUi.BehaviorDelegate {
-    static const CONNECTING_NOTIF      = WatchUi.loadResource(Rez.Strings.Connecting);
-    static const CONNECT_ERROR_NOTIF   = WatchUi.loadResource(Rez.Strings.ConnectFail);
-
+    
     (:ble) private var lastPairedDevice as Ble.ScanResult?;
 
     private var delegate as CameraDelegate;

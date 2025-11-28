@@ -60,7 +60,12 @@ class BluetoothDelegate extends CameraDelegate {
 
     public function connect(device as Ble.ScanResult?) as Void {
         CameraDelegate.connect(device);
+        try {
         pairingDevice = Ble.pairDevice(device);
+        } catch (ex) {
+            var view = new NotifView(Rez.Strings.PairingFail, NotifView.NOTIF_ERROR);
+            getApp().viewController.push(view, new NotifDelegate(), WatchUi.SLIDE_UP);
+        }
     }
 
     public function onPairingFailed() as Void {

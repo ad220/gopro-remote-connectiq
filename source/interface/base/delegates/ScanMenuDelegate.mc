@@ -17,8 +17,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
         62      => 12,
         64      => Rez.Strings.MAX2,
         65      => 13,
-        0xFF    => Rez.Strings.UnknownGP,
-    };
+    } as Dictionary<Number, Number or ResourceId>;
 
     private const SCAN_TITLE    = WatchUi.loadResource(Rez.Strings.ScanTitle);
     private const SCAN_CANCEL   = WatchUi.loadResource(Rez.Strings.ScanCancel);
@@ -100,7 +99,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
                 if (label==null) {
                 // from Open GoPro documentation, Model ID is given in byte 13
                     label = goproModelTable.get(results[i].getRawData()[13]);
-                    if (label==null) { label = goproModelTable.get(0xFF); }
+                    if (label == null) { label = Rez.Strings.UnknownGP; }
                     if (label instanceof Number) {
                         label = loadResource(Rez.Strings.HERO) + label;
                     } else if (label instanceof ResourceId) {

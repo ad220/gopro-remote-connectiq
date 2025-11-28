@@ -6,6 +6,12 @@
     <!-- $$$ Medium -->
     <string id="GoPro" translatable="false">GoPro</string>
 
+    <!-- Notif messages -->
+    <!-- $$$ Small -->
+    <string id="Connecting">Connecting\nto GoPro...</string>
+    <string id="ConnectFail">Unable to connect\nto the camera</string>
+    <string id="PairingFail">Unexpected error\nwhile pairing, please\nretry or restart\nthe app</string>
+
     <!-- GoPro Models -->
     <!-- $$$ Small -->
     <string id="HERO" translatable="false">GoPro HERO</string>
@@ -25,9 +31,7 @@
     <!-- $$$ Small -->
     <string id="Pair">PAIR</string>
     <string id="Connect">CONNECT</string>
-    <string id="Connecting">Connecting\nto GoPro...</string>
-    <string id="ConnectFail">Unable to connect\nto the camera</string>
-
+    
     <!-- SettingsMenu -->
     <!-- $$$ Small -->
     <string id="Cinema">Cinema</string>

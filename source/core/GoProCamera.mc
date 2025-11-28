@@ -26,8 +26,8 @@ class GoProCamera extends GoProSettings {
     protected var disconnectCallback as Method() as Void;
     protected var statuses as Dictionary;
     protected var availableSettings as Dictionary;
-    private var availableRatios as Dictionary;
-    private var tmpAvailableSettings as Dictionary;
+    private var availableRatios as Dictionary<Number, Array<Char>>;
+    private var tmpAvailableSettings as Dictionary<Char, Array<Char>>;
     protected var progressTimer as TimerCallback?;
 
 
@@ -87,16 +87,25 @@ class GoProCamera extends GoProSettings {
     }
 
     public function onReceiveSetting(id as Char, value as ByteArray) as Void {
-        settings.put(id, value[0]);
+        if (value.size()==0) { return; }
+
+        settings.put(id as GoProSettings.SettingId, value[0] as Char);
         if (id==RESOLUTION) {
-            settings.put(RATIO, value[0]);
-            if (availableRatios!={}) {
-                availableSettings.put(RATIO, availableRatios.get((RESOLUTION_MAP.get(settings.get(RESOLUTION)) as Array)[0]));
+            settings.put(RATIO, value[0] as Char);
+
+            var tuple = RESOLUTION_MAP.get(value[0] as Char);
+            if (tuple == null) { return; }
+
+            var ratios = availableRatios.get(tuple[0]);
+            if (ratios != null and ratios.size()>0) {
+                availableSettings.put(RATIO, ratios);
             }
         }
     }
 
     public function onReceiveStatus(id as Char, value as ByteArray) as Void {
+        if (value.size()==0) { return; }
+
         if (id==ENCODING) {
             if (value[0]==1) {
                 var request = [0x02, CameraDelegate.GET_STATUS, ENCODING_DURATION]b;
@@ -116,11 +125,13 @@ class GoProCamera extends GoProSettings {
     }
 
     public function onReceiveAvailable(id as Char, value as ByteArray) as Void {
+        if (value.size()==0) { return; }
+
         var available = tmpAvailableSettings.get(id);
-        if (available instanceof Array) {
-            available.add(value[0]);
+        if (available != null) {
+            available.add(value[0] as Char);
         } else {
-            tmpAvailableSettings.put(id, [value[0]]);
+            tmpAvailableSettings.put(id, [value[0] as Char]);
         }
     }
 
@@ -128,8 +139,9 @@ class GoProCamera extends GoProSettings {
         return statuses.get(id);
     }
 
-    public function getAvailableSettings(id as GoProSettings.SettingId) as Array? {
-        return availableSettings.get(id);
+    public function getAvailableSettings(id as GoProSettings.SettingId) as Array {
+        var result = availableSettings.get(id);
+        return result == null ? [] : result;
     }
 
     public function applyAvailableSettings() as Void {
@@ -145,10 +157,13 @@ class GoProCamera extends GoProSettings {
                     var currentMap = [];
                     var availableResolutions = [];
                     for (var j=0; j<tmpValues.size(); j++) {
-                        if (currentRes==(RESOLUTION_MAP.get(tmpValues[j]) as Array)[0]) {
+                        var tuple = RESOLUTION_MAP.get(tmpValues[j]);
+                        if (tuple == null) { continue; }
+
+                        if (currentRes == tuple[0]) {
                             currentMap.add(tmpValues[j]);
                         } else {
-                            currentRes=(RESOLUTION_MAP.get(tmpValues[j]) as Array)[0];
+                            currentRes = tuple[0];
                             currentMap = [tmpValues[j]];
                             availableRatios.put(currentRes, currentMap);
                             availableResolutions.add(tmpValues[j]);
