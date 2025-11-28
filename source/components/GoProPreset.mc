@@ -11,7 +11,8 @@ class GoProPreset extends GoProSettings {
         GoProSettings.initialize();
 
         try {
-            self.settings = Application.Storage.getValue(self.id);
+            var preset = Application.Storage.getValue(self.id);
+            self.settings = preset as Dictionary<GoProSettings.SettingId, Char>?;
         } catch (exception) {
             // Not an exception on every watch, therefore separate initiation below
             System.println(exception.getErrorMessage());
@@ -25,7 +26,7 @@ class GoProPreset extends GoProSettings {
                 {RESOLUTION => 4, LENS => WIDE, FRAMERATE => 6, FLICKER => HZ50, RATIO => 4},
                 // 1080p 16:9, large, 25fps
                 {RESOLUTION => 9, LENS => LINEAR, FRAMERATE => 9, FLICKER => HZ50, RATIO => 9},
-            ][id as Number];
+            ][id as Number] as Dictionary<GoProSettings.SettingId, Char>;
         } 
     }
 

@@ -44,7 +44,7 @@ class GoProSettings {
         111 => [2700, 4.3],
         112 => [4000, 4.3],
         113 => [5300, 4.3],
-    };
+    } as Dictionary<Char, Array<Numeric>>;
 
     public static const FRAMERATE_MAP = {
         0  => 240,
@@ -60,7 +60,7 @@ class GoProSettings {
         15 => 400,
         16 => 360,
         17 => 300,
-    };
+    } as Dictionary<Char, Number>;
 
     public static const FRAMERATE_LABEL = WatchUi.loadResource(Rez.Strings._FPS);
 
@@ -80,7 +80,7 @@ class GoProSettings {
         LED_ALL_OFF     => Rez.Strings.AllOff,
         LED_FRONT_OFF   => Rez.Strings.FrontOffOnly,
         LED_BACK_ONLY   => Rez.Strings.BackOnly,
-    };
+    } as Dictionary<LedId, ResourceId>;
 
     public enum LensId {
         WIDE            = 0,
@@ -112,7 +112,7 @@ class GoProSettings {
         ULTRAWIDE       => Rez.Strings._ULTRAWIDE,
         ULTRALINEAR     => Rez.Strings._ULTRALINEAR,
         ULTRAHYPERVIEW  => Rez.Strings._ULTRAHYPERVIEW,
-    };
+    } as Dictionary<LensId, ResourceId>;
 
     public enum FlickerId {
         NTSC,
@@ -137,16 +137,16 @@ class GoProSettings {
         HS_BOOST        => Rez.Strings.Boost,
         HS_AUTO_BOOST   => Rez.Strings.AutoBoost,
         HS_STANDARD     => Rez.Strings.Standard,
-    };
+    } as Dictionary<HypersmoothId, ResourceId>;
 
-    protected var settings = {} as Dictionary;
+    protected var settings as Dictionary<SettingId, Char>;
 
     function initialize() {
         self.settings = {};
     }
 
     public function getSetting(id as SettingId) as Char? {
-        return settings.get(id);
+        return settings[id];
     }
 
     public function getSettings() as Dictionary {
@@ -157,36 +157,42 @@ class GoProSettings {
         try {
             switch (settingId) {
                 case RESOLUTION:
-                    var res = (RESOLUTION_MAP.get(setting) as Array)[0];
-                    if (res < 2000) {
-                        return res + "p";
-                    } else {
-                        return res%1000==0 ? res/1000+"K" : (res/1000.0).format("%.1f")+"K"; 
-                    }
                 case RATIO:
-                    var ratio = (RESOLUTION_MAP.get(setting) as Array)[1];
+                    var tuple = RESOLUTION_MAP.get(setting);
+                    if (tuple == null) { throw new Exception(); }
+
+                    if (settingId == RESOLUTION) {
+                        var res = tuple[0];
+                        if (res < 2000) {
+                            return res + "p";
+                        } else {
+                            return res%1000==0 ? res/1000+"K" : (res/1000.0).format("%.1f")+"K"; 
+                        }
+                    }
+
+                    var ratio = tuple[1];
                     if (ratio<45) {
                         ratio = ratio.format("%.2f");
                         return ratio.substring(null, ratio.find(".")) + ":" + ratio.substring(ratio.find(".")+1, ratio.find("0"));
                     } else {
                         return ratio + "°";
                     }
+                    
                 case LENS:
-                    return LENS_LABELS.get(setting);
+                    return LENS_LABELS.get(setting as LensId);
                 case FRAMERATE:
                     return FRAMERATE_MAP.get(setting) + FRAMERATE_LABEL;
                 case LED:
-                    return LED_LABELS.get(setting);
+                    return LED_LABELS.get(setting as LedId);
                 case HYPERSMOOTH:
-                    return HYPERSMOOTH_LABELS.get(setting);
+                    return HYPERSMOOTH_LABELS.get(setting as HypersmoothId);
                 default:
-                    System.println("Unknown setting ID requested for label");
-                    return "";
+                    throw new Exception();
             }
         } catch (ex) {
             System.println("Error while retrieving setting label");
             System.println(ex.getErrorMessage());
-            return ". . .";
+            return "";
         }
     }
 
@@ -194,26 +200,49 @@ class GoProSettings {
         if (settings.isEmpty()) {
             return ". . .";
         }
-        return getLabel(RESOLUTION, settings.get(RESOLUTION)) \
-                + "@" + FRAMERATE_MAP.get(settings.get(FRAMERATE)) \
-                + " " + getLabel(RATIO, settings.get(RATIO));
+        var res = getLabel(RESOLUTION, settings[RESOLUTION]) as String;
+        var fps = FRAMERATE_MAP.get(settings[FRAMERATE]);
+        var ratio = getLabel(RATIO, settings[RATIO]) as String;
+
+        if (!res.equals("") and fps!=null and !ratio.equals("")) {
+            return res + "@" + fps + " " + ratio;
+        } else {
+            return ". . .";
+        }
     }
 }
 
 class ResolutionComparator {
+    public function wrappedCompare(a as Char, b as Char, id as Number) as Number {
+        var tupleA = GoProSettings.RESOLUTION_MAP.get(a);
+        var tupleB = GoProSettings.RESOLUTION_MAP.get(b);
+
+        if (tupleA == null) { tupleA = [0,0]; }
+        if (tupleB == null) { tupleB = [0,0]; }
+
+        return tupleB[id] - tupleA[id];
+    }
+
     public function compare(resolutionA as Char, resolutionB as Char) as Number {
-        return (GoProSettings.RESOLUTION_MAP.get(resolutionB) as Array)[0] as Number - (GoProSettings.RESOLUTION_MAP.get(resolutionA) as Array)[0] as Number;
+        return wrappedCompare(resolutionA, resolutionB, 0);
     }
 }
 
-class RatioComparator {
+(:typecheck(false))
+class RatioComparator extends ResolutionComparator {
     public function compare(ratioA as Char, ratioB as Char) as Number {
-        return (GoProSettings.RESOLUTION_MAP.get(ratioB) as Array)[1] as Number - (GoProSettings.RESOLUTION_MAP.get(ratioA) as Array)[1] as Number;
+        return wrappedCompare(ratioA, ratioB, 1);
     }
 }
 
 class FramerateComparator {
     public function compare(framerateA as Char, framerateB as Char) {
-        return GoProSettings.FRAMERATE_MAP.get(framerateB) as Number - GoProSettings.FRAMERATE_MAP.get(framerateA) as Number;
+        var a = GoProSettings.FRAMERATE_MAP.get(framerateA);
+        var b = GoProSettings.FRAMERATE_MAP.get(framerateB);
+
+        if (a == null) { a=0; }
+        if (b == null) { b=0; }
+        
+        return b-a;
     }
 }

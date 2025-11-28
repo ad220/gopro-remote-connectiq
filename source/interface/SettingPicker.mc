@@ -16,6 +16,7 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
         var comparator = null;
         var items = getApp().gopro.getAvailableSettings(setting);
         var selected = getApp().gopro.getSetting(setting);
+        
         switch (setting) {
             case GoProSettings.RESOLUTION:
                 titleId = Rez.Strings.Resolution;
@@ -45,7 +46,7 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
         menu.setTitle(new OptionPickerTitle(titleId));
         items.sort(comparator);
         for (var i=0; i<items.size(); i++) {
-            menu.addItem(new OptionPickerItem(GoProSettings.getLabel(setting, items[i]), items[i] as Char, selected));
+            menu.addItem(new OptionPickerItem(GoProSettings.getLabel(setting, items[i]), items[i], selected));
         }
         menu.setFocus(items.indexOf(selected));
 

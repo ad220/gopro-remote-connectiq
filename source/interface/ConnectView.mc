@@ -41,9 +41,6 @@ class ConnectView extends WatchUi.View {
 
 
 class ConnectDelegate extends WatchUi.BehaviorDelegate {
-    static const CONNECTING_NOTIF      = WatchUi.loadResource(Rez.Strings.Connecting);
-    static const CONNECT_ERROR_NOTIF   = WatchUi.loadResource(Rez.Strings.ConnectFail);
-
     private var lastPairedDevice as Ble.ScanResult?;
     private var delegate as GoProDelegate;
 
@@ -112,9 +109,9 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         delegate.setScanResultCallback(null);
         Ble.setScanState(Ble.SCAN_STATE_SCANNING);
         if (getApp().fromGlance) {
-            getApp().viewController.switchTo(new NotifView(CONNECTING_NOTIF, NotifView.NOTIF_INFO), null, SLIDE_DOWN);
+            getApp().viewController.switchTo(new NotifView(Rez.Strings.Connecting, NotifView.NOTIF_INFO), null, SLIDE_DOWN);
         } else {
-            getApp().viewController.push(new NotifView(CONNECTING_NOTIF, NotifView.NOTIF_INFO), new NotifDelegate(), SLIDE_DOWN);
+            getApp().viewController.push(new NotifView(Rez.Strings.Connecting, NotifView.NOTIF_INFO), new NotifDelegate(), SLIDE_DOWN);
         }
         delegate.pair(device);
     }
