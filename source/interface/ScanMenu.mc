@@ -138,7 +138,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
                 if (scanState==Ble.SCAN_STATE_SCANNING) {
                     stopScan();
                 } else {
-                    getApp().viewController.pop(SLIDE_LEFT);
+                    onBack();
                 }
                 break;            
             default:
@@ -163,6 +163,6 @@ class ScanMenuDelegate extends Menu2InputDelegate {
 
     public function onBack() as Void {
         stopScan();
-        getApp().viewController.pop(SLIDE_RIGHT);
+        getApp().viewController.returnHome(null, null);
     }
 }
