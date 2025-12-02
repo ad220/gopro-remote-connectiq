@@ -145,16 +145,26 @@ class GoProDelegate extends Ble.BleDelegate {
         
         pairingTimer = null;
         pairingDevice = null;
+
+        var pushView = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
         
         var service = device.getService(Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE));
         if (service != null) {
             requestQueue = new GattRequestQueue(service);
+        } else {
+            try {
+                unpairDevice(device);
+            } catch (ex) { }
+
+            onDisconnect();
+            pushView.invoke(new NotifView(Rez.Strings.PairingFail, NotifView.NOTIF_ERROR), new NotifDelegate(), WatchUi.SLIDE_UP);
+            return;
         }
+
         getApp().gopro = new GoProCamera(requestQueue, method(:onDisconnect));
         getApp().gopro.registerSettings();
 
         keepAliveTimer = getApp().timerController.start(method(:keepAlive), 8, true);
-        var pushView = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
         pushView.invoke(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
     }
 
