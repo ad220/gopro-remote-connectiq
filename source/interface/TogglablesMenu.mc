@@ -89,13 +89,15 @@ class TogglablesView extends WatchUi.View {
         var camera = getApp().gopro;
         camera.requestStatuses([GoProCamera.BATTERY, GoProCamera.SD_REMAINING]b);
 
-        var flicker = camera.getSetting(GoProSettings.FLICKER) as Number;
-        (findDrawableById("FlickerButton") as Togglable).toggleState(flicker & 0x01 != 0);
+        var flicker = camera.getSetting(GoProSettings.FLICKER);
+        (findDrawableById("FlickerButton") as Togglable).toggleState(
+            flicker != null ? flicker.toNumber() & 1 != 0 : false
+        );
         
-        var gps = camera.getSetting(GoProSettings.GPS) as Number;
+        var gps = camera.getSetting(GoProSettings.GPS);
         (findDrawableById("GpsButton") as Togglable).toggleState(gps==1);
         
-        var led = camera.getSetting(GoProSettings.LED) as Number;
+        var led = camera.getSetting(GoProSettings.LED);
         (findDrawableById("LedButton") as Togglable).toggleState(
             led==GoProSettings.LED_ON or
             led==GoProSettings.LED_ALL_ON or
@@ -189,9 +191,12 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onFlicker() as Void {
-        var flicker = camera.getSetting(GoProSettings.FLICKER) as Number;
-        view.getHilighted().toggleState(flicker & 0x01 == 0);
-        camera.sendSetting(GoProSettings.FLICKER, (flicker ^ 0x01) as Char);
+        var flicker = camera.getSetting(GoProSettings.FLICKER);
+        if (flicker != null) {
+            flicker = flicker.toNumber();
+            view.getHilighted().toggleState(flicker & 0x01 == 0);
+            camera.sendSetting(GoProSettings.FLICKER, (flicker ^ 0x01) as Char);
+        }
     }
     
     public function onPower() as Void {
