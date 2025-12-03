@@ -80,6 +80,7 @@ class GoProDelegate extends Ble.BleDelegate {
     }
 
     public function pair(device as Ble.ScanResult?) as Void {
+        System.println("Trying to pair / connect to " + device.getDeviceName());
         pairingTimer = getApp().timerController.start(method(:onPairingFailed), 20, false);
         try {
             pairingDevice = Ble.pairDevice(device);
@@ -94,6 +95,7 @@ class GoProDelegate extends Ble.BleDelegate {
     }
 
     public function onPairingFailed() as Void {
+        System.println("Pairing Failed");
         if (!isConnected and pairingDevice!=null) {
             unpairDevice(pairingDevice);
         }
@@ -102,11 +104,11 @@ class GoProDelegate extends Ble.BleDelegate {
     }
 
     public function onConnectedStateChanged(device as Ble.Device, state as Ble.ConnectionState) as Void {
+        System.println("Device connection state change : " + device.getName() + ", " + state);
         if (device!=null) {
             if (state == Ble.CONNECTION_STATE_CONNECTED) {
                 System.println("Device connected");
                 if (device.isBonded()) {
-                    isConnected = true;
                     initiateConnection(device);
                 } else {
                     isConnected = false;
@@ -123,21 +125,22 @@ class GoProDelegate extends Ble.BleDelegate {
     }
     
     public function onEncryptionStatus(device as Ble.Device, status as Ble.Status) as Void {
+        System.println("Device encryption status : " + device.getName() + ", " + status);
         if (device!=null and status == Ble.STATUS_SUCCESS) {
             if (!isConnected) {
                 System.println("Device bonded");
-                isConnected = true;
                 initiateConnection(device);
             }
         } else {
             isConnected = false;
-            System.println("null device changed encryption status");
+            System.println("Camera changed encryption status");
         }
     }
 
     private function initiateConnection(device as Ble.Device) as Void {
         System.println("Initiating connection");
         Ble.setScanState(Ble.SCAN_STATE_OFF);
+        isConnected = true;
 
         if (pairingTimer != null) {
             pairingTimer.stop();
@@ -145,16 +148,26 @@ class GoProDelegate extends Ble.BleDelegate {
         
         pairingTimer = null;
         pairingDevice = null;
+
+        var pushView = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
         
         var service = device.getService(Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE));
         if (service != null) {
             requestQueue = new GattRequestQueue(service);
+        } else {
+            try {
+                unpairDevice(device);
+            } catch (ex) { }
+
+            onDisconnect();
+            pushView.invoke(new NotifView(Rez.Strings.PairingFail, NotifView.NOTIF_ERROR), new NotifDelegate(), WatchUi.SLIDE_UP);
+            return;
         }
+
         getApp().gopro = new GoProCamera(requestQueue, method(:onDisconnect));
         getApp().gopro.registerSettings();
 
         keepAliveTimer = getApp().timerController.start(method(:keepAlive), 8, true);
-        var pushView = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
         pushView.invoke(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
     }
 
@@ -167,7 +180,8 @@ class GoProDelegate extends Ble.BleDelegate {
     }
 
     public function onDisconnect() as Void {
-        // put camera to sleep and close connection
+        // close connection
+        System.println("Camera disconnected");
         if (isConnected) {
             isConnected = false;
             getApp().timerController.stop(keepAliveTimer);
