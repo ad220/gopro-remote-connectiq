@@ -3,7 +3,7 @@ import Toybox.System;
 
 using Toybox.BluetoothLowEnergy as Ble;
 
-(:debug) class FakeGoProDevice {
+(:debugoff) class FakeGoProDevice {
 
     private static const AVAILABLE_MAP_H11 = {
         26  => {
@@ -269,7 +269,7 @@ using Toybox.BluetoothLowEnergy as Ble;
 }
 
 
-(:debug) class GattRequestQueueStub extends GattRequestQueue {
+(:debugoff) class GattRequestQueueStub extends GattRequestQueue {
 
     private var fakeDevice as FakeGoProDevice?;
    
@@ -304,7 +304,7 @@ using Toybox.BluetoothLowEnergy as Ble;
     }
 }
 
-(:debug) class GoProDelegateStub extends GoProDelegate {
+(:debugoff) class GoProDelegateStub extends GoProDelegate {
 
     public function initialize() {
         GoProDelegate.initialize();

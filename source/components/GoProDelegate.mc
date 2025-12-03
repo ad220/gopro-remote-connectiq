@@ -80,7 +80,7 @@ class GoProDelegate extends Ble.BleDelegate {
     }
 
     public function pair(device as Ble.ScanResult?) as Void {
-        System.println("Trying to pair / connect to " + device.getDeviceName());
+        // System.println("Trying to pair / connect to " + device.getDeviceName());
         pairingTimer = getApp().timerController.start(method(:onPairingFailed), 20, false);
         try {
             pairingDevice = Ble.pairDevice(device);
@@ -104,7 +104,7 @@ class GoProDelegate extends Ble.BleDelegate {
     }
 
     public function onConnectedStateChanged(device as Ble.Device, state as Ble.ConnectionState) as Void {
-        System.println("onConnectState(device, state) : " + device.getName() + ", " + state);
+        // System.println("onConnectState(device, state) : " + device.getName() + ", " + state);
         if (device!=null) {
             if (state == Ble.CONNECTION_STATE_CONNECTED) {
                 System.println("Device connected");
@@ -125,7 +125,7 @@ class GoProDelegate extends Ble.BleDelegate {
     }
     
     public function onEncryptionStatus(device as Ble.Device, status as Ble.Status) as Void {
-        System.println("onEncryptionStatus(device, status) : " + device.getName() + ", " + status);
+        // System.println("onEncryptionStatus(device, status) : " + device.getName() + ", " + status);
         if (device!=null and status == Ble.STATUS_SUCCESS) {
             if (!isConnected) {
                 System.println("Device bonded");
@@ -133,7 +133,7 @@ class GoProDelegate extends Ble.BleDelegate {
             }
         } else {
             isConnected = false;
-            System.println("null device changed encryption status");
+            System.println("Camera changed encryption status");
         }
     }
 

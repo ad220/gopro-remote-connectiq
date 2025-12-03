@@ -1,5 +1,7 @@
 project.manifest = manifest.xml
 
+base.excludeAnnotations = debugoff
+
 round-218x218.resourcePath = resources; resources-scalable/resources-round-218x218
 round-240x240.resourcePath = resources; resources-scalable/resources-round-240x240
 round-260x260.resourcePath = resources; resources-scalable/resources-round-260x260

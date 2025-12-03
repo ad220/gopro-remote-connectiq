@@ -44,7 +44,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
     private var lastPairedDevice as Ble.ScanResult?;
     private var delegate as GoProDelegate;
 
-    (:debug)
+    (:debugoff)
     public function initialize(lastPairedDevice as Ble.ScanResult?) {
         BehaviorDelegate.initialize();
         self.lastPairedDevice = lastPairedDevice;
@@ -52,7 +52,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         Ble.setDelegate(delegate);
     }
 
-    (:release)
+    (:releaseoff)
     public function initialize(lastPairedDevice as Ble.ScanResult?) {
         BehaviorDelegate.initialize();
         self.lastPairedDevice = lastPairedDevice;
@@ -70,13 +70,13 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         );
     }
 
-    (:debug)
+    (:debugoff)
     public function onSelect() as Boolean {
         onScanResult(null);
         return true;
     }
     
-    (:release)
+    (:releaseoff)
     public function onSelect() as Boolean {
         if (lastPairedDevice instanceof Ble.ScanResult) {
             if (!delegate.isPairing()) {
