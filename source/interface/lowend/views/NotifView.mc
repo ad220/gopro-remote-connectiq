@@ -12,13 +12,13 @@ class NotifView extends WatchUi.View {
         NOTIF_ERROR
     }
 
-    private var message as String;
+    private var msg as String;
     private var type as NotifType;
 
-    function initialize(message as String, type as NotifType) {
+    function initialize(msg as String or ResourceId, type as NotifType) {
         View.initialize();
         
-        self.message = message;
+        self.msg = msg instanceof String ? msg : loadResource(msg) as String;
         self.type = type;
     }
 
@@ -30,7 +30,7 @@ class NotifView extends WatchUi.View {
 
         dc.setColor(Graphics.COLOR_WHITE, accentColor);
         dc.clear();
-        dc.drawText(ICM.halfW, ICM.halfH, ICM.fontSmall, message, ICM.JTEXT_MID);
+        dc.drawText(ICM.halfW, ICM.halfH, ICM.fontSmall, msg, ICM.JTEXT_MID);
         dc.fillCircle(ICM.halfW, 0.3*ICM.screenH, 0.08*ICM.screenW);
         
         dc.setColor(accentColor, Graphics.COLOR_WHITE);
