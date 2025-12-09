@@ -197,7 +197,7 @@ class GoProSettings {
     }
 
     public function getDescription() as String {
-        if (settings.isEmpty()) {
+        if (settings.isEmpty() or settings[FRAMERATE]==null) {
             return ". . .";
         }
         var res = getLabel(RESOLUTION, settings[RESOLUTION]) as String;
