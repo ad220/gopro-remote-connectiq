@@ -55,8 +55,8 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     public function startScan() as Void {
         if (scanState!=Ble.SCAN_STATE_SCANNING) {
             Ble.setScanState(Ble.SCAN_STATE_SCANNING);
-            scanTimer = getApp().timerController.start(method(:stopScan), 40, false);
-            animTimer = getApp().timerController.start(method(:animate), 2, true);
+            scanTimer = getApp().timerController.start(method(:stopScan), 100, false);
+            animTimer = getApp().timerController.start(method(:animate), 5, true);
 
             statusItem.setLabel("...");
             cancelItem.setLabel(SCAN_CANCEL);

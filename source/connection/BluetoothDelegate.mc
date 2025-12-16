@@ -115,7 +115,7 @@ class BluetoothDelegate extends CameraDelegate {
 
         CameraDelegate.onConnect(device);
 
-        keepAliveTimer = getApp().timerController.start(method(:keepAlive), 8, true);
+        keepAliveTimer = getApp().timerController.start(method(:keepAlive), 20, true);
     }
 
     public function keepAlive() as Void {

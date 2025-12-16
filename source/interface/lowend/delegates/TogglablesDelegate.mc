@@ -31,7 +31,7 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
         menu.addItem(new MenuItem(      Rez.Strings.PowerOff,       null,                                               :onPower,                           null));
 
         updateTitle();
-        getApp().timerController.start(method(:updateTitle), 2, false);
+        getApp().timerController.start(method(:updateTitle), 5, false);
     }
 
     public function updateTitle() as Void {
@@ -86,7 +86,7 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
     
     public function onPower() as Void {
         gopro.sendCommand(GoProCamera.SLEEP);
-        getApp().timerController.start(gopro.method(:disconnect), 1, false);
+        getApp().timerController.start(gopro.method(:disconnect), 2, false);
     }
     
 

@@ -18,7 +18,7 @@ class ViewController {
         currentDelegate = delegate;
         WatchUi.pushView(view, delegate, slide);
         if (delegate instanceof NotifDelegate) {
-            getApp().timerController.start(method(:popNotif), 8, false);
+            getApp().timerController.start(method(:popNotif), 20, false);
         } else {
             viewLayersCount++;
         }

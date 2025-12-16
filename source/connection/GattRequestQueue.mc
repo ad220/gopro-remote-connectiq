@@ -128,7 +128,7 @@ class GattRequest {
 
     public function startTimer() as Void {
         if (failCounter==0) {
-            getApp().timerController.start(method(:onTimeOut), 2, false);
+            getApp().timerController.start(method(:onTimeOut), 5, false);
         }
     }
 

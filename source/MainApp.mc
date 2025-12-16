@@ -40,7 +40,7 @@ class GoProRemoteApp extends Application.AppBase {
 
     // Return the initial view of your application here
     function getInitialView() {
-        self.timerController = new TimerController(500);
+        self.timerController = new TimerController(200);
         self.viewController = new ViewController();
         InterfaceComponentsManager.computeInterfaceConstants();
         InterfaceComponentsManager.loadFonts();

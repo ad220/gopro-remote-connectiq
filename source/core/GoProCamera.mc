@@ -111,7 +111,7 @@ class GoProCamera extends GoProSettings {
                 var request = [0x02, CameraDelegate.GET_STATUS, ENCODING_DURATION]b;
                 statuses.put(ENCODING_DURATION, 0);
                 delegate.send(GattRequest.WRITE_CHARACTERISTIC, GPM.UUID_QUERY_CHAR, request);
-                progressTimer = getApp().timerController.start(method(:incrementEncodingDuration), 2, true);
+                progressTimer = getApp().timerController.start(method(:incrementEncodingDuration), 5, true);
             } else {
                 getApp().timerController.stop(progressTimer);
             }

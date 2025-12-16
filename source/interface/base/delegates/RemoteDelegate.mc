@@ -76,7 +76,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
     public function onBack() as Boolean {
         if (!gopro.isRecording()) {
             gopro.sendCommand(GoProCamera.SLEEP);
-            getApp().timerController.start(gopro.method(:disconnect), 1, false);
+            getApp().timerController.start(gopro.method(:disconnect), 2, false);
         } else {
             gopro.disconnect();
         }

@@ -55,7 +55,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     public function onPower() as Void {
         view.getHilighted().toggleState(true);
         camera.sendCommand(GoProCamera.SLEEP);
-        getApp().timerController.start(camera.method(:disconnect), 1, false);
+        getApp().timerController.start(camera.method(:disconnect), 2, false);
     }
     
     public function onLed() as Void {

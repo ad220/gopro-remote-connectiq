@@ -29,7 +29,7 @@ class CameraDelegate {
     }
 
     public function connect(device as Ble.ScanResult?) as Void {
-        pairingTimer = getApp().timerController.start(method(:onPairingFailed), 20, false);
+        pairingTimer = getApp().timerController.start(method(:onPairingFailed), 50, false);
 
         var pushMethod = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
         var delegate = getApp().fromGlance ? null : new NotifDelegate();
