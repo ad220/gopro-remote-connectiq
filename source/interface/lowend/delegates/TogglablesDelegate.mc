@@ -77,8 +77,8 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
     }
     
     public function onGps() as Void {
-        if (gopro.getAvailableSettings(GoProSettings.GPS)!=null) {
-            var gps = gopro.getSetting(GoProSettings.GPS) as Number;
+        var gps = gopro.getSetting(GoProSettings.GPS) as Number?;
+        if (gps!=null and gopro.getAvailableSettings(GoProSettings.GPS)!=null) {
             (selected as ToggleMenuItem).setEnabled(gps & 0x01 == 0);
             gopro.sendSetting(GoProSettings.GPS, (gps ^ 0x01) as Char);
         }

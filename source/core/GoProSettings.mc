@@ -205,9 +205,10 @@ class GoProSettings {
         if (settings.isEmpty()) {
             return ". . .";
         }
-        var res = getLabel(RESOLUTION, null) as String;
+        var resId = settings.get(RESOLUTION);
+        var res = getLabel(RESOLUTION, resId) as String;
         var fps = FRAMERATE_MAP.get(settings.get(FRAMERATE));
-        var ratio = getLabel(RATIO, null) as String;
+        var ratio = getLabel(RATIO, resId) as String;
 
         if (!res.equals("") and fps!=null and !ratio.equals("")) {
             return res + "@" + fps + " " + ratio;

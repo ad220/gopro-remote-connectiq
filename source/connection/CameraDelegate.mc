@@ -52,7 +52,10 @@ class CameraDelegate {
 
     protected function onConnect(device as Ble.Device?) as Void {
         connected = true;
-        pairingTimer.stop();
+
+        if (pairingTimer != null) {
+            pairingTimer.stop();
+        }
         pairingTimer = null;
 
         getApp().gopro = new GoProCamera(self, method(:onDisconnect));

@@ -71,8 +71,8 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     }
     
     public function onGps() as Void {
-        if (camera.getAvailableSettings(GoProSettings.GPS)!=null) {
-            var gps = camera.getSetting(GoProSettings.GPS) as Number;
+        var gps = camera.getSetting(GoProSettings.GPS) as Number?;
+        if (gps!=null and camera.getAvailableSettings(GoProSettings.GPS)!=null) {
             view.getHilighted().toggleState(gps & 0x01 == 0);
             camera.sendSetting(GoProSettings.GPS, (gps ^ 0x01) as Char);
         }
@@ -84,7 +84,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onBack() as Boolean {
-        getApp().gopro.subscribeChanges(
+        camera.subscribeChanges(
             CameraDelegate.UNREGISTER_AVAILABLE,
             [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.GPS, GoProSettings.HYPERSMOOTH]b
         );   

@@ -130,6 +130,7 @@ class BluetoothDelegate extends CameraDelegate {
         if (connected) {
             getApp().timerController.stop(keepAliveTimer);
             requestQueue.close();
+            Ble.setDelegate(null as Ble.BleDelegate);
         }
         CameraDelegate.onDisconnect();
     }
