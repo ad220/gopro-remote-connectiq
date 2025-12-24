@@ -153,12 +153,14 @@ class GoProSettings {
         return settings;
     }
 
-    public static function getLabel(settingId as GoProSettings.SettingId, setting as Char) as String or ResourceId {
+    public static function getLabel(settingId as GoProSettings.SettingId, setting as Char?) as String or ResourceId {
         try {
+            if (setting == null) { throw new Exception(); }
+            
             switch (settingId) {
                 case RESOLUTION:
                 case RATIO:
-                    var tuple = RESOLUTION_MAP.get(setting);
+                    var tuple = RESOLUTION_MAP.get(setting); // 3 crash on this line in v3.4.3
                     if (tuple == null) { throw new Exception(); }
 
                     if (settingId == RESOLUTION) {

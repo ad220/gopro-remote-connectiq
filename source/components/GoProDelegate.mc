@@ -104,8 +104,8 @@ class GoProDelegate extends Ble.BleDelegate {
     }
 
     public function onConnectedStateChanged(device as Ble.Device, state as Ble.ConnectionState) as Void {
-        System.println("Device connection state change : " + device.getName() + ", " + state);
         if (device!=null) {
+            System.println("Device connection state change : " + device.getName() + ", " + state);
             if (state == Ble.CONNECTION_STATE_CONNECTED) {
                 System.println("Device connected");
                 if (device.isBonded()) {
@@ -159,6 +159,7 @@ class GoProDelegate extends Ble.BleDelegate {
                 unpairDevice(device);
             } catch (ex) { }
 
+            isConnected = false;
             onDisconnect();
             pushView.invoke(new NotifView(Rez.Strings.PairingFail, NotifView.NOTIF_ERROR), new NotifDelegate(), WatchUi.SLIDE_UP);
             return;
