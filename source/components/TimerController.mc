@@ -33,7 +33,10 @@ class TimerController {
     }
 
     public function stop(callback as TimerCallback?) as Void {
-        if (callback!=null and callbackList.remove(callback)) {
+        if (callback!=null) {
+            callback.clear();
+            
+            callbackList.remove(callback);
             if (callbackList.size()==0) {
                 stopAll();
             }
@@ -54,7 +57,7 @@ class TimerController {
 
 class TimerCallback {
 
-    private var callback as WeakReference<Method() as Void>;
+    private var callback as Method() as Void?;
     private var period as Number;
     private var repeat as Boolean;
     private var controller as TimerController;
@@ -62,7 +65,7 @@ class TimerCallback {
 
 
     public function initialize(callback as Method() as Void, period as Number, repeat as Boolean, controller as TimerController) {
-        self.callback = callback.weak();
+        self.callback = callback;
         self.period = period;
         self.repeat = repeat;
         self.controller = controller;
@@ -71,9 +74,8 @@ class TimerCallback {
 
     public function trigger() as Void {
         tickCount = (tickCount + 1) % period;
-        var method = callback.get();
-        if (tickCount == 0 and method!=null) {
-            method.invoke();
+        if (tickCount == 0 and callback!=null) {
+            callback.invoke();
             if (!repeat) {
                 stop();
             }
@@ -82,5 +84,9 @@ class TimerCallback {
 
     public function stop() as Void {
         controller.stop(self);
+    }
+
+    public function clear() as Void {
+        callback = null;
     }
 }
