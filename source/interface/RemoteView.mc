@@ -8,7 +8,8 @@ using InterfaceComponentsManager as ICM;
 
 class RecordButton extends WatchUi.Button {
 
-    public function initialize(options) {
+    (:typecheck(false))
+    public function initialize(options as Dictionary) {
         Button.initialize(options);
     }
 
@@ -43,10 +44,11 @@ class RemoteView extends WatchUi.View {
         var gopro = getApp().gopro;
         var isRecording = gopro.isRecording();
         var recDuration = gopro.getStatus(GoProCamera.ENCODING_DURATION);
+        if (recDuration == null) { recDuration = 0; }
         var timeLabel = findDrawableById("RecordTime") as Text;
         var descLabel = findDrawableById("RecordSettingsLabel") as Text;
         if (isRecording) {
-            var minutes = Math.floor(recDuration / 60);
+            var minutes = recDuration / 60;
             var seconds = recDuration % 60;
             var timeString = (minutes/100).toString() + (minutes%60).toString() + ":" + (seconds/10).toString() + (seconds%10).toString();
             timeLabel.setText(timeString);
@@ -54,9 +56,9 @@ class RemoteView extends WatchUi.View {
         timeLabel.setVisible(isRecording);
         descLabel.setText(gopro.getDescription());
         descLabel.setColor(isRecording ? 0xAAAAAA : 0xFFFFFF);
-        findDrawableById("RecordSettingsButton").setVisible(!isRecording);
-        findDrawableById("RecordRed").setVisible(isRecording and recDuration&1==0);
-        findDrawableById("RecordGray").setVisible(isRecording and recDuration&1==1);
+        (findDrawableById("RecordSettingsButton") as Drawable).setVisible(!isRecording);
+        (findDrawableById("RecordRed") as Drawable).setVisible(isRecording and recDuration&1==0);
+        (findDrawableById("RecordGray") as Drawable).setVisible(isRecording and recDuration&1==1);
 
         View.onUpdate(dc);
     }
@@ -100,7 +102,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
         } else if (!gopro.getDescription().equals(". . .")) {
             var view = new TogglablesView();
             getApp().viewController.push(view, new TogglablesDelegate(view), SLIDE_DOWN);
-            getApp().gopro.subscribeChanges(GoProDelegate.REGISTER_AVAILABLE, [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.GPS, GoProSettings.HYPERSMOOTH]b);
+            getApp().gopro.subscribeChanges(GoProDelegate.REGISTER_AVAILABLE, [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.HYPERSMOOTH]b);
             return true;
         }
         return false;

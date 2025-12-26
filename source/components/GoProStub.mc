@@ -117,9 +117,17 @@ using Toybox.BluetoothLowEnergy as Ble;
         };
     }
 
-    public function send(uuid as Ble.Uuid, data as ByteArray) {
+    public function send(uuid as Ble.Uuid, data as ByteArray) as Void {
         var response;
-        switch (uuid.toString().substring(4,8).toNumber()) {
+
+        var shortId = uuid.toString().substring(4,8);
+        if (shortId == null) {
+            System.println("Error while parsing uuid");
+            return;
+        }
+
+        shortId = shortId.toNumber();
+        switch (shortId!=null ? shortId : 0) {
             case GattProfileManager.UUID_QUERY_CHAR:
                 System.println("query :"+data);
                 var queryId = data[1];
@@ -198,6 +206,7 @@ using Toybox.BluetoothLowEnergy as Ble;
                 break;
 
             default:
+                System.println("Unknown UUID");
                 break;
         }
         garminDevice.whenCharacteristicWrite(uuid, Ble.STATUS_SUCCESS);

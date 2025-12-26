@@ -15,7 +15,7 @@ class RemoteGlance extends WatchUi.GlanceView {
     public function initialize(subtitle as String) {
         GlanceView.initialize();
 
-        self.title = loadResource(Rez.Strings.GlanceTitle);
+        self.title = loadResource(Rez.Strings.GlanceTitle) as String;
         self.subtitle = subtitle;
     }
 

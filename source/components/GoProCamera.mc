@@ -22,10 +22,10 @@ class GoProCamera extends GoProSettings {
 
     private var goproRequestQueue as GattRequestQueue;
     protected var disconnectCallback as Method() as Void;
-    protected var statuses as Dictionary;
-    protected var availableSettings as Dictionary;
-    private var availableRatios as Dictionary<Number, Array<Char>>;
-    private var tmpAvailableSettings as Dictionary<Char, Array<Char>>;
+    protected var statuses as Dictionary<StatusId or Char, Number>;
+    protected var availableSettings as Dictionary<GoProSettings.SettingId or Char, Array<Char>>;
+    private var availableRatios as Dictionary<Numeric, Array<Char>>;
+    private var tmpAvailableSettings as Dictionary<GoProSettings.SettingId or Char, Array<Char>>;
     protected var progressTimer as TimerCallback?;
 
 
@@ -66,8 +66,9 @@ class GoProCamera extends GoProSettings {
     public function sendPreset(preset as GoProPreset) as Void {
         var keys = [RESOLUTION, LENS, FRAMERATE];
         for (var i=0; i<3; i++) {
-            if (settings.get(keys[i]) != preset.getSetting(keys[i])) {
-                sendSetting(keys[i], preset.getSetting(keys[i]));
+            var value = preset.getSetting(keys[i]);
+            if (settings.get(keys[i]) != value and value != null) {
+                sendSetting(keys[i], value);
             }
         }  
     }
@@ -78,7 +79,7 @@ class GoProCamera extends GoProSettings {
         goproRequestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_CHAR), request);
     }
 
-    public function subscribeChanges(queryId as GoProDelegate.QueryId, values as ByteArray) {
+    public function subscribeChanges(queryId as GoProDelegate.QueryId, values as ByteArray) as Void {
         var request = [values.size()+1, queryId as Char]b;
         request.addAll(values);
         goproRequestQueue.add(
@@ -120,11 +121,11 @@ class GoProCamera extends GoProSettings {
             }
         }
         if (id==ENCODING_DURATION or id==SD_REMAINING) {
-            statuses.put(id, value.decodeNumber(Lang.NUMBER_FORMAT_UINT32, {:endianness => Lang.ENDIAN_BIG}));
+            statuses.put(id, value.decodeNumber(Lang.NUMBER_FORMAT_UINT32, {:endianness => Lang.ENDIAN_BIG}) as Number);
         } else {
             statuses.put(id, value[0]);
         }
-        if (statuses[ENCODING]==null) {statuses[ENCODING] = 0;}
+        if (statuses.get(ENCODING) == null) { statuses.put(ENCODING, 0); }
     }
 
     public function onReceiveAvailable(id as Char, value as ByteArray) as Void {
@@ -138,11 +139,11 @@ class GoProCamera extends GoProSettings {
         }
     }
 
-    public function getStatus(id as StatusId) as Number? {
+    public function getStatus(id as StatusId or Char) as Number? {
         return statuses.get(id);
     }
 
-    public function getAvailableSettings(id as GoProSettings.SettingId) as Array {
+    public function getAvailableSettings(id as GoProSettings.SettingId) as Array<Char> {
         var result = availableSettings.get(id);
         return result == null ? [] : result;
     }
@@ -176,7 +177,10 @@ class GoProCamera extends GoProSettings {
                     availableSettings.put(RESOLUTION, availableResolutions);
                     var res = settings.get(RESOLUTION);
                     if (res != null) {
-                        availableSettings.put(RATIO, availableRatios.get((RESOLUTION_MAP.get(res) as Array)[0]));
+                        var tuple = RESOLUTION_MAP.get(res);
+                        if (tuple != null) {
+                            availableSettings.put(RATIO, availableRatios.get(tuple[0]));
+                        }
                     }
                 } else {
                     availableSettings.put(tmpKeys[i], tmpValues);

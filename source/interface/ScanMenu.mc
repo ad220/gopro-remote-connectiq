@@ -19,11 +19,11 @@ class ScanMenuDelegate extends Menu2InputDelegate {
         65      => 13,
     } as Dictionary<Number, Number or ResourceId>;
 
-    private const SCAN_TITLE    = WatchUi.loadResource(Rez.Strings.ScanTitle);
-    private const SCAN_CANCEL   = WatchUi.loadResource(Rez.Strings.ScanCancel);
-    private const SCAN_RESTART  = WatchUi.loadResource(Rez.Strings.ScanRestart);
-    private const EXIT          = WatchUi.loadResource(Rez.Strings.Exit);
-    private const DEVICES_FOUND = WatchUi.loadResource(Rez.Strings.DevicesFound);
+    private const SCAN_TITLE    = WatchUi.loadResource(Rez.Strings.ScanTitle)       as String;
+    private const SCAN_CANCEL   = WatchUi.loadResource(Rez.Strings.ScanCancel)      as String;
+    private const SCAN_RESTART  = WatchUi.loadResource(Rez.Strings.ScanRestart)     as String;
+    private const EXIT          = WatchUi.loadResource(Rez.Strings.Exit)            as String;
+    private const DEVICES_FOUND = WatchUi.loadResource(Rez.Strings.DevicesFound)    as String;
 
     private var menu as CustomMenu;
     private var statusItem as OptionPickerItem;
@@ -68,8 +68,8 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     public function stopScan() as Void {
         if (scanState!=Ble.SCAN_STATE_OFF) {
             Ble.setScanState(Ble.SCAN_STATE_OFF);
-            scanTimer.stop();
-            animTimer.stop();
+            getApp().timerController.stop(scanTimer);
+            getApp().timerController.stop(animTimer);
 
             statusItem.setLabel(SCAN_RESTART);
             cancelItem.setLabel(EXIT);
@@ -82,7 +82,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
         if (scanState == Ble.SCAN_STATE_SCANNING) {
             var label = statusItem.getLabel() + ".";
             label = label.substring(0, label.length()%4 + 1);
-            statusItem.setLabel(label);
+            statusItem.setLabel(label!=null ? label : "...");
             WatchUi.requestUpdate();
         }
     }
@@ -91,7 +91,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
         scanState = state;
     }
 
-    public function onScanResults(results as [Ble.ScanResult]) as Void{
+    public function onScanResults(results as Array<Ble.ScanResult>) as Void{
         for(var i=0; i<results.size(); i++) {
             if (!isDeviceInMenu(results[i])) {
                 var id = scanResults.size() as Char;
@@ -101,9 +101,9 @@ class ScanMenuDelegate extends Menu2InputDelegate {
                     label = goproModelTable.get(results[i].getRawData()[13]);
                     if (label == null) { label = Rez.Strings.UnknownGP; }
                     if (label instanceof Number) {
-                        label = loadResource(Rez.Strings.HERO) + label;
+                        label = loadResource(Rez.Strings.HERO) as String + label;
                     } else if (label instanceof ResourceId) {
-                        label = loadResource(label);
+                        label = loadResource(label) as String;
                     }
                 }
 
@@ -119,8 +119,8 @@ class ScanMenuDelegate extends Menu2InputDelegate {
 
     private function isDeviceInMenu(device as Ble.ScanResult) as Boolean {
         for (var i=0; i<scanResults.size(); i++) {
-            var res = scanResults[i];
-            if (res.get(:device).isSameDevice(device)) {
+            var dev = scanResults[i].get(:device);
+            if (dev !=null and dev.isSameDevice(device)) {
                 return true;
             }
         }
@@ -128,7 +128,10 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     }
 
     public function onSelect(item as MenuItem) as Void {
-        switch (item.getId()) {
+        var id = item.getId();
+        if (id == null) { return; }
+        
+        switch (id) {
             case 0xF0: // status
                 if (scanState==Ble.SCAN_STATE_OFF) {
                     startScan();
