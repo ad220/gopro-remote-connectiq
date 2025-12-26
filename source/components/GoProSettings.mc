@@ -44,7 +44,7 @@ class GoProSettings {
         111 => [2700, 4.3],
         112 => [4000, 4.3],
         113 => [5300, 4.3],
-    } as Dictionary<Char, Array<Numeric>>;
+    } as Dictionary<Char, [Number, Numeric]>;
 
     public static const FRAMERATE_MAP = {
         0  => 240,
@@ -62,7 +62,7 @@ class GoProSettings {
         17 => 300,
     } as Dictionary<Char, Number>;
 
-    public static const FRAMERATE_LABEL = WatchUi.loadResource(Rez.Strings._FPS);
+    public static const FRAMERATE_LABEL = WatchUi.loadResource(Rez.Strings._FPS) as String;
 
     public enum LedId {
         LED_OFF         = 0,
@@ -142,26 +142,27 @@ class GoProSettings {
     protected var settings as Dictionary<SettingId, Char>;
 
     function initialize() {
-        self.settings = {};
+        self.settings = {} as Dictionary<SettingId, Char>;
     }
 
     public function getSetting(id as SettingId) as Char? {
-        return settings[id];
+        return settings.get(id);
     }
 
-    public function getSettings() as Dictionary {
+    public function getSettings() as Dictionary<SettingId, Char> {
         return settings;
     }
 
     public static function getLabel(settingId as GoProSettings.SettingId, setting as Char?) as String or ResourceId {
+        var label = "";
         try {
-            if (setting == null) { throw new Exception(); }
-            
+            if (setting == null) { return label; }
+
             switch (settingId) {
                 case RESOLUTION:
                 case RATIO:
-                    var tuple = RESOLUTION_MAP.get(setting); // 3 crash on this line in v3.4.3
-                    if (tuple == null) { throw new Exception(); }
+                    var tuple = RESOLUTION_MAP.get(setting);
+                    if (tuple == null) { return label; }
 
                     if (settingId == RESOLUTION) {
                         var res = tuple[0];
@@ -175,27 +176,36 @@ class GoProSettings {
                     var ratio = tuple[1];
                     if (ratio<45) {
                         ratio = ratio.format("%.2f");
-                        return ratio.substring(null, ratio.find(".")) + ":" + ratio.substring(ratio.find(".")+1, ratio.find("0"));
+                        var dotPlace = ratio.find(".");
+                        if (dotPlace == null) { return ""; }
+                        return ratio.substring(null, dotPlace) + ":" + ratio.substring(dotPlace+1, ratio.find("0"));
                     } else {
                         return ratio + "°";
                     }
                     
                 case LENS:
-                    return LENS_LABELS.get(setting as LensId);
+                    label = LENS_LABELS.get(setting as LensId);
+                    break;
                 case FRAMERATE:
                     return FRAMERATE_MAP.get(setting) + FRAMERATE_LABEL;
                 case LED:
-                    return LED_LABELS.get(setting as LedId);
+                    label = LED_LABELS.get(setting as LedId);
+                    break;
                 case HYPERSMOOTH:
-                    return HYPERSMOOTH_LABELS.get(setting as HypersmoothId);
+                    label = HYPERSMOOTH_LABELS.get(setting as HypersmoothId);
+                    break;
                 default:
                     throw new Exception();
             }
         } catch (ex) {
             System.println("Error while retrieving setting label");
             System.println(ex.getErrorMessage());
-            return "";
+            return label;
         }
+
+        if (label == null) { label = ""; }
+        return label;
+        // TODO: error msg for unknown ids
     }
 
     public function getDescription() as String {
@@ -203,7 +213,8 @@ class GoProSettings {
             return ". . .";
         }
         var res = getLabel(RESOLUTION, settings[RESOLUTION]) as String;
-        var fps = FRAMERATE_MAP.get(settings[FRAMERATE]);
+        var fps = settings[FRAMERATE];
+        if (fps != null) { fps = FRAMERATE_MAP.get(fps); }
         var ratio = getLabel(RATIO, settings[RATIO]) as String;
 
         if (!res.equals("") and fps!=null and !ratio.equals("")) {
@@ -215,7 +226,7 @@ class GoProSettings {
 }
 
 class ResolutionComparator {
-    public function wrappedCompare(a as Char, b as Char, id as Number) as Number {
+    public function wrappedCompare(a as Char, b as Char, id as Number) as Numeric {
         var tupleA = GoProSettings.RESOLUTION_MAP.get(a);
         var tupleB = GoProSettings.RESOLUTION_MAP.get(b);
 
@@ -223,24 +234,25 @@ class ResolutionComparator {
         if (tupleB == null) { tupleB = [0,0]; }
 
         return tupleB[id] - tupleA[id];
+        // TODO: fix ratio comp
     }
 
-    public function compare(resolutionA as Char, resolutionB as Char) as Number {
-        return wrappedCompare(resolutionA, resolutionB, 0);
+    public function compare(resolutionA as Object, resolutionB as Object) as Number {
+        return wrappedCompare(resolutionA as Char, resolutionB as Char, 0).toNumber();
     }
 }
 
 (:typecheck(false))
 class RatioComparator extends ResolutionComparator {
-    public function compare(ratioA as Char, ratioB as Char) as Number {
-        return wrappedCompare(ratioA, ratioB, 1);
+    public function compare(ratioA as Object, ratioB as Object) as Number {
+        return (wrappedCompare(ratioA as Char, ratioB as Char, 1)*10).toNumber();
     }
 }
 
 class FramerateComparator {
-    public function compare(framerateA as Char, framerateB as Char) {
-        var a = GoProSettings.FRAMERATE_MAP.get(framerateA);
-        var b = GoProSettings.FRAMERATE_MAP.get(framerateB);
+    public function compare(framerateA as Object, framerateB as Object) as Number {
+        var a = GoProSettings.FRAMERATE_MAP.get(framerateA as Char);
+        var b = GoProSettings.FRAMERATE_MAP.get(framerateB as Char);
 
         if (a == null) { a=0; }
         if (b == null) { b=0; }

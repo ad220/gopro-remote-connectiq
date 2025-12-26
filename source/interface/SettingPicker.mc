@@ -16,6 +16,7 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
         var comparator = null;
         var items = getApp().gopro.getAvailableSettings(setting);
         var selected = getApp().gopro.getSetting(setting);
+        if (selected==null) { selected = 0xFF as Char; }
         
         switch (setting) {
             case GoProSettings.RESOLUTION:
@@ -24,7 +25,7 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
                 break;
             case GoProSettings.RATIO:
                 titleId = Rez.Strings.Ratio;
-                comparator = new ResolutionComparator();
+                comparator = new RatioComparator();
                 break;
             case GoProSettings.LENS:
                 titleId = Rez.Strings.Lens;

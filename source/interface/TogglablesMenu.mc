@@ -163,7 +163,8 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
 
     public function onKey(keyEvent as KeyEvent) as Boolean {
         if (keyEvent.getKey() == KEY_ENTER) {
-            method(view.getHilighted().behavior).invoke();
+            var callback = view.getHilighted().behavior;
+            if (callback != null) { method(callback).invoke(); }
             return true;
         }
         return false;
@@ -212,8 +213,10 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
             getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.LED), SLIDE_LEFT);
         } else {
             var ledStatus = camera.getSetting(GoProSettings.LED);
-            view.getHilighted().toggleState(ledStatus==0 or ledStatus==100);
-            camera.sendSetting(GoProSettings.LED, available[available.indexOf(ledStatus) ^ 0x01] as Char);
+            if (ledStatus != null) {
+                view.getHilighted().toggleState(ledStatus==0 or ledStatus==100);
+                camera.sendSetting(GoProSettings.LED, available[available.indexOf(ledStatus) ^ 0x01] as Char);
+            }
         }
     }
     

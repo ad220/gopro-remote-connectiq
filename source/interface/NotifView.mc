@@ -18,7 +18,7 @@ class NotifView extends WatchUi.View {
     function initialize(msg as String or ResourceId, type as NotifType) {
         View.initialize();
         
-        self.msg = msg instanceof String ? msg : loadResource(msg);
+        self.msg = msg instanceof String ? msg : loadResource(msg) as String;
         self.type = type;
     }
 

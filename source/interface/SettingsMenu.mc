@@ -24,8 +24,8 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
 
     public function initialize(menuId as SettingsMenuDelegate.MenuId, itemId as Char, labelId as ResourceId, iconId as ResourceId) {
         self.menuId = menuId;
-        self.label = loadResource(labelId);
-        self.icon = loadResource(iconId);
+        self.label = loadResource(labelId) as String;
+        self.icon = loadResource(iconId) as BitmapResource;
 
         if (menuId == SettingsMenuDelegate.CAMERA) {
             self.gopro = getApp().gopro;
@@ -88,7 +88,7 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
         self.viewController = getApp().viewController;
 
         var title = menuId == CAMERA ? loadResource(Rez.Strings.GoPro) : loadResource(Rez.Strings.Settings);
-        menu.setTitle(new OptionPickerTitle(title));
+        menu.setTitle(new OptionPickerTitle(title as String));
         
         if (menuId != CAMERA) {
             if (menuId == MAIN) {

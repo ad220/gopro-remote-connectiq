@@ -23,7 +23,7 @@ class GoProDelegate extends Ble.BleDelegate {
     protected var isConnected as Boolean;
 
     private var scanStateChangeCallback as Method(state as Ble.ScanState) as Void?;
-    private var scanResultCallback as Method(scanResults as [Ble.ScanResult]) as Void?;
+    private var scanResultCallback as Method(scanResults as Array<Ble.ScanResult>) as Void?;
 
     protected var requestQueue as GattRequestQueue?;
 
@@ -53,7 +53,7 @@ class GoProDelegate extends Ble.BleDelegate {
         }
     }
 
-    public function setScanResultCallback(callback as Method(scanResults as [Ble.ScanResult]) as Void?) as Void{
+    public function setScanResultCallback(callback as Method(scanResults as Array<Ble.ScanResult>) as Void?) as Void{
         scanResultCallback = callback;
     }
 
@@ -80,6 +80,8 @@ class GoProDelegate extends Ble.BleDelegate {
     }
 
     public function pair(device as Ble.ScanResult?) as Void {
+        if (device == null) { return; }
+
         System.println("Trying to pair / connect to " + device.getDeviceName());
         pairingTimer = getApp().timerController.start(method(:onPairingFailed), 20, false);
         try {
@@ -165,7 +167,7 @@ class GoProDelegate extends Ble.BleDelegate {
             return;
         }
 
-        getApp().gopro = new GoProCamera(requestQueue, method(:onDisconnect));
+        getApp().gopro = new GoProCamera(requestQueue as GattRequestQueue, method(:onDisconnect));
         getApp().gopro.registerSettings();
 
         keepAliveTimer = getApp().timerController.start(method(:keepAlive), 8, true);
@@ -174,7 +176,7 @@ class GoProDelegate extends Ble.BleDelegate {
 
     public function keepAlive() as Void {
         System.println("KeepAlive, isConnected: "+isConnected);
-        if (isConnected) {
+        if (isConnected and requestQueue != null) {
             var data = [0x03, 0x5b, 0x01, 0x42]b;
             requestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_SETTINGS_CHAR), data);
         }
@@ -186,8 +188,11 @@ class GoProDelegate extends Ble.BleDelegate {
         if (isConnected) {
             isConnected = false;
             getApp().timerController.stop(keepAliveTimer);
-            requestQueue.close();
             getApp().viewController.returnHome(null, null);
+        }
+        if (requestQueue != null) {
+            requestQueue.close();
+            requestQueue = null;
         }
     }
 
@@ -218,7 +223,8 @@ class GoProDelegate extends Ble.BleDelegate {
         } else if (response[0] & 0xe0 == 0x40) { // 16-bit length packet
             queryReplyLength = (response[1] << 8) + response[2];
             queryReplyBuffer = response.slice(3, null);
-        } else if ((response[0] & 0x80) == 0x80) { // Continuation packet
+        } else if ((response[0] & 0x80) == 0x80 and queryReplyBuffer != null) { // Continuation packet
+            // TODO: error msg if buffer null
             queryReplyBuffer.addAll(response.slice(1, null));
             if (queryReplyBuffer.size() == queryReplyLength) {
                 readTLVMessage(queryReplyBuffer);
@@ -277,10 +283,16 @@ class GoProDelegate extends Ble.BleDelegate {
     }
 
     public function onCharacteristicWrite(characteristic as Ble.Characteristic, status as Ble.Status) as Void {
-        requestQueue.onRequestProcessed(GattRequest.WRITE_CHARACTERISTIC, characteristic.getUuid(), status);
+        // TODO: error msg
+        if (requestQueue != null) {
+            requestQueue.onRequestProcessed(GattRequest.WRITE_CHARACTERISTIC, characteristic.getUuid(), status);
+        }
     }
 
     public function onDescriptorWrite(descriptor as Ble.Descriptor, status as Ble.Status) as Void {
-        requestQueue.onRequestProcessed(GattRequest.REGISTER_NOTIFICATION, descriptor.getUuid(), status);        
+        // TODO: error msg
+        if (requestQueue != null) {
+            requestQueue.onRequestProcessed(GattRequest.REGISTER_NOTIFICATION, descriptor.getUuid(), status);
+        }
     }
 }

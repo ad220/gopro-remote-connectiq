@@ -13,7 +13,7 @@ class OptionPickerTitle extends WatchUi.Drawable {
     public function initialize(title as String or ResourceId) {
         Drawable.initialize({});
 
-        self.title = title instanceof String ? title : loadResource(title);
+        self.title = title instanceof String ? title : loadResource(title) as String;
     }
 
     public function draw(dc as Dc) as Void {

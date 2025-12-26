@@ -16,10 +16,9 @@ class GattRequestQueue {
         self.isProcessing = false;
     }
 
-    public function add(type as GattRequest.RequestType, uuid as Ble.Uuid, data as ByteArray) {
-        var request = new GattRequest(type, uuid, data);
+    public function add(type as GattRequest.RequestType, uuid as Ble.Uuid, data as ByteArray) as Void {
+        var request = new GattRequest(type, uuid, data, self);
         System.println("Message added to queue, data: "+data);
-        request.setCallbacks(method(:sendRequest), method(:onRequestFail));
         queue.add(request);
         if (!isProcessing) {
             sendRequest();
@@ -48,7 +47,7 @@ class GattRequestQueue {
         request.startTimer();
     }
     
-    public function onRequestProcessed(type as GattRequest.RequestType, uuid as Ble.Uuid, status as Ble.Status) {
+    public function onRequestProcessed(type as GattRequest.RequestType, uuid as Ble.Uuid, status as Ble.Status) as Void {
         var request = queue[0];
         if (request != null and (type==GattRequest.REGISTER_NOTIFICATION or uuid.equals(request.getUuid())) and status==Ble.STATUS_SUCCESS) {
             System.println("Write op went successfully");
@@ -93,15 +92,14 @@ class GattRequest {
     private var data as ByteArray;
     private var done as Boolean;
     private var failCounter as Number;
-
-    private var retryCallback as (Method() as Void)?;
-    private var tooManyFailsCallback as (Method() as Void)?;
+    private var queue as WeakReference<GattRequestQueue>;
 
 
-    public function initialize(type as RequestType, uuid as Ble.Uuid, data as ByteArray) {
+    public function initialize(type as RequestType, uuid as Ble.Uuid, data as ByteArray, queue as GattRequestQueue) {
         self.type = type;
         self.uuid = uuid;
         self.data = data;
+        self.queue = queue.weak();
         self.done = false;
         self.failCounter = 0;
     }
@@ -122,11 +120,6 @@ class GattRequest {
         return done;
     }
 
-    public function setCallbacks(retryCallback as Method() as Void, tooManyFailsCallback as Method() as Void) as Void {
-        self.retryCallback = retryCallback;
-        self.tooManyFailsCallback = tooManyFailsCallback;
-    }
-
     public function startTimer() as Void {
         if (failCounter==0) {
             getApp().timerController.start(method(:onTimeOut), 2, false);
@@ -134,12 +127,12 @@ class GattRequest {
     }
 
     public function onTimeOut() as Void {
-        if (!done) {
+        if (!done and queue.stillAlive()) {
             failCounter++;
             if (failCounter<3) {
-                retryCallback.invoke();
+                queue.get().sendRequest();
             } else {
-                tooManyFailsCallback.invoke();
+                queue.get().onRequestFail();
             }
         }
     }
