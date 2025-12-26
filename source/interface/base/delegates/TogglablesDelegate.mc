@@ -19,7 +19,8 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
 
     public function onKey(keyEvent as KeyEvent) as Boolean {
         if (keyEvent.getKey() == KEY_ENTER) {
-            method(view.getHilighted().behavior).invoke();
+            var callback = view.getHilighted().behavior;
+            if (callback != null) { method(callback).invoke(); }
             return true;
         }
         return false;
@@ -47,9 +48,12 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onFlicker() as Void {
-        var flicker = camera.getSetting(GoProSettings.FLICKER) as Number;
-        view.getHilighted().toggleState(flicker & 0x01 == 0);
-        camera.sendSetting(GoProSettings.FLICKER, (flicker ^ 0x01) as Char);
+        var flicker = camera.getSetting(GoProSettings.FLICKER);
+        if (flicker != null) {
+            flicker = flicker.toNumber();
+            view.getHilighted().toggleState(flicker & 0x01 == 0);
+            camera.sendSetting(GoProSettings.FLICKER, (flicker ^ 0x01) as Char);
+        }
     }
     
     public function onPower() as Void {
@@ -65,14 +69,16 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
             getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.LED), SLIDE_LEFT);
         } else {
             var ledStatus = camera.getSetting(GoProSettings.LED);
-            view.getHilighted().toggleState(ledStatus==0 or ledStatus==100);
-            camera.sendSetting(GoProSettings.LED, available[available.indexOf(ledStatus) ^ 0x01] as Char);
+            if (ledStatus != null) {
+                view.getHilighted().toggleState(ledStatus==0 or ledStatus==100);
+                camera.sendSetting(GoProSettings.LED, available[available.indexOf(ledStatus) ^ 0x01] as Char);
+            }
         }
     }
     
     public function onGps() as Void {
         var gps = camera.getSetting(GoProSettings.GPS) as Number?;
-        if (gps!=null and camera.getAvailableSettings(GoProSettings.GPS)!=null) {
+        if (gps!=null) {
             view.getHilighted().toggleState(gps & 0x01 == 0);
             camera.sendSetting(GoProSettings.GPS, (gps ^ 0x01) as Char);
         }

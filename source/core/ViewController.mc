@@ -57,7 +57,7 @@ class ViewController {
                 pop(WatchUi.SLIDE_IMMEDIATE);
             }
             if (viewLayersCount>0) {
-                pop(WatchUi.SLIDE_LEFT);
+                pop(WatchUi.SLIDE_RIGHT);
             }
         }
     }

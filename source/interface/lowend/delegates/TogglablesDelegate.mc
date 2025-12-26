@@ -19,10 +19,11 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
         self.gopro = getApp().gopro;
         gopro.requestStatuses([GoProCamera.BATTERY, GoProCamera.SD_REMAINING]b);
 
-        var flicker = gopro.getSetting(GoProSettings.FLICKER) as Number;
+        var flicker = gopro.getSetting(GoProSettings.FLICKER);
+        if (flicker == null) { flicker = 0; }
         var flickerSub = flicker & 1 ? "50Hz" : "60Hz";
 
-        var gps = gopro.getSetting(GoProSettings.GPS) as Number;
+        var gps = gopro.getSetting(GoProSettings.GPS);
 
         menu.addItem(new MenuItem(      Rez.Strings.HyperSmooth,    gopro.getLabel(GoProSettings.HYPERSMOOTH, null),    :onStab,                            null));
         menu.addItem(new MenuItem(      Rez.Strings.Led,            gopro.getLabel(GoProSettings.LED, null),            :onLed,                             null));
@@ -63,9 +64,11 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
             getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.LED), SLIDE_LEFT);
         } else {
             var ledStatus = gopro.getSetting(GoProSettings.LED);
-            var newStatus = available[available.indexOf(ledStatus) ^ 0x01] as Char;
-            selected.setSubLabel(GoProSettings.getLabel(GoProSettings.LED, newStatus));
-            gopro.sendSetting(GoProSettings.LED, newStatus);
+            if (ledStatus != null) {
+                var newStatus = available[available.indexOf(ledStatus) ^ 0x01];
+                selected.setSubLabel(GoProSettings.getLabel(GoProSettings.LED, newStatus));
+                gopro.sendSetting(GoProSettings.LED, newStatus);
+            }
         }
     }
     
@@ -78,7 +81,7 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
     
     public function onGps() as Void {
         var gps = gopro.getSetting(GoProSettings.GPS) as Number?;
-        if (gps!=null and gopro.getAvailableSettings(GoProSettings.GPS)!=null) {
+        if (gps!=null) {
             (selected as ToggleMenuItem).setEnabled(gps & 0x01 == 0);
             gopro.sendSetting(GoProSettings.GPS, (gps ^ 0x01) as Char);
         }

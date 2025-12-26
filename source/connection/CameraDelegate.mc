@@ -94,7 +94,8 @@ class CameraDelegate {
         } else if (response[0] & 0xe0 == 0x40) { // 16-bit length packet
             queryReplyLength = (response[1] << 8) + response[2];
             queryReplyBuffer = response.slice(3, null);
-        } else if ((response[0] & 0x80) == 0x80) { // Continuation packet
+        } else if ((response[0] & 0x80) == 0x80 and queryReplyBuffer!=null) { // Continuation packet
+            // TODO: error msg if buffer null
             queryReplyBuffer.addAll(response.slice(1, null));
             if (queryReplyBuffer.size() == queryReplyLength) {
                 readTLVMessage(queryReplyBuffer);

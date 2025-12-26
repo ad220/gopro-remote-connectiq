@@ -13,11 +13,7 @@ class PickerTitle extends WatchUi.Drawable {
     public function initialize(title as String or ResourceId) {
         Drawable.initialize({});
 
-        if (title instanceof ResourceId) {
-            self.title = loadResource(title);
-        } else {
-            self.title = title;
-        }
+        self.title = title instanceof String ? title : loadResource(title) as String;
     }
 
     public function draw(dc as Dc) as Void {

@@ -4,22 +4,23 @@ import Toybox.Lang;
 
 
 class GoProPreset extends GoProSettings {
-    private var id;
+    private var id as String;
 
     public function initialize(id as Char) {
         self.id = "preset#"+id.toNumber();
         GoProSettings.initialize();
 
+        var preset = null;
+
         try {
-            var preset = Application.Storage.getValue(self.id);
-            self.settings = preset as Dictionary<GoProSettings.SettingId, Char>?;
+            preset = Application.Storage.getValue(self.id) as Dictionary<GoProSettings.SettingId, Char>?;
         } catch (exception) {
             // Not an exception on every watch, therefore separate initiation below
             System.println(exception.getErrorMessage());
         }
-        if (self.settings==null or self.settings.isEmpty()) {
+        if (preset==null or preset.isEmpty()) {
             // Default presets defined below
-            self.settings = [
+            preset = [
                 // 4K 16:9, linear, 24fps
                 {RESOLUTION => 1, LENS => LINEAR, FRAMERATE => 10, FLICKER => HZ50, RATIO => 1},
                 // 2K7 16:9, wide, 50fps
@@ -28,10 +29,12 @@ class GoProPreset extends GoProSettings {
                 {RESOLUTION => 9, LENS => LINEAR, FRAMERATE => 9, FLICKER => HZ50, RATIO => 9},
             ][id as Number] as Dictionary<GoProSettings.SettingId, Char>;
         } 
+
+        self.settings = preset;
     }
 
-    public function sync() {
+    public function sync() as Void {
         self.settings = getApp().gopro.getSettings();
-        Application.Storage.setValue(id, self.settings);
+        Application.Storage.setValue(id, self.settings as Dictionary<PropertyKeyType, PropertyValueType>);
     }
 }

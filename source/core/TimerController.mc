@@ -32,16 +32,18 @@ class TimerController {
         return timerCallback;
     }
 
-    public function stop(callback as TimerCallback?) {
-        if (callbackList.remove(callback)) {
+    public function stop(callback as TimerCallback?) as Void {
+        if (callback!=null) {
             callback.clear();
+            
+            callbackList.remove(callback);
             if (callbackList.size()==0) {
                 stopAll();
             }
         }
     }
 
-    public function stopAll() {
+    public function stopAll() as Void {
         callbackList = [];
         timer.stop();
         isRunning = false;
@@ -72,7 +74,7 @@ class TimerCallback {
 
     public function trigger() as Void {
         tickCount = (tickCount + 1) % period;
-        if (tickCount == 0) {
+        if (tickCount == 0 and callback!=null) {
             callback.invoke();
             if (!repeat) {
                 stop();

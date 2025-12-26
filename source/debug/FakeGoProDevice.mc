@@ -118,8 +118,9 @@ using GattProfileManager as GPM;
         };
     }
 
-    public function send(uuid as GattProfileManager.GoProUuid, data as ByteArray) {
+    public function send(uuid as GattProfileManager.GoProUuid, data as ByteArray) as Void {
         var response;
+        
         switch (uuid) {
             case GattProfileManager.UUID_QUERY_CHAR:
                 System.println("query :"+data);
@@ -203,6 +204,7 @@ using GattProfileManager as GPM;
                 break;
 
             default:
+                System.println("Unknown UUID");
                 break;
         }
         // garminDevice.whenCharacteristicWrite(uuid, Ble.STATUS_SUCCESS);

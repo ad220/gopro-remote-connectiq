@@ -56,6 +56,7 @@ class RemoteView extends WatchUi.View {
 
         if (gopro.isRecording()) {
             var recDurationSeconds = gopro.getStatus(GoProCamera.ENCODING_DURATION);
+            if (recDuration == null) { recDuration = 0; }
 
             // Draw the recording circle, blinks every second
             if (recDurationSeconds % 2) {
@@ -65,7 +66,7 @@ class RemoteView extends WatchUi.View {
 
             // Draw the recording duration 
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-            var minutes = Math.floor(recDurationSeconds / 60);
+            var minutes = recDurationSeconds / 60;
             var seconds = recDurationSeconds % 60;
             var timeString = (minutes/100).toString() + (minutes%60).toString() + ":" + (seconds/10).toString() + (seconds%10).toString();
             dc.drawText(ICM.halfW, 0.1*height, ICM.fontTiny, timeString, ICM.JTEXT_MID);

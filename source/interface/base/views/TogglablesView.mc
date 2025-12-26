@@ -34,19 +34,21 @@ class TogglablesView extends WatchUi.View {
         var camera = getApp().gopro;
         camera.requestStatuses([GoProCamera.BATTERY, GoProCamera.SD_REMAINING]b);
 
-        var flicker = camera.getSetting(GoProSettings.FLICKER) as Number;
-        (findDrawableById("FlickerButton") as Togglable).toggleState(flicker & 0x01 != 0);
+        var flicker = camera.getSetting(GoProSettings.FLICKER);
+        (findDrawableById("FlickerButton") as Togglable).toggleState(
+            flicker != null ? flicker.toNumber() & 1 != 0 : false
+        );
         
-        var gps = camera.getSetting(GoProSettings.GPS) as Number;
+        var gps = camera.getSetting(GoProSettings.GPS);
         (findDrawableById("GpsButton") as Togglable).toggleState(gps==1);
         
-        var led = camera.getSetting(GoProSettings.LED) as Number;
+        var led = camera.getSetting(GoProSettings.LED);
         (findDrawableById("LedButton") as Togglable).toggleState(
             led!=GoProSettings.LED_OFF and
             led!=GoProSettings.LED_ALL_OFF
         );
         
-        var hypersmooth = camera.getSetting(GoProSettings.HYPERSMOOTH) as Number;
+        var hypersmooth = camera.getSetting(GoProSettings.HYPERSMOOTH);
         (findDrawableById("StabilizeButton") as Togglable).toggleState(hypersmooth != GoProSettings.HS_OFF);
     }
 

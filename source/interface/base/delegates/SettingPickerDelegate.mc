@@ -17,8 +17,10 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
         var items = getApp().gopro.getAvailableSettings(setting);
         
         var selected = getApp().gopro.getSetting(setting);
+        if (selected==null) { selected = 0xFF as Char; }
+
         if      (setting == GoProSettings.RESOLUTION)   { titleId = Rez.Strings.Resolution;     comparator = new ResolutionComparator(); }
-        else if (setting == GoProSettings.RATIO)        { titleId = Rez.Strings.Ratio;          comparator = new ResolutionComparator(); }
+        else if (setting == GoProSettings.RATIO)        { titleId = Rez.Strings.Ratio;          comparator = new RatioComparator(); }
         else if (setting == GoProSettings.LENS)         { titleId = Rez.Strings.Lens; }
         else if (setting == GoProSettings.FRAMERATE)    { titleId = Rez.Strings.Framerate;      comparator = new FramerateComparator(); }
         else if (setting == GoProSettings.LED)          { titleId = Rez.Strings.Led; }

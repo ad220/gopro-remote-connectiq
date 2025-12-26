@@ -27,10 +27,10 @@ module InterfaceComponentsManager {
     }
 
     (:highend)
-    function loadFonts() as Void{
-        fontTiny = WatchUi.loadResource(Rez.Fonts.Tiny);
-        fontSmall = WatchUi.loadResource(Rez.Fonts.Small);
-        fontMedium = WatchUi.loadResource(Rez.Fonts.Medium);
+    function loadFonts() as Void {
+        fontTiny = WatchUi.loadResource(Rez.Fonts.Tiny) as FontResource;
+        fontSmall = WatchUi.loadResource(Rez.Fonts.Small) as FontResource;
+        fontMedium = WatchUi.loadResource(Rez.Fonts.Medium) as FontResource;
     }
     
     (:lowend)

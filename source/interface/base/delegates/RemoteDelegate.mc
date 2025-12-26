@@ -23,7 +23,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
 
     public function onMenu() as Boolean {
         if (!gopro.isRecording()) {
-            var menu = new CustomMenu((0.15*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {});
+            var menu = new CustomMenu((0.15*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, null);
             getApp().viewController.switchTo(menu, new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, []), SLIDE_UP);
             getApp().gopro.subscribeChanges(
                 CameraDelegate.REGISTER_AVAILABLE,
@@ -48,7 +48,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
             getApp().viewController.push(view, new TogglablesDelegate(view), SLIDE_DOWN);
             getApp().gopro.subscribeChanges(
                 CameraDelegate.REGISTER_AVAILABLE,
-                [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.GPS, GoProSettings.HYPERSMOOTH]b
+                [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.HYPERSMOOTH]b
             );
             return true;
         }

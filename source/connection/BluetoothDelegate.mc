@@ -59,9 +59,11 @@ class BluetoothDelegate extends CameraDelegate {
     }
 
     public function connect(device as Ble.ScanResult?) as Void {
+        if (device == null) { throw new Exception(); }
         CameraDelegate.connect(device);
+
         try {
-        pairingDevice = Ble.pairDevice(device);
+            pairingDevice = Ble.pairDevice(device);
         } catch (ex) {
             var view = new NotifView(Rez.Strings.PairingFail, NotifView.NOTIF_ERROR);
             getApp().viewController.push(view, new NotifDelegate(), WatchUi.SLIDE_UP);
@@ -111,6 +113,14 @@ class BluetoothDelegate extends CameraDelegate {
         var service = device.getService(Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE));
         if (service != null) {
             requestQueue = new GattRequestQueue(service);
+        } else {
+            try {
+                Ble.unpairDevice(device);
+            } catch (ex) {}
+
+            onDisconnect();
+            onPairingFailed();
+            return;
         }
 
         CameraDelegate.onConnect(device);
@@ -119,7 +129,7 @@ class BluetoothDelegate extends CameraDelegate {
     }
 
     public function keepAlive() as Void {
-        if (connected) {
+        if (connected and requestQueue != null) {
             var data = [0x03, 0x5b, 0x01, 0x42]b;
             requestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_SETTINGS_CHAR), data);
         }
@@ -129,8 +139,11 @@ class BluetoothDelegate extends CameraDelegate {
         // put camera to sleep and close connection
         if (connected) {
             getApp().timerController.stop(keepAliveTimer);
-            requestQueue.close();
             Ble.setDelegate(null as Ble.BleDelegate);
+        }
+        if (requestQueue != null) {
+            requestQueue.close();
+            requestQueue = null;
         }
         CameraDelegate.onDisconnect();
     }
@@ -160,10 +173,16 @@ class BluetoothDelegate extends CameraDelegate {
     }
 
     public function onCharacteristicWrite(characteristic as Ble.Characteristic, status as Ble.Status) as Void {
-        requestQueue.onRequestProcessed(GattRequest.WRITE_CHARACTERISTIC, characteristic.getUuid(), status);
+        // TODO: error msg
+        if (requestQueue != null) {
+            requestQueue.onRequestProcessed(GattRequest.WRITE_CHARACTERISTIC, characteristic.getUuid(), status);
+        }
     }
 
     public function onDescriptorWrite(descriptor as Ble.Descriptor, status as Ble.Status) as Void {
-        requestQueue.onRequestProcessed(GattRequest.REGISTER_NOTIFICATION, descriptor.getUuid(), status);
+        // TODO: error msg
+        if (requestQueue != null) {
+            requestQueue.onRequestProcessed(GattRequest.REGISTER_NOTIFICATION, descriptor.getUuid(), status);
+        }
     }
 }
