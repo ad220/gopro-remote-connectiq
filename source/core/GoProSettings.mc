@@ -17,34 +17,34 @@ class GoProSettings {
     }
 
     public static const RESOLUTION_MAP = {
-        1   => [4000, 16.9],
-        4   => [2700, 16.9],
-        6   => [2700, 4.3],
-        7   => [1440, 16.9],
-        9   => [1080, 16.9],
-        12  => [720, 16.9],
-        18  => [4000, 4.3],
-        21  => [5600, 360],
-        24  => [5000, 16.9],
-        25  => [5000, 4.3],
-        26  => [5300, 8.7],
-        27  => [5300, 4.3],
-        28  => [4000, 8.7],
-        31  => [8000, 360],
-        35  => [5300, 21.9],
-        36  => [4000, 21.9],
-        37  => [4000, 1.1],
-        38  => [900, 16.9],
-        39  => [4000, 360],
-        100 => [5300, 16.9],
-        107 => [5300, 8.7],
-        108 => [4000, 8.7],
-        109 => [4000, 9.16],
-        110 => [1080, 9.16],
-        111 => [2700, 4.3],
-        112 => [4000, 4.3],
-        113 => [5300, 4.3],
-    } as Dictionary<Char, [Number, Numeric]>;
+        1   => [4000,   16 + 9  << 16],
+        4   => [2700,   16 + 9  << 16],
+        6   => [2700,   4  + 3  << 16],
+        7   => [1440,   16 + 9  << 16],
+        9   => [1080,   16 + 9  << 16],
+        12  => [720,    16 + 9  << 16],
+        18  => [4000,   4  + 3  << 16],
+        21  => [5600,   360 << 16],
+        24  => [5000,   16 + 9  << 16],
+        25  => [5000,   4  + 3  << 16],
+        26  => [5300,   8  + 7  << 16],
+        27  => [5300,   4  + 3  << 16],
+        28  => [4000,   8  + 7  << 16],
+        31  => [8000,   360 << 16],
+        35  => [5300,   21 + 9  << 16],
+        36  => [4000,   21 + 9  << 16],
+        37  => [4000,   1  + 1  << 16],
+        38  => [900,    16 + 9  << 16],
+        39  => [4000,   360 << 16],
+        100 => [5300,   16 + 9  << 16],
+        107 => [5300,   8  + 7  << 16],
+        108 => [4000,   8  + 7  << 16],
+        109 => [4000,   9  + 16 << 16],
+        110 => [1080,   9  + 16 << 16],
+        111 => [2700,   4  + 3  << 16],
+        112 => [4000,   4  + 3  << 16],
+        113 => [5300,   4  + 3  << 16],
+    } as Dictionary<Char, [Number, Number]>;
 
     public static const FRAMERATE_MAP = {
         0  => 240,
@@ -80,7 +80,7 @@ class GoProSettings {
         LED_ALL_OFF     => Rez.Strings.AllOff,
         LED_FRONT_OFF   => Rez.Strings.FrontOffOnly,
         LED_BACK_ONLY   => Rez.Strings.BackOnly,
-    } as Dictionary<LedId, ResourceId>;
+    } as Dictionary<LedId or Char, ResourceId>;
 
     public enum LensId {
         WIDE            = 0,
@@ -112,7 +112,7 @@ class GoProSettings {
         ULTRAWIDE       => Rez.Strings._ULTRAWIDE,
         ULTRALINEAR     => Rez.Strings._ULTRALINEAR,
         ULTRAHYPERVIEW  => Rez.Strings._ULTRAHYPERVIEW,
-    } as Dictionary<LensId, ResourceId>;
+    } as Dictionary<LensId or Char, ResourceId>;
 
     public enum FlickerId {
         NTSC,
@@ -137,7 +137,7 @@ class GoProSettings {
         HS_BOOST        => Rez.Strings.Boost,
         HS_AUTO_BOOST   => Rez.Strings.AutoBoost,
         HS_STANDARD     => Rez.Strings.Standard,
-    } as Dictionary<HypersmoothId, ResourceId>;
+    } as Dictionary<HypersmoothId or Char, ResourceId>;
 
     protected var settings as Dictionary<SettingId, Char>;
 
@@ -154,52 +154,46 @@ class GoProSettings {
     }
 
     public static function getLabel(id as GoProSettings.SettingId, setting as Char?) as String or ResourceId {
-        try {
-            // TODO: inspect null exception
-            if (setting == null) {
-                setting = getApp().gopro.getSetting(id);
-                if (setting == null) { throw new Exception(); }
-            }
+        var label = "";
 
-            if (id <= RESOLUTION)   {
-                var tuple = RESOLUTION_MAP[setting];
-                if (tuple == null) {
-                    throw new Exception();
-                }
-
-                if (id == RESOLUTION) {
-                    var res = tuple[0];
-                    if (res < 2000) {
-                        return res + "p";
-                    } else {
-                        return res%1000==0 ? res/1000+"K" : (res/1000.0).format("%.1f")+"K"; 
-                    }
-                } else { // RATIO
-                    var ratio = tuple[1];
-                    if (ratio<45) {
-                        ratio = ratio.format("%.2f");
-                        var length = ratio.find("0");
-                        length = length ? length : ratio.length();
-                        return ratio.substring(0, ratio.find(".")) + ":" + ratio.substring(ratio.find(".")+1, length);
-                    } else {
-                        return ratio + "°";
-                    }
-                }
-            }
-            if (id == LENS)         { return LENS_LABELS.get(setting as LensId); }
-            if (id == FRAMERATE)    { return FRAMERATE_MAP.get(setting) + FRAMERATE_LABEL; }
-            if (id == LED)          { return LED_LABELS.get(setting as LedId); }
-            if (id == HYPERSMOOTH)  { return HYPERSMOOTH_LABELS.get(setting as HypersmoothId); }
-            else {
-                System.println("Unknown setting ID requested for label");
-                return "";
-            }
-            
-        } catch (ex) {
-            System.println("Error while retrieving setting label");
-            System.println(ex.getErrorMessage());
-            return "";
+        if (setting == null) {
+            setting = getApp().gopro.getSetting(id);
+            if (setting == null) { return label; }
         }
+
+        if (id <= RESOLUTION)   {
+            var tuple = RESOLUTION_MAP.get(setting);
+            if (tuple == null) { return label; }
+
+            // Resolution label
+            if (id == RESOLUTION) {
+                var res = tuple[0];
+                if (res < 2000) {
+                    return res + "p";
+                } else {
+                    return res%1000==0 ? res/1000+"K" : (res/1000.0).format("%.1f")+"K"; 
+                }
+            
+            // Ratio label
+            } else {
+                var ratio = tuple[1];
+                if (ratio & 0xFFFF != 0) {
+                    return ratio & 0xFF + ":" + ratio >> 16;
+                } else {
+                    return ratio >> 16 + "°";
+                }
+            }
+        }
+        else if (id == LENS)         { label = LENS_LABELS.get(setting); }
+        else if (id == FRAMERATE)    { return FRAMERATE_MAP.get(setting) + FRAMERATE_LABEL; }
+        else if (id == LED)          { label = LED_LABELS.get(setting); }
+        else if (id == HYPERSMOOTH)  { label = HYPERSMOOTH_LABELS.get(setting); }
+        else {
+            System.println("Unknown setting ID requested for label");
+            return label;
+        }
+        
+        return label == null ? "" : label;
         // TODO: error msg for unknown ids
     }
 
@@ -230,8 +224,13 @@ class ResolutionComparator {
         if (tupleA == null) { tupleA = [0,0]; }
         if (tupleB == null) { tupleB = [0,0]; }
 
-        return tupleB[id] - tupleA[id];
-        // TODO: fix ratio comp
+        if (id == 0) {
+            return tupleB[0] - tupleA[0];
+        } else {
+            var ratioA = tupleA[1];
+            var ratioB = tupleB[1];
+            return (ratioA & 0xFFFF / (ratioA >> 16).toFloat()) - (ratioB & 0xFFFF / (ratioB >> 16).toFloat());
+        }
     }
 
     public function compare(resolutionA, resolutionB) as Numeric {

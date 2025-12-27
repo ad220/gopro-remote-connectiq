@@ -57,7 +57,19 @@ using GattProfileManager as GPM;
             GoProSettings.LINEAR      => [0,1,2,5,6,8,9,10,13],
             GoProSettings.LINEARLOCK  => [1,2,5,6,8,9,10],
             GoProSettings.LINEARLEVEL => [0,13],
-        }
+        },
+        // 36  => {
+        //     GoProSettings.WIDE        => [8,9],
+        // },
+        // 37  => {
+        //     GoProSettings.WIDE        => [8,9],
+        // },
+        // 39  => {
+        //     GoProSettings.WIDE        => [8,9],
+        // },
+        // 109 => {
+        //     GoProSettings.WIDE        => [8,9],
+        // },
     } as Dictionary<Char or Number, Dictionary<GoProSettings.LensId or Char, Array<Char or Number>>>;
 
     private static const AVAILABLE_FLICKER_H11 = [
