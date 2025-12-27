@@ -3,28 +3,28 @@
 
     <layout id="TogglablesLayout" background="Gfx.COLOR_BLACK">
         <button id="FlickerButton" class="Togglable" x="68.53%" y="49.27%" width="20%" height="20%" behavior="onFlicker">
-            <state id="stateDefault" bitmap="@Drawables.Flicker60" />
-            <param name="stateToggled">Rez.Drawables.Flicker50</param>
+            <param name="defaultBmpId">Rez.Drawables.Flicker60</param>
+            <param name="activatedBmpId">Rez.Drawables.Flicker50</param>
         </button>
 
         <button id="PowerButton" class="Togglable" x="40.0%" y="70.0%" width="20%" height="20%" behavior="onPower">
-            <state id="stateDefault" bitmap="@Drawables.PowerOn" />
-            <param name="stateToggled">Rez.Drawables.PowerOff</param>
+            <param name="defaultBmpId">Rez.Drawables.PowerOn</param>
+            <param name="activatedBmpId">Rez.Drawables.PowerOff</param>
         </button>
 
         <button id="LedButton" class="Togglable" x="11.47%" y="49.27%" width="20%" height="20%" behavior="onLed">
-            <state id="stateDefault" bitmap="@Drawables.LedOff" />
-            <param name="stateToggled">Rez.Drawables.LedOn</param>
+            <param name="defaultBmpId">Rez.Drawables.LedOff</param>
+            <param name="activatedBmpId">Rez.Drawables.LedOn</param>
         </button>
         
         <button id="GpsButton" class="Togglable" x="22.37%" y="15.73%" width="20%" height="20%" behavior="onGps">
-            <state id="stateDefault" bitmap="@Drawables.GpsOff" />
-            <param name="stateToggled">Rez.Drawables.GpsOn</param>
+            <param name="defaultBmpId">Rez.Drawables.GpsOff</param>
+            <param name="activatedBmpId">Rez.Drawables.GpsOn</param>
         </button>
 
         <button id="StabilizeButton" class="Togglable" x="57.63%" y="15.73%" width="20%" height="20%" behavior="onStabilize">
-            <state id="stateDefault" bitmap="@Drawables.StabilizeOff" />
-            <param name="stateToggled">Rez.Drawables.StabilizeOn</param>
+            <param name="defaultBmpId">Rez.Drawables.StabilizeOff</param>
+            <param name="activatedBmpId">Rez.Drawables.StabilizeOn</param>
         </button>
     </layout>
 

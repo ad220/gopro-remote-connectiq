@@ -40,6 +40,9 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
 
     public function onSelectable(selectableEvent as SelectableEvent) as Boolean {
         var button = selectableEvent.getInstance();
+        if (button.getState() == :stateHighlighted) {
+            button.setState(selectableEvent.getPreviousState());
+        }
         if (button instanceof Togglable) {
             view.onTouch(button);
             return true;
@@ -65,13 +68,23 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     public function onLed() as Void {
         var available = camera.getAvailableSettings(GoProSettings.LED);
         if (available.size()>2) {
-            var menu = new CustomMenu((0.1*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.15*ICM.screenH).toNumber()<<1});
+            var menu = new CustomMenu(
+                (0.1*ICM.screenH).toNumber()<<1,
+                Graphics.COLOR_BLACK,
+                {:titleItemHeight => (0.15*ICM.screenH).toNumber() << 1}
+            );
             getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.LED), SLIDE_LEFT);
         } else {
             var ledStatus = camera.getSetting(GoProSettings.LED);
             if (ledStatus != null) {
-                view.getHilighted().toggleState(ledStatus==0 or ledStatus==100);
-                camera.sendSetting(GoProSettings.LED, available[available.indexOf(ledStatus) ^ 0x01] as Char);
+                view.getHilighted().toggleState(
+                    ledStatus==GoProSettings.LED_OFF or 
+                    ledStatus==GoProSettings.LED_ALL_OFF
+                );
+                camera.sendSetting(
+                    GoProSettings.LED,
+                    available[available.indexOf(ledStatus) ^ 0x01] as Char
+                );
             }
         }
     }
