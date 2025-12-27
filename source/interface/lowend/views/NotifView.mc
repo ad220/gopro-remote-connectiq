@@ -4,7 +4,7 @@ import Toybox.Lang;
 
 using InterfaceComponentsManager as ICM;
 
-(:lowend)
+
 class NotifView extends WatchUi.View {
 
     public enum NotifType {

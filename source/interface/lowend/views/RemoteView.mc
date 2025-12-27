@@ -4,7 +4,7 @@ import Toybox.Graphics;
 
 using InterfaceComponentsManager as ICM;
 
-(:lowend)
+
 class RemoteView extends WatchUi.View {
 
     private var hilightIcon as BitmapResource?;
@@ -56,7 +56,7 @@ class RemoteView extends WatchUi.View {
 
         if (gopro.isRecording()) {
             var recDurationSeconds = gopro.getStatus(GoProCamera.ENCODING_DURATION);
-            if (recDuration == null) { recDuration = 0; }
+            if (recDurationSeconds == null) { recDurationSeconds = 0; }
 
             // Draw the recording circle, blinks every second
             if (recDurationSeconds % 2) {
