@@ -168,14 +168,14 @@ class GoProSettings {
                 }
 
                 if (id == RESOLUTION) {
-                    var res = (tuple as Array)[0];
+                    var res = tuple[0];
                     if (res < 2000) {
                         return res + "p";
                     } else {
                         return res%1000==0 ? res/1000+"K" : (res/1000.0).format("%.1f")+"K"; 
                     }
                 } else { // RATIO
-                    var ratio = (tuple as Array)[1];
+                    var ratio = tuple[1];
                     if (ratio<45) {
                         ratio = ratio.format("%.2f");
                         var length = ratio.find("0");

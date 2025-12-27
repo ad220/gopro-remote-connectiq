@@ -10,6 +10,7 @@ class Togglable extends WatchUi.Button {
     private var isActivated as Boolean;
     public var isHilighted as Boolean;
 
+    (:typecheck(false))
     public function initialize(options as Dictionary) {
         Button.initialize(options);
 

@@ -58,7 +58,7 @@ using GattProfileManager as GPM;
             GoProSettings.LINEARLOCK  => [1,2,5,6,8,9,10],
             GoProSettings.LINEARLEVEL => [0,13],
         }
-    } as Dictionary<Char, Dictionary<GoProSettings.LensId or Char, Array<Char or Number>>>;
+    } as Dictionary<Char or Number, Dictionary<GoProSettings.LensId or Char, Array<Char or Number>>>;
 
     private static const AVAILABLE_FLICKER_H11 = [
         GoProSettings.HZ50,
@@ -159,6 +159,7 @@ using GattProfileManager as GPM;
                     case GoProCamera.SHUTTER:
                         statuses.put(GoProCamera.ENCODING, data[3]);
                         var device = garminDevice.get();
+                        if (device == null) { throw new Exception(); }
                         device.onReceive(
                             GattProfileManager.UUID_QUERY_RESPONSE_CHAR,
                             [0x03, CameraDelegate.NOTIF_STATUS, 0x00, GoProCamera.ENCODING, 0x01, data[3]]b
@@ -186,13 +187,14 @@ using GattProfileManager as GPM;
                 var j;
                 switch (minSettingChanged) {
                     case GoProSettings.RESOLUTION:
-                        iter = (AVAILABLE_MAP_H11.get(settings.get(GoProSettings.RESOLUTION))).keys();
+                        var res = settings.get(GoProSettings.RESOLUTION) as Number;
+                        iter = (AVAILABLE_MAP_H11.get(res) as Dictionary).keys();
                         for (j=0; j<iter.size(); j++) {
                             response.addAll([GoProSettings.LENS, 0x01, iter[j]]);
                         }
                     case GoProSettings.LENS:
-                        iter = (AVAILABLE_MAP_H11.get(settings.get(GoProSettings.RESOLUTION)))
-                                                 .get(settings.get(GoProSettings.LENS)) as Array;
+                        iter = ((AVAILABLE_MAP_H11.get(settings.get(GoProSettings.RESOLUTION) as Char)) as Dictionary)
+                                                  .get(settings.get(GoProSettings.LENS) as Char) as Array;
                         for (j=0; j<iter.size(); j++) {
                             response.addAll([GoProSettings.FRAMERATE, 0x01, iter[j]]);
                         }
@@ -204,7 +206,7 @@ using GattProfileManager as GPM;
                 break;
 
             default:
-                System.println("Unknown UUID");
+                System.println("Unknown UUID" + uuid);
                 break;
         }
         // garminDevice.whenCharacteristicWrite(uuid, Ble.STATUS_SUCCESS);
@@ -213,6 +215,8 @@ using GattProfileManager as GPM;
     private function responseSplitter(uuid as GattProfileManager.GoProUuid, response as ByteArray) as Void {
         var length = response.size();
         var device = garminDevice.get();
+        if (device == null) { throw new Exception(); }
+
         if (length<20) {
             device.onReceive(uuid, [length]b.addAll(response));
         }
@@ -248,10 +252,14 @@ using GattProfileManager as GPM;
                 available = AVAILABLE_MAP_H11.keys();
                 break;
             case GoProSettings.LENS:
-                available = (AVAILABLE_MAP_H11.get(settings.get(GoProSettings.RESOLUTION)) as Dictionary).keys();
+                available = (AVAILABLE_MAP_H11.get(settings.get(GoProSettings.RESOLUTION) as Char) as Dictionary).keys();
                 break;
             case GoProSettings.FRAMERATE:
-                available = (AVAILABLE_MAP_H11.get(settings.get(GoProSettings.RESOLUTION)) as Dictionary).get(settings.get(GoProSettings.LENS));
+                available = (
+                    AVAILABLE_MAP_H11.get(
+                        settings.get(GoProSettings.RESOLUTION) as Char
+                    ) as Dictionary
+                ).get(settings.get(GoProSettings.LENS) as Char) as Array;
                 break;
             case GoProSettings.LED:
                 available = AVAILABLE_LED_H11;

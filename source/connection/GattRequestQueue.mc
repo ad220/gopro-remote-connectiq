@@ -35,12 +35,20 @@ class GattRequestQueue {
         }
         var characteristic = service.getCharacteristic(request.getUuid());
         try {
+            if (characteristic == null) { throw new Exception(); }
+
+            // Register notifications for characteristic
             if (request.getType() == GattRequest.REGISTER_NOTIFICATION) {
                 var descriptor = characteristic.getDescriptor(Ble.cccdUuid());
-                descriptor.requestWrite(request.getData());
+                if (descriptor != null) {
+                    descriptor.requestWrite(request.getData());
+                }
+
+            // Write request.data in characteristic
             } else {
                 characteristic.requestWrite(request.getData(), {:writeType => Ble.WRITE_TYPE_DEFAULT});
             }
+            
         } catch (ex) {
             System.println(ex.getErrorMessage());
         }
@@ -129,12 +137,14 @@ class GattRequest {
     }
 
     public function onTimeOut() as Void {
-        if (!done and queue.stillAlive()) {
+        // TODO: handle null queue
+        var queueRef = queue.get();
+        if (!done and queueRef != null) {
             failCounter++;
             if (failCounter<3) {
-                queue.get().sendRequest();
+                queueRef.sendRequest();
             } else {
-                queue.get().onRequestFail();
+                queueRef.onRequestFail();
             }
         }
     }

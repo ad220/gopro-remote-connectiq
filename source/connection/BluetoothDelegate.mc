@@ -110,6 +110,8 @@ class BluetoothDelegate extends CameraDelegate {
         Ble.setScanState(Ble.SCAN_STATE_OFF);
         pairingDevice = null;
         
+        if (device == null) { throw new Exception(); }
+
         var service = device.getService(Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE));
         if (service != null) {
             requestQueue = new GattRequestQueue(service);
@@ -132,6 +134,8 @@ class BluetoothDelegate extends CameraDelegate {
         if (connected and requestQueue != null) {
             var data = [0x03, 0x5b, 0x01, 0x42]b;
             requestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_SETTINGS_CHAR), data);
+        } else {
+            throw new Exception();
         }
     }
 
@@ -153,6 +157,7 @@ class BluetoothDelegate extends CameraDelegate {
         uuid as GattProfileManager.GoProUuid,
         data as ByteArray
     ) as Void {
+        if (requestQueue == null) { throw new Exception(); }
         requestQueue.add(type, GattProfileManager.getUuid(uuid), data);
     }
 
@@ -173,16 +178,12 @@ class BluetoothDelegate extends CameraDelegate {
     }
 
     public function onCharacteristicWrite(characteristic as Ble.Characteristic, status as Ble.Status) as Void {
-        // TODO: error msg
-        if (requestQueue != null) {
-            requestQueue.onRequestProcessed(GattRequest.WRITE_CHARACTERISTIC, characteristic.getUuid(), status);
-        }
+        if (requestQueue == null) { throw new Exception(); }
+        requestQueue.onRequestProcessed(GattRequest.WRITE_CHARACTERISTIC, characteristic.getUuid(), status);
     }
 
     public function onDescriptorWrite(descriptor as Ble.Descriptor, status as Ble.Status) as Void {
-        // TODO: error msg
-        if (requestQueue != null) {
-            requestQueue.onRequestProcessed(GattRequest.REGISTER_NOTIFICATION, descriptor.getUuid(), status);
-        }
+        if (requestQueue == null) { throw new Exception(); }
+        requestQueue.onRequestProcessed(GattRequest.REGISTER_NOTIFICATION, descriptor.getUuid(), status);
     }
 }

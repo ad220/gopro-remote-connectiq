@@ -54,6 +54,7 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
                     subText = loadResource(subText);
                 }
             } else {
+                if (gopro == null) { throw new Exception(); }
                 subText = gopro.getDescription();
             }
             dc.drawText(0.6*width, 0.325*height, ICM.fontSmall, label, ICM.JTEXT_MID);

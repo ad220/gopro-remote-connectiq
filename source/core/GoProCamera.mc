@@ -4,6 +4,8 @@ using GattProfileManager as GPM;
 
 class GoProCamera extends GoProSettings {
 
+    typedef TAvailableSettings as Dictionary<GoProSettings.SettingId or Char, Array<Char>>;
+
     public enum StatusId {
         OVERHEATING         = 6,
         BUSY                = 8,
@@ -22,13 +24,13 @@ class GoProCamera extends GoProSettings {
         KEEP_ALIVE  = 0x5B,
     }
 
-    private var delegate as CameraDelegate;
-    protected var disconnectCallback as Method() as Void;
-    protected var statuses as Dictionary<StatusId or Char, Number>;
-    protected var availableSettings as Dictionary<GoProSettings.SettingId or Char, Array<Char>>;
-    private var availableRatios as Dictionary<Numeric, Array<Char>>;
-    private var tmpAvailableSettings as Dictionary<GoProSettings.SettingId or Char, Array<Char>>;
-    protected var progressTimer as TimerCallback?;
+    private     var delegate                as CameraDelegate;
+    protected   var disconnectCallback      as Method() as Void;
+    protected   var statuses                as Dictionary<StatusId or Char, Number>;
+    protected   var availableSettings       as TAvailableSettings;
+    private     var availableRatios         as Dictionary<Numeric, Array<Char>>;
+    private     var tmpAvailableSettings    as TAvailableSettings;
+    protected   var progressTimer           as TimerCallback?;
 
 
     public function initialize(delegate as CameraDelegate, disconnectCallback as Method() as Void) {
@@ -36,10 +38,10 @@ class GoProCamera extends GoProSettings {
         
         self.delegate = delegate;
         self.disconnectCallback = disconnectCallback;
-        self.statuses = {};
-        self.availableSettings = {};
-        self.availableRatios = {};
-        self.tmpAvailableSettings = {};
+        self.statuses               = {}    as Dictionary<StatusId or Char, Number>;
+        self.availableSettings      = {}    as Dictionary<GoProSettings.SettingId or Char, Array<Char>>;
+        self.availableRatios        = {}    as Dictionary<Numeric, Array<Char>>;
+        self.tmpAvailableSettings   = {}    as Dictionary<GoProSettings.SettingId or Char, Array<Char>>;
     }
 
     public function registerSettings() as Void {
@@ -81,7 +83,7 @@ class GoProCamera extends GoProSettings {
         delegate.send(GattRequest.WRITE_CHARACTERISTIC, GPM.UUID_QUERY_CHAR, request);
     }
 
-    public function subscribeChanges(queryId as CameraDelegate.QueryId, values as ByteArray) {
+    public function subscribeChanges(queryId as CameraDelegate.QueryId, values as ByteArray) as Void {
         var request = [values.size()+1, queryId as Char]b;
         request.addAll(values);
         delegate.send(GattRequest.WRITE_CHARACTERISTIC, GPM.UUID_QUERY_CHAR, request);
@@ -152,7 +154,7 @@ class GoProCamera extends GoProSettings {
             tmpValues = tmpAvailableSettings.get(tmpKeys[i]);
             if (tmpValues instanceof Array and tmpValues.size()>0) {
                 if (tmpKeys[i]==RESOLUTION) {
-                    availableRatios = {};
+                    availableRatios = {} as Dictionary<Numeric, Array<Char>>;
                     Helper.sort(tmpValues as Array, new ResolutionComparator());
                     var currentRes = -1;
                     var currentMap = [];
@@ -171,11 +173,13 @@ class GoProCamera extends GoProSettings {
                         }
                     }
                     availableSettings.put(RESOLUTION, availableResolutions);
+
                     var res = settings.get(RESOLUTION);
                     if (res != null) {
                         var tuple = RESOLUTION_MAP.get(res);
                         if (tuple != null) {
-                            availableSettings.put(RATIO, availableRatios.get(tuple[0]));
+                            var avRatios = availableRatios.get(tuple[0]);
+                            if (avRatios != null) { availableSettings.put(RATIO, avRatios); }
                         }
                     }
                 } else {
@@ -183,13 +187,14 @@ class GoProCamera extends GoProSettings {
                 }
             }
         }
-        tmpAvailableSettings = {};
+        tmpAvailableSettings = {} as TAvailableSettings;
     }
 
     public function isRecording() as Boolean {
         return statuses.get(ENCODING)==1;
     }
 
+    (:typecheck(false))
     public function incrementEncodingDuration() as Void {
         if (isRecording()) {
             statuses[ENCODING_DURATION]++;
