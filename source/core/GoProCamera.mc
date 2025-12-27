@@ -153,7 +153,7 @@ class GoProCamera extends GoProSettings {
             if (tmpValues instanceof Array and tmpValues.size()>0) {
                 if (tmpKeys[i]==RESOLUTION) {
                     availableRatios = {};
-                    Helper.sort(tmpValues, new ResolutionComparator() as Helper.Comparator);
+                    Helper.sort(tmpValues as Array, new ResolutionComparator());
                     var currentRes = -1;
                     var currentMap = [];
                     var availableResolutions = [];
