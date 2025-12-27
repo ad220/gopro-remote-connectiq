@@ -7,16 +7,16 @@ using InterfaceComponentsManager as ICM;
 
 class RemoteView extends WatchUi.View {
 
-    private var hilightIcon as BitmapResource?;
-    private var settingsIcon as BitmapResource?;
+    private var hilightIcon as BitmapType?;
+    private var settingsIcon as BitmapType?;
 
     function initialize() {
         View.initialize();
     }
 
     function onShow() as Void {
-        hilightIcon = loadResource(Rez.Drawables.Hilight);
-        settingsIcon = loadResource(Rez.Drawables.Settings);
+        hilightIcon = loadResource(Rez.Drawables.Hilight) as BitmapType;
+        settingsIcon = loadResource(Rez.Drawables.Settings) as BitmapType;
     }
 
     function onHide() as Void {
@@ -46,8 +46,10 @@ class RemoteView extends WatchUi.View {
         dc.drawText(0.55*width, 0.765*height, ICM.fontTiny, gopro.getDescription(), ICM.JTEXT_MID);
         
         // Draw icons
-        dc.drawBitmap(0.156*width, 0.356*height, hilightIcon);
-        dc.drawBitmap(0.21*width, 0.72*height, settingsIcon);
+        if (hilightIcon!=null and settingsIcon!=null) {
+            dc.drawBitmap(0.156*width, 0.356*height, hilightIcon);
+            dc.drawBitmap(0.21*width, 0.72*height, settingsIcon);
+        }
 
         // Draw record circle
         dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_DK_GRAY);
