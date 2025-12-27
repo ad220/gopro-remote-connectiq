@@ -81,7 +81,9 @@ class GattRequestQueue {
 }
 
 
+(:ble)
 class GattRequest {
+    
     public enum RequestType {
         REGISTER_NOTIFICATION,
         WRITE_CHARACTERISTIC,
@@ -139,5 +141,14 @@ class GattRequest {
 
     public function onResponse() as Void {
         done = true;
+    }
+}
+
+(:mobile)
+class GattRequest {
+
+    enum RequestType {
+        REGISTER_NOTIFICATION,
+        WRITE_CHARACTERISTIC,
     }
 }

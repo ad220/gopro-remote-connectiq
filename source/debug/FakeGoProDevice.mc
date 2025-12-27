@@ -58,7 +58,7 @@ using GattProfileManager as GPM;
             GoProSettings.LINEARLOCK  => [1,2,5,6,8,9,10],
             GoProSettings.LINEARLEVEL => [0,13],
         }
-    };
+    } as Dictionary<Char, Dictionary<GoProSettings.LensId or Char, Array<Char or Number>>>;
 
     private static const AVAILABLE_FLICKER_H11 = [
         GoProSettings.HZ50,
@@ -96,8 +96,8 @@ using GattProfileManager as GPM;
 
     private var garminDevice as WeakReference<FakeDelegate>;
 
-    private var settings as Dictionary;
-    private var statuses as Dictionary;
+    private var settings as Dictionary<Char or GoProSettings.SettingId, Char or Number>;
+    private var statuses as Dictionary<Char or GoProCamera.StatusId, Number>;
 
     public function initialize(garminDevice as WeakReference<FakeDelegate>) {
         self.garminDevice = garminDevice;
@@ -109,13 +109,13 @@ using GattProfileManager as GPM;
             GoProSettings.LED           => GoProSettings.LED_ON,
             GoProSettings.HYPERSMOOTH   => GoProSettings.HS_LOW,
             GoProSettings.GPS           => 0,
-        };
+        } as Dictionary<Char, Char>;
         self.statuses = {
             GoProCamera.ENCODING            => 0,
             GoProCamera.ENCODING_DURATION   => 0,
             GoProCamera.BATTERY             => 50,
             GoProCamera.SD_REMAINING        => 4269
-        };
+        } as Dictionary<GoProCamera.StatusId, Number>;
     }
 
     public function send(uuid as GattProfileManager.GoProUuid, data as ByteArray) as Void {
@@ -173,7 +173,7 @@ using GattProfileManager as GPM;
                 var minSettingChanged = 0xFF;
                 response = [CameraDelegate.NOTIF_SETTING, 0x00]b;
                 for (var i=1; i<data.size(); i+=2+data[i+1]) {
-                    settings.put(data[i], data[i+2]);
+                    settings.put(data[i] as Char, data[i+2]);
                     response.addAll([data[i], 0x01, data[i+2]]);
                     minSettingChanged = data[i]==GoProSettings.RESOLUTION ? data[i] : \
                                         data[i]==GoProSettings.LENS and minSettingChanged!=GoProSettings.RESOLUTION ? data[i] : \
@@ -186,13 +186,13 @@ using GattProfileManager as GPM;
                 var j;
                 switch (minSettingChanged) {
                     case GoProSettings.RESOLUTION:
-                        iter = (AVAILABLE_MAP_H11.get(settings.get(GoProSettings.RESOLUTION)) as Dictionary).keys();
+                        iter = (AVAILABLE_MAP_H11.get(settings.get(GoProSettings.RESOLUTION))).keys();
                         for (j=0; j<iter.size(); j++) {
                             response.addAll([GoProSettings.LENS, 0x01, iter[j]]);
                         }
                     case GoProSettings.LENS:
-                        iter = (AVAILABLE_MAP_H11.get(settings.get(GoProSettings.RESOLUTION)) as Dictionary)
-                                                  .get(settings.get(GoProSettings.LENS)) as Array;
+                        iter = (AVAILABLE_MAP_H11.get(settings.get(GoProSettings.RESOLUTION)))
+                                                 .get(settings.get(GoProSettings.LENS)) as Array;
                         for (j=0; j<iter.size(); j++) {
                             response.addAll([GoProSettings.FRAMERATE, 0x01, iter[j]]);
                         }
@@ -271,7 +271,7 @@ using GattProfileManager as GPM;
                 break;
         }
         for (var i=0; i<available.size(); i++) {
-            response.addAll([id, 0x01, available[i] as Char]b);
+            response.addAll([id, 0x01, (available as Array)[i]]b);
         }
     }
 }
