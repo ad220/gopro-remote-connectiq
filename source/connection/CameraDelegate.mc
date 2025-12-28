@@ -58,7 +58,7 @@ class CameraDelegate {
         }
         pairingTimer = null;
 
-        getApp().gopro = new GoProCamera(self, method(:onDisconnect));
+        getApp().gopro = new GoProCamera(self);
         getApp().gopro.registerSettings();
         
         var pushView = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);

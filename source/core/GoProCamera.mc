@@ -25,7 +25,6 @@ class GoProCamera extends GoProSettings {
     }
 
     private     var delegate                as CameraDelegate;
-    protected   var disconnectCallback      as Method() as Void;
     protected   var statuses                as Dictionary<StatusId or Char, Number>;
     protected   var availableSettings       as TAvailableSettings;
     private     var availableRatios         as Dictionary<Numeric, Array<Char>>;
@@ -33,11 +32,10 @@ class GoProCamera extends GoProSettings {
     protected   var progressTimer           as TimerCallback?;
 
 
-    public function initialize(delegate as CameraDelegate, disconnectCallback as Method() as Void) {
+    public function initialize(delegate as CameraDelegate) {
         GoProSettings.initialize();
         
         self.delegate = delegate;
-        self.disconnectCallback = disconnectCallback;
         self.statuses               = {}    as Dictionary<StatusId or Char, Number>;
         self.availableSettings      = {}    as Dictionary<GoProSettings.SettingId or Char, Array<Char>>;
         self.availableRatios        = {}    as Dictionary<Numeric, Array<Char>>;
@@ -89,7 +87,7 @@ class GoProCamera extends GoProSettings {
         delegate.send(GattRequest.WRITE_CHARACTERISTIC, GPM.UUID_QUERY_CHAR, request);
     }
 
-    public function onReceiveSetting(id as Char, value as ByteArray) as Void {
+    public function onReceiveSetting(id as Char or GoProSettings.SettingId, value as ByteArray) as Void {
         if (value.size()==0) { return; }
 
         settings.put(id as GoProSettings.SettingId, value[0] as Char);
@@ -106,7 +104,7 @@ class GoProCamera extends GoProSettings {
         }
     }
 
-    public function onReceiveStatus(id as Char, value as ByteArray) as Void {
+    public function onReceiveStatus(id as Char or StatusId, value as ByteArray) as Void {
         if (value.size()==0) { return; }
 
         if (id==ENCODING) {
@@ -203,6 +201,6 @@ class GoProCamera extends GoProSettings {
     }
 
     public function disconnect() as Void {
-        disconnectCallback.invoke();
+        delegate.onDisconnect();
     }
 }
