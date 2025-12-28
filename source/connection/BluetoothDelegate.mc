@@ -13,7 +13,7 @@ class BluetoothDelegate extends CameraDelegate {
 
     protected var requestQueue as GattRequestQueue?;
 
-    protected var pairingDevice as Ble.Device?;
+    protected var camera as Ble.Device?;
     private var keepAliveTimer as TimerCallback?;
 
     public function initialize() {
@@ -63,7 +63,7 @@ class BluetoothDelegate extends CameraDelegate {
         CameraDelegate.connect(device);
 
         try {
-            pairingDevice = Ble.pairDevice(device);
+            camera = Ble.pairDevice(device);
         } catch (ex) {
             var view = new NotifView(Rez.Strings.PairingFail, NotifView.NOTIF_ERROR);
             getApp().viewController.push(view, new NotifDelegate(), WatchUi.SLIDE_UP);
@@ -71,8 +71,10 @@ class BluetoothDelegate extends CameraDelegate {
     }
 
     public function onPairingFailed() as Void {
-        if (!connected and pairingDevice!=null) {
-            Ble.unpairDevice(pairingDevice);
+        if (!connected and camera!=null) {
+            try {
+                Ble.unpairDevice(camera);
+            } catch (ex) {}
         }
         Ble.setScanState(Ble.SCAN_STATE_OFF);
     }
@@ -108,7 +110,7 @@ class BluetoothDelegate extends CameraDelegate {
 
     private function onConnect(device as Ble.Device?) as Void {
         Ble.setScanState(Ble.SCAN_STATE_OFF);
-        pairingDevice = null;
+        camera = null;
         
         if (device == null) { throw new Exception(); }
 
@@ -144,6 +146,12 @@ class BluetoothDelegate extends CameraDelegate {
         if (connected) {
             getApp().timerController.stop(keepAliveTimer);
             Ble.setDelegate(null as Ble.BleDelegate);
+            try {
+                if (camera != null) {
+                    Ble.unpairDevice(camera);
+                    camera = null;
+                }
+            } catch (ex) {}
         }
         if (requestQueue != null) {
             requestQueue.close();
