@@ -13,7 +13,7 @@ class HelperTest {
         Helper.sort(array, comparator);
         
         var sortedArray = [1l<<48, 7, 2.3, 1, 5.2d/42, 0, 0, -2, -5.0, -12, -45];
-        
+
         for (var i=0; i<array.size(); i++) {
             if (array[i] != sortedArray[i]) {
                 logger.error(
@@ -25,5 +25,23 @@ class HelperTest {
         }
 
         return true;
+    }
+
+    (:test)
+    static function testEmptySort(logger as Logger) as Boolean {
+        var array = [];
+
+        try {
+            Helper.sort(array, null);
+        } catch (ex) {
+            logger.error(ex.getErrorMessage() + "");
+            return false;
+        }
+        
+        var result = array.size() == 0;
+        if (!result) {
+            logger.error("Empty array size changed suring sort");
+        }
+        return result;
     }
 }
