@@ -1,0 +1,29 @@
+import Toybox.Lang;
+import Toybox.Test;
+import Toybox.System;
+
+(:test)
+class HelperTest {
+    
+    (:test)
+    static function testSort(logger as Logger) as Boolean {
+        var comparator = new Helper.NumericComparator();
+        var array = [-12, 2.3, 0, -2, 7, 1, 1l << 48, 5.2d/42, -45, 0, -5.0];
+
+        Helper.sort(array, comparator);
+        
+        var sortedArray = [1l<<48, 7, 2.3, 1, 5.2d/42, 0, 0, -2, -5.0, -12, -45];
+        
+        for (var i=0; i<array.size(); i++) {
+            if (array[i] != sortedArray[i]) {
+                logger.error(
+                    "Expecting sorted array: " + sortedArray + 
+                    "\ngiven: " + array
+                );
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
