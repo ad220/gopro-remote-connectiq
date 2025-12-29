@@ -4,6 +4,7 @@ import Toybox.Graphics;
 import Toybox.Application;
 
 using Toybox.BluetoothLowEnergy as Ble;
+using BleApiWrapper as BleAPI;
 using InterfaceComponentsManager as ICM;
 
 
@@ -90,7 +91,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         }
         (delegate as BluetoothDelegate).setScanStateChangeCallback(null);
         (delegate as BluetoothDelegate).setScanResultCallback(null);
-        Ble.setScanState(Ble.SCAN_STATE_SCANNING);
+        BleAPI.setScanState(Ble.SCAN_STATE_SCANNING);
         delegate.connect(device);
     }
 }

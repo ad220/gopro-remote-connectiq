@@ -91,7 +91,6 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
         return false;
     }
 
-    (:inline)
     private function unsubscribeAvailable() as Void {
         getApp().gopro.subscribeChanges(
             CameraDelegate.UNREGISTER_AVAILABLE,

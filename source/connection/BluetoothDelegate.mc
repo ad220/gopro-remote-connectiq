@@ -2,11 +2,12 @@ import Toybox.System;
 import Toybox.Lang;
 
 using Toybox.BluetoothLowEnergy as Ble;
+using BleApiWrapper as BleAPI;
 
 (:ble)
 class BluetoothDelegate extends CameraDelegate {
 
-    private var apiWrapper as BleApiWrapper;
+    private var apiCallbacks as BleApiWrapper;
 
     private var scanStateChangeCallback as Method(state as Ble.ScanState) as Void?;
     private var scanResultCallback as Method(scanResults as Array<Ble.ScanResult>) as Void?;
@@ -19,8 +20,8 @@ class BluetoothDelegate extends CameraDelegate {
     public function initialize() {
         CameraDelegate.initialize();
 
-        self.apiWrapper = new BleApiWrapper(self);
-        Ble.setDelegate(apiWrapper);
+        self.apiCallbacks = new BleApiCallbacks(self);
+        BleAPI.setDelegate(apiCallbacks);
     }
 
     public function setScanStateChangeCallback(callback as Method(state as Ble.ScanState) as Void?) as Void {
@@ -63,7 +64,7 @@ class BluetoothDelegate extends CameraDelegate {
         CameraDelegate.connect(device);
 
         try {
-            camera = Ble.pairDevice(device);
+            camera = BleAPI.pairDevice(device);
         } catch (ex) {
             var view = new NotifView(Rez.Strings.PairingFail, NotifView.NOTIF_ERROR);
             getApp().viewController.push(view, new NotifDelegate(), WatchUi.SLIDE_UP);
@@ -73,10 +74,10 @@ class BluetoothDelegate extends CameraDelegate {
     public function onPairingFailed() as Void {
         if (!connected and camera!=null) {
             try {
-                Ble.unpairDevice(camera);
+                BleAPI.unpairDevice(camera);
             } catch (ex) {}
         }
-        Ble.setScanState(Ble.SCAN_STATE_OFF);
+        BleAPI.setScanState(Ble.SCAN_STATE_OFF);
     }
 
     public function onConnectedStateChanged(device as Ble.Device, state as Ble.ConnectionState) as Void {
@@ -109,7 +110,7 @@ class BluetoothDelegate extends CameraDelegate {
     }
 
     private function onConnect(device as Ble.Device?) as Void {
-        Ble.setScanState(Ble.SCAN_STATE_OFF);
+        BleAPI.setScanState(Ble.SCAN_STATE_OFF);
         camera = null;
         
         if (device == null) { throw new Exception(); }
@@ -119,7 +120,7 @@ class BluetoothDelegate extends CameraDelegate {
             requestQueue = new GattRequestQueue(service);
         } else {
             try {
-                Ble.unpairDevice(device);
+                BleAPI.unpairDevice(device);
             } catch (ex) {}
 
             onDisconnect();
@@ -145,10 +146,10 @@ class BluetoothDelegate extends CameraDelegate {
         // put camera to sleep and close connection
         if (connected) {
             getApp().timerController.stop(keepAliveTimer);
-            Ble.setDelegate(null as Ble.BleDelegate);
+            BleAPI.setDelegate(null as Ble.BleDelegate);
             try {
                 if (camera != null) {
-                    Ble.unpairDevice(camera);
+                    BleAPI.unpairDevice(camera);
                     camera = null;
                 }
             } catch (ex) {}

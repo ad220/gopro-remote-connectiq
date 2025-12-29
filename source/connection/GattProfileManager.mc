@@ -2,6 +2,7 @@ import Toybox.Lang;
 import Toybox.System;
 
 using Toybox.BluetoothLowEnergy as Ble;
+using BleApiWrapper as BleAPI;
 
 module GattProfileManager {
 
@@ -22,7 +23,7 @@ module GattProfileManager {
         // UUID_MANAGE_MAX,
     }
     
-    (:inline :ble)
+    (:ble)
     function getUuid(gpxx as Number) as Ble.Uuid {
         return Ble.stringToUuid("B5F9" + gpxx.format("%04d") + "-AA8D-11E3-9046-0002A5D5C51B");
     }
@@ -43,7 +44,7 @@ module GattProfileManager {
         profile.put(:characteristics, chars);
         
         try {
-            Ble.registerProfile(profile);
+            BleAPI.registerProfile(profile);
         } catch (ex) {
             System.println(ex.getErrorMessage());
         }

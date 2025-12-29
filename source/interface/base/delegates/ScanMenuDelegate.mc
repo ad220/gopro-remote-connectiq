@@ -3,6 +3,7 @@ import Toybox.WatchUi;
 import Toybox.System;
 
 using Toybox.BluetoothLowEnergy as Ble;
+using BleApiWrapper as BleAPI;
 
 (:ble)
 class ScanMenuDelegate extends Menu2InputDelegate {
@@ -54,7 +55,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
 
     public function startScan() as Void {
         if (scanState!=Ble.SCAN_STATE_SCANNING) {
-            Ble.setScanState(Ble.SCAN_STATE_SCANNING);
+            BleAPI.setScanState(Ble.SCAN_STATE_SCANNING);
             scanTimer = getApp().timerController.start(method(:stopScan), 100, false);
             animTimer = getApp().timerController.start(method(:animate), 5, true);
 
@@ -67,7 +68,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
 
     public function stopScan() as Void {
         if (scanState!=Ble.SCAN_STATE_OFF) {
-            Ble.setScanState(Ble.SCAN_STATE_OFF);
+            BleAPI.setScanState(Ble.SCAN_STATE_OFF);
             getApp().timerController.stop(scanTimer);
             getApp().timerController.stop(animTimer);
 

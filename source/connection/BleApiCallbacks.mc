@@ -4,7 +4,7 @@ import Toybox.Lang;
 using Toybox.BluetoothLowEnergy as Ble;
 
 (:ble)
-class BleApiWrapper extends Ble.BleDelegate {
+class BleApiCallbacks extends Ble.BleDelegate {
 
     private var delegate as WeakReference;
 
