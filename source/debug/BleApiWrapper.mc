@@ -1,7 +1,7 @@
 import Toybox.Lang;
 
 using Toybox.BluetoothLowEnergy as Ble;
-
+using BleApiWrapper as BleAPI;
 
 (:ble :debug)
 module BleApiWrapper {
@@ -19,21 +19,25 @@ module BleApiWrapper {
     typedef ServiceProfile as Array<{:uuid as Ble.Uuid, :descriptors as Array<Ble.Uuid>}>;
 
     (:initialized) var callbacks    as BleApiCallbacks;
+    (:initialized) var device       as FakeGoProDevice;
 
     var registeredProfiles          as Array<GattProfile>   = [];
     var delegate                    as Ble.BleDelegate?     = null;
     var scanState                   as Ble.ScanState        = Ble.SCAN_STATE_OFF;
     var pairedDevice                as Array<Ble.Device>    = [];
+    var scanTimer                   as TimerCallback?       = null;
 
     // Test options
     var failPairing                 as Boolean              = false;
     var nullPairing                 as Boolean              = false;
     var connectionStatus            as Ble.ConnectionState  = Ble.CONNECTION_STATE_CONNECTED;
     var hasGoProService             as Boolean              = true;
+    var scannedDevices              as MockIterator         = new MockIterator([new MockScanResult(0)]);
 
 
-    function setCallbacks(callbacks as BleApiCallbacks) as Void {
-        self.callbacks = callbacks;
+    function getCallbackInstance(delegate as BluetoothDelegate) as BleApiCallbacks {
+        callbacks = new BleApiCallbacks(delegate);
+        return callbacks;
     }
 
     function registerProfile(profile as GattProfile) as Void {
@@ -49,7 +53,21 @@ module BleApiWrapper {
     }
 
     function setScanState(state as Ble.ScanState) as Void {
+        if (state == Ble.SCAN_STATE_OFF) {
+            if (scanTimer != null) {
+                scanTimer.stop();
+                scanTimer = null;
+            }
+        } else if (state == Ble.SCAN_STATE_SCANNING and scanState!=state) {
+            scanTimer = getApp().timerController.start(new Method(self, :updateScan), 10, true);
+        }
+
         self.scanState = state;
+        callbacks.onScanStateChange(state, Ble.STATUS_SUCCESS);
+    }
+
+    function updateScan() as Void {
+        callbacks.onScanResults(scannedDevices);
     }
 
     function pairDevice(device as Ble.ScanResult) as Ble.Device? {
@@ -134,8 +152,8 @@ module BleApiWrapper {
         }
 
         function requestBond() as Void {
-            // TODO
             bonded = true;
+            BleAPI.callbacks.onEncryptionStatus(self as Ble.Device, Ble.STATUS_SUCCESS);
         }
     }
 
@@ -242,12 +260,15 @@ module BleApiWrapper {
 
         function requestRead() as Void {
             // TODO
+            throw new Exception();
             return;
         }
 
+        (:typecheck(false))
         function requestWrite(value as ByteArray, options as { :writeType as Ble.WriteType }) as Void {
-            // TODO
-            return;
+            var gpxx = uuid.toString().substring(4,8).toNumber();
+            callbacks.onCharacteristicWrite(self as Ble.Characteristic, Ble.STATUS_SUCCESS);
+            device.onSend(gpxx, value);
         }
 
     }
@@ -273,12 +294,13 @@ module BleApiWrapper {
 
         function requestRead() as Void {
             // TODO
+            throw new Exception();
             return;
         }
 
+        (:typecheck(false))
         function requestWrite(value as ByteArray) as Void {
-            // TODO
-            return;
+            callbacks.onDescriptorWrite(self as Ble.Characteristic, Ble.STATUS_SUCCESS);
         }
     }
 

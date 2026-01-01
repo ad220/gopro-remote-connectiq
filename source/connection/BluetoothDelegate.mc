@@ -7,10 +7,9 @@ using BleApiWrapper as BleAPI;
 (:ble)
 class BluetoothDelegate extends CameraDelegate {
 
-    private var apiCallbacks as BleApiWrapper;
+    private var apiCallbacks as BleApiCallbacks;
 
-    private var scanStateChangeCallback as Method(state as Ble.ScanState) as Void?;
-    private var scanResultCallback as Method(scanResults as Array<Ble.ScanResult>) as Void?;
+    private var scanMenuDelegate as ScanMenuDelegate?;
 
     protected var requestQueue as GattRequestQueue?;
 
@@ -20,26 +19,22 @@ class BluetoothDelegate extends CameraDelegate {
     public function initialize() {
         CameraDelegate.initialize();
 
-        self.apiCallbacks = new BleApiCallbacks(self);
+        self.apiCallbacks = BleAPI.getCallbackInstance(self);
         BleAPI.setDelegate(apiCallbacks);
     }
 
-    public function setScanStateChangeCallback(callback as Method(state as Ble.ScanState) as Void?) as Void {
-        scanStateChangeCallback = callback;
+    public function setScanMenuDelegate(menu as ScanMenuDelegate?) as Void {
+        scanMenuDelegate = menu;
     }
 
     public function onScanStateChange(scanState as Ble.ScanState, status as Ble.Status) as Void {
-        if (status == Ble.STATUS_SUCCESS and scanStateChangeCallback!=null) {
-            scanStateChangeCallback.invoke(scanState);
+        if (status == Ble.STATUS_SUCCESS and scanMenuDelegate!=null) {
+            scanMenuDelegate.setScanState(scanState);
         }
     }
 
-    public function setScanResultCallback(callback as Method(scanResults as Array<Ble.ScanResult>) as Void?) as Void{
-        scanResultCallback = callback;
-    }
-
     public function onScanResults(scanResults as Ble.Iterator) as Void {
-        if (scanResultCallback!=null) {
+        if (scanMenuDelegate!=null) {
             var scanResultsArray = [];
             // filter results with GoPro 0xFEA6 UUID
             for (var device = scanResults.next() as Ble.ScanResult; device!=null; device = scanResults.next()) {
@@ -53,9 +48,9 @@ class BluetoothDelegate extends CameraDelegate {
                     }
                 }
             }
-            scanResultCallback.invoke(scanResultsArray);
+            scanMenuDelegate.onScanResults(scanResultsArray);
         } else {
-            System.println("scanResultCallback is null");
+            System.println("Scan menu is null");
         }
     }
 

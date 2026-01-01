@@ -3,10 +3,10 @@ import Toybox.Test;
 import Toybox.System;
 
 (:test)
-class HelperTest {
+module HelperTest {
     
     (:test)
-    static function testSort(logger as Logger) as Boolean {
+    function testSort(logger as Logger) as Boolean {
         var comparator = new Helper.NumericComparator();
         var array = [-12, 2.3, 0, -2, 7, 1, 1l << 48, 5.2d/42, -45, 0, -5.0];
 
@@ -28,7 +28,7 @@ class HelperTest {
     }
 
     (:test)
-    static function testEmptySort(logger as Logger) as Boolean {
+    function testEmptySort(logger as Logger) as Boolean {
         var array = [];
 
         try {

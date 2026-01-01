@@ -50,7 +50,6 @@ class ScanMenuDelegate extends Menu2InputDelegate {
         menu.setTitle(title);
         menu.addItem(self.statusItem);
         menu.addItem(self.cancelItem);
-        startScan();
     }
 
     public function startScan() as Void {
