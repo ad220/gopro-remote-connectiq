@@ -14,17 +14,25 @@ using GattProfileManager as GPM;
     private var statuses as FakeGoProStatuses;
     private var specs as FakeGoProSpecs.ISpecs;
 
+    private var notifSettings as Array<Char>;
+    private var notifStatuses as Array<Char>;
+    private var notifAvailable as Array<Char>;
+
     private var gpControlService as BleAPI.MockService;
     private var gpQueryResponseChar as BleAPI.MockCharacteristic;
 
     public function initialize(
             settings as FakeGoProSettings,
             statuses as FakeGoProStatuses,
-            specs as FakeGoProSpecs
+            specs as FakeGoProSpecs.ISpecs
         ) {
         self.settings = settings;
         self.statuses = statuses;
         self.specs = specs;
+
+        self.notifSettings = [];
+        self.notifStatuses = [];
+        self.notifAvailable = [];
 
         var device = new BleAPI.MockDevice();
         gpControlService = new BleAPI.MockService(Ble.stringToUuid(GPM.GOPRO_CONTROL_SERVICE), device);
@@ -47,14 +55,17 @@ using GattProfileManager as GPM;
                 switch (queryId) {
                     case CameraDelegate.GET_SETTING:
                     case CameraDelegate.REGISTER_SETTING:
+                    case CameraDelegate.UNREGISTER_SETTING:
                         decoder = method(:onReceiveSetting);
                         break;
                     case CameraDelegate.GET_STATUS:
                     case CameraDelegate.REGISTER_STATUS:
+                    case CameraDelegate.UNREGISTER_STATUS:
                         decoder = method(:onReceiveStatus);
                         break;
                     case CameraDelegate.GET_AVAILABLE:
                     case CameraDelegate.REGISTER_AVAILABLE:
+                    case CameraDelegate.UNREGISTER_AVAILABLE:
                         decoder = method(:onReceiveAvailable);
                         break;
                     default:
@@ -63,7 +74,7 @@ using GattProfileManager as GPM;
                 if (decoder instanceof Method) {
                     response = [queryId, 0x00]b;
                     for (var i=0; i<data.size(); i++) {
-                        decoder.invoke(data[i] as Char, response);
+                        decoder.invoke(data[i] as Char, response, queryId);
                     }
                     responseSplitter(GPM.UUID_QUERY_RESPONSE_CHAR, response);
                 }
@@ -74,10 +85,13 @@ using GattProfileManager as GPM;
                 switch (commandId) {
                     case GoProCamera.SHUTTER:
                         statuses.put(GoProCamera.ENCODING, data[3]);
-                        BleAPI.callbacks.onCharacteristicChanged(
-                            gpQueryResponseChar as Ble.Characteristic,
-                            [0x03, CameraDelegate.NOTIF_STATUS, 0x00, GoProCamera.ENCODING, 0x01, data[3]]b
-                        );
+                        responseSplitter(GPM.UUID_COMMAND_RESPONSE_CHAR, [1, 0]b);
+                        if (notifStatuses.indexOf(GoProCamera.ENCODING as Char) != -1) {
+                            BleAPI.callbacks.onCharacteristicChanged(
+                                gpQueryResponseChar as Ble.Characteristic,
+                                [0x03, CameraDelegate.NOTIF_STATUS, 0x00, GoProCamera.ENCODING, 0x01, data[3]]b
+                            );
+                        }
                         break;
                     default:
                         break;
@@ -89,34 +103,49 @@ using GattProfileManager as GPM;
                 response = [CameraDelegate.NOTIF_SETTING, 0x00]b;
                 for (var i=1; i<data.size(); i+=2+data[i+1]) {
                     settings.put(data[i] as Char, data[i+2]);
-                    response.addAll([data[i], 0x01, data[i+2]]);
+                    if (notifSettings.indexOf(data[i] as Char)!=-1) {
+                        response.addAll([data[i], 0x01, data[i+2]]);
+                    }
                     minSettingChanged = data[i]==GoProSettings.RESOLUTION ? data[i] : \
                                         data[i]==GoProSettings.LENS and minSettingChanged!=GoProSettings.RESOLUTION ? data[i] : \
                                         data[i]==GoProSettings.FRAMERATE and minSettingChanged==0xFF ? data[i] : minSettingChanged;
                 }
-                responseSplitter(GPM.UUID_QUERY_RESPONSE_CHAR, response);
+                responseSplitter(GPM.UUID_SETTINGS_RESPONSE_CHAR, [1, 0]b);
+                if (response.size()>2) {
+                    responseSplitter(GPM.UUID_QUERY_RESPONSE_CHAR, response);
+                }
 
                 response = [CameraDelegate.NOTIF_AVAILABLE, 0x00]b;
                 var iter;
                 var j;
+                var res = settings.get(GoProSettings.RESOLUTION) as Char;
+                var lens = settings.get(GoProSettings.LENS) as Char;
                 switch (minSettingChanged) {
                     case GoProSettings.RESOLUTION:
-                        var res = settings.get(GoProSettings.RESOLUTION) as Number;
                         iter = (specs.availableSettingsMap.get(res) as Dictionary).keys();
-                        for (j=0; j<iter.size(); j++) {
-                            response.addAll([GoProSettings.LENS, 0x01, iter[j]]);
+                        if (iter.indexOf(lens) == -1) {
+                            settings.put(GoProSettings.LENS as Char, iter[0] as Char);
+                        }
+                        if (notifAvailable.indexOf(GoProSettings.LENS as Char) != -1) {
+                            for (j=0; j<iter.size(); j++) {
+                                response.addAll([GoProSettings.LENS, 0x01, iter[j]]);
+                            }
                         }
                     case GoProSettings.LENS:
-                        iter = ((specs.availableSettingsMap.get(settings.get(GoProSettings.RESOLUTION) as Char)) as Dictionary)
-                                                  .get(settings.get(GoProSettings.LENS) as Char) as Array;
-                        for (j=0; j<iter.size(); j++) {
-                            response.addAll([GoProSettings.FRAMERATE, 0x01, iter[j]]);
+                        if (notifAvailable.indexOf(GoProSettings.FRAMERATE as Char) != -1) {
+                            iter = specs.availableSettingsMap.get(res);
+                            iter = iter!=null ? iter.get(lens) : null;
+                            for (j=0; iter!=null and j<iter.size(); j++) {
+                                response.addAll([GoProSettings.FRAMERATE, 0x01, iter[j]]);
+                            }
                         }
                         break;
                     default:
                         break;
                 }
-                responseSplitter(GPM.UUID_QUERY_RESPONSE_CHAR, response);
+                if (response.size()>2) {
+                    responseSplitter(GPM.UUID_QUERY_RESPONSE_CHAR, response);
+                }
                 break;
 
             default:
@@ -145,7 +174,18 @@ using GattProfileManager as GPM;
         }
     }
 
-    public function onReceiveSetting(id as Char, response as ByteArray) as Void {
+    private function updateNotif(notifs as Array<Char>, query as Char, value as Char) as Void {
+        if (query>=80 and notifs.indexOf(value)==-1) {
+            notifs.add(value); 
+        } else if (query>=0x70) {
+            notifs.remove(value);
+        }
+    }
+
+    public function onReceiveSetting(id as Char, response as ByteArray, query as Char) as Void {
+        updateNotif(notifSettings, query, id);
+        if (query >= 0x70) { return; }
+
         var value = settings.get(id);
         if (value == null) {
             System.println("onReceiveSetting null value, id="+id);
@@ -154,7 +194,10 @@ using GattProfileManager as GPM;
         response.addAll([id, 0x01, value]b);
     }
 
-    public function onReceiveStatus(id as Char, response as ByteArray) as Void {
+    public function onReceiveStatus(id as Char, response as ByteArray, query as Char) as Void {
+        updateNotif(notifStatuses, query, id);
+        if (query >= 0x70) { return; }
+
         if (id==GoProCamera.SD_REMAINING or id==GoProCamera.ENCODING_DURATION) {
             response.addAll([id, 0x04]b);
             var valueN = statuses.get(id);
@@ -172,7 +215,10 @@ using GattProfileManager as GPM;
         }
     }
     
-    public function onReceiveAvailable(id as Char, response as ByteArray) as Void {
+    public function onReceiveAvailable(id as Char, response as ByteArray, query as Char) as Void {
+        updateNotif(notifAvailable, query, id);
+        if (query >= 0x70) { return; }
+
         var available;
         switch (id) {
             case GoProSettings.RESOLUTION:

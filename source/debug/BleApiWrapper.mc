@@ -261,7 +261,6 @@ module BleApiWrapper {
         function requestRead() as Void {
             // TODO
             throw new Exception();
-            return;
         }
 
         (:typecheck(false))
@@ -295,7 +294,6 @@ module BleApiWrapper {
         function requestRead() as Void {
             // TODO
             throw new Exception();
-            return;
         }
 
         (:typecheck(false))

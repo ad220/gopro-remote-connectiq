@@ -77,13 +77,15 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
         } else {
             var ledStatus = camera.getSetting(GoProSettings.LED);
             if (ledStatus != null) {
+                var index = available.indexOf(ledStatus);
+                if (index == -1) { return; } // TODO: error msg
                 view.getHilighted().toggleState(
                     ledStatus==GoProSettings.LED_OFF or 
                     ledStatus==GoProSettings.LED_ALL_OFF
                 );
                 camera.sendSetting(
                     GoProSettings.LED,
-                    available[available.indexOf(ledStatus) ^ 0x01] as Char
+                    index as Char
                 );
             }
         }

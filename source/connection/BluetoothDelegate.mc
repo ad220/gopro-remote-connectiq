@@ -131,7 +131,7 @@ class BluetoothDelegate extends CameraDelegate {
     public function keepAlive() as Void {
         if (connected and requestQueue != null) {
             var data = [0x03, 0x5b, 0x01, 0x42]b;
-            requestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_SETTINGS_CHAR), data);
+            requestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_COMMAND_CHAR), data);
         } else {
             throw new Exception();
         }
