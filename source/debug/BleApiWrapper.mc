@@ -21,18 +21,18 @@ module BleApiWrapper {
     (:initialized) var callbacks    as BleApiCallbacks;
     (:initialized) var device       as FakeGoProDevice;
 
-    var registeredProfiles          as Array<GattProfile>   = [];
-    var delegate                    as Ble.BleDelegate?     = null;
-    var scanState                   as Ble.ScanState        = Ble.SCAN_STATE_OFF;
-    var pairedDevice                as Array<Ble.Device>    = [];
-    var scanTimer                   as TimerCallback?       = null;
+    var registeredProfiles          as Array<GattProfile>       = [];
+    var delegate                    as Ble.BleDelegate?         = null;
+    var scanState                   as Ble.ScanState            = Ble.SCAN_STATE_OFF;
+    var pairedDevice                as Array<Ble.Device>        = [];
+    var scanTimer                   as TimerCallback?           = null;
 
     // Test options
-    var failPairing                 as Boolean              = false;
-    var nullPairing                 as Boolean              = false;
-    var connectionStatus            as Ble.ConnectionState  = Ble.CONNECTION_STATE_CONNECTED;
-    var hasGoProService             as Boolean              = true;
-    var scannedDevices              as MockIterator         = new MockIterator([new MockScanResult(0)]);
+    var failPairing                 as Boolean                  = false;
+    var nullPairing                 as Boolean                  = false;
+    var connectionStatus            as Ble.ConnectionState      = Ble.CONNECTION_STATE_CONNECTED;
+    var hasGoProService             as Boolean                  = true;
+    var scannedDevices              as Array<MockScanResult>    = [new MockScanResult(0)];
 
 
     function getCallbackInstance(delegate as BluetoothDelegate) as BleApiCallbacks {
@@ -67,7 +67,7 @@ module BleApiWrapper {
     }
 
     function updateScan() as Void {
-        callbacks.onScanResults(scannedDevices);
+        callbacks.onScanResults(new MockIterator(scannedDevices as Array));
     }
 
     function pairDevice(device as Ble.ScanResult) as Ble.Device? {

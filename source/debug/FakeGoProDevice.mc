@@ -21,6 +21,8 @@ using GattProfileManager as GPM;
     private var gpControlService as BleAPI.MockService;
     private var gpQueryResponseChar as BleAPI.MockCharacteristic;
 
+    private var autoSleepTimer as TimerCallback?;
+
     public function initialize(
             settings as FakeGoProSettings,
             statuses as FakeGoProStatuses,
@@ -34,6 +36,8 @@ using GattProfileManager as GPM;
         self.notifStatuses = [];
         self.notifAvailable = [];
 
+        resetSleepTimer();
+
         var device = new BleAPI.MockDevice();
         gpControlService = new BleAPI.MockService(Ble.stringToUuid(GPM.GOPRO_CONTROL_SERVICE), device);
         gpQueryResponseChar = new BleAPI.MockCharacteristic(
@@ -42,8 +46,24 @@ using GattProfileManager as GPM;
         );
     }
 
+    private function resetSleepTimer() as Void {
+        if (autoSleepTimer != null) {
+            autoSleepTimer.stop();
+        }
+        autoSleepTimer = getApp().timerController.start(method(:sleep), 40, false);
+    }
+
+    public function sleep() as Void {
+        BleAPI.callbacks.onConnectedStateChanged(
+            gpControlService.device as Ble.Device,
+            Ble.CONNECTION_STATE_DISCONNECTED
+        );
+        autoSleepTimer = null;
+    }
+
     public function onSend(uuid as GPM.GoProUuid, data as ByteArray) as Void {
         var response;
+        resetSleepTimer();
         
         switch (uuid) {
             case GPM.UUID_QUERY_CHAR:
