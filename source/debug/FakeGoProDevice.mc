@@ -10,18 +10,19 @@ using GattProfileManager as GPM;
     typedef FakeGoProSettings as Dictionary<Char or GoProSettings.SettingId, Char or Number>;
     typedef FakeGoProStatuses as Dictionary<Char or GoProCamera.StatusId, Number>;
 
-    private var settings as FakeGoProSettings;
-    private var statuses as FakeGoProStatuses;
-    private var specs as FakeGoProSpecs.ISpecs;
+    var settings as FakeGoProSettings;
+    var statuses as FakeGoProStatuses;
+    var specs as FakeGoProSpecs.ISpecs;
 
-    private var notifSettings as Array<Char>;
-    private var notifStatuses as Array<Char>;
-    private var notifAvailable as Array<Char>;
+    var notifSettings as Array<Char>;
+    var notifStatuses as Array<Char>;
+    var notifAvailable as Array<Char>;
 
-    private var gpControlService as BleAPI.MockService;
-    private var gpQueryResponseChar as BleAPI.MockCharacteristic;
+    var gpControlService as BleAPI.MockService;
+    var gpQueryResponseChar as BleAPI.MockCharacteristic;
 
-    private var autoSleepTimer as TimerCallback?;
+    var autoSleepTimer as TimerCallback?;
+    var hilightCount as Number = 0;
 
     public function initialize(
             settings as FakeGoProSettings,
@@ -67,7 +68,6 @@ using GattProfileManager as GPM;
         
         switch (uuid) {
             case GPM.UUID_QUERY_CHAR:
-                System.println("query :"+data);
                 var queryId = data[1];
                 var decoder = null;
                 data = data.slice(2, null);
@@ -109,10 +109,13 @@ using GattProfileManager as GPM;
                         if (notifStatuses.indexOf(GoProCamera.ENCODING as Char) != -1) {
                             BleAPI.callbacks.onCharacteristicChanged(
                                 gpQueryResponseChar as Ble.Characteristic,
-                                [0x03, CameraDelegate.NOTIF_STATUS, 0x00, GoProCamera.ENCODING, 0x01, data[3]]b
+                                [0x05, CameraDelegate.NOTIF_STATUS, 0x00, GoProCamera.ENCODING, 0x01, data[3]]b
                             );
                         }
                         break;
+                    case GoProCamera.HILIGHT:
+                        responseSplitter(GPM.UUID_COMMAND_RESPONSE_CHAR, [commandId, 0]b);
+                        hilightCount += 1;
                     default:
                         break;
                 }

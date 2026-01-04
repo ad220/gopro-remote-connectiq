@@ -66,7 +66,7 @@ class GoProCamera extends GoProSettings {
     }
 
     public function sendPreset(preset as GoProPreset) as Void {
-        var keys = [RESOLUTION, LENS, FRAMERATE];
+        var keys = [FLICKER, RESOLUTION, LENS, FRAMERATE];
         for (var i=0; i<3; i++) {
             var value = preset.getSetting(keys[i]);
             if (settings.get(keys[i]) != value and value != null) {
@@ -189,7 +189,7 @@ class GoProCamera extends GoProSettings {
     }
 
     public function isRecording() as Boolean {
-        return statuses.get(ENCODING)==1;
+        return statuses.get(ENCODING) == 1;
     }
 
     (:typecheck(false))

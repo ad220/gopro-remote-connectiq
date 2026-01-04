@@ -58,7 +58,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
                 GoProSettings.LED               => GoProSettings.LED_ON
             } as FakeGoProDevice.FakeGoProSettings,
             {
-                GoProCamera.ENCODING            => 10,
+                GoProCamera.ENCODING            => 0,
                 GoProCamera.ENCODING_DURATION   => 0,
                 GoProCamera.SD_REMAINING        => 6942,
                 GoProCamera.BATTERY             => 42
