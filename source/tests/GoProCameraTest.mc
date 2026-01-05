@@ -6,7 +6,7 @@ using Toybox.BluetoothLowEnergy as Ble;
 using BleApiWrapper as BleAPI;
 using GattProfileManager as GPM;
 
-(:test)
+(:test :ble)
 module GoProCameraTest {
     
     /* TODO:
@@ -21,10 +21,10 @@ module GoProCameraTest {
             - isRecording
         * sleep
     [ ] check keep alive (use sink)
-    [ ] check disconnect / sleep
-    [ ] check available settings match those in specs
-    [ ] check settings match those in fake cam
-    [ ] test getLabel / getDescription
+    
+    [ ] test available with unknown resolutions
+    [X] test getLabel / getDescription
+    [ ] test unknown status ids (useful ?)
 
     [X] test request ~~settings~~ / statuses / available
     [X] test notif settings / statuses / available
@@ -62,7 +62,7 @@ module GoProCameraTest {
         GoProSettings.LENS              => GoProSettings.WIDE,
         GoProSettings.FRAMERATE         => 5,
         GoProSettings.FLICKER           => GoProSettings.HZ60,
-        GoProSettings.HYPERSMOOTH       => GoProSettings.HS_HIGH,
+        GoProSettings.HYPERSMOOTH       => GoProSettings.HS_BOOST,
         GoProSettings.LED               => GoProSettings.LED_ON
     };
 
@@ -425,7 +425,6 @@ module GoProCameraTest {
         return true;
     }
 
-    // test encoding duration 
 
     (:test)
     function testRecordingCamera(logger as Logger) as Boolean {
@@ -461,4 +460,89 @@ module GoProCameraTest {
         return true;
     }
 
+    
+    (:test)
+    function testLabelKnown(logger as Logger) as Boolean {
+        initDefaults();
+        initFake();
+        initConnection();
+        
+        var camera = getApp().gopro;
+        var label;
+
+        var ids = [
+            GoProSettings.RESOLUTION,
+            GoProSettings.RATIO,
+            GoProSettings.LENS,
+            GoProSettings.FRAMERATE,
+            GoProSettings.GPS,
+            GoProSettings.LED,
+            GoProSettings.FLICKER,
+            GoProSettings.HYPERSMOOTH,
+        ];
+        var expected = ["4K", "16:9", Rez.Strings._WIDE, "60 fps", "", Rez.Strings.On, "", Rez.Strings.Boost];
+
+        for (var i=0; i<ids.size(); i+=1) {
+            label = camera.getLabel(ids[i], null);
+            if (!label.equals(expected[i])) {
+                logger.error("Wrong label, expected: " + expected[i] + ", got :" + label);
+                return false;
+            }
+        }
+
+        label = camera.getDescription();
+        if (!label.equals("4K@60 16:9")) {
+            logger.error("Wrong description, expected '4K@60 16:9', got :" + label);
+            return false;
+        }
+
+        return true;
+    }
+
+    
+    (:test)
+    function testLabelUnknown(logger as Logger) as Boolean {
+        initDefaults();
+        
+        initSettings.put(GoProSettings.RESOLUTION, 0xFF);
+        initSettings.put(GoProSettings.LENS, 42);
+        initSettings.put(GoProSettings.FRAMERATE, 220);
+        initSettings.put(GoProSettings.GPS, 13);
+        initSettings.put(GoProSettings.LED, 69);
+        initSettings.put(GoProSettings.FLICKER, 78);
+        initSettings.put(GoProSettings.HYPERSMOOTH, 26);
+
+        initFake();
+        initConnection();
+        
+        var camera = getApp().gopro;
+        var label;
+
+        var ids = [
+            GoProSettings.RESOLUTION,
+            GoProSettings.RATIO,
+            GoProSettings.LENS,
+            GoProSettings.FRAMERATE,
+            GoProSettings.GPS,
+            GoProSettings.LED,
+            GoProSettings.FLICKER,
+            GoProSettings.HYPERSMOOTH
+        ];
+
+        for (var i=0; i<ids.size(); i+=1) {
+            label = camera.getLabel(ids[i], null);
+            if (!label.equals("")) {
+                logger.error("Wrong label, expected empty string, got :" + label);
+                return false;
+            }
+        }
+        
+        label = camera.getDescription();
+        if (!label.equals(". . .")) {
+            logger.error("Expected placeholder description as '. . .' got :" + label);
+            return false;
+        }
+
+        return true;
+    }
 }
