@@ -67,7 +67,7 @@ class GoProCamera extends GoProSettings {
 
     public function sendPreset(preset as GoProPreset) as Void {
         var keys = [FLICKER, RESOLUTION, LENS, FRAMERATE];
-        for (var i=0; i<3; i++) {
+        for (var i=0; i<keys.size(); i++) {
             var value = preset.getSetting(keys[i]);
             if (settings.get(keys[i]) != value and value != null) {
                 sendSetting(keys[i], value);

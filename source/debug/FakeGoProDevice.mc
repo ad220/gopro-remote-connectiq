@@ -278,4 +278,23 @@ using GattProfileManager as GPM;
             response.addAll([id, 0x01, (available as Array)[i]]b);
         }
     }
+
+    function setSetting(id as GoProSettings.SettingId or Char, value as Char or Number) as Void {
+        onSend(GPM.UUID_SETTINGS_CHAR, [3, id as Char, 1, value]b);
+    }
+
+    function setStatus(id as GoProCamera.StatusId or Char, value as Number) as Void {
+        statuses.put(id, value);
+
+        var notif = [CameraDelegate.NOTIF_STATUS, 0, id as Char]b;
+        if (id == GoProCamera.SD_REMAINING or id == GoProCamera.ENCODING_DURATION) {
+            var valueB = [0,0,0,0]b;
+            valueB.encodeNumber(value, Lang.NUMBER_FORMAT_UINT32, {:endianness => Lang.ENDIAN_BIG});
+            notif.add(4).addAll(valueB);
+        } else {
+            notif.addAll([1, value]b);
+        }
+        
+        responseSplitter(GPM.UUID_QUERY_RESPONSE_CHAR, notif);
+    }
 }
