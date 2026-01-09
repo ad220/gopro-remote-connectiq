@@ -19,7 +19,6 @@ class GattRequestQueue {
 
     public function add(type as GattRequest.RequestType, uuid as Ble.Uuid, data as ByteArray) as Void {
         var request = new GattRequest(type, uuid, data, self);
-        System.println("Message added to queue, data: "+data);
         queue.add(request);
         if (!isProcessing) {
             sendRequest();

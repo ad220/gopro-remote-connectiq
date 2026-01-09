@@ -30,6 +30,17 @@ module GoProCameraTest {
     [X] test notif settings / statuses / available
     */
 
+
+    function haveSameData(a as Array, b as Array) as Boolean {
+        if (a.size() != b.size()) { return false; }
+
+        for (var i=0; i<a.size(); i+=1) {
+            if (!(a[i] as Object).equals(b[i] as Object)) { return false; }
+        }
+
+        return true;
+    }
+
     class SinkGoProDevice extends FakeGoProDevice {
 
         var requests as Array<[GPM.GoProUuid, ByteArray]>;
@@ -236,6 +247,7 @@ module GoProCameraTest {
 
     (:test)
     function testRequestStatus(logger as Logger) as Boolean {
+        var result = true;
         initDefaults();
         initFake();
         initConnection();
@@ -246,20 +258,23 @@ module GoProCameraTest {
         
         var battery = camera.getStatus(GoProCamera.BATTERY);
         if (battery != 42) {
-                logger.error("Wrong battery percentage, expected 42, got: " + battery);
+            logger.error("Wrong battery percentage, expected 42, got: " + battery);
+            result = false;
         }
 
         var sd = camera.getStatus(GoProCamera.SD_REMAINING);
         if (sd != 6942) {
-                logger.error("Wrong battery percentage, expected 6942, got: " + sd);
+            logger.error("Wrong battery percentage, expected 6942, got: " + sd);
+            result = false;
         }
 
-        return true;
+        return result;
     }
 
 
     (:test)
     function testNotifStatus(logger as Logger) as Boolean {
+        var result = true;
         initDefaults();
         initFake();
         initConnection();
@@ -274,11 +289,13 @@ module GoProCameraTest {
         var battery = camera.getStatus(GoProCamera.BATTERY);
         if (battery != 42) {
             logger.error("Wrong battery percentage, expected 42, got: " + battery);
+            result = false;
         }
 
         var sd = camera.getStatus(GoProCamera.SD_REMAINING);
         if (sd != 6942) {
             logger.error("Wrong battery percentage, expected 6942, got: " + sd);
+            result = false;
         }
         
         BleAPI.device.setStatus(GoProCamera.BATTERY, 90);
@@ -287,19 +304,22 @@ module GoProCameraTest {
         battery = camera.getStatus(GoProCamera.BATTERY);
         if (battery != 90) {
             logger.error("Wrong battery percentage, expected 90, got: " + battery);
+            result = false;
         }
 
         sd = camera.getStatus(GoProCamera.SD_REMAINING);
         if (sd != 7200) {
             logger.error("Wrong battery percentage, expected 7200, got: " + sd);
+            result = false;
         }
 
-        return true;
+        return result;
     }
 
     
     (:test)
     function testRequestAvailable(logger as Logger) as Boolean {
+        var result = true;
         initDefaults();
         initFake();
         initConnection();
@@ -317,7 +337,7 @@ module GoProCameraTest {
         );
 
         var expectedFramerates = [1,2,5,6,8,9,10];
-        var expectedRatios = [8+7<<16, 4+3<<16, 16+9<<16];
+        var expectedRatios = [28, 18, 1];
         var expectedHypersmooth = [
             GoProSettings.HS_OFF,
             GoProSettings.HS_LOW,
@@ -326,26 +346,30 @@ module GoProCameraTest {
         ];
         
         var availableFramerates = camera.getAvailableSettings(GoProSettings.FRAMERATE);
-        if (!availableFramerates.equals(expectedFramerates)) {
+        if (!haveSameData(availableFramerates as Array, expectedFramerates)) {
             logger.error("Wrong available lenses, expected: " + expectedFramerates + ", got: " + availableFramerates);
+            result = false;
         }
 
         var availableRatios = camera.getAvailableSettings(GoProSettings.RATIO);
-        if (!availableRatios.equals(expectedRatios)) {
+        if (!haveSameData(availableRatios as Array, expectedRatios)) {
             logger.error("Wrong available ratios, expected: " + expectedRatios + ", got: " + availableRatios);
+            result = false;
         }
 
         var availableHypersmooth = camera.getAvailableSettings(GoProSettings.HYPERSMOOTH);
-        if (!availableHypersmooth.equals(expectedHypersmooth)) {
+        if (!haveSameData(availableHypersmooth as Array, expectedHypersmooth)) {
             logger.error("Wrong available hypersmooth, expected: " + expectedHypersmooth + ", got: " + availableHypersmooth);
+            result = false;
         }
 
-        return true;
+        return result;
     }
 
 
     (:test)
     function testNotifAvailable(logger as Logger) as Boolean {
+        var result = true;
         initDefaults();
         initFake();
         initConnection();
@@ -367,20 +391,71 @@ module GoProCameraTest {
         BleAPI.device.setSetting(GoProSettings.FLICKER, GoProSettings.HZ60);
         BleAPI.device.setSetting(GoProSettings.FRAMERATE, 5);
 
-        var expectedFramerates = [1,2,5,6];
-        var expectedRatios = [4+3<<16, 16+9<<16];
+        var expectedFramerates = [1, 2, 5, 6];
+        var expectedRatios = [4, 6];
         
         var availableFramerates = camera.getAvailableSettings(GoProSettings.FRAMERATE);
-        if (!availableFramerates.equals(expectedFramerates)) {
+        if (!haveSameData(availableFramerates as Array, expectedFramerates)) {
             logger.error("Wrong available lenses, expected: " + expectedFramerates + ", got: " + availableFramerates);
+            result = false;
         }
 
         var availableRatios = camera.getAvailableSettings(GoProSettings.RATIO);
-        if (!availableRatios.equals(expectedRatios)) {
+        if (!haveSameData(availableRatios as Array, expectedRatios)) {
             logger.error("Wrong available ratios, expected: " + expectedRatios + ", got: " + availableRatios);
+            result = false;
         }
 
-        return true;
+        return result;
+    }
+
+    
+    (:test)
+    function testUnexpectedAvailable(logger as Logger) as Boolean {
+        var result = true;
+        initDefaults();
+        
+        BleAPI.device = new FakeGoProDevice(
+            initSettings,
+            initStatuses,
+            new FakeGoProSpecs.SpecsUnknown()
+        );
+        new BluetoothDelegate();
+
+        initConnection();
+
+        var camera = getApp().gopro;
+                
+        camera.subscribeChanges(
+            CameraDelegate.REGISTER_AVAILABLE,
+            [
+                GoProSettings.RESOLUTION,
+                GoProSettings.LENS,
+                GoProSettings.FRAMERATE,
+                GoProSettings.HYPERSMOOTH
+            ]b
+        );
+
+        BleAPI.device.setSetting(GoProSettings.RESOLUTION, 42);
+        BleAPI.device.setSetting(GoProSettings.LENS, 220);
+        BleAPI.device.setSetting(GoProSettings.FRAMERATE, 28);
+
+        var expectedFramerates = [20,21,22,28];
+        var expectedRatios = [];
+        
+        var availableFramerates = camera.getAvailableSettings(GoProSettings.FRAMERATE);
+        if (!haveSameData(availableFramerates as Array, expectedFramerates)) {
+            logger.error("Wrong available lenses, expected: " + expectedFramerates + ", got: " + availableFramerates);
+            result = false;
+        }
+
+        var availableRatios = camera.getAvailableSettings(GoProSettings.RATIO);
+        if (!haveSameData(availableRatios as Array, expectedRatios)) {
+            logger.error("Wrong available ratios, expected: " + expectedRatios + ", got: " + availableRatios);
+            result = false;
+        }
+
+        return result;
     }
 
 
@@ -463,6 +538,7 @@ module GoProCameraTest {
     
     (:test)
     function testLabelKnown(logger as Logger) as Boolean {
+        var result = true;
         initDefaults();
         initFake();
         initConnection();
@@ -486,17 +562,17 @@ module GoProCameraTest {
             label = camera.getLabel(ids[i], null);
             if (!label.equals(expected[i])) {
                 logger.error("Wrong label, expected: " + expected[i] + ", got :" + label);
-                return false;
+                result = false;
             }
         }
 
         label = camera.getDescription();
         if (!label.equals("4K@60 16:9")) {
             logger.error("Wrong description, expected '4K@60 16:9', got :" + label);
-            return false;
+            result = false;
         }
 
-        return true;
+        return result;
     }
 
     

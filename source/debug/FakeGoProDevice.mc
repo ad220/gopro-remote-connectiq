@@ -5,7 +5,7 @@ using Toybox.BluetoothLowEnergy as Ble;
 using BleApiWrapper as BleAPI;
 using GattProfileManager as GPM;
 
-(:debug) class FakeGoProDevice {
+(:debug :ble) class FakeGoProDevice {
 
     typedef FakeGoProSettings as Dictionary<Char or GoProSettings.SettingId, Char or Number>;
     typedef FakeGoProStatuses as Dictionary<Char or GoProCamera.StatusId, Number>;
@@ -248,14 +248,13 @@ using GattProfileManager as GPM;
                 available = specs.availableSettingsMap.keys();
                 break;
             case GoProSettings.LENS:
-                available = (specs.availableSettingsMap.get(settings.get(GoProSettings.RESOLUTION) as Char) as Dictionary).keys();
+                available = specs.availableSettingsMap.get(settings.get(GoProSettings.RESOLUTION) as Char);
+                available = available !=null ? available.keys() : [];
                 break;
             case GoProSettings.FRAMERATE:
-                available = (
-                    specs.availableSettingsMap.get(
-                        settings.get(GoProSettings.RESOLUTION) as Char
-                    ) as Dictionary
-                ).get(settings.get(GoProSettings.LENS) as Char) as Array;
+                available = specs.availableSettingsMap.get(settings.get(GoProSettings.RESOLUTION) as Char);
+                available = available != null ? available.get(settings.get(GoProSettings.LENS) as Char) : [];
+                if (available == null) { available = []; }
                 break;
             case GoProSettings.LED:
                 available = specs.availableLed;

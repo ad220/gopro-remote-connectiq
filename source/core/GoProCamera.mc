@@ -7,14 +7,14 @@ class GoProCamera extends GoProSettings {
     typedef TAvailableSettings as Dictionary<GoProSettings.SettingId or Char, Array<Char>>;
 
     public enum StatusId {
-        OVERHEATING         = 6,
-        BUSY                = 8,
+        // OVERHEATING         = 6,
+        // BUSY                = 8,
         ENCODING            = 10,
         ENCODING_DURATION   = 13,
         SD_REMAINING        = 35,
         BATTERY             = 70,
-        READY               = 82,
-        COLD                = 85,
+        // READY               = 82,
+        // COLD                = 85,
     }
 
     public enum CommandId {

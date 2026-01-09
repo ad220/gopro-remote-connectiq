@@ -104,4 +104,34 @@ module FakeGoProSpecs {
         const availableGps = [] as Array<Char>;
     }
 
+    class SpecsUnknown {
+        const availableSettingsMap    = {
+            42  => {
+                220     => [20,21,22,28],
+                221     => [5,6,8,9,10],
+                222     => [1,5,8],
+                223     => [2],
+            },
+            69  => {
+                72                        => [70,71],
+                GoProSettings.LINEAR      => [3,6,7],
+                99                        => [12,46],
+            },
+            27  => {
+                50      => [28,230]
+            }
+        } as SpecsMap;
+        const availableFlicker        = [10, 210] as Array<Char>;
+        const availableHypersmooth    = [52, 63] as Array<Char>;
+        const availableLed            = [7, 8] as Array<Char>;
+        const availableGps            = [9, 10] as Array<Char>;
+    }
+
+    class SpecsEmpty {
+        const availableSettingsMap    = {} as SpecsMap;
+        const availableFlicker        = [] as Array<Char>;
+        const availableHypersmooth    = [] as Array<Char>;
+        const availableLed            = [] as Array<Char>;
+        const availableGps            = [] as Array<Char>;
+    }
 }
