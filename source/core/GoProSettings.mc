@@ -185,7 +185,10 @@ class GoProSettings {
             }
         }
         else if (id == LENS)         { label = LENS_LABELS.get(setting); }
-        else if (id == FRAMERATE)    { return FRAMERATE_MAP.get(setting) + FRAMERATE_LABEL; }
+        else if (id == FRAMERATE)    {
+            var fps = FRAMERATE_MAP.get(setting);
+            return fps != null ? fps + FRAMERATE_LABEL : "";
+        }
         else if (id == LED)          { label = LED_LABELS.get(setting); }
         else if (id == HYPERSMOOTH)  { label = HYPERSMOOTH_LABELS.get(setting); }
         else {

@@ -47,7 +47,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
             var view = new TogglablesView();
             getApp().viewController.push(view, new TogglablesDelegate(view), SLIDE_DOWN);
             getApp().gopro.subscribeChanges(
-                CameraDelegate.REGISTER_AVAILABLE,
+                CameraDelegate.GET_AVAILABLE,
                 [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.HYPERSMOOTH]b
             );
             return true;
@@ -65,8 +65,8 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
             var menu = new Menu2(null);
             getApp().viewController.push(menu, new TogglablesDelegate(menu), SLIDE_DOWN);
             getApp().gopro.subscribeChanges(
-                CameraDelegate.REGISTER_AVAILABLE,
-                [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.GPS, GoProSettings.HYPERSMOOTH]b
+                CameraDelegate.GET_AVAILABLE,
+                [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.HYPERSMOOTH]b
             );
             return true;
         }

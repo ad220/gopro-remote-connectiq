@@ -95,10 +95,6 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
     
 
     public function onBack() {
-        gopro.subscribeChanges(
-            CameraDelegate.UNREGISTER_AVAILABLE,
-            [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.GPS, GoProSettings.HYPERSMOOTH]b
-        );   
         getApp().viewController.pop(SLIDE_UP);
     }
 }

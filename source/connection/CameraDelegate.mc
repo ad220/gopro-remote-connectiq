@@ -119,9 +119,9 @@ class CameraDelegate {
         }
         
         var mask = queryId & 0x1F;
-        if      (mask ^ 0x12 == 0) { decoder = gopro.method(:onReceiveSetting); }
-        else if (mask ^ 0x13 == 0) { decoder = gopro.method(:onReceiveStatus); }
-        else if (mask ^ 0x02 == 0) { decoder = gopro.method(:onReceiveAvailable); }
+        if      (mask ^ 0x12 == 0 and queryId != 0x32)  { decoder = :onReceiveSetting; }
+        else if (mask ^ 0x13 == 0)                      { decoder = :onReceiveStatus; }
+        else if (mask ^ 0x02 == 0 or queryId == 0x32)   { decoder = :onReceiveAvailable; }
         else {
             System.println("Unknown queryId: " + queryId.toNumber());
             return;
@@ -135,9 +135,9 @@ class CameraDelegate {
             type = data[i] as Char;
             length = data[i+1];
             value = data.slice(i+2, i+2+length);
-            (decoder as Method(id as Char, value as ByteArray) as Void).invoke(type, value);
+            gopro.method(decoder).invoke(type, value);
         }
-        if (queryId == REGISTER_AVAILABLE or queryId == NOTIF_AVAILABLE) {
+        if (decoder == :onReceiveAvailable) {
             gopro.applyAvailableSettings();
         }
         WatchUi.requestUpdate();

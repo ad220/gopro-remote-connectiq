@@ -337,7 +337,7 @@ module GoProCameraTest {
         );
 
         var expectedFramerates = [1,2,5,6,8,9,10];
-        var expectedRatios = [28, 18, 1];
+        var expectedRatios = [1, 18, 28];
         var expectedHypersmooth = [
             GoProSettings.HS_OFF,
             GoProSettings.HS_LOW,
