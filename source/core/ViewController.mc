@@ -4,8 +4,8 @@ import Toybox.WatchUi;
 
 class ViewController {
 
-    private var viewLayersCount as Number;
-    private var currentDelegate as WatchUi.BehaviorDelegate or WatchUi.Menu2InputDelegate or Null;
+    protected var viewLayersCount as Number;
+    protected var currentDelegate as WatchUi.BehaviorDelegate or WatchUi.Menu2InputDelegate or Null;
 
 
     public function initialize() {
