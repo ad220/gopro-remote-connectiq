@@ -47,4 +47,8 @@ class ViewDebugController extends ViewController {
 
         ViewController.popNotif();
     }
+
+    function getCurrentDelegate() as BehaviorDelegate or Menu2InputDelegate or Null {
+        return stack.size()>0 ? stack[stack.size() - 1][1] : null;
+    }
 }
