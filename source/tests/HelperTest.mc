@@ -12,7 +12,7 @@ module HelperTest {
 
         Helper.sort(array, comparator);
         
-        var sortedArray = [1l<<48, 7, 2.3, 1, 5.2d/42, 0, 0, -2, -5.0, -12, -45];
+        var sortedArray = [-45, -12, -5.0, -2, 0, 0, 5.2d/42, 1, 2.3, 7, 1l<<48];
 
         for (var i=0; i<array.size(); i++) {
             if (array[i] != sortedArray[i]) {

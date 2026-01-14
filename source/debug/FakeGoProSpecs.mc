@@ -43,7 +43,7 @@ module FakeGoProSpecs {
             1   => {
                 GoProSettings.HYPERVIEW   => [5,6],
                 GoProSettings.SUPERVIEW   => [1,2,5,6,8,9,10],
-                GoProSettings.WIDE        => [1,2,5,6,8,9,10],
+                GoProSettings.WIDE        => [8,1,10,9,5,2,6],
                 GoProSettings.LINEAR      => [1,2,5,6,8,9,10],
                 GoProSettings.LINEARLOCK  => [5,6,8,9,10],
                 GoProSettings.LINEARLEVEL => [1,2],

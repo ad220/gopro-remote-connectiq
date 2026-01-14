@@ -11,7 +11,7 @@ module Helper {
             var j = 0;
             while (
                 j<sortedArray.size() and
-                comp.compare(array[0] as Object, sortedArray[j] as Object) > 0
+                comp.compare(array[0] as Object, sortedArray[j] as Object) < 0
             ) { j++; }
 
             sortedArray = sortedArray.slice(0, j).add(array[0] as Object).addAll(sortedArray.slice(j, sortedArray.size()));

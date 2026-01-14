@@ -241,7 +241,7 @@ module GoProCameraTest {
             ]b
         );
 
-        var expectedFramerates = [1,2,5,6,8,9,10];
+        var expectedFramerates = [8, 1, 10, 9, 5, 2, 6];
         var expectedRatios = [1, 18, 28];
         var expectedHypersmooth = [
             GoProSettings.HS_OFF,
@@ -252,7 +252,7 @@ module GoProCameraTest {
         
         var availableFramerates = camera.getAvailableSettings(GoProSettings.FRAMERATE);
         if (!TestInit.haveSameData(availableFramerates as Array, expectedFramerates)) {
-            logger.error("Wrong available lenses, expected: " + expectedFramerates + ", got: " + availableFramerates);
+            logger.error("Wrong available framerates, expected: " + expectedFramerates + ", got: " + availableFramerates);
             result = false;
         }
 
@@ -301,7 +301,7 @@ module GoProCameraTest {
         
         var availableFramerates = camera.getAvailableSettings(GoProSettings.FRAMERATE);
         if (!TestInit.haveSameData(availableFramerates as Array, expectedFramerates)) {
-            logger.error("Wrong available lenses, expected: " + expectedFramerates + ", got: " + availableFramerates);
+            logger.error("Wrong available framerates, expected: " + expectedFramerates + ", got: " + availableFramerates);
             result = false;
         }
 
@@ -350,7 +350,7 @@ module GoProCameraTest {
         
         var availableFramerates = camera.getAvailableSettings(GoProSettings.FRAMERATE);
         if (!TestInit.haveSameData(availableFramerates as Array, expectedFramerates)) {
-            logger.error("Wrong available lenses, expected: " + expectedFramerates + ", got: " + availableFramerates);
+            logger.error("Wrong available framerates, expected: " + expectedFramerates + ", got: " + availableFramerates);
             result = false;
         }
 

@@ -228,11 +228,11 @@ class ResolutionComparator {
         if (tupleB == null) { tupleB = [0,0]; }
 
         if (id == 0) {
-            return tupleB[0] - tupleA[0];
+            return tupleA[0] - tupleB[0];
         } else {
             var ratioA = tupleA[1];
             var ratioB = tupleB[1];
-            return (ratioA & 0xFFFF / (ratioA >> 16).toFloat()) - (ratioB & 0xFFFF / (ratioB >> 16).toFloat());
+            return (ratioB & 0xFFFF / (ratioB >> 16).toFloat()) - (ratioA & 0xFFFF / (ratioA >> 16).toFloat());
         }
     }
 
@@ -244,7 +244,7 @@ class ResolutionComparator {
 (:typecheck(false))
 class RatioComparator extends ResolutionComparator {
     public function compare(ratioA, ratioB) as Numeric {
-        return (wrappedCompare(ratioA as Char, ratioB as Char, 1)*10);
+        return wrappedCompare(ratioA as Char, ratioB as Char, 1);
     }
 }
 
@@ -257,6 +257,6 @@ class FramerateComparator {
         if (a == null) { a=0; }
         if (b == null) { b=0; }
         
-        return b-a;
+        return a-b;
     }
 }
