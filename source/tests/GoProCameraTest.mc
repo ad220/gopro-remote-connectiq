@@ -146,6 +146,7 @@ module GoProCameraTest {
             }
         }
 
+        // TODO: test unregister
         return true;
     }
     
@@ -218,6 +219,7 @@ module GoProCameraTest {
             result = false;
         }
 
+        // TODO: test unregister
         return result;
     }
 
@@ -311,6 +313,7 @@ module GoProCameraTest {
             result = false;
         }
 
+        // TODO: test unregister
         return result;
     }
 

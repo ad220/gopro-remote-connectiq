@@ -25,10 +25,6 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
         if (!gopro.isRecording()) {
             var menu = new CustomMenu((0.15*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, null);
             getApp().viewController.switchTo(menu, new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, []), SLIDE_UP);
-            getApp().gopro.subscribeChanges(
-                CameraDelegate.REGISTER_AVAILABLE,
-                [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE]b
-            );
             return true;
         }
         return false;

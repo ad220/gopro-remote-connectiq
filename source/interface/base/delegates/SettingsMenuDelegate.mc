@@ -39,6 +39,11 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
                 menu.addItem(items[id]);
             }
         } else {
+            getApp().gopro.subscribeChanges(
+                CameraDelegate.REGISTER_AVAILABLE,
+                [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE]b
+            );
+
             menu.addItem(new SettingsMenuItem(menuId, GoProSettings.RESOLUTION as Char, Rez.Strings.Resolution, Rez.Drawables.Resolution));
             menu.addItem(new SettingsMenuItem(menuId, GoProSettings.RATIO as Char, Rez.Strings.Ratio, Rez.Drawables.Ratio));
             menu.addItem(new SettingsMenuItem(menuId, GoProSettings.LENS as Char, Rez.Strings.Lens, Rez.Drawables.Lens));
@@ -60,11 +65,9 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
             viewController.switchTo(newMenu, new SettingsMenuDelegate(newMenu, PRESET, items), SLIDE_LEFT);
         } else if (menuId == PRESET) {
             ((item as SettingsMenuItem).gopro as GoProPreset).sync();
-            unsubscribeAvailable();
             toRemote();
         } else {
             getApp().gopro.sendPreset((item as SettingsMenuItem).gopro as GoProPreset);
-            unsubscribeAvailable();
             toRemote();
         }
     }
@@ -74,16 +77,17 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
             toRemote();
         }
         else if (menuId == CAMERA) {
+            unsubscribeAvailable();
             var menu = new CustomMenu((0.15*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {});
+            var delegate = new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, []);
             menu.setFocus(3);
-            viewController.switchTo(menu, new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, []), SLIDE_DOWN);
+            viewController.switchTo(menu, delegate, SLIDE_DOWN);
         } else {
             viewController.pop(SLIDE_DOWN);
         }
     }
 
     private function toRemote() as Void {
-        unsubscribeAvailable();
         viewController.switchTo(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_RIGHT);
     }
 
@@ -96,5 +100,10 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
             CameraDelegate.UNREGISTER_AVAILABLE,
             [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE]b
         );
+    }
+
+    (:debug)
+    public function getId() as MenuId {
+        return menuId;
     }
 }

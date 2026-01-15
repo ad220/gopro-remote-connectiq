@@ -53,4 +53,9 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
     public function onWrap(key as Key) as Boolean {
         return false;
     }
+
+    (:debug)
+    public function getId() as GoProSettings.SettingId {
+        return setting;
+    }
 }
