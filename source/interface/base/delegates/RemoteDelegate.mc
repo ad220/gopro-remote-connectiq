@@ -42,10 +42,6 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
         } else if (!gopro.getDescription().equals(". . .")) {
             var view = new TogglablesView();
             getApp().viewController.push(view, new TogglablesDelegate(view), SLIDE_DOWN);
-            getApp().gopro.subscribeChanges(
-                CameraDelegate.GET_AVAILABLE,
-                [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.HYPERSMOOTH]b
-            );
             return true;
         }
         return false;

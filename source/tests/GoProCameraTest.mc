@@ -28,6 +28,8 @@ module GoProCameraTest {
 
     [X] test request ~~settings~~ / statuses / available
     [X] test notif settings / statuses / available
+
+    [ ] test init / deinit for intended behavior, blocked msg, camera crash,  
     */
 
 

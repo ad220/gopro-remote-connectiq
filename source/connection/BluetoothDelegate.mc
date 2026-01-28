@@ -139,8 +139,12 @@ class BluetoothDelegate extends CameraDelegate {
 
     public function onDisconnect() as Void {
         // put camera to sleep and close connection
+
+        // TODO: separate into disconnect(inherited from CameraDelegate) and onDisconnect (called by the API)
         if (connected) {
             getApp().timerController.stop(keepAliveTimer);
+            keepAliveTimer = null;
+
             BleAPI.setDelegate(null as Ble.BleDelegate);
             try {
                 if (camera != null) {

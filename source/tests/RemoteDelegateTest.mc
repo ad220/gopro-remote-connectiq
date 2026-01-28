@@ -142,6 +142,7 @@ module RemoteDelegateTest {
     (:test)
     function testBack(logger as Test.Logger) as Boolean {
         // TODO
-        return false;
+        throw new Exception();
+        // return false;
     }
 }

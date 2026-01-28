@@ -15,27 +15,32 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
 
         self.view = view;
         self.camera = getApp().gopro;
+
+        camera.subscribeChanges(
+            CameraDelegate.GET_AVAILABLE,
+            [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.HYPERSMOOTH]b
+        );
     }
 
     public function onKey(keyEvent as KeyEvent) as Boolean {
-        if (keyEvent.getKey() == KEY_ENTER) {
-            var callback = view.getHilighted().behavior;
-            if (callback != null) { method(callback).invoke(); }
-            return true;
+        if (keyEvent.getType() == PRESS_TYPE_ACTION) {
+            if (keyEvent.getKey() == KEY_ENTER) {
+                var callback = view.getHilighted().behavior;
+                if (callback != null) { method(callback).invoke(); }
+                return true;
+            }
+            else if (keyEvent.getKey() == KEY_UP) {
+                view.nextButton();
+                requestUpdate();
+                return true;
+            }
+            else if (keyEvent.getKey() == KEY_DOWN) {
+                view.prevButton();
+                requestUpdate();
+                return true;
+            }
         }
         return false;
-    }
-
-    public function onNextPage() as Boolean {
-        view.prevButton();
-        requestUpdate();
-        return true;
-    }
-
-    public function onPreviousPage() as Boolean {
-        view.nextButton();
-        requestUpdate();
-        return true;
     }
 
     public function onSelectable(selectableEvent as SelectableEvent) as Boolean {
@@ -78,14 +83,14 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
             var ledStatus = camera.getSetting(GoProSettings.LED);
             if (ledStatus != null) {
                 var index = available.indexOf(ledStatus);
-                if (index == -1) { return; } // TODO: error msg
+                // TODO: error msg if index == -1
                 view.getHilighted().toggleState(
                     ledStatus==GoProSettings.LED_OFF or 
                     ledStatus==GoProSettings.LED_ALL_OFF
                 );
                 camera.sendSetting(
                     GoProSettings.LED,
-                    index as Char
+                    available[(index + 1) % available.size()]
                 );
             }
         }
@@ -102,6 +107,13 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     public function onStabilize() as Void {
         var menu = new CustomMenu((0.1*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.15*ICM.screenH).toNumber()<<1});
         getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.HYPERSMOOTH), SLIDE_LEFT);
+    }
+
+    public function onSwipe(swipeEvent as SwipeEvent) as Boolean {
+        if (swipeEvent.getDirection() == SWIPE_UP) {
+            return onBack();
+        }
+        return false;
     }
 
     public function onBack() as Boolean {
