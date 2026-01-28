@@ -141,8 +141,26 @@ module RemoteDelegateTest {
 
     (:test)
     function testBack(logger as Test.Logger) as Boolean {
-        // TODO
-        throw new Exception();
-        // return false;
+        TestInit.initDefaults();
+        TestInit.initSink();
+        TestInit.initConnection();
+        
+        var device = BleAPI.device as TestInit.SinkGoProDevice;
+
+        var viewController = new ViewDebugController();
+        getApp().viewController = viewController;
+        
+        var delegate = new RemoteDelegate();
+        viewController.push(new RemoteView(), delegate, WatchUi.SLIDE_IMMEDIATE);
+
+        device.requests = [];
+        delegate.onBack();
+
+        if (!TestInit.haveSameData(device.requests[0], [GPM.UUID_COMMAND_CHAR, [1, GoProCamera.SLEEP]b])) {
+            logger.error("Wrong sleep command");
+            return false;
+        }
+        
+        return true;
     }
 }
