@@ -160,8 +160,9 @@ class BluetoothDelegate extends CameraDelegate {
     private function onDisconnect() as Void {
         System.println("[DEBUG]     onDisconnect");
         if (connected) {
-            getApp().timerController.stop(keepAliveTimer);
-            keepAliveTimer = null;
+            if (camera != null or keepAliveTimer != null) {
+                disconnect();
+            }
             
             if (requestQueue != null) {
                 requestQueue.close();
