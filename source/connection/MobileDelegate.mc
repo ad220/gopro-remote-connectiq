@@ -23,7 +23,7 @@ class MobileDelegate extends CameraDelegate {
         transmit(true);
     }
 
-    protected function onDisconnect() as Void {
+    protected function disconnect() as Void {
         if (connected) {
             transmit(false);
         }
@@ -48,7 +48,7 @@ class MobileDelegate extends CameraDelegate {
             return;
         }
         
-        System.println("Received: " + data);
+        System.println("[DEBUG]     Received from mobile: " + data);
         if (data instanceof Array) {
             var uuid = data[0];
             data.remove(uuid);
@@ -59,7 +59,7 @@ class MobileDelegate extends CameraDelegate {
     }
 
     private function transmit(data as Object) {
-        System.println("sending data: "+data.toString());
+        System.println("[DEBUG]     Sending to mobile: "+data.toString());
         queue.add(data);
         if (queue.size() == 1) { processQueue(); }
     }
@@ -117,12 +117,12 @@ class MobileConnection extends Communications.ConnectionListener {
     }
 
     public function onComplete() as Void {
-        System.println("Succesfully sent message");
+        System.println("[DEBUG]     Successfully sent message");
         getApp().timerController.start(completeCallback, 1, false);
     }
 
     public function onError() {
-        System.println("Error while sending message");
+        System.println("[WARNING]   Error while sending message");
         errorCallback.invoke();
     }
 }

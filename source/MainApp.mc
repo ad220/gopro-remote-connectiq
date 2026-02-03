@@ -22,6 +22,8 @@ class GoProRemoteApp extends Application.AppBase {
 
     // onStart() is called on application start up
     function onStart(state as Dictionary?) as Void {
+        System.println("[APP DBG]   App started");
+
         lastPairedDevice = Storage.getValue("lastPairedDevice") as BluetoothLowEnergy.ScanResult;
         if (state!=null) {
             fromGlance = state.get(:launchedFromGlance) as Boolean == true;
@@ -37,6 +39,8 @@ class GoProRemoteApp extends Application.AppBase {
         if (timerController!=null) {
             timerController.stopAll();
         }
+
+        System.println("[APP DBG]   App stopped");
     }
 
     // Return the initial view of your application here
@@ -44,8 +48,10 @@ class GoProRemoteApp extends Application.AppBase {
     function getInitialView() {
         self.timerController = new TimerController(200);
         self.viewController = new ViewController();
+
         InterfaceComponentsManager.computeInterfaceConstants();
         InterfaceComponentsManager.loadFonts();
+        
         var label = lastPairedDevice==null ? WatchUi.loadResource(Rez.Strings.Pair) : WatchUi.loadResource(Rez.Strings.Connect);
         var delegate = new ConnectDelegate(lastPairedDevice);
         return [ new ConnectView(label, delegate), delegate ];

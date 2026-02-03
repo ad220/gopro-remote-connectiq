@@ -89,7 +89,7 @@ using GattProfileManager as GPM;
                         decoder = method(:onReceiveAvailable);
                         break;
                     default:
-                        System.println("Unknown queryId: " + queryId.toNumber());
+                        System.println("[DBG WARN]  Unknown queryId: " + queryId.toNumber());
                 }
                 if (decoder instanceof Method) {
                     response = [queryId, 0x00]b;
@@ -172,7 +172,7 @@ using GattProfileManager as GPM;
                 break;
 
             default:
-                System.println("Unknown UUID" + uuid);
+                System.println("[DBG WARN]  Unknown UUID" + uuid);
                 break;
         }
         // garminDevice.whenCharacteristicWrite(uuid, Ble.STATUS_SUCCESS);
@@ -211,7 +211,7 @@ using GattProfileManager as GPM;
 
         var value = settings.get(id);
         if (value == null) {
-            System.println("onReceiveSetting null value, id="+id);
+            System.println("[DBG WARN]  onReceiveSetting null value, id="+id);
             return;
         } 
         response.addAll([id, 0x01, value]b);
@@ -227,7 +227,7 @@ using GattProfileManager as GPM;
             var valueB = [0,0,0,0]b;
 
             if (valueN == null) {
-                System.println("onReceiveStatus null value, id="+id);
+                System.println("[DBG WARN]  onReceiveStatus null value, id="+id);
                 return;
             }
 
@@ -270,7 +270,7 @@ using GattProfileManager as GPM;
                 break;
             default:
                 available = [];
-                System.println("Wrong id");
+                System.println("[DBG WARN]  Wrong id");
                 break;
         }
         for (var i=0; i<available.size(); i++) {

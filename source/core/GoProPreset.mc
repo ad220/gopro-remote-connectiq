@@ -16,7 +16,7 @@ class GoProPreset extends GoProSettings {
             preset = Application.Storage.getValue(self.id) as Dictionary<GoProSettings.SettingId, Char>?;
         } catch (exception) {
             // Not an exception on every watch, therefore separate initiation below
-            System.println(exception.getErrorMessage());
+            System.println("[WARNING]   Preset initialize : " + exception.getErrorMessage());
         }
         if (preset==null or preset.isEmpty()) {
             // Default presets defined below

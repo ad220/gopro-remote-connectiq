@@ -100,7 +100,6 @@ module GoProCameraTest {
 
         if (device.requests.size() != ids.size()) {
             logger.error("Wrong number of requests, expected 4, got: " + device.requests.size());
-            System.println(device.requests);
             return false;
         }
 

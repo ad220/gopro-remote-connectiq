@@ -65,7 +65,7 @@ class CameraDelegate {
         pushView.invoke(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
     }
 
-    public function onDisconnect() as Void {
+    public function disconnect() as Void {
         if (connected) {
             connected = false;
             getApp().viewController.returnHome(null, null);
@@ -105,7 +105,7 @@ class CameraDelegate {
 
     private function readTLVMessage(message as ByteArray) as Void {
         if (message.size()<2) {
-            System.println("TLV Message too short");
+            System.println("[WARNING]   TLV Message too short");
             return;
         }
         var gopro = getApp().gopro;
@@ -115,7 +115,7 @@ class CameraDelegate {
         var decoder = null;
 
         if (status != 0) {
-            System.println("Wrong query status received from camera, value: " + status.toNumber());
+            System.println("[WARNING]   Wrong query status received from camera, value: " + status.toNumber());
         }
         
         var mask = queryId & 0x1F;
@@ -123,7 +123,7 @@ class CameraDelegate {
         else if (mask ^ 0x13 == 0)                      { decoder = :onReceiveStatus; }
         else if (mask ^ 0x02 == 0 or queryId == 0x32)   { decoder = :onReceiveAvailable; }
         else {
-            System.println("Unknown queryId: " + queryId.toNumber());
+            System.println("[WARNING]   Unknown queryId: " + queryId.toNumber());
             return;
         }
 

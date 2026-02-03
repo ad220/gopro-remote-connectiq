@@ -150,13 +150,10 @@ class ScanMenuDelegate extends Menu2InputDelegate {
                     if (scanResults[i].get(:menuid)==item.getId()) {
                         stopScan();
                         var device = scanResults[i].get(:device);
-                        try {
-                            getApp().viewController.pop(SLIDE_IMMEDIATE);
-                            WatchUi.requestUpdate();
-                            scanResultCallback.invoke(device);
-                        } catch (ex) {
-                            System.println(ex.getErrorMessage());
-                        }
+                        
+                        getApp().viewController.pop(SLIDE_IMMEDIATE);
+                        WatchUi.requestUpdate();
+                        scanResultCallback.invoke(device);
                         break;
                     }
                 }

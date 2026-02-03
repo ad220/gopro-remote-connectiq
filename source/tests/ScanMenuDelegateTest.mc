@@ -126,7 +126,6 @@ module ScanMenuDelegateTest {
             return false;
         }
         
-        System.println(menu[0].debugItems[0].getId());
         menu[1].onSelect(menu[0].debugItems[0]);
 
         if (BleAPI.scanState != Ble.SCAN_STATE_SCANNING) {

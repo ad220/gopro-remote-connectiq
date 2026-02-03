@@ -201,6 +201,6 @@ class GoProCamera extends GoProSettings {
     }
 
     public function disconnect() as Void {
-        delegate.onDisconnect();
+        delegate.disconnect();
     }
 }
