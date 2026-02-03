@@ -29,12 +29,12 @@ class MobileDelegate extends CameraDelegate {
         }
         queue = [];
         Communications.registerForPhoneAppMessages(null);
-        CameraDelegate.onDisconnect();
+        CameraDelegate.disconnect();
     }
     
     protected function onPairingFailed() as Void {
         CameraDelegate.onPairingFailed();
-        onDisconnect();
+        disconnect();
     }
 
     public function onReceive(message as Communications.PhoneAppMessage) as Void {

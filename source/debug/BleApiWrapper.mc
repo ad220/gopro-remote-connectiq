@@ -24,7 +24,7 @@ module BleApiWrapper {
     var registeredProfiles          as Array<GattProfile>       = [];
     var delegate                    as Ble.BleDelegate?         = null;
     var scanState                   as Ble.ScanState            = Ble.SCAN_STATE_OFF;
-    var pairedDevice                as Array<Ble.Device>        = [];
+    var pairedDevices                as Array<Ble.Device>        = [];
     var scanTimer                   as TimerCallback?           = null;
 
     // Test options
@@ -71,7 +71,7 @@ module BleApiWrapper {
     }
 
     function pairDevice(device as Ble.ScanResult) as Ble.Device? {
-        if (failPairing or pairedDevice.size() >= 3) {
+        if (failPairing or pairedDevices.size() >= 3) {
             throw new Ble.DevicePairException();
 
         } else if (nullPairing) {
@@ -80,14 +80,14 @@ module BleApiWrapper {
         } else {
             var result = new MockDevice() as Ble.Device;
             callbacks.onConnectedStateChanged(result, connectionStatus);
-            pairedDevice.add(result);
+            pairedDevices.add(result);
             return result;
         }
     }
 
     function unpairDevice(device as Ble.Device) as Void {
-        // TODO
-        Ble.unpairDevice(device);
+        pairedDevices.remove(device);
+        callbacks.onConnectedStateChanged(device, Ble.CONNECTION_STATE_DISCONNECTED);
     }
 
 

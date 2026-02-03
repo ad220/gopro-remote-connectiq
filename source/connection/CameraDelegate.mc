@@ -68,7 +68,9 @@ class CameraDelegate {
     public function disconnect() as Void {
         if (connected) {
             connected = false;
-            getApp().viewController.returnHome(null, null);
+
+            getApp().viewController.returnHome(Rez.Strings.Disconnected, NotifView.NOTIF_INFO);
+            getApp().gopro = null as GoProCamera;
         }
     }
 

@@ -67,6 +67,8 @@ class BluetoothDelegate extends CameraDelegate {
     }
 
     public function onPairingFailed() as Void {
+        CameraDelegate.onPairingFailed();
+
         if (!connected and camera!=null) {
             try {
                 BleAPI.unpairDevice(camera);
@@ -129,10 +131,10 @@ class BluetoothDelegate extends CameraDelegate {
 
     public function keepAlive() as Void {
         if (connected and requestQueue != null) {
+            System.println("[DEBUG]     keepAlive");
+
             var data = [0x03, 0x5b, 0x01, 0x42]b;
             requestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_COMMAND_CHAR), data);
-
-            System.println("[DEBUG]     keepAlive");
         } else {
             throw new Exception();
         }
@@ -149,6 +151,8 @@ class BluetoothDelegate extends CameraDelegate {
                 catch (ex) { /* TODO: error code */ }
 
                 camera = null;
+            } else {
+                System.println("[WARNING]   Trying to disconnect a null BLE device");
             }
         }
     }
@@ -165,6 +169,7 @@ class BluetoothDelegate extends CameraDelegate {
             }
 
             BleAPI.setDelegate(null as Ble.BleDelegate);
+            apiCallbacks = null as BleApiCallbacks;
             CameraDelegate.disconnect();
         } else {
             System.println("[WARNING]   onDisconnect called while camera already disconnected");

@@ -48,7 +48,7 @@ class ViewController {
         }
     }
 
-    public function returnHome(message as String?, messageType as NotifView.NotifType?) as Void {
+    public function returnHome(message as String or ResourceId or Null, messageType as NotifView.NotifType?) as Void {
         if (getApp().fromGlance) {
             getApp().fromGlance = false;
             System.exit();
@@ -58,6 +58,11 @@ class ViewController {
             }
             if (viewLayersCount>0) {
                 pop(WatchUi.SLIDE_RIGHT);
+            }
+
+            if (message != null and messageType != null) {
+                var notif = new NotifView(message, messageType);
+                push(notif, new NotifDelegate(), WatchUi.SLIDE_DOWN);
             }
         }
     }

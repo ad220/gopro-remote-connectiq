@@ -11,6 +11,7 @@
     <string id="Connecting">Connecting\nto GoPro...</string>
     <string id="ConnectFail">Unable to connect\nto the camera</string>
     <string id="PairingFail">Unexpected error\nwhile pairing, please\nretry or restart\nthe app</string>
+    <string id="Disconnected">Camera\ndisconnected</string>
 
     <!-- GoPro Models -->
     <!-- $$$ Small -->
