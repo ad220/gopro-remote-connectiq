@@ -46,7 +46,7 @@ module GattProfileManager {
         try {
             BleAPI.registerProfile(profile);
         } catch (ex) {
-            System.println("[ERROR]     registerProfile : " + ex.getErrorMessage());
+            // System.println("[ERROR]     registerProfile : " + ex.getErrorMessage());
         }
     }
 }

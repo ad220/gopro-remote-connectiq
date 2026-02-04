@@ -192,7 +192,7 @@ class GoProSettings {
         else if (id == LED)          { label = LED_LABELS.get(setting); }
         else if (id == HYPERSMOOTH)  { label = HYPERSMOOTH_LABELS.get(setting); }
         else {
-            System.println("[WARNING]   Unknown setting ID requested for label");
+            // System.println("[WARNING]   Unknown setting ID requested for label");
             return label;
         }
         

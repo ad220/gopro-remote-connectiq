@@ -48,7 +48,7 @@ class MobileDelegate extends CameraDelegate {
             return;
         }
         
-        System.println("[DEBUG]     Received from mobile: " + data);
+        // System.println("[DEBUG]     Received from mobile: " + data);
         if (data instanceof Array) {
             var uuid = data[0];
             data.remove(uuid);
@@ -59,7 +59,7 @@ class MobileDelegate extends CameraDelegate {
     }
 
     private function transmit(data as Object) {
-        System.println("[DEBUG]     Sending to mobile: "+data.toString());
+        // System.println("[DEBUG]     Sending to mobile: "+data.toString());
         queue.add(data);
         if (queue.size() == 1) { processQueue(); }
     }
@@ -117,12 +117,12 @@ class MobileConnection extends Communications.ConnectionListener {
     }
 
     public function onComplete() as Void {
-        System.println("[DEBUG]     Successfully sent message");
+        // System.println("[DEBUG]     Successfully sent message");
         getApp().timerController.start(completeCallback, 1, false);
     }
 
     public function onError() {
-        System.println("[WARNING]   Error while sending message");
+        // System.println("[WARNING]   Error while sending message");
         errorCallback.invoke();
     }
 }
