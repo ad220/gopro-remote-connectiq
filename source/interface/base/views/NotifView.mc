@@ -23,6 +23,10 @@ class NotifView extends WatchUi.View {
     }
 
     function onUpdate(dc as Dc) as Void {
+        if (dc has :setAntiAlias) {
+            dc.setAntiAlias(true);
+        }
+
         View.onUpdate(dc);
 
         var accentColor = type == NOTIF_ERROR ? 0xFF5500 : Graphics.COLOR_BLACK;
