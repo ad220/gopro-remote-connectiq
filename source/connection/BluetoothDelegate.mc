@@ -82,8 +82,6 @@ class BluetoothDelegate extends CameraDelegate {
             }
 
             BleAPI.setScanState(Ble.SCAN_STATE_OFF);
-            BleAPI.setDelegate(null as Ble.BleDelegate);
-            apiCallbacks = null as BleApiCallbacks;
         }
     }
 
@@ -131,7 +129,7 @@ class BluetoothDelegate extends CameraDelegate {
 
         CameraDelegate.onConnect(device);
 
-        keepAliveTimer = getApp().timerController.start(method(:keepAlive), 20, true);
+        keepAliveTimer = getApp().timerController.start(method(:keepAlive), 15, true);
     }
 
     public function keepAlive() as Void {
@@ -174,8 +172,6 @@ class BluetoothDelegate extends CameraDelegate {
                 requestQueue = null;
             }
 
-            BleAPI.setDelegate(null as Ble.BleDelegate);
-            apiCallbacks = null as BleApiCallbacks;
             CameraDelegate.disconnect();
         } else {
             System.println("[WARNING]   onDisconnect called while camera already disconnected");

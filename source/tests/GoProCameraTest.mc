@@ -92,11 +92,6 @@ module GoProCameraTest {
             logger.error("Request queue should be null after disconnect");
             result = false;
         }
-
-        if (BleAPI.delegate != null) {
-            logger.error("BLE API delegate should be null after disconnect");
-            result = false;
-        }
         
         if (BleAPI.pairedDevices.size() > 0) {
             logger.error("There is still at least one device paired in the API");
@@ -143,11 +138,6 @@ module GoProCameraTest {
             logger.error("Request queue should be null after pairing failed");
             result = false;
         }
-        
-        if (BleAPI.delegate != null) {
-            logger.error("BLE API delegate should be null after pairing failed");
-            result = false;
-        }
 
         BleAPI.connectionStatus = Ble.CONNECTION_STATE_CONNECTED;
         return result;
@@ -177,11 +167,6 @@ module GoProCameraTest {
         
         if (delegate.getQueue() != null) {
             logger.error("Request queue should be null after disconnect");
-            result = false;
-        }
-
-        if (BleAPI.delegate != null) {
-            logger.error("BLE API delegate should be null after disconnect");
             result = false;
         }
         

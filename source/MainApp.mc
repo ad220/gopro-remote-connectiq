@@ -40,6 +40,8 @@ class GoProRemoteApp extends Application.AppBase {
             timerController.stopAll();
         }
 
+        BleApiWrapper.setDelegate(null as BleDelegate);
+
         System.println("[APP DBG]   App stopped");
     }
 
