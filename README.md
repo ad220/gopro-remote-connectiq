@@ -6,17 +6,22 @@ The widget should support every Garmin watch compatible with encrypted BLE conne
 Please note that this app was mainly developed for personal use, it should now be stable enough but you may still encounter a few bugs.
 
 ## Features
-- allows a Garmin watch to control a GoPro HERO9+
+- allows a Garmin watch to control a GoPro HERO 9/10/11/11 Mini/12/13 and MAX2
 - press shutter (start and stop video)
 - add hilight when recording
 - change video settings manually (resolution, aspect ratio, lens and framerate)
 - change video settings with customizable presets
 - edit camera settings (hypersmooth, gps, leds, anti-flicker)
 
-### Planned [(*)](#disclaimer)
+### Moved to another app
 - QR Code generator for GoPro Labs support
+
+### Planned
+- better info and error pop-ups message with automatic reporting
+- better support for MAX2 (switch between single lens and 360 mode)
+- unofficial api support for older cameras (HERO 5+)
+- protune settings and more
 - add photo and timelapse support
-- better info and error pop-ups message
 
 ## Installation
 The widget is available on the [Garmin Connect IQ store](https://apps.garmin.com/apps/f9e09224-1c60-4e94-a616-f9ef10932fdf). You can install it directly from your Garmin Connect app on your smartphone.
@@ -37,6 +42,12 @@ On this view, press the select button on your watch to start recording and the u
 ![](documentation/screenshots/settings.png)
 
 ## Changelog
+
+### v4.0
+- Add theoretical support for non BLE capable watches through companion app v2[(*)](#disclaimer)
+- Low-end UI for watches with a memory smaller than 60kB
+- Non regression tests 
+- Bug fixes
 
 ### v3.4
 - Add support for MAX2 camera
@@ -75,4 +86,4 @@ On this view, press the select button on your watch to start recording and the u
 - First version of the app, hardcoded for 240x240 garmin watches with touchscreen and HERO11 Black Mini ; needs companion app.
 
 ## Disclaimer
-(*): The planned features are not guaranteed to be implemented. The development of this app is done on my free time, and with the compatibility additions done in v2, I don't feel like continuing this anymore (at least for now). If you want to help, feel free to contribute to the project.
+(*): Garmin broke companion apps a while ago and it's been impossible to communicate between a watch and a custom Android app since then. On the day it comes back, I'll be able to add support for 60+ watch models to bring the new features to the [legacy app](https://github.com/ad220/gopro-remote-connectiq/tree/legacy).
