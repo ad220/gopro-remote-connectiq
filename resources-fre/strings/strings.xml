@@ -8,9 +8,10 @@
 
     <!-- Notif messages -->
     <!-- $$$ Small -->
-    <string id="Connecting">Connexion à la caméra...</string>
-    <string id="ConnectFail">Connexion échouée</string>
+    <string id="Connecting">Connexion à\nla caméra...</string>
+    <string id="ConnectFail">Connexion\néchouée</string>
     <string id="PairingFail">Erreur lors de la\nconnexion, veuillez\n réessayer et/ou redémarrer\nl'application</string>
+    <string id="Disconnected">Caméra\ndéconnectée</string>
 
     <!-- GoPro Models -->
     <!-- $$$ Small -->
@@ -29,7 +30,7 @@
     <!-- $$$ Small -->
     <string id="Pair">APPAIRER</string>
     <string id="Connect">CONNEXION</string>
-
+    
     <!-- PresetPick -->
     <!-- $$$ Small -->
     <string id="Cinema">Cinéma</string>
@@ -48,6 +49,11 @@
     <string id="Ratio">Format</string>
     <string id="Lens">Objectif</string>
     <string id="Framerate">Fréq. d'image</string>
+
+    <!-- Paramètres de la caméra pour appareils avec peu de mémoire -->
+     <!-- $$$ -->
+    <string id="AntiFlicker">Anti scintillement</string>
+    <string id="PowerOff">Éteindre la caméra</string>
 
     <!-- Fréquences d'image -->
     <!-- $$$ Small Tiny-->

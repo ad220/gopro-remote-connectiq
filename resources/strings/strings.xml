@@ -8,9 +8,10 @@
 
     <!-- Notif messages -->
     <!-- $$$ Small -->
-    <string id="Connecting">Connecting to GoPro...</string>
-    <string id="ConnectFail">Unable to connect to GoPro</string>
+    <string id="Connecting">Connecting\nto GoPro...</string>
+    <string id="ConnectFail">Unable to connect\nto the camera</string>
     <string id="PairingFail">Unexpected error\nwhile pairing, please\nretry or restart\nthe app</string>
+    <string id="Disconnected">Camera\ndisconnected</string>
 
     <!-- GoPro Models -->
     <!-- $$$ Small -->
@@ -31,7 +32,7 @@
     <!-- $$$ Small -->
     <string id="Pair">PAIR</string>
     <string id="Connect">CONNECT</string>
-
+    
     <!-- SettingsMenu -->
     <!-- $$$ Small -->
     <string id="Cinema">Cinema</string>
@@ -53,6 +54,11 @@
     <string id="Gps" translatable="false">GPS</string>
     <string id="Led" translatable="false">LED</string>
     <string id="HyperSmooth" translatable="false">HyperSmooth</string>
+
+    <!-- Low end devices settings menu -->
+     <!-- $$$ -->
+    <string id="AntiFlicker">Anti-flicker</string>
+    <string id="PowerOff">Power off</string>
     
     <!-- Framerate -->
     <!-- $$$ Small Tiny-->
