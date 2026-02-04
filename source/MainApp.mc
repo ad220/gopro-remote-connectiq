@@ -2,29 +2,34 @@ import Toybox.Application;
 import Toybox.Lang;
 import Toybox.WatchUi;
 import Toybox.System;
-import Toybox.BluetoothLowEnergy;
+
+using Toybox.BluetoothLowEnergy as Ble;
+using BleApiWrapper as BleAPI;
 
 
 (:glance)
 class GoProRemoteApp extends Application.AppBase {
 
     public var fromGlance as Boolean;
+    
+    (:typecheck(false)) private var appStarted as Boolean;
 
     (:initialized) public var timerController as TimerController;
     (:initialized) public var viewController as ViewController;
     (:initialized) public var gopro as GoProCamera;
-    private var lastPairedDevice as BluetoothLowEnergy.ScanResult?;
+    private var lastPairedDevice as Ble.ScanResult?;
 
     function initialize() {
         AppBase.initialize();
         self.fromGlance = false;
+        self.appStarted = false;
     }
 
     // onStart() is called on application start up
     function onStart(state as Dictionary?) as Void {
         System.println("[APP DBG]   App started");
 
-        lastPairedDevice = Storage.getValue("lastPairedDevice") as BluetoothLowEnergy.ScanResult;
+        lastPairedDevice = Storage.getValue("lastPairedDevice") as Ble.ScanResult;
         if (state!=null) {
             fromGlance = state.get(:launchedFromGlance) as Boolean == true;
         }
@@ -39,8 +44,9 @@ class GoProRemoteApp extends Application.AppBase {
         if (timerController!=null) {
             timerController.stopAll();
         }
-
-        BleApiWrapper.setDelegate(null as BleDelegate);
+        if (appStarted) {
+            BleAPI.setDelegate(null as Ble.BleDelegate);
+        }
 
         System.println("[APP DBG]   App stopped");
     }
@@ -48,6 +54,7 @@ class GoProRemoteApp extends Application.AppBase {
     // Return the initial view of your application here
     (:typecheck(false))
     function getInitialView() {
+        self.appStarted = true;
         self.timerController = new TimerController(200);
         self.viewController = new ViewController();
 
