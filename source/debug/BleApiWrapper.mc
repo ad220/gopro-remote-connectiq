@@ -86,8 +86,10 @@ module BleApiWrapper {
     }
 
     function unpairDevice(device as Ble.Device) as Void {
-        pairedDevices.remove(device);
-        callbacks.onConnectedStateChanged(device, Ble.CONNECTION_STATE_DISCONNECTED);
+        var found = pairedDevices.remove(device);
+        if (found) {
+            callbacks.onConnectedStateChanged(device, Ble.CONNECTION_STATE_DISCONNECTED);
+        }
     }
 
 

@@ -59,10 +59,11 @@ class CameraDelegate {
         pairingTimer = null;
 
         getApp().gopro = new GoProCamera(self);
-        getApp().gopro.registerSettings();
         
         var pushView = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
         pushView.invoke(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
+        
+        getApp().gopro.registerSettings();
     }
 
     public function disconnect() as Void {
@@ -75,8 +76,10 @@ class CameraDelegate {
     }
 
     public function onPairingFailed() as Void {
-        getApp().viewController.push(new NotifView(Rez.Strings.ConnectFail, NotifView.NOTIF_ERROR), new NotifDelegate(), WatchUi.SLIDE_DOWN);
-        pairingTimer = null;
+        if (!connected) {
+            getApp().viewController.push(new NotifView(Rez.Strings.ConnectFail, NotifView.NOTIF_ERROR), new NotifDelegate(), WatchUi.SLIDE_DOWN);
+            pairingTimer = null;
+        }
     }
 
     public function send(

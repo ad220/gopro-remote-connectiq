@@ -14,7 +14,7 @@ class BluetoothDelegate extends CameraDelegate {
     protected var requestQueue as GattRequestQueue?;
 
     protected var camera as Ble.Device?;
-    private var keepAliveTimer as TimerCallback?;
+    protected var keepAliveTimer as TimerCallback?;
 
     public function initialize() {
         CameraDelegate.initialize();
@@ -67,14 +67,24 @@ class BluetoothDelegate extends CameraDelegate {
     }
 
     public function onPairingFailed() as Void {
-        CameraDelegate.onPairingFailed();
+        if (!connected) {
+            System.println("[DEBUG]     Bluetooth pairing failed");
+            CameraDelegate.onPairingFailed();
 
-        if (!connected and camera!=null) {
-            try {
-                BleAPI.unpairDevice(camera);
-            } catch (ex) {}
+            if (camera != null) {
+                try { BleAPI.unpairDevice(camera); }
+
+                catch (ex) {
+                    System.println("[ERROR]     Unexpected error while unpairing camera : " + ex.getErrorMessage());
+                }
+
+                camera = null;
+            }
+
+            BleAPI.setScanState(Ble.SCAN_STATE_OFF);
+            BleAPI.setDelegate(null as Ble.BleDelegate);
+            apiCallbacks = null as BleApiCallbacks;
         }
-        BleAPI.setScanState(Ble.SCAN_STATE_OFF);
     }
 
     public function onConnectedStateChanged(device as Ble.Device, state as Ble.ConnectionState) as Void {
@@ -87,10 +97,10 @@ class BluetoothDelegate extends CameraDelegate {
                     device.requestBond();
                 }
             } else {
-                onDisconnect();
+                if (isPairing())    { onPairingFailed(); }
+                else                { onDisconnect(); }
             }
         } else {
-            connected = false;
             System.println("[WARNING]   Null device changed connected status");
         }
     }
@@ -115,11 +125,6 @@ class BluetoothDelegate extends CameraDelegate {
         if (service != null) {
             requestQueue = new GattRequestQueue(service);
         } else {
-            try {
-                BleAPI.unpairDevice(device);
-            } catch (ex) {}
-
-            disconnect();
             onPairingFailed();
             return;
         }
