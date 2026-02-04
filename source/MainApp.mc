@@ -11,7 +11,7 @@ using BleApiWrapper as BleAPI;
 class GoProRemoteApp extends Application.AppBase {
 
     public var fromGlance as Boolean;
-    
+
     (:typecheck(false)) private var appStarted as Boolean;
 
     (:initialized) public var timerController as TimerController;
@@ -27,7 +27,7 @@ class GoProRemoteApp extends Application.AppBase {
 
     // onStart() is called on application start up
     function onStart(state as Dictionary?) as Void {
-        System.println("[APP DBG]   App started");
+        // System.println("[APP DBG]   App started");
 
         lastPairedDevice = Storage.getValue("lastPairedDevice") as Ble.ScanResult;
         if (state!=null) {
@@ -48,7 +48,7 @@ class GoProRemoteApp extends Application.AppBase {
             BleAPI.setDelegate(null as Ble.BleDelegate);
         }
 
-        System.println("[APP DBG]   App stopped");
+        // System.println("[APP DBG]   App stopped");
     }
 
     // Return the initial view of your application here

@@ -29,7 +29,7 @@ class GattRequestQueue {
         isProcessing = true;
         var request = queue[0];
         if (!(request.getData() instanceof ByteArray)) {
-            System.println("[WARNING]   Request data is not a ByteArray: "+request.getData());
+            // System.println("[WARNING]   Request data is not a ByteArray: "+request.getData());
             onRequestProcessed(request.getType(), request.getUuid(), Ble.STATUS_SUCCESS);
         }
         var characteristic = service.getCharacteristic(request.getUuid());
@@ -48,10 +48,10 @@ class GattRequestQueue {
                 characteristic.requestWrite(request.getData(), {:writeType => Ble.WRITE_TYPE_DEFAULT});
             }
             
-            System.println("[DEBUG]     Write data " + request.getData() + " to char " + request.getUuid());
+            // System.println("[DEBUG]     Write data " + request.getData() + " to char " + request.getUuid());
             
         } catch (ex) {
-            System.println("[ERROR]     sendRequest : " + ex.getErrorMessage());
+            // System.println("[ERROR]     sendRequest : " + ex.getErrorMessage());
         }
         request.startTimer();
     }
@@ -67,12 +67,12 @@ class GattRequestQueue {
                 isProcessing = false;
             }
         } else {
-            System.println("[WARNING]   Write operation failed or queue is not synchronized, status: " + status);
+            // System.println("[WARNING]   Write operation failed or queue is not synchronized, status: " + status);
         }
     }
 
     public function onRequestFail() as Void {
-        System.println("[WARNING]   GATT write operation failed");
+        // System.println("[WARNING]   GATT write operation failed");
     }
 
     public function close() as Void {

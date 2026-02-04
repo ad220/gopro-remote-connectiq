@@ -39,9 +39,9 @@ class BluetoothDelegate extends CameraDelegate {
             // filter results with GoPro 0xFEA6 UUID
             for (var device = scanResults.next() as Ble.ScanResult; device!=null; device = scanResults.next()) {
                 var uuids = device.getServiceUuids();
-                System.println("[DEBUG]     Scan result raw data: " + device.getRawData());
+                // System.println("[DEBUG]     Scan result raw data: " + device.getRawData());
                 for (var uuid = uuids.next() as Ble.Uuid; uuid!=null; uuid = uuids.next()) {
-                    System.println("[DEBUG]     Scan result uuid: " + uuid.toString());
+                    // System.println("[DEBUG]     Scan result uuid: " + uuid.toString());
                     if (uuid.toString().equals(GattProfileManager.GOPRO_CONTROL_SERVICE)) {
                         scanResultsArray.add(device);
                         break;
@@ -50,7 +50,7 @@ class BluetoothDelegate extends CameraDelegate {
             }
             scanMenuDelegate.onScanResults(scanResultsArray);
         } else {
-            System.println("[WARNING]   Scan menu is null");
+            // System.println("[WARNING]   Scan menu is null");
         }
     }
 
@@ -68,14 +68,14 @@ class BluetoothDelegate extends CameraDelegate {
 
     public function onPairingFailed() as Void {
         if (!connected) {
-            System.println("[DEBUG]     Bluetooth pairing failed");
+            // System.println("[DEBUG]     Bluetooth pairing failed");
             CameraDelegate.onPairingFailed();
 
             if (camera != null) {
                 try { BleAPI.unpairDevice(camera); }
 
                 catch (ex) {
-                    System.println("[ERROR]     Unexpected error while unpairing camera : " + ex.getErrorMessage());
+                    // System.println("[ERROR]     Unexpected error while unpairing camera : " + ex.getErrorMessage());
                 }
 
                 camera = null;
@@ -99,7 +99,7 @@ class BluetoothDelegate extends CameraDelegate {
                 else                { onDisconnect(); }
             }
         } else {
-            System.println("[WARNING]   Null device changed connected status");
+            // System.println("[WARNING]   Null device changed connected status");
         }
     }
     
@@ -110,7 +110,7 @@ class BluetoothDelegate extends CameraDelegate {
             }
         } else {
             connected = false;
-            System.println("[WARNING]   Null device changed encryption status");
+            // System.println("[WARNING]   Null device changed encryption status");
         }
     }
 
@@ -134,7 +134,7 @@ class BluetoothDelegate extends CameraDelegate {
 
     public function keepAlive() as Void {
         if (connected and requestQueue != null) {
-            System.println("[DEBUG]     keepAlive");
+            // System.println("[DEBUG]     keepAlive");
 
             var data = [0x03, 0x5b, 0x01, 0x42]b;
             requestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_COMMAND_CHAR), data);
@@ -155,13 +155,13 @@ class BluetoothDelegate extends CameraDelegate {
 
                 camera = null;
             } else {
-                System.println("[WARNING]   Trying to disconnect a null BLE device");
+                // System.println("[WARNING]   Trying to disconnect a null BLE device");
             }
         }
     }
 
     private function onDisconnect() as Void {
-        System.println("[DEBUG]     onDisconnect");
+        // System.println("[DEBUG]     onDisconnect");
         if (connected) {
             if (camera != null or keepAliveTimer != null) {
                 disconnect();
@@ -174,7 +174,7 @@ class BluetoothDelegate extends CameraDelegate {
 
             CameraDelegate.disconnect();
         } else {
-            System.println("[WARNING]   onDisconnect called while camera already disconnected");
+            // System.println("[WARNING]   onDisconnect called while camera already disconnected");
         }
     }
 
@@ -195,7 +195,7 @@ class BluetoothDelegate extends CameraDelegate {
 
     public function onCharacteristicRead(characteristic as Ble.Characteristic, status as Ble.Status, value as ByteArray) as Void {
         if (status != Ble.STATUS_SUCCESS) {
-            System.println("[WARNING]     Error while reading characteristic");
+            // System.println("[WARNING]     Error while reading characteristic");
             return;
         }
         if (characteristic.getUuid().equals(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR))) {

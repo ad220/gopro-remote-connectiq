@@ -26,7 +26,7 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
         else if (setting == GoProSettings.LED)          { titleId = Rez.Strings.Led; }
         else if (setting == GoProSettings.HYPERSMOOTH)  { titleId = Rez.Strings.HyperSmooth; }
         else {
-            System.println("[WARNING]   Unknown Setting id");
+            // System.println("[WARNING]   Unknown Setting id");
             throw new Exception();
         }
 
