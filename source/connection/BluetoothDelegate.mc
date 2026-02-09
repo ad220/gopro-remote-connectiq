@@ -82,6 +82,7 @@ class BluetoothDelegate extends CameraDelegate {
             }
 
             BleAPI.setScanState(Ble.SCAN_STATE_OFF);
+            BleAPI.setDelegate(null as Ble.BleDelegate);
         }
     }
 
