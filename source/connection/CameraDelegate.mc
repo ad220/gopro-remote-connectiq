@@ -140,6 +140,7 @@ class CameraDelegate {
             type = data[i] as Char;
             length = data[i+1];
             value = data.slice(i+2, i+2+length);
+            // ERA_CRASHx1: gopro is null
             gopro.method(decoder).invoke(type, value);
         }
         if (decoder == :onReceiveAvailable) {
