@@ -81,7 +81,9 @@ class BluetoothDelegate extends CameraDelegate {
                 camera = null;
             }
 
+            // TODO: add test for null delegate after pairing fail
             BleAPI.setScanState(Ble.SCAN_STATE_OFF);
+            BleAPI.setDelegate(null as Ble.BleDelegate);
         }
     }
 
@@ -92,7 +94,8 @@ class BluetoothDelegate extends CameraDelegate {
                     onConnect(device);
                 } else {
                     connected = false;
-                    device.requestBond();
+                    try             { device.requestBond(); }
+                    catch (ex)      { onPairingFailed(); }
                 }
             } else {
                 if (isPairing())    { onPairingFailed(); }
@@ -139,6 +142,7 @@ class BluetoothDelegate extends CameraDelegate {
             var data = [0x03, 0x5b, 0x01, 0x42]b;
             requestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_COMMAND_CHAR), data);
         } else {
+            // ERA_CRASHx9
             throw new Exception();
         }
     }

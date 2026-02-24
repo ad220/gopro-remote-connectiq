@@ -72,6 +72,8 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     
     public function onLed() as Void {
         var available = camera.getAvailableSettings(GoProSettings.LED);
+        if (available.size() == 0) { return; }
+
         if (available.size()>2) {
             var menu = new CustomMenu(
                 (0.1*ICM.screenH).toNumber()<<1,
