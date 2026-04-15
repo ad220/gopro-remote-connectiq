@@ -31,6 +31,7 @@ class BluetoothDelegate extends CameraDelegate {
         if (status == Ble.STATUS_SUCCESS and scanMenuDelegate!=null) {
             scanMenuDelegate.setScanState(scanState);
         }
+        // TODO(error): if status != success
     }
 
     public function onScanResults(scanResults as Ble.Iterator) as Void {
@@ -55,7 +56,7 @@ class BluetoothDelegate extends CameraDelegate {
     }
 
     public function connect(device as Ble.ScanResult?) as Void {
-        if (device == null) { throw new Exception(); }
+        if (device == null) { throw new Exception(); /* TODO(error)? */}
         CameraDelegate.connect(device);
 
         try {
@@ -63,6 +64,7 @@ class BluetoothDelegate extends CameraDelegate {
         } catch (ex) {
             var view = new NotifView(Rez.Strings.PairingFail, NotifView.NOTIF_ERROR);
             getApp().viewController.push(view, new NotifDelegate(), WatchUi.SLIDE_UP);
+            // TODO(error)
         }
     }
 
@@ -75,6 +77,7 @@ class BluetoothDelegate extends CameraDelegate {
                 try { BleAPI.unpairDevice(camera); }
 
                 catch (ex) {
+                    // TODO(error)
                     // System.println("[ERROR]     Unexpected error while unpairing camera : " + ex.getErrorMessage());
                 }
 
@@ -88,32 +91,27 @@ class BluetoothDelegate extends CameraDelegate {
     }
 
     public function onConnectedStateChanged(device as Ble.Device, state as Ble.ConnectionState) as Void {
-        if (device!=null) {
-            if (state == Ble.CONNECTION_STATE_CONNECTED) {
-                if (device.isBonded()) {
-                    onConnect(device);
-                } else {
-                    connected = false;
-                    try             { device.requestBond(); }
-                    catch (ex)      { onPairingFailed(); }
-                }
+        if (state == Ble.CONNECTION_STATE_CONNECTED) {
+            if (device.isBonded()) {
+                onConnect(device);
             } else {
-                if (isPairing())    { onPairingFailed(); }
-                else                { onDisconnect(); }
+                connected = false;
+                try             { device.requestBond(); }
+                catch (ex)      { onPairingFailed(); /* TODO(error)? */ }
             }
         } else {
-            // System.println("[WARNING]   Null device changed connected status");
+            if (isPairing())    { onPairingFailed(); }
+            else                { onDisconnect(); }
         }
     }
     
     public function onEncryptionStatus(device as Ble.Device, status as Ble.Status) as Void {
-        if (device!=null and status == Ble.STATUS_SUCCESS) {
+        if (status == Ble.STATUS_SUCCESS) {
             if (!connected) {
                 onConnect(device);
             }
         } else {
             connected = false;
-            // System.println("[WARNING]   Null device changed encryption status");
         }
     }
 
@@ -127,6 +125,7 @@ class BluetoothDelegate extends CameraDelegate {
             requestQueue = new GattRequestQueue(service);
         } else {
             onPairingFailed();
+            // TODO(error)
             return;
         }
 
@@ -142,7 +141,8 @@ class BluetoothDelegate extends CameraDelegate {
             var data = [0x03, 0x5b, 0x01, 0x42]b;
             requestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_COMMAND_CHAR), data);
         } else {
-            // ERA_CRASHx9
+            // ERA_CRASH(x9v4.0.1)
+            // TODO(error)
             throw new Exception();
         }
     }
@@ -155,12 +155,13 @@ class BluetoothDelegate extends CameraDelegate {
             
             if (camera != null) {
                 try { BleAPI.unpairDevice(camera); }
-                catch (ex) { /* TODO: error code */ }
+                catch (ex) { /* TODO(error) */ }
 
                 camera = null;
-            } else {
-                // System.println("[WARNING]   Trying to disconnect a null BLE device");
             }
+            // else {
+            //     System.println("[WARNING]   Trying to disconnect a null BLE device");
+            // }
         }
     }
 
@@ -177,9 +178,10 @@ class BluetoothDelegate extends CameraDelegate {
             }
 
             CameraDelegate.disconnect();
-        } else {
-            // System.println("[WARNING]   onDisconnect called while camera already disconnected");
         }
+        // else {
+        //     System.println("[WARNING]   onDisconnect called while camera already disconnected");
+        // }
     }
 
     public function send(
@@ -200,6 +202,7 @@ class BluetoothDelegate extends CameraDelegate {
     public function onCharacteristicRead(characteristic as Ble.Characteristic, status as Ble.Status, value as ByteArray) as Void {
         if (status != Ble.STATUS_SUCCESS) {
             // System.println("[WARNING]     Error while reading characteristic");
+            // TODO(error)
             return;
         }
         if (characteristic.getUuid().equals(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR))) {
@@ -208,12 +211,12 @@ class BluetoothDelegate extends CameraDelegate {
     }
 
     public function onCharacteristicWrite(characteristic as Ble.Characteristic, status as Ble.Status) as Void {
-        if (requestQueue == null) { throw new Exception(); }
+        if (requestQueue == null) { throw new Exception(); /* TODO(error) */ }
         requestQueue.onRequestProcessed(GattRequest.WRITE_CHARACTERISTIC, characteristic.getUuid(), status);
     }
 
     public function onDescriptorWrite(descriptor as Ble.Descriptor, status as Ble.Status) as Void {
-        if (requestQueue == null) { throw new Exception(); }
+        if (requestQueue == null) { throw new Exception(); /* TODO(error) */ }
         requestQueue.onRequestProcessed(GattRequest.REGISTER_NOTIFICATION, descriptor.getUuid(), status);
     }
 }

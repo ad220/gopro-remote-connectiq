@@ -100,7 +100,7 @@ class CameraDelegate {
             queryReplyLength = (response[1] << 8) + response[2];
             queryReplyBuffer = response.slice(3, null);
         } else if ((response[0] & 0x80) == 0x80 and queryReplyBuffer!=null) { // Continuation packet
-            // TODO: error msg if buffer null
+            // TODO(error): if buffer null
             queryReplyBuffer.addAll(response.slice(1, null));
             if (queryReplyBuffer.size() == queryReplyLength) {
                 readTLVMessage(queryReplyBuffer);
@@ -120,6 +120,7 @@ class CameraDelegate {
         var decoder = null;
 
         if (status != 0) {
+            // TODO(error): bad camera status
             // System.println("[WARNING]   Wrong query status received from camera, value: " + status.toNumber());
         }
         
@@ -128,6 +129,7 @@ class CameraDelegate {
         else if (mask ^ 0x13 == 0)                      { decoder = :onReceiveStatus; }
         else if (mask ^ 0x02 == 0 or queryId == 0x32)   { decoder = :onReceiveAvailable; }
         else {
+            // TODO(error): unknown camera queryId
             // System.println("[WARNING]   Unknown queryId: " + queryId.toNumber());
             return;
         }
@@ -140,7 +142,10 @@ class CameraDelegate {
             type = data[i] as Char;
             length = data[i+1];
             value = data.slice(i+2, i+2+length);
-            // ERA_CRASHx1: gopro is null
+            // ERA_CRASH(x1v4.0.1): gopro is null
+            // This bug shouldn't exist as delegate doesn't exist if gopro is null.
+            // GoPro app-wide ref set on instanciation
+            // CamDelegate only exists outside of the gopro scope in ConnectViewDelegate
             gopro.method(decoder).invoke(type, value);
         }
         if (decoder == :onReceiveAvailable) {

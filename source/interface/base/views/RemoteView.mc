@@ -69,7 +69,7 @@ class RemoteView extends WatchUi.View {
         dc.fillRoundedRectangle(0.385*width, 0.231*height, 0.346*width, 0.346*height, 0.07*width);
         
         // Settings button
-        // ERA_CRASHx4
+        // ERA_CRASH(x11v4.0.1)
         if (!gopro.isRecording()) {
             dc.fillRoundedRectangle(0.175*width, 0.6865*height, 0.65*width, 0.167*height, 255);
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
@@ -89,7 +89,7 @@ class RemoteView extends WatchUi.View {
         dc.setPenWidth(0.03*width);
         dc.drawCircle(0.558*width, 0.404*height, 0.1*width);
 
-        if (gopro.isRecording()) {
+        if (gopro != null and gopro.isRecording()) {
             var recDurationSeconds = gopro.getStatus(GoProCamera.ENCODING_DURATION);
             if (recDurationSeconds == null) { recDurationSeconds = 0; }
 

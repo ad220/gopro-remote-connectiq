@@ -28,31 +28,32 @@ class GattRequestQueue {
     public function sendRequest() as Void {
         isProcessing = true;
         var request = queue[0];
-        if (!(request.getData() instanceof ByteArray)) {
-            // System.println("[WARNING]   Request data is not a ByteArray: "+request.getData());
-            onRequestProcessed(request.getType(), request.getUuid(), Ble.STATUS_SUCCESS);
-        }
         var characteristic = service.getCharacteristic(request.getUuid());
-        try {
-            if (characteristic == null) { throw new Exception(); }
-
-            // Register notifications for characteristic
-            if (request.getType() == GattRequest.REGISTER_NOTIFICATION) {
-                var descriptor = characteristic.getDescriptor(Ble.cccdUuid());
-                if (descriptor != null) {
-                    descriptor.requestWrite(request.getData());
-                }
-
-            // Write request.data in characteristic
-            } else {
-                characteristic.requestWrite(request.getData(), {:writeType => Ble.WRITE_TYPE_DEFAULT});
-            }
-            
-            // System.println("[DEBUG]     Write data " + request.getData() + " to char " + request.getUuid());
-            
-        } catch (ex) {
-            // System.println("[ERROR]     sendRequest : " + ex.getErrorMessage());
+        if (characteristic == null) {
+            // TODO(error) warn: BLE char not found
+            onRequestFail();
+            return;
         }
+
+        // Register notifications for characteristic
+        if (request.getType() == GattRequest.REGISTER_NOTIFICATION) {
+            var descriptor = characteristic.getDescriptor(Ble.cccdUuid());
+            if (descriptor != null) {
+                // TODO(error) BLE warn write fail, add try catch
+                descriptor.requestWrite(request.getData());
+            } else {
+                // TODO(error) warn: BLE desc not found
+                onRequestFail();
+                return;
+            }
+
+        // Write request.data in characteristic
+        } else {
+            // TODO(error) BLE warn write fail, add try catch
+            characteristic.requestWrite(request.getData(), {:writeType => Ble.WRITE_TYPE_DEFAULT});
+        }
+        
+        // System.println("[DEBUG]     Write data " + request.getData() + " to char " + request.getUuid());
         request.startTimer();
     }
     
@@ -71,7 +72,9 @@ class GattRequestQueue {
         }
     }
 
-    public function onRequestFail() as Void {
+    public function onRequestFail(/* TODO(error) error as Number */) as Void {
+        // TODO(test)
+        // TODO(error)
         // System.println("[WARNING]   GATT write operation failed");
     }
 
@@ -133,7 +136,7 @@ class GattRequest {
     }
 
     public function onTimeOut() as Void {
-        // TODO: handle null queue
+        // TODO(error): BLE null queue (refactor, remove done, add timercallback and stop timer onResponse)
         var queueRef = queue.get();
         if (!done and queueRef != null) {
             failCounter++;
