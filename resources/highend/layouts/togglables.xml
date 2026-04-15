@@ -30,25 +30,25 @@
 
     <layout id="TogglablesInfos">
         <label id="BatteryLevel" x="50%" y="46.5%" text="0%" color="Gfx.COLOR_WHITE" font="@Fonts.Tiny" justification="Gfx.TEXT_JUSTIFY_VCENTER | Gfx.TEXT_JUSTIFY_LEFT"/>
-        <bitmap id="BatteryIcon" x="41%" y="44%" filename="../../resources/drawables/bolt.png" scaleY="6%"  dithering="none"/>
+        <bitmap id="BatteryIcon" x="41%" y="44%" filename="../../common/drawables/bolt.png" scaleY="6%"  dithering="none"/>
 
         <label id="SdLevel" x="50%" y="54.5%" text="0:00" color="Gfx.COLOR_WHITE" font="@Fonts.Tiny" justification="Gfx.TEXT_JUSTIFY_VCENTER | Gfx.TEXT_JUSTIFY_LEFT"/>
-        <bitmap id="SdIcon" x="41%" y="52%" filename="../../resources/drawables/sd.png" scaleX="6%"  dithering="none"/>
+        <bitmap id="SdIcon" x="41%" y="52%" filename="../../common/drawables/sd.png" scaleX="6%"  dithering="none"/>
     </layout>
     
-    <bitmap id="LedOff" filename="../../resources/drawables/led_off.png" scaleX="20%"  dithering="none"/>
-    <bitmap id="LedOn" filename="../../resources/drawables/led_on.png" scaleX="20%"  dithering="none"/>
+    <bitmap id="LedOff" filename="../../common/drawables/led_off.png" scaleX="20%"  dithering="none"/>
+    <bitmap id="LedOn" filename="../../common/drawables/led_on.png" scaleX="20%"  dithering="none"/>
     
-    <bitmap id="PowerOff" filename="../../resources/drawables/power_off.png" scaleX="20%"  dithering="none"/>
-    <bitmap id="PowerOn" filename="../../resources/drawables/power_on.png" scaleX="20%"  dithering="none"/>
+    <bitmap id="PowerOff" filename="../../common/drawables/power_off.png" scaleX="20%"  dithering="none"/>
+    <bitmap id="PowerOn" filename="../../common/drawables/power_on.png" scaleX="20%"  dithering="none"/>
     
-    <bitmap id="Flicker60" filename="../../resources/drawables/flicker_60.png" scaleX="20%"  dithering="none"/>
-    <bitmap id="Flicker50" filename="../../resources/drawables/flicker_50.png" scaleX="20%"  dithering="none"/>
+    <bitmap id="Flicker60" filename="../../common/drawables/flicker_60.png" scaleX="20%"  dithering="none"/>
+    <bitmap id="Flicker50" filename="../../common/drawables/flicker_50.png" scaleX="20%"  dithering="none"/>
     
-    <bitmap id="StabilizeOff" filename="../../resources/drawables/stabilize_off.png" scaleX="20%"  dithering="none"/>
-    <bitmap id="StabilizeOn" filename="../../resources/drawables/stabilize_on.png" scaleX="20%"  dithering="none"/>
+    <bitmap id="StabilizeOff" filename="../../common/drawables/stabilize_off.png" scaleX="20%"  dithering="none"/>
+    <bitmap id="StabilizeOn" filename="../../common/drawables/stabilize_on.png" scaleX="20%"  dithering="none"/>
     
-    <bitmap id="GpsOff" filename="../../resources/drawables/gps_off.png" scaleX="20%"  dithering="none"/>
-    <bitmap id="GpsOn" filename="../../resources/drawables/gps_on.png" scaleX="20%"  dithering="none"/>
+    <bitmap id="GpsOff" filename="../../common/drawables/gps_off.png" scaleX="20%"  dithering="none"/>
+    <bitmap id="GpsOn" filename="../../common/drawables/gps_on.png" scaleX="20%"  dithering="none"/>
     
 </resources>

@@ -1,21 +1,22 @@
 project.manifest = manifest.xml
 
 base.excludeAnnotations = mobile; lowend; debugoff
-base.resourcePath = resources; resources-highend
+base.resourcePath = resources/common; resources/highend
+base.lang.fre = resources/lang/fre
 
 mobile_excludeAnnotations = ble; lowend; debugoff
 
 mobile-light_excludeAnnotations = ble; highend; debugoff
-mobile-light_resourcePath = resources; resources-lowend; resources-scalable/resources-round-240x240
+mobile-light_resourcePath = resources/common; resources/lowend; resources/typefaces/resources-round-240x240
 
-round-218x218.resourcePath = $(base.resourcePath); resources-scalable/resources-round-218x218
-round-240x240.resourcePath = $(base.resourcePath); resources-scalable/resources-round-240x240
-round-260x260.resourcePath = $(base.resourcePath); resources-scalable/resources-round-260x260
-round-280x280.resourcePath = $(base.resourcePath); resources-scalable/resources-round-280x280
-round-360x360.resourcePath = $(base.resourcePath); resources-scalable/resources-round-360x360
-round-390x390.resourcePath = $(base.resourcePath); resources-scalable/resources-round-390x390
-round-416x416.resourcePath = $(base.resourcePath); resources-scalable/resources-round-416x416
-round-454x454.resourcePath = $(base.resourcePath); resources-scalable/resources-round-454x454
+round-218x218.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-218x218
+round-240x240.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-240x240
+round-260x260.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-260x260
+round-280x280.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-280x280
+round-360x360.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-360x360
+round-390x390.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-390x390
+round-416x416.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-416x416
+round-454x454.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-454x454
 
 # Oddly shaped devices with BLE comm
 venux1.resourcePath = $(round-454x454.resourcePath)
