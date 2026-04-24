@@ -79,7 +79,7 @@ class RemoteView extends WatchUi.View {
         dc.drawText(0.55*width, 0.765*height, ICM.fontTiny, gopro.getDescription(), ICM.JTEXT_MID);
         
         // Draw icons
-        if (hilightIcon!=null and settingsIcon!=null) {
+        if (hilightIcon!=null and settingsIcon!=null) { // TODO(error): null
             dc.drawBitmap(0.156*width, 0.356*height, hilightIcon);
             dc.drawBitmap(0.21*width, 0.72*height, settingsIcon);
         }
@@ -89,7 +89,7 @@ class RemoteView extends WatchUi.View {
         dc.setPenWidth(0.03*width);
         dc.drawCircle(0.558*width, 0.404*height, 0.1*width);
 
-        if (gopro != null and gopro.isRecording()) {
+        if (gopro != null and gopro.isRecording()) { // TODO(error): null error
             var recDurationSeconds = gopro.getStatus(GoProCamera.ENCODING_DURATION);
             if (recDurationSeconds == null) { recDurationSeconds = 0; }
 

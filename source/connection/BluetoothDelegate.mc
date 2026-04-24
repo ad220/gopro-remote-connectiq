@@ -56,7 +56,7 @@ class BluetoothDelegate extends CameraDelegate {
     }
 
     public function connect(device as Ble.ScanResult?) as Void {
-        if (device == null) { throw new Exception(); /* TODO(error)? */}
+        if (device == null) { throw new Exception(); /* TODO(error): null error */}
         CameraDelegate.connect(device);
 
         try {
@@ -64,7 +64,7 @@ class BluetoothDelegate extends CameraDelegate {
         } catch (ex) {
             var view = new NotifView(Rez.Strings.PairingFail, NotifView.NOTIF_ERROR);
             getApp().viewController.push(view, new NotifDelegate(), WatchUi.SLIDE_UP);
-            // TODO(error)
+            // TODO(error): connect
         }
     }
 
@@ -77,7 +77,7 @@ class BluetoothDelegate extends CameraDelegate {
                 try { BleAPI.unpairDevice(camera); }
 
                 catch (ex) {
-                    // TODO(error)
+                    // TODO(error): pairing
                     // System.println("[ERROR]     Unexpected error while unpairing camera : " + ex.getErrorMessage());
                 }
 
@@ -118,14 +118,14 @@ class BluetoothDelegate extends CameraDelegate {
     private function onConnect(device as Ble.Device?) as Void {
         BleAPI.setScanState(Ble.SCAN_STATE_OFF);
         
-        if (device == null) { throw new Exception(); }
+        if (device == null) { throw new Exception(); } // TODO(error): null error
 
         var service = device.getService(Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE));
         if (service != null) {
             requestQueue = new GattRequestQueue(service);
         } else {
             onPairingFailed();
-            // TODO(error)
+            // TODO(error): null pairing
             return;
         }
 
@@ -179,6 +179,7 @@ class BluetoothDelegate extends CameraDelegate {
 
             CameraDelegate.disconnect();
         }
+        // TODO(error): null ? what can I do with this error wo the trace
         // else {
         //     System.println("[WARNING]   onDisconnect called while camera already disconnected");
         // }
@@ -189,7 +190,7 @@ class BluetoothDelegate extends CameraDelegate {
         uuid as GattProfileManager.GoProUuid,
         data as ByteArray
     ) as Void {
-        if (requestQueue == null) { throw new Exception(); }
+        if (requestQueue == null) { throw new Exception(); } // TODO(error): null queue warning
         requestQueue.add(type, GattProfileManager.getUuid(uuid), data);
     }
 
@@ -211,12 +212,12 @@ class BluetoothDelegate extends CameraDelegate {
     }
 
     public function onCharacteristicWrite(characteristic as Ble.Characteristic, status as Ble.Status) as Void {
-        if (requestQueue == null) { throw new Exception(); /* TODO(error) */ }
+        if (requestQueue == null) { throw new Exception(); /* TODO(error): null queue warning */ }
         requestQueue.onRequestProcessed(GattRequest.WRITE_CHARACTERISTIC, characteristic.getUuid(), status);
     }
 
     public function onDescriptorWrite(descriptor as Ble.Descriptor, status as Ble.Status) as Void {
-        if (requestQueue == null) { throw new Exception(); /* TODO(error) */ }
+        if (requestQueue == null) { throw new Exception(); /* TODO(error): null queue warning */ }
         requestQueue.onRequestProcessed(GattRequest.REGISTER_NOTIFICATION, descriptor.getUuid(), status);
     }
 }

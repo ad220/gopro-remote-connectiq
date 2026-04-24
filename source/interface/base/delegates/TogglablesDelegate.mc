@@ -26,7 +26,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
         if (keyEvent.getType() == PRESS_TYPE_ACTION) {
             if (keyEvent.getKey() == KEY_ENTER) {
                 var callback = view.getHilighted().behavior;
-                if (callback != null) { method(callback).invoke(); }
+                if (callback != null) { method(callback).invoke(); } // TODO(error): null error
                 return true;
             }
             else if (keyEvent.getKey() == KEY_UP) {
@@ -61,6 +61,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
             flicker = flicker.toNumber();
             view.getHilighted().toggleState(flicker & 0x01 == 0);
             camera.sendSetting(GoProSettings.FLICKER, (flicker ^ 0x01) as Char);
+            // TODO(error): settings
         }
     }
     
@@ -72,7 +73,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     
     public function onLed() as Void {
         var available = camera.getAvailableSettings(GoProSettings.LED);
-        if (available.size() == 0) { return; }
+        if (available.size() == 0) { return; } // TODO(error): available
 
         if (available.size()>2) {
             var menu = new CustomMenu(
@@ -94,7 +95,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
                     GoProSettings.LED,
                     available[(index + 1) % available.size()]
                 );
-            }
+            } // TODO(error): settings
         }
     }
     
@@ -103,7 +104,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
         if (gps!=null) {
             view.getHilighted().toggleState(gps & 0x01 == 0);
             camera.sendSetting(GoProSettings.GPS, (gps ^ 0x01) as Char);
-        }
+        } // TODO(error): settings
     }
 
     public function onStabilize() as Void {

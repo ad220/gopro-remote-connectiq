@@ -40,7 +40,7 @@ class TimerController {
             if (callbackList.size()==0) {
                 stopAll();
             }
-        }
+        } // TODO(error): null
     }
 
     public function stopAll() as Void {
@@ -74,7 +74,7 @@ class TimerCallback {
 
     public function trigger() as Void {
         tickCount = (tickCount + 1) % period;
-        if (tickCount == 0 and callback!=null) {
+        if (tickCount == 0 and callback!=null) { // TODO(error): null
             callback.invoke();
             if (!repeat) {
                 stop();

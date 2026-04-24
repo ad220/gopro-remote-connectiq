@@ -163,7 +163,7 @@ class GoProSettings {
 
         if (id <= RESOLUTION)   {
             var tuple = RESOLUTION_MAP.get(setting);
-            if (tuple == null) { return label; }
+            if (tuple == null) { return label; } // TODO(error): settings
 
             // Resolution label
             if (id == RESOLUTION) {
@@ -197,7 +197,7 @@ class GoProSettings {
         }
         
         return label == null ? "" : label;
-        // TODO: error msg for unknown ids
+        // TODO(error) msg for unknown ids
     }
 
     public function getDescription() as String {

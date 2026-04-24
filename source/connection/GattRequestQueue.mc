@@ -39,7 +39,7 @@ class GattRequestQueue {
         if (request.getType() == GattRequest.REGISTER_NOTIFICATION) {
             var descriptor = characteristic.getDescriptor(Ble.cccdUuid());
             if (descriptor != null) {
-                // TODO(error) BLE warn write fail, add try catch
+                // TODO(error): ble --> BLE warn write fail, add try catch
                 descriptor.requestWrite(request.getData());
             } else {
                 // TODO(error) warn: BLE desc not found
@@ -49,7 +49,7 @@ class GattRequestQueue {
 
         // Write request.data in characteristic
         } else {
-            // TODO(error) BLE warn write fail, add try catch
+            // TODO(error): ble --> BLE warn write fail, add try catch
             characteristic.requestWrite(request.getData(), {:writeType => Ble.WRITE_TYPE_DEFAULT});
         }
         
@@ -68,6 +68,7 @@ class GattRequestQueue {
                 isProcessing = false;
             }
         } else {
+            // TODO(error): null warning
             // System.println("[WARNING]   Write operation failed or queue is not synchronized, status: " + status);
         }
     }

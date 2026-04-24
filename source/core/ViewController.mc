@@ -53,7 +53,7 @@ class ViewController {
             getApp().fromGlance = false;
             System.exit();
         } else {
-            for (; viewLayersCount>1;) {
+            while (viewLayersCount>1) {
                 pop(WatchUi.SLIDE_IMMEDIATE);
             }
             if (viewLayersCount>0) {

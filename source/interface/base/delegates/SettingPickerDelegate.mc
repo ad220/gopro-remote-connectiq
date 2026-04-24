@@ -17,7 +17,7 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
         var items = getApp().gopro.getAvailableSettings(setting);
         
         var selected = getApp().gopro.getSetting(setting);
-        if (selected==null) { selected = 0xFF as Char; }
+        if (selected==null) { selected = 0xFF as Char; } // TODO(error): settings
 
         if      (setting == GoProSettings.RESOLUTION)   { titleId = Rez.Strings.Resolution;     comparator = new ResolutionComparator(); }
         else if (setting == GoProSettings.RATIO)        { titleId = Rez.Strings.Ratio;          comparator = new RatioComparator(); }
@@ -27,6 +27,7 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
         else if (setting == GoProSettings.HYPERSMOOTH)  { titleId = Rez.Strings.HyperSmooth; }
         else {
             // System.println("[WARNING]   Unknown Setting id");
+            // TODO(error)
             throw new Exception();
         }
 

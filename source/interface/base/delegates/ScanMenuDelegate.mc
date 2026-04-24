@@ -80,9 +80,10 @@ class ScanMenuDelegate extends Menu2InputDelegate {
 
     public function animate() as Void {
         if (scanState == Ble.SCAN_STATE_SCANNING) {
-            var label = statusItem.getLabel() + ".";
-            label = label.substring(0, label.length()%4 + 1);
-            statusItem.setLabel(label!=null ? label : "...");
+            var label = statusItem.getLabel() + " .";
+            if (label.length() > 5) { label = "."; }
+            
+            statusItem.setLabel(label);
             WatchUi.requestUpdate();
         }
     }
@@ -120,7 +121,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     private function isDeviceInMenu(device as Ble.ScanResult) as Boolean {
         for (var i=0; i<scanResults.size(); i++) {
             var dev = scanResults[i].get(:device);
-            if (dev !=null and dev.isSameDevice(device)) {
+            if (dev.isSameDevice(device)) {
                 return true;
             }
         }
@@ -129,7 +130,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
 
     public function onSelect(item as MenuItem) as Void {
         var id = item.getId();
-        if (id == null) { return; }
+        if (id == null) { return; } // TODO(error): null warning
         
         switch (id) {
             case 0xF0: // status
