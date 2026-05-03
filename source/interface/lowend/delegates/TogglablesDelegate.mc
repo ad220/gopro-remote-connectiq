@@ -39,7 +39,7 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
         var gopro = getApp().gopro;
 
         var sdRemaining = gopro.getStatus(GoProCamera.SD_REMAINING);
-        sdRemaining = sdRemaining ? sdRemaining/3600+":"+sdRemaining%3600/60 : "--:--";
+        sdRemaining = sdRemaining ? sdRemaining / 3600 + ":" + (sdRemaining % 3600 / 60).format("%02d") : "--:--";
 
         var battery = gopro.getStatus(GoProCamera.BATTERY);
         battery = (battery ? battery : "--") + "%";
@@ -95,7 +95,6 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
     
     public function onPower() as Void {
         gopro.sendCommand(GoProCamera.SLEEP);
-        getApp().timerController.start(gopro.method(:disconnect), 2, false);
     }
     
 

@@ -61,7 +61,9 @@ class TogglablesView extends WatchUi.View {
 
         var sdRemaining = camera.getStatus(GoProCamera.SD_REMAINING);
         if (sdRemaining!=null) {
-            (findDrawableById("SdLevel") as Text).setText(sdRemaining/3600+":"+sdRemaining%3600/60);
+            (findDrawableById("SdLevel") as Text).setText(
+                sdRemaining / 3600 + ":" + (sdRemaining % 3600 / 60).format("%02d")
+            );
         }
 
         var battery = camera.getStatus(GoProCamera.BATTERY);
