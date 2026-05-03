@@ -12,10 +12,12 @@
     <string id="ConnectFail">Connexion\néchouée</string>
     <string id="PairingFail">Erreur lors de la\nconnexion, veuillez\n réessayer et/ou redémarrer\nl'application</string>
     <string id="Disconnected">Caméra\ndéconnectée</string>
+    <string id="WarningErr">Erreur imprévue, l'appli\npourrait être instable, merci\nde la signaler si récurrente.\n\n0x</string>
+    <string id="CriticalErr">Erreur critique, l'appli\nva fermer, merci de la\nsignaler si récurrente.\n\nx</string>
 
     <!-- GoPro Models -->
     <!-- $$$ Small -->
-    <string id="UnknownGP">Modèle de GoPro inconnu</string>
+    <string id="UnknownGP">GoPro inconnue</string>
 
     <!-- ScanMenu -->
     <!-- $$$ Small -->

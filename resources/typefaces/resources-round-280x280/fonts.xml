@@ -1,5 +1,5 @@
 <fonts>
     <font id="Tiny" filename="../fonts/semibold/semibold_17.fnt" antialias="true" filter=" %+.0123456789:@AHKLMNSUVWXacdefgiklnoprstuvwy°Éé"/>
-    <font id="Small" filename="../fonts/bold/bold_22_fix.fnt" antialias="true" filter=" '+,./0123456789:ABCDEFGHIKLMNOPQRSTUVWXabcdefghijklmnopqrstuvwxyz°Éàèé"/>
+    <font id="Small" filename="../fonts/bold/bold_22_fix.fnt" antialias="true" filter=" '+,./0123456789:ABCDEFGHIKLMNOPQRSTUVWX_abcdefghijklmnopqrstuvwxyz°Éàèé"/>
     <font id="Medium" filename="../fonts/extrabold/extrabold_30_fix.fnt" antialias="true" filter=" !'.0123456789ADEFGHLOPRSabcdefghijlmnopqrstuvyèé"/>
 </fonts>

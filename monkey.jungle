@@ -1,7 +1,7 @@
 project.manifest = manifest.xml
 
 base.excludeAnnotations = mobile; lowend; debugoff
-base.resourcePath = resources/common; resources/highend
+base.resourcePath = resources/common; resources/highend; resources/lang/en
 base.lang.fre = resources/lang/fre
 
 mobile_excludeAnnotations = ble; lowend; debugoff

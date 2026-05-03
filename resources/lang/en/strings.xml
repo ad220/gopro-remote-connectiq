@@ -12,12 +12,14 @@
     <string id="ConnectFail">Unable to connect\nto the camera</string>
     <string id="PairingFail">Unexpected error\nwhile pairing, please\nretry or restart\nthe app</string>
     <string id="Disconnected">Camera\ndisconnected</string>
+    <string id="WarningErr">Unexpected error, the app\nmay become instable, please\nreport it if recurring\n\n0x</string>
+    <string id="CriticalErr">Critical error, the app\nwill stop, please report it\n if recurring\n\n0x</string>
 
     <!-- GoPro Models -->
     <!-- $$$ Small -->
     <string id="HERO" translatable="false">GoPro HERO</string>
     <string id="MAX2" translatable="false">GoPro MAX2</string>
-    <string id="UnknownGP">Unknown GoPro Model</string>
+    <string id="UnknownGP">Unknown GoPro</string>
 
     <!-- ScanMenu -->
     <!-- $$$ Small -->
