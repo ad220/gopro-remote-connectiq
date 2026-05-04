@@ -155,7 +155,7 @@ module GoProCameraTest {
         var delegate = new MockBluetoothDelegate();
         delegate.connect(new BleAPI.MockScanResult(0) as Ble.ScanResult);
         
-        BleAPI.callbacks.onConnectedStateChanged(
+        BleAPI.delegate.onConnectedStateChanged(
             delegate.getDevice() as Ble.Device,
             Ble.CONNECTION_STATE_DISCONNECTED
         );

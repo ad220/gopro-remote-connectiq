@@ -12,7 +12,7 @@ class GoProRemoteApp extends Application.AppBase {
 
     public var fromGlance as Boolean;
 
-    (:typecheck(false)) private var appStarted as Boolean;
+    private var appStarted as Boolean;
 
     (:initialized) public var timerController as TimerController;
     (:initialized) public var viewController as ViewController;
@@ -36,18 +36,23 @@ class GoProRemoteApp extends Application.AppBase {
     }
 
     // onStop() is called when your application is exiting
-    (:typecheck(false))
+    (:ble :typecheck(false))
     function onStop(state as Dictionary?) as Void {
-        if (viewController!=null) {
-            viewController.returnHome(null, null);
-        }
-        if (timerController!=null) {
-            timerController.stopAll();
-        }
         if (appStarted) {
+            if (viewController != null)     { viewController.returnHome(null, null); }
+            if (timerController != null)    { timerController.stopAll(); }
             BleAPI.setDelegate(null as Ble.BleDelegate);
         }
+        // System.println("[APP DBG]   App stopped");
+    }
 
+    (:mobile :typecheck(false))
+    function onStop(state as Dictionary?) as Void {
+        if (appStarted) {
+            if (viewController != null)     { viewController.returnHome(null, null); }
+            if (timerController!=null)      { timerController.stopAll(); }
+            Communications.registerForPhoneAppMessages(null);
+        }
         // System.println("[APP DBG]   App stopped");
     }
 

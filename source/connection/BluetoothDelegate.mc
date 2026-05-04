@@ -7,8 +7,6 @@ using BleApiWrapper as BleAPI;
 (:ble)
 class BluetoothDelegate extends CameraDelegate {
 
-    private var apiCallbacks as BleApiCallbacks;
-
     private var scanMenuDelegate as ScanMenuDelegate?;
 
     protected var requestQueue as GattRequestQueue?;
@@ -19,8 +17,7 @@ class BluetoothDelegate extends CameraDelegate {
     public function initialize() {
         CameraDelegate.initialize();
 
-        self.apiCallbacks = BleAPI.getCallbackInstance(self);
-        BleAPI.setDelegate(apiCallbacks);
+        BleAPI.setDelegate(new BleApiCallbacks(self));
     }
 
     public function setScanMenuDelegate(menu as ScanMenuDelegate?) as Void {
@@ -86,7 +83,6 @@ class BluetoothDelegate extends CameraDelegate {
 
             // TODO: add test for null delegate after pairing fail
             BleAPI.setScanState(Ble.SCAN_STATE_OFF);
-            BleAPI.setDelegate(null as Ble.BleDelegate);
         }
     }
 

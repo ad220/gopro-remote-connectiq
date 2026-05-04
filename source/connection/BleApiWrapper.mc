@@ -14,11 +14,6 @@ module BleApiWrapper {
         }>
     };
 
-    (:inline)
-    function getCallbackInstance(delegate as BluetoothDelegate) as BleApiCallbacks {
-        return new BleApiCallbacks(delegate);
-    }
-
 
     (:inline)
     function registerProfile(profile as GattProfile) as Void {
@@ -26,8 +21,8 @@ module BleApiWrapper {
     }
 
     (:inline)
-    function setDelegate(delegate as Ble.BleDelegate) as Void {
-        Ble.setDelegate(delegate);
+    function setDelegate(delegate as BluetoothDelegate) as Void {
+        Ble.setDelegate(new BleApiCallbacks(delegate));
     }
 
     (:inline)

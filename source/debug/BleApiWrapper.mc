@@ -18,13 +18,12 @@ module BleApiWrapper {
 
     typedef ServiceProfile as Array<{:uuid as Ble.Uuid, :descriptors as Array<Ble.Uuid>}>;
 
-    (:initialized) var callbacks    as BleApiCallbacks;
+    (:initialized) var delegate     as Ble.BleDelegate;
     (:initialized) var device       as FakeGoProDevice;
 
     var registeredProfiles          as Array<GattProfile>       = [];
-    var delegate                    as Ble.BleDelegate?         = null;
     var scanState                   as Ble.ScanState            = Ble.SCAN_STATE_OFF;
-    var pairedDevices                as Array<Ble.Device>        = [];
+    var pairedDevices               as Array<Ble.Device>        = [];
     var scanTimer                   as TimerCallback?           = null;
 
     // Test options
@@ -34,11 +33,6 @@ module BleApiWrapper {
     var hasGoProService             as Boolean                  = true;
     var scannedDevices              as Array<MockScanResult>    = [new MockScanResult(0)];
 
-
-    function getCallbackInstance(delegate as BluetoothDelegate) as BleApiCallbacks {
-        callbacks = new BleApiCallbacks(delegate);
-        return callbacks;
-    }
 
     function registerProfile(profile as GattProfile) as Void {
         if (registeredProfiles.size() < 3) {
@@ -63,11 +57,11 @@ module BleApiWrapper {
         }
 
         self.scanState = state;
-        callbacks.onScanStateChange(state, Ble.STATUS_SUCCESS);
+        delegate.onScanStateChange(state, Ble.STATUS_SUCCESS);
     }
 
     function updateScan() as Void {
-        callbacks.onScanResults(new MockIterator(scannedDevices as Array));
+        delegate.onScanResults(new MockIterator(scannedDevices as Array));
     }
 
     function pairDevice(device as Ble.ScanResult) as Ble.Device? {
@@ -79,7 +73,7 @@ module BleApiWrapper {
 
         } else {
             var result = new MockDevice() as Ble.Device;
-            callbacks.onConnectedStateChanged(result, connectionStatus);
+            delegate.onConnectedStateChanged(result, connectionStatus);
             pairedDevices.add(result);
             return result;
         }
@@ -88,7 +82,7 @@ module BleApiWrapper {
     function unpairDevice(device as Ble.Device) as Void {
         var found = pairedDevices.remove(device);
         if (found) {
-            callbacks.onConnectedStateChanged(device, Ble.CONNECTION_STATE_DISCONNECTED);
+            delegate.onConnectedStateChanged(device, Ble.CONNECTION_STATE_DISCONNECTED);
         }
     }
 
@@ -155,7 +149,7 @@ module BleApiWrapper {
 
         function requestBond() as Void {
             bonded = true;
-            BleAPI.callbacks.onEncryptionStatus(self as Ble.Device, Ble.STATUS_SUCCESS);
+            BleAPI.delegate.onEncryptionStatus(self as Ble.Device, Ble.STATUS_SUCCESS);
         }
     }
 
@@ -268,7 +262,7 @@ module BleApiWrapper {
         (:typecheck(false))
         function requestWrite(value as ByteArray, options as { :writeType as Ble.WriteType }) as Void {
             var gpxx = uuid.toString().substring(4,8).toNumber();
-            callbacks.onCharacteristicWrite(self as Ble.Characteristic, Ble.STATUS_SUCCESS);
+            delegate.onCharacteristicWrite(self as Ble.Characteristic, Ble.STATUS_SUCCESS);
             device.onSend(gpxx, value);
         }
 
@@ -300,7 +294,7 @@ module BleApiWrapper {
 
         (:typecheck(false))
         function requestWrite(value as ByteArray) as Void {
-            callbacks.onDescriptorWrite(self as Ble.Characteristic, Ble.STATUS_SUCCESS);
+            delegate.onDescriptorWrite(self as Ble.Characteristic, Ble.STATUS_SUCCESS);
         }
     }
 
