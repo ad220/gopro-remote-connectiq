@@ -4,6 +4,33 @@ using Toybox.BluetoothLowEnergy as Ble;
 
 class CameraDelegate {
 
+    public static const goproModelTable = [0, 12, 13, 19, 21, 22, 24, 30, /*41, *//*44, */51, 55, 57, 58, 60, 62, 64, 65]b;
+      
+    public static const goproModelString = [
+        :UnknownGP,
+        4           /* id:12 -> HERO4 Silver */,
+        4           /* id:13 -> HERO4 Black */,
+        5           /* id:19 -> HERO5 Black */,
+        5           /* id:21 -> HERO5 Session */,
+        :Fusion     /* id:22 -> Fusion */,
+        6           /* id:24 -> HERO6 Black */,
+        7           /* id:30 -> HERO7 Black */,
+        // 4           /* id: -> HERO 2018 */,
+        // 4           /* id: -> HERO8 Black*/,
+        :MAX        /* id:51 -> MAX */,
+        9           /* id:55 -> HERO9 Black */,
+        10          /* id:57 -> HERO10 Black */,
+        11          /* id:58 -> HERO11 Black*/,
+        11          /* id:60 -> HERO11 Black Mini*/,
+        12          /* id:62 -> HERO12 Black*/,
+        :MAX        /* id:64 -> MAX2 */,
+        13          /* id:65 -> HERO13 Black*/,
+    ];
+
+    public static function getGoProId(device as Ble.ScanResult) as Char {
+        return goproModelTable.indexOf(device.getRawData()[13]).toChar();
+    }
+
     public enum QueryId {
         GET_SETTING             = 0x12,
         GET_STATUS              = 0x13,
@@ -20,6 +47,7 @@ class CameraDelegate {
     }
 
     protected var connected as Boolean;
+    protected var goproId as Char?;
     private var pairingTimer as TimerCallback?;
     private var queryReplyLength as Number?;
     private var queryReplyBuffer as ByteArray?;
@@ -58,7 +86,7 @@ class CameraDelegate {
         }
         pairingTimer = null;
 
-        getApp().gopro = new GoProCamera(self);
+        getApp().gopro = new GoProCamera(self, goproId);
         
         var pushView = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
         pushView.invoke(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);

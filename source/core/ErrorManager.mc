@@ -1,6 +1,8 @@
 import Toybox.Lang;
 import Toybox.WatchUi;
 
+using InterfaceComponentsManager as ICM;
+
 
 /**
  * ErrorManager module
@@ -22,7 +24,7 @@ import Toybox.WatchUi;
  *      SYS  (0x10) -> unexpected system exception
  *      NULL (0x00) -> unexpected null exception
  */
-
+ 
 module ErrorManager {
 
     (:ble)              const BUILD_FLAGS = 0;
@@ -45,20 +47,22 @@ module ErrorManager {
      * warns the user about the error
      *
      * @param code      prefix of the error code as defined above
-     * @param gopro     gopro advertised model id
+     * @param gopro     gopro 6-bit internal id, defined in CameraDelegate
      * @param level     error level, should be on of {:SilentErr, :WarningErr, :CriticalErr} 
      */
-    function raise(code as Number, gopro as Number, data as Number, level as Symbol) as Void {
+    function raise(code as Number, data as Number, level as Symbol) as Void {
         if (shuttingDown) { return; }
+        
+        var app = getApp(); 
+        var goproId = app.gopro ? app.gopro.getGoProId() : 0;
 
-        code |= BUILD_FLAGS | (0x3F & gopro << 24);
+        code |= BUILD_FLAGS | (0x3F & goproId << 24) | (0xFFFF & data);
 
         // errorQueue.add(code);
         // if (errorQueue.size() > 64) { errorQueue = errorQueue.slice(1, null); }
 
         if (level != :SilentErr) {
-            var app = getApp();
-            var msg = getMsgTemplate(level);
+            var msg = ICM.loadString(level);
             var format = "%04X";
             var errMsg = msg + (code >> 16).format(format) + \
                          "_" + (code & 0xFFFF).format(format);
@@ -76,10 +80,4 @@ module ErrorManager {
             }
         }
     }
-
-    (:typecheck(false) :inline)
-    function getMsgTemplate(level as Symbol) as String {
-        return WatchUi.loadResource(Rez.Strings[level]);
-    }
-
 }

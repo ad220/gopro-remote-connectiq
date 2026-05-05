@@ -4,21 +4,12 @@ import Toybox.System;
 
 using Toybox.BluetoothLowEnergy as Ble;
 using BleApiWrapper as BleAPI;
+using InterfaceComponentsManager as ICM;
 
 (:ble)
 class ScanMenuDelegate extends Menu2InputDelegate {
 
     typedef ScanEntry as {:name as String, :device as Ble.ScanResult, :menuid as Char};
-
-    private const goproModelTable = {
-        55      => 9,
-        57      => 10,
-        58      => 11,
-        60      => 11,
-        62      => 12,
-        64      => Rez.Strings.MAX2,
-        65      => 13,
-    } as Dictionary<Number, Number or ResourceId>;
 
     private const SCAN_TITLE    = WatchUi.loadResource(Rez.Strings.ScanTitle)       as String;
     private const SCAN_CANCEL   = WatchUi.loadResource(Rez.Strings.ScanCancel)      as String;
@@ -58,7 +49,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
             scanTimer = getApp().timerController.start(method(:stopScan), 100, false);
             animTimer = getApp().timerController.start(method(:animate), 5, true);
 
-            statusItem.setLabel("...");
+            statusItem.setLabel(". . .");
             cancelItem.setLabel(SCAN_CANCEL);
             title.setTitle(SCAN_TITLE);
             WatchUi.requestUpdate();
@@ -93,21 +84,25 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     }
 
     public function onScanResults(results as Array<Ble.ScanResult>) as Void{
-        for(var i=0; i<results.size(); i++) {
+        for(var i=0; i<results.size(); i++){
             if (!isDeviceInMenu(results[i])) {
-                var id = scanResults.size() as Char;
+
                 var label = results[i].getDeviceName();
-                if (label==null) {
-                // from Open GoPro documentation, Model ID is given in byte 13
-                    label = goproModelTable.get(results[i].getRawData()[13]);
-                    if (label == null) { label = Rez.Strings.UnknownGP; }
-                    if (label instanceof Number) {
+
+                if (label == null) {
+                    // from Open GoPro documentation, Model ID is given in byte 13
+                    var camId = CameraDelegate.getGoProId(results[i]);
+                    if (camId == -1) { camId = 0; }
+
+                    label = CameraDelegate.goproModelString[camId];
+                    if (label instanceof Symbol) {
+                        label = ICM.loadString(label);
+                    } else {
                         label = loadResource(Rez.Strings.HERO) as String + label;
-                    } else if (label instanceof ResourceId) {
-                        label = loadResource(label) as String;
                     }
                 }
 
+                var id = scanResults.size() as Char;
                 var entryItem = new PickerItem(label, id, 0xFF as Char);
                 menu.updateItem(entryItem, scanResults.size());
                 menu.updateItem(statusItem, scanResults.size()+1);

@@ -25,6 +25,7 @@ class GoProCamera extends GoProSettings {
     }
 
     private     var delegate                as CameraDelegate;
+    private     var goproId                 as Char;
     protected   var statuses                as Dictionary<StatusId or Char, Number>;
     protected   var availableSettings       as TAvailableSettings;
     private     var availableRatios         as Dictionary<Numeric, Array<Char>>;
@@ -32,10 +33,11 @@ class GoProCamera extends GoProSettings {
     protected   var progressTimer           as TimerCallback?;
 
 
-    public function initialize(delegate as CameraDelegate) {
+    public function initialize(delegate as CameraDelegate, goproId as Char) {
         GoProSettings.initialize();
         
         self.delegate = delegate;
+        self.goproId = goproId;
         self.statuses               = {}    as Dictionary<StatusId or Char, Number>;
         self.availableSettings      = {}    as Dictionary<GoProSettings.SettingId or Char, Array<Char>>;
         self.availableRatios        = {}    as Dictionary<Numeric, Array<Char>>;
@@ -200,6 +202,10 @@ class GoProCamera extends GoProSettings {
             statuses[ENCODING_DURATION]++;
             WatchUi.requestUpdate();
         }
+    }
+
+    public function getGoProId() as Char {
+        return goproId;
     }
 
     public function disconnect() as Void {

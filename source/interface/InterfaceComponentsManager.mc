@@ -39,6 +39,11 @@ module InterfaceComponentsManager {
         fontSmall = Graphics.FONT_TINY;
         fontMedium = WatchUi.loadResource(Rez.Fonts.Medium);
     }
+
+    (:typecheck(false) :inline)
+    function loadString(rez as Symbol) as String {
+        return WatchUi.loadResource(Rez.Strings[rez]);
+    }
 }
 
 

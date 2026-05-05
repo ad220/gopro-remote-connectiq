@@ -55,6 +55,7 @@ class BluetoothDelegate extends CameraDelegate {
     public function connect(device as Ble.ScanResult?) as Void {
         if (device == null) { throw new Exception(); /* TODO(error): null error */}
         CameraDelegate.connect(device);
+        goproId = getGoProId(device);
 
         try {
             camera = BleAPI.pairDevice(device);
