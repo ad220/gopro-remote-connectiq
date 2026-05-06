@@ -542,6 +542,13 @@ module GoProCameraTest {
         if (BleAPI.device.hilightCount != 1) {
             logger.error("Wrong hilight count");
         }
+
+        camera.sendCommand(GoProCamera.HILIGHT);
+        camera.sendCommand(GoProCamera.HILIGHT);
+
+        if (BleAPI.device.hilightCount != 3) {
+            logger.error("Wrong hilight count");
+        }
         
         camera.sendCommand(GoProCamera.SHUTTER);
 
