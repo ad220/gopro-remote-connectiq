@@ -17,12 +17,7 @@ using InterfaceComponentsManager as ICM;
  * - GP ID:
  *      Internal GoPro model id, check CameraDelegate.mc for more info
  * - EC (error code):
- *      CAM  (0x80) -> gopro unexpected behavior, 7 LSB for suberror type and index
- *      MSG  (0x40) -> unexpected message decoding error, 6 LSB for suberror type and index
- *      EXT  (0x30) -> extended error code, reserved for future use
- *      COMM (0x20) -> communication error, context depends on build flag (ble / mobile)
- *      SYS  (0x10) -> unexpected system exception
- *      NULL (0x00) -> unexpected null exception
+ *      check ERR constants below for more information
  */
  
 module ErrorManager {
@@ -31,14 +26,27 @@ module ErrorManager {
     (:mobile :highend)  const BUILD_FLAGS = 1 << 30;
     (:mobile :lowend)   const BUILD_FLAGS = 3 << 30;
 
-    const   ERR_CAM     = 0x80 << 16;
-    const   ERR_MSG     = 0x40 << 16;
-    const   ERR_EXT     = 0x30 << 16;
-    const   ERR_COMM    = 0x20 << 16;
-    const   ERR_SYS     = 0x10 << 16;
-    const   ERR_NULL    = 0;
+    const   ERR_CAM         = 0x80 << 16;   // gopro settings error
+    const   ERR_MSG         = 0x40 << 16;   // message encoding / decoding error
+    const   ERR_EXT         = 0x30 << 16;   // reserved for extended error codes
+    const   ERR_COMM        = 0x20 << 16;   // communication error (ble or mobile)
+    const   ERR_SYS         = 0x10 << 16;   // system api exception
+    const   ERR_NULL        = 0x00;         // unexpected null exception
+
+    const   SUB_BLE_STATUS  = 0x00;         // status != success
+    const   SUB_BLE_CONN    = 0x10;         // not connected
+    const   SUB_BLE_NULLQ   = 0x40;         // null queue (maybe too many bits reserved)
+    const   SUB_BLE_BADSCD  = 0x80;         // bad service, characteristic or descriptor
+    const   SUB_BLE_WRITE   = 0x90;         // write fail
+    const   SUB_BLE_TO      = 0xA0;         // timeout
+    const   SUB_BLE_API     = 0xF0;         // ble api exception
+
+    const   SUB_MSG_STATUS  = 0x00 << 16;   // camera status != 0
+    const   SUB_MSG_QUERY   = 0x10 << 16;   // unknown query
+    const   SUB_MSG_STRUCT  = 0x20 << 16;   // bad message structure
+    // const   SUB_            = 0x30 << 16;
     
-    var shuttingDown as Boolean = false;
+    var unstable as Boolean = false;
     // var errorQueue as Array<Number> = [];
 
 
@@ -47,21 +55,22 @@ module ErrorManager {
      * warns the user about the error
      *
      * @param code      prefix of the error code as defined above
-     * @param gopro     gopro 6-bit internal id, defined in CameraDelegate
+     * @param data      16-bit error context
      * @param level     error level, should be on of {:SilentErr, :WarningErr, :CriticalErr} 
      */
     function raise(code as Number, data as Number, level as Symbol) as Void {
-        if (shuttingDown) { return; }
         
         var app = getApp(); 
-        var goproId = app.gopro ? app.gopro.getGoProId() : 0;
+        var goproId = app.gopro!=null ? app.gopro.getGoProId() : 0;
 
-        code |= BUILD_FLAGS | (0x3F & goproId << 24) | (0xFFFF & data);
+        code |= BUILD_FLAGS | (0x3F & goproId as Number << 24) | (0xFFFF & data);
 
         // errorQueue.add(code);
         // if (errorQueue.size() > 64) { errorQueue = errorQueue.slice(1, null); }
 
-        if (level != :SilentErr) {
+        if (level != :SilentErr and !unstable) {
+            if (level != :ConnectErr) { unstable = true; }
+
             var msg = ICM.loadString(level);
             var format = "%04X";
             var errMsg = msg + (code >> 16).format(format) + \
@@ -69,10 +78,9 @@ module ErrorManager {
             
             var view = new NotifView(errMsg, NotifView.NOTIF_ERROR);
 
-            if (level == :WarningErr) {
+            if (level != :CriticalErr) {
                 app.viewController.push(view, null, WatchUi.SLIDE_UP);
             } else {
-                shuttingDown = true;
                 app.viewController.returnHome(null, null);
                 app.viewController.switchTo(view, null, WatchUi.SLIDE_IMMEDIATE);
 

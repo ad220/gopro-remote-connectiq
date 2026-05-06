@@ -1,6 +1,7 @@
 import Toybox.Lang;
 
 using Toybox.BluetoothLowEnergy as Ble;
+using ErrorManager as EM;
 
 class CameraDelegate {
 
@@ -57,7 +58,7 @@ class CameraDelegate {
     }
 
     public function connect(device as Ble.ScanResult?) as Void {
-        pairingTimer = getApp().timerController.start(method(:onPairingFailed), 50, false);
+        pairingTimer = getApp().timerController.start(method(:onPairingTimeout), 50, false);
 
         var pushMethod = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
         var delegate = getApp().fromGlance ? null : new NotifDelegate();
@@ -103,10 +104,20 @@ class CameraDelegate {
         }
     }
 
-    public function onPairingFailed() as Void {
+    public function onPairingTimeout() as Void {
+        onPairingFailed(EM.SUB_BLE_TO | 0x00);
+    }
+
+    public function onPairingFailed(errCode as Number) as Void {
         if (!connected) {
-            getApp().viewController.push(new NotifView(Rez.Strings.ConnectFail, NotifView.NOTIF_ERROR), new NotifDelegate(), WatchUi.SLIDE_DOWN);
-            pairingTimer = null;
+            if (pairingTimer != null) {
+                pairingTimer.stop();
+                pairingTimer = null;
+            }
+
+            EM.raise(EM.ERR_COMM, errCode + goproId as Number << 24, :ConnectErr);
+        } else {
+            EM.raise(EM.ERR_COMM, EM.SUB_BLE_CONN | 0x0F, :WarningErr);
         }
     }
 
@@ -119,16 +130,23 @@ class CameraDelegate {
     }
     
     protected function decodeQuery(response as ByteArray) as Void {
-        if (response[0] & 0xe0 == 0x00) { // 5-bit length packets
+        if      (response[0] & 0xe0 == 0x00) { // 5-bit length packets
             readTLVMessage(response.slice(1, null));
-        } else if (response[0] & 0xe0 == 0x20) { // 13-bit length packet
+        }
+        else if (response[0] & 0xe0 == 0x20) { // 13-bit length packet
             queryReplyLength = ((response[0] & 0x1f) << 8) + response[1];
             queryReplyBuffer = response.slice(2, null);
-        } else if (response[0] & 0xe0 == 0x40) { // 16-bit length packet
+        }
+        else if (response[0] & 0xe0 == 0x40) { // 16-bit length packet
             queryReplyLength = (response[1] << 8) + response[2];
             queryReplyBuffer = response.slice(3, null);
-        } else if ((response[0] & 0x80) == 0x80 and queryReplyBuffer!=null) { // Continuation packet
-            // TODO(error): if buffer null
+        }
+        else if ((response[0] & 0x80) == 0x80) { // Continuation packet
+            if (queryReplyBuffer == null) {
+                EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x00, 0, :WarningErr); 
+                return;
+            } /* TODO(raise): complete data field */ 
+
             queryReplyBuffer.addAll(response.slice(1, null));
             if (queryReplyBuffer.size() == queryReplyLength) {
                 readTLVMessage(queryReplyBuffer);
@@ -142,6 +160,8 @@ class CameraDelegate {
             return;
         }
         var gopro = getApp().gopro;
+        if (gopro == null) { EM.raise(EM.ERR_NULL, 3, :CriticalErr); }
+
         var queryId = message[0];
         var status = message[1];
         var data = message.slice(2, null);
@@ -170,10 +190,6 @@ class CameraDelegate {
             type = data[i] as Char;
             length = data[i+1];
             value = data.slice(i+2, i+2+length);
-            // ERA_CRASH(x1v4.0.1): gopro is null
-            // This bug shouldn't exist as delegate doesn't exist if gopro is null.
-            // GoPro app-wide ref set on instanciation
-            // CamDelegate only exists outside of the gopro scope in ConnectViewDelegate
             gopro.method(decoder).invoke(type, value);
         }
         if (decoder == :onReceiveAvailable) {

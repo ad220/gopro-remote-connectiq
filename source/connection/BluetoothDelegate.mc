@@ -3,6 +3,7 @@ import Toybox.Lang;
 
 using Toybox.BluetoothLowEnergy as Ble;
 using BleApiWrapper as BleAPI;
+using ErrorManager as EM;
 
 (:ble)
 class BluetoothDelegate extends CameraDelegate {
@@ -25,10 +26,12 @@ class BluetoothDelegate extends CameraDelegate {
     }
 
     public function onScanStateChange(scanState as Ble.ScanState, status as Ble.Status) as Void {
-        if (status == Ble.STATUS_SUCCESS and scanMenuDelegate!=null) {
-            scanMenuDelegate.setScanState(scanState);
+        if (status == Ble.STATUS_SUCCESS) {
+            if (scanMenuDelegate != null) { scanMenuDelegate.setScanState(scanState); }
         }
-        // TODO(error): if status != success
+        else {
+            EM.raise(EM.ERR_COMM, EM.SUB_BLE_STATUS | 0x00, :WarningErr);
+        }
     }
 
     public function onScanResults(scanResults as Ble.Iterator) as Void {
@@ -47,42 +50,44 @@ class BluetoothDelegate extends CameraDelegate {
                 }
             }
             scanMenuDelegate.onScanResults(scanResultsArray);
-        } else {
-            // System.println("[WARNING]   Scan menu is null");
         }
+        // else {
+        //     System.println("[WARNING]   Scan menu is null");
+        // }
     }
 
     public function connect(device as Ble.ScanResult?) as Void {
-        if (device == null) { throw new Exception(); /* TODO(error): null error */}
+        if (device == null) { 
+            EM.raise(EM.ERR_NULL, 0, :CriticalErr);
+            return;
+        }
+
         CameraDelegate.connect(device);
         goproId = getGoProId(device);
 
         try {
             camera = BleAPI.pairDevice(device);
         } catch (ex) {
-            var view = new NotifView(Rez.Strings.PairingFail, NotifView.NOTIF_ERROR);
-            getApp().viewController.push(view, new NotifDelegate(), WatchUi.SLIDE_UP);
-            // TODO(error): connect
+            onPairingFailed(EM.SUB_BLE_API | 0x00);
         }
     }
 
-    public function onPairingFailed() as Void {
+    public function onPairingFailed(errCode as Number) as Void {
         if (!connected) {
             // System.println("[DEBUG]     Bluetooth pairing failed");
-            CameraDelegate.onPairingFailed();
+            CameraDelegate.onPairingFailed(errCode);
 
             if (camera != null) {
                 try { BleAPI.unpairDevice(camera); }
 
                 catch (ex) {
-                    // TODO(error): pairing
+                    EM.raise(EM.ERR_COMM, EM.SUB_BLE_API | 0x01, :WarningErr);
                     // System.println("[ERROR]     Unexpected error while unpairing camera : " + ex.getErrorMessage());
                 }
 
                 camera = null;
             }
 
-            // TODO: add test for null delegate after pairing fail
             BleAPI.setScanState(Ble.SCAN_STATE_OFF);
         }
     }
@@ -94,10 +99,12 @@ class BluetoothDelegate extends CameraDelegate {
             } else {
                 connected = false;
                 try             { device.requestBond(); }
-                catch (ex)      { onPairingFailed(); /* TODO(error)? */ }
+                catch (ex)      {
+                    onPairingFailed(EM.SUB_BLE_API | 0x04);
+                }
             }
         } else {
-            if (isPairing())    { onPairingFailed(); }
+            if (isPairing())    { onPairingFailed(EM.SUB_BLE_STATUS | 0x0F); }
             else                { onDisconnect(); }
         }
     }
@@ -108,6 +115,7 @@ class BluetoothDelegate extends CameraDelegate {
                 onConnect(device);
             }
         } else {
+            onPairingFailed(EM.SUB_BLE_STATUS | 0x01);
             connected = false;
         }
     }
@@ -115,14 +123,16 @@ class BluetoothDelegate extends CameraDelegate {
     private function onConnect(device as Ble.Device?) as Void {
         BleAPI.setScanState(Ble.SCAN_STATE_OFF);
         
-        if (device == null) { throw new Exception(); } // TODO(error): null error
+        if (device == null) { 
+            EM.raise(EM.ERR_NULL, 1, :CriticalErr);
+            return;
+        }
 
         var service = device.getService(Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE));
         if (service != null) {
             requestQueue = new GattRequestQueue(service);
         } else {
-            onPairingFailed();
-            // TODO(error): null pairing
+            onPairingFailed(EM.SUB_BLE_BADSCD | 0x00);
             return;
         }
 
@@ -139,26 +149,25 @@ class BluetoothDelegate extends CameraDelegate {
             requestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_COMMAND_CHAR), data);
         } else {
             // ERA_CRASH(x9v4.0.1)
-            // TODO(error)
-            throw new Exception();
+            EM.raise(EM.ERR_COMM, EM.SUB_BLE_NULLQ | 0x00, :CriticalErr);
         }
     }
 
     public function disconnect() as Void {
-        // put camera to sleep and close connection
+        // close connection
         if (connected) {
             getApp().timerController.stop(keepAliveTimer);
             keepAliveTimer = null;
             
             if (camera != null) {
                 try { BleAPI.unpairDevice(camera); }
-                catch (ex) { /* TODO(error) */ }
+                catch (ex) { EM.raise(EM.ERR_COMM, EM.SUB_BLE_API, :SilentErr); }
 
                 camera = null;
             }
-            // else {
-            //     System.println("[WARNING]   Trying to disconnect a null BLE device");
-            // }
+            else {
+                EM.raise(EM.ERR_NULL, 2, :SilentErr); // paranoid
+            }
         }
     }
 
@@ -176,10 +185,10 @@ class BluetoothDelegate extends CameraDelegate {
 
             CameraDelegate.disconnect();
         }
-        // TODO(error): null ? what can I do with this error wo the trace
-        // else {
-        //     System.println("[WARNING]   onDisconnect called while camera already disconnected");
-        // }
+        else {
+            // System.println("[WARNING]   onDisconnect called while camera already disconnected");
+            EM.raise(EM.ERR_COMM, EM.SUB_BLE_CONN | 0x00, :SilentErr); // paranoid
+        }
     }
 
     public function send(
@@ -187,7 +196,10 @@ class BluetoothDelegate extends CameraDelegate {
         uuid as GattProfileManager.GoProUuid,
         data as ByteArray
     ) as Void {
-        if (requestQueue == null) { throw new Exception(); } // TODO(error): null queue warning
+        if (requestQueue == null) {
+            EM.raise(EM.ERR_COMM, EM.SUB_BLE_NULLQ | 0x01, :CriticalErr);
+            return;
+        }
         requestQueue.add(type, GattProfileManager.getUuid(uuid), data);
     }
 
@@ -200,7 +212,7 @@ class BluetoothDelegate extends CameraDelegate {
     public function onCharacteristicRead(characteristic as Ble.Characteristic, status as Ble.Status, value as ByteArray) as Void {
         if (status != Ble.STATUS_SUCCESS) {
             // System.println("[WARNING]     Error while reading characteristic");
-            // TODO(error)
+            EM.raise(EM.ERR_COMM, EM.SUB_BLE_STATUS | 0x02, :SilentErr);
             return;
         }
         if (characteristic.getUuid().equals(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR))) {
@@ -209,12 +221,12 @@ class BluetoothDelegate extends CameraDelegate {
     }
 
     public function onCharacteristicWrite(characteristic as Ble.Characteristic, status as Ble.Status) as Void {
-        if (requestQueue == null) { throw new Exception(); /* TODO(error): null queue warning */ }
+        if (requestQueue == null) { EM.raise(EM.ERR_COMM, EM.SUB_BLE_NULLQ | 0x02, :CriticalErr); return; }
         requestQueue.onRequestProcessed(GattRequest.WRITE_CHARACTERISTIC, characteristic.getUuid(), status);
     }
 
     public function onDescriptorWrite(descriptor as Ble.Descriptor, status as Ble.Status) as Void {
-        if (requestQueue == null) { throw new Exception(); /* TODO(error): null queue warning */ }
+        if (requestQueue == null) { EM.raise(EM.ERR_COMM, EM.SUB_BLE_NULLQ | 0x03, :CriticalErr); return; }
         requestQueue.onRequestProcessed(GattRequest.REGISTER_NOTIFICATION, descriptor.getUuid(), status);
     }
 }

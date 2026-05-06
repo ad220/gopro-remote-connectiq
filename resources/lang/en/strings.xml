@@ -9,9 +9,8 @@
     <!-- Notif messages -->
     <!-- $$$ Small -->
     <string id="Connecting">Connecting\nto GoPro...</string>
-    <string id="ConnectFail">Unable to connect\nto the camera</string>
-    <string id="PairingFail">Unexpected error\nwhile pairing, please\nretry or restart\nthe app</string>
     <string id="Disconnected">Camera\ndisconnected</string>
+    <string id="ConnectErr">Connection failed due to\nthe following error, please\nretry or restart the app\n\n0x</string>
     <string id="WarningErr">Unexpected error, the app\nmay become instable, please\nreport it if recurring\n\n0x</string>
     <string id="CriticalErr">Critical error, the app\nwill stop, please report it\n if recurring\n\n0x</string>
 

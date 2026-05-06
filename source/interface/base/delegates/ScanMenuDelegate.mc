@@ -91,7 +91,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
 
                 if (label == null) {
                     // from Open GoPro documentation, Model ID is given in byte 13
-                    var camId = CameraDelegate.getGoProId(results[i]);
+                    var camId = CameraDelegate.getGoProId(results[i]) as Number;
                     if (camId == -1) { camId = 0; }
 
                     label = CameraDelegate.goproModelString[camId];
@@ -115,7 +115,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
 
     private function isDeviceInMenu(device as Ble.ScanResult) as Boolean {
         for (var i=0; i<scanResults.size(); i++) {
-            var dev = scanResults[i].get(:device);
+            var dev = scanResults[i].get(:device) as Ble.ScanResult;
             if (dev.isSameDevice(device)) {
                 return true;
             }
