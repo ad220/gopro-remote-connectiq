@@ -2,6 +2,9 @@ import Toybox.Lang;
 import Toybox.System;
 import Toybox.WatchUi;
 
+using ErrorManager as EM;
+
+
 class GoProSettings {
 
     public enum SettingId {
@@ -163,41 +166,56 @@ class GoProSettings {
 
         if (id <= RESOLUTION)   {
             var tuple = RESOLUTION_MAP.get(setting);
-            if (tuple == null) { return label; } // TODO(error): settings
-
-            // Resolution label
-            if (id == RESOLUTION) {
-                var res = tuple[0];
-                if (res < 2000) {
-                    return res + "p";
+            if (tuple != null)
+            {
+                // Resolution label
+                if (id == RESOLUTION) {
+                    var res = tuple[0];
+                    if (res < 2000) {
+                        return res + "p";
+                    } else {
+                        return res%1000==0 ? res/1000+"K" : (res/1000.0).format("%.1f")+"K"; 
+                    }
+                
+                // Ratio label
                 } else {
-                    return res%1000==0 ? res/1000+"K" : (res/1000.0).format("%.1f")+"K"; 
-                }
-            
-            // Ratio label
-            } else {
-                var ratio = tuple[1];
-                if (ratio & 0xFFFF != 0) {
-                    return ratio & 0xFF + ":" + ratio >> 16;
-                } else {
-                    return ratio >> 16 + "°";
+                    var ratio = tuple[1];
+                    if (ratio & 0xFFFF != 0) {
+                        return ratio & 0xFF + ":" + ratio >> 16;
+                    } else {
+                        return ratio >> 16 + "°";
+                    }
                 }
             }
+
         }
         else if (id == LENS)         { label = LENS_LABELS.get(setting); }
         else if (id == FRAMERATE)    {
             var fps = FRAMERATE_MAP.get(setting);
-            return fps != null ? fps + FRAMERATE_LABEL : "";
+            if (fps != null) { label = fps + FRAMERATE_LABEL; }
         }
         else if (id == LED)          { label = LED_LABELS.get(setting); }
         else if (id == HYPERSMOOTH)  { label = HYPERSMOOTH_LABELS.get(setting); }
         else {
             // System.println("[WARNING]   Unknown setting ID requested for label");
+            EM.raise(
+                EM.ERR_CAM | EM.SUB_CAM_ID | 0x00 << 16,
+                setting as Number << 8 + id,
+                :WarningErr
+            );
             return label;
         }
         
-        return label == null ? "" : label;
-        // TODO(error) msg for unknown ids
+        if (label == null) { label = ""; }
+        if (label.equals("")) {
+            EM.raise(
+                EM.ERR_CAM | EM.SUB_CAM_VAL | 0x03 << 16,
+                setting as Number << 8 + id,
+                :WarningErr
+            );
+        }
+        
+        return label;
     }
 
     public function getDescription() as String {

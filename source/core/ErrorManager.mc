@@ -41,12 +41,19 @@ module ErrorManager {
     const   SUB_BLE_TO      = 0xA0;         // timeout
     const   SUB_BLE_API     = 0xF0;         // ble api exception
 
+    const   SUB_CAM_ID      = 0x00 << 16;   // unknown setting / status id
+    const   SUB_CAM_VAL     = 0x10 << 16;   // unknown setting / status value
+    const   SUB_CAM_NULL    = 0x20 << 16;   // null settings / status / available
+    const   SUB_CAM_AVAIL   = 0x30 << 16;   // settings not in available
+
     const   SUB_MSG_STATUS  = 0x00 << 16;   // camera status != 0
     const   SUB_MSG_QUERY   = 0x10 << 16;   // unknown query
     const   SUB_MSG_STRUCT  = 0x20 << 16;   // bad message structure
-    // const   SUB_            = 0x30 << 16;
+    // const   SUB_MSG_        = 0x30 << 16;
+
     
-    var unstable as Boolean = false;
+    var stable as Boolean = true;
+    var running as Boolean = true;
     // var errorQueue as Array<Number> = [];
 
 
@@ -68,8 +75,9 @@ module ErrorManager {
         // errorQueue.add(code);
         // if (errorQueue.size() > 64) { errorQueue = errorQueue.slice(1, null); }
 
-        if (level != :SilentErr and !unstable) {
-            if (level != :ConnectErr) { unstable = true; }
+        if (level != :SilentErr and running and (stable or level == :CriticalErr)) {
+            if (level != :ConnectErr) { stable = false; }
+            if (level == :CriticalErr) { running = false; }
 
             var msg = ICM.loadString(level);
             var format = "%04X";

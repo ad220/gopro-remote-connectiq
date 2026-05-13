@@ -1,6 +1,7 @@
 import Toybox.Lang;
 
 using GattProfileManager as GPM;
+using ErrorManager as EM;
 
 class GoProCamera extends GoProSettings {
 
@@ -74,7 +75,6 @@ class GoProCamera extends GoProSettings {
             if (settings.get(keys[i]) != value and value != null) {
                 sendSetting(keys[i], value);
             }
-            // TODO(error): settings ? flicker may be null on MAX2...
         }  
     }
 
@@ -91,24 +91,45 @@ class GoProCamera extends GoProSettings {
     }
 
     public function onReceiveSetting(id as Char or GoProSettings.SettingId, value as ByteArray) as Void {
-        if (value.size()==0) { return; /* TODO(error): transmit */ }
+        if (value.size()==0) { 
+            EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x00 << 16, id as Number, :SilentErr);
+            // TODO(raise): confirm level
+            return;
+        }
 
         settings.put(id as GoProSettings.SettingId, value[0] as Char);
         if (id==RESOLUTION) {
             settings.put(RATIO, value[0] as Char);
 
             var tuple = RESOLUTION_MAP.get(value[0] as Char);
-            if (tuple == null) { return; /* TODO(error): settings */ }
+            if (tuple == null) {
+                EM.raise(
+                    EM.ERR_CAM | EM.SUB_CAM_VAL | 0x00 << 16,
+                    value[0] << 8 + id as Number,
+                    :WarningErr
+                );
+                // TODO(raise): confirm flag
+                return;
+            }
 
             var ratios = availableRatios.get(tuple[0]);
             if (ratios != null and ratios.size()>0) {
                 availableSettings.put(RATIO, ratios);
+            } else {
+                EM.raise(
+                    EM.ERR_CAM | EM.SUB_CAM_AVAIL | 0x00 << 16,
+                    value[0] << 8 + id as Number,
+                    :WarningErr
+                );
             }
         }
     }
 
     public function onReceiveStatus(id as Char or StatusId, value as ByteArray) as Void {
-        if (value.size()==0) { return; /* TODO(error) */ }
+        if (value.size()==0) { 
+            EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x01 << 16, id as Number, :SilentErr);
+            return;
+        }
 
         if (id==ENCODING) {
             if (value[0]==1) {
@@ -129,7 +150,10 @@ class GoProCamera extends GoProSettings {
     }
 
     public function onReceiveAvailable(id as Char, value as ByteArray) as Void {
-        if (value.size()==0) { return; /* TODO(error): transmit */ }
+        if (value.size()==0) {
+            EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x02 << 16, id as Number, :SilentErr);
+            return;
+        }
 
         var available = tmpAvailableSettings.get(id);
         if (available != null) {
@@ -162,7 +186,14 @@ class GoProCamera extends GoProSettings {
                     var availableResolutions = [];
                     for (var j=0; j<tmpValues.size(); j++) {
                         var tuple = RESOLUTION_MAP.get(tmpValues[j]);
-                        if (tuple == null) { continue; /* TODO(error): settings */ }
+                        if (tuple == null) {
+                            EM.raise(
+                                EM.ERR_CAM | EM.SUB_CAM_VAL | 0x01 << 16,
+                                tmpValues[j] as Number << 8 + RESOLUTION,
+                                :WarningErr
+                            );
+                            continue;
+                        }
 
                         if (currentRes == tuple[0]) {
                             currentMap.add(tmpValues[j]);
@@ -178,11 +209,17 @@ class GoProCamera extends GoProSettings {
                     var res = settings.get(RESOLUTION);
                     if (res != null) {
                         var tuple = RESOLUTION_MAP.get(res);
-                        if (tuple != null) {
+                        if (tuple == null) {
+                            EM.raise(
+                                EM.ERR_CAM | EM.SUB_CAM_VAL | 0x02 << 16,
+                                res as Number << 8 + RESOLUTION,
+                                :WarningErr
+                            );
+                        }
+                        else {
                             var avRatios = availableRatios.get(tuple[0]);
                             if (avRatios != null) { availableSettings.put(RATIO, avRatios); }
                         }
-                        // TODO(error): settings (only second if)
                     }
                 } else {
                     availableSettings.put(tmpKeys[i], tmpValues);
