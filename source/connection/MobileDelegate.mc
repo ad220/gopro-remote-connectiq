@@ -65,7 +65,7 @@ class MobileDelegate extends CameraDelegate {
     }
 
     public function send(
-        type as GattRequest.RequestType,
+        type as GattRequestQueue.RequestType,
         uuid as GattProfileManager.GoProUuid,
         data as ByteArray
     ) as Void {

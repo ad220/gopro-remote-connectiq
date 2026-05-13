@@ -99,9 +99,7 @@ class BluetoothDelegate extends CameraDelegate {
             } else {
                 connected = false;
                 try             { device.requestBond(); }
-                catch (ex)      {
-                    onPairingFailed(EM.SUB_BLE_API | 0x04);
-                }
+                catch (ex)      { onPairingFailed(EM.SUB_BLE_API | 0x04); }
             }
         } else {
             if (isPairing())    { onPairingFailed(EM.SUB_BLE_STATUS | 0x0F); }
@@ -146,7 +144,7 @@ class BluetoothDelegate extends CameraDelegate {
             // System.println("[DEBUG]     keepAlive");
 
             var data = [0x03, 0x5b, 0x01, 0x42]b;
-            requestQueue.add(GattRequest.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_COMMAND_CHAR), data);
+            requestQueue.add(GattRequestQueue.WRITE_CHARACTERISTIC, GattProfileManager.getUuid(GattProfileManager.UUID_COMMAND_CHAR), data);
         } else {
             // ERA_CRASH(x9v4.0.1)
             EM.raise(EM.ERR_COMM, EM.SUB_BLE_NULLQ | 0x00, :CriticalErr);
@@ -161,7 +159,7 @@ class BluetoothDelegate extends CameraDelegate {
             
             if (camera != null) {
                 try { BleAPI.unpairDevice(camera); }
-                catch (ex) { EM.raise(EM.ERR_COMM, EM.SUB_BLE_API, :SilentErr); }
+                catch (ex) { EM.raise(EM.ERR_COMM, EM.SUB_BLE_API | 0x02, :SilentErr); }
 
                 camera = null;
             }
@@ -192,7 +190,7 @@ class BluetoothDelegate extends CameraDelegate {
     }
 
     public function send(
-        type as GattRequest.RequestType,
+        type as GattRequestQueue.RequestType,
         uuid as GattProfileManager.GoProUuid,
         data as ByteArray
     ) as Void {
@@ -211,7 +209,7 @@ class BluetoothDelegate extends CameraDelegate {
 
     public function onCharacteristicRead(characteristic as Ble.Characteristic, status as Ble.Status, value as ByteArray) as Void {
         if (status != Ble.STATUS_SUCCESS) {
-            // System.println("[WARNING]     Error while reading characteristic");
+            // System.println("[WARNING]   Error while reading characteristic");
             EM.raise(EM.ERR_COMM, EM.SUB_BLE_STATUS | 0x02, :SilentErr);
             return;
         }
@@ -222,11 +220,11 @@ class BluetoothDelegate extends CameraDelegate {
 
     public function onCharacteristicWrite(characteristic as Ble.Characteristic, status as Ble.Status) as Void {
         if (requestQueue == null) { EM.raise(EM.ERR_COMM, EM.SUB_BLE_NULLQ | 0x02, :CriticalErr); return; }
-        requestQueue.onRequestProcessed(GattRequest.WRITE_CHARACTERISTIC, characteristic.getUuid(), status);
+        requestQueue.onRequestProcessed(GattRequestQueue.WRITE_CHARACTERISTIC, characteristic.getUuid(), status);
     }
 
     public function onDescriptorWrite(descriptor as Ble.Descriptor, status as Ble.Status) as Void {
         if (requestQueue == null) { EM.raise(EM.ERR_COMM, EM.SUB_BLE_NULLQ | 0x03, :CriticalErr); return; }
-        requestQueue.onRequestProcessed(GattRequest.REGISTER_NOTIFICATION, descriptor.getUuid(), status);
+        requestQueue.onRequestProcessed(GattRequestQueue.REGISTER_NOTIFICATION, descriptor.getUuid(), status);
     }
 }

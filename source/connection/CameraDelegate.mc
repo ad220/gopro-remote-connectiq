@@ -105,7 +105,7 @@ class CameraDelegate {
     }
 
     public function onPairingTimeout() as Void {
-        onPairingFailed(EM.SUB_BLE_TO | 0x00);
+        onPairingFailed(EM.SUB_BLE_TO | 0x01);
     }
 
     public function onPairingFailed(errCode as Number) as Void {
@@ -115,14 +115,15 @@ class CameraDelegate {
                 pairingTimer = null;
             }
 
-            EM.raise(EM.ERR_COMM, errCode + goproId as Number << 24, :ConnectErr);
+            if (goproId == null) { goproId = 0 as Char; }
+            EM.raise(EM.ERR_COMM, errCode + goproId.toNumber() << 24, :ConnectErr);
         } else {
             EM.raise(EM.ERR_COMM, EM.SUB_BLE_CONN | 0x0F, :WarningErr);
         }
     }
 
     public function send(
-        type as GattRequest.RequestType,
+        type as GattRequestQueue.RequestType,
         uuid as GattProfileManager.GoProUuid,
         data as ByteArray
     ) as Void {
@@ -143,7 +144,7 @@ class CameraDelegate {
         }
         else if ((response[0] & 0x80) == 0x80) { // Continuation packet
             if (queryReplyBuffer == null) {
-                EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x00, 0, :WarningErr); 
+                EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x00 << 16, 0, :WarningErr); 
                 return;
             } /* TODO(raise): complete data field */ 
 
@@ -168,7 +169,8 @@ class CameraDelegate {
         var decoder = null;
 
         if (status != 0) {
-            // TODO(error): bad camera status
+            // TODO(raise): skip msg, check for queue impact ? confirm err_flag
+            EM.raise(EM.ERR_MSG | EM.SUB_MSG_STATUS | 0x00 << 16, 0, :SilentErr);
             // System.println("[WARNING]   Wrong query status received from camera, value: " + status.toNumber());
         }
         
@@ -177,7 +179,8 @@ class CameraDelegate {
         else if (mask ^ 0x13 == 0)                      { decoder = :onReceiveStatus; }
         else if (mask ^ 0x02 == 0 or queryId == 0x32)   { decoder = :onReceiveAvailable; }
         else {
-            // TODO(error): unknown camera queryId
+            // TODO(raise): skip msg, check for queue impact ? confirm err_flag
+            EM.raise(EM.ERR_MSG | EM.SUB_MSG_QUERY | 0x00 << 16, 0, :SilentErr);
             // System.println("[WARNING]   Unknown queryId: " + queryId.toNumber());
             return;
         }

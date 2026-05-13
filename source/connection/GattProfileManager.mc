@@ -3,6 +3,7 @@ import Toybox.System;
 
 using Toybox.BluetoothLowEnergy as Ble;
 using BleApiWrapper as BleAPI;
+using ErrorManager as EM;
 
 module GattProfileManager {
 
@@ -46,7 +47,7 @@ module GattProfileManager {
         try {
             BleAPI.registerProfile(profile);
         } catch (ex) {
-            // TODO(error) BLE register profile
+            EM.raise(EM.ERR_COMM, EM.SUB_BLE_API | 0x08, :CriticalErr);
             // System.println("[ERROR]     registerProfile : " + ex.getErrorMessage());
         }
     }

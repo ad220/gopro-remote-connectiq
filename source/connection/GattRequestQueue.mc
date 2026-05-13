@@ -2,160 +2,162 @@ import Toybox.System;
 import Toybox.Lang;
 
 using Toybox.BluetoothLowEnergy as Ble;
+using ErrorManager as EM;
+
 
 (:ble)
 class GattRequestQueue {
 
-    private var service as Ble.Service;
-    protected var queue as Array<GattRequest>;
-    protected var isProcessing as Boolean;
+    static const ALREADY_FAIL_CNTR_FLAG = 1 << 16; 
+
+    enum RequestType {
+        REGISTER_NOTIFICATION,
+        WRITE_CHARACTERISTIC,
+    }
+
+    typedef GattRequest as {
+        :type           as RequestType,
+        :uuid           as Ble.Uuid,
+        :data           as ByteArray,
+        :timer          as TimerCallback?,
+    };
+
+
+    private var service         as Ble.Service;
+    protected var queue         as Array<GattRequest>;
+    protected var isProcessing  as Boolean;
+    protected var failCounter   as Number;
 
 
     public function initialize(service as Ble.Service) {
         self.service = service;
         self.queue = [];
         self.isProcessing = false;
+        self.failCounter = 0;
     }
 
-    public function add(type as GattRequest.RequestType, uuid as Ble.Uuid, data as ByteArray) as Void {
-        var request = new GattRequest(type, uuid, data, self);
+
+    public function add(type as RequestType, uuid as Ble.Uuid, data as ByteArray) as Void {
+        var request = {:type => type, :uuid => uuid, :data => data, :timer => null} as GattRequest;
         queue.add(request);
         if (!isProcessing) {
+            failCounter = 0;
             sendRequest();
         }
     }
 
-    public function sendRequest() as Void {
+
+    private function sendRequest() as Void {
         isProcessing = true;
         var request = queue[0];
-        var characteristic = service.getCharacteristic(request.getUuid());
+        var characteristic = service.getCharacteristic(request[:uuid] as Ble.Uuid);
         if (characteristic == null) {
-            // TODO(error) warn: BLE char not found
-            onRequestFail();
+            onRequestFail(EM.SUB_BLE_BADSCD | 0x01);
             return;
         }
 
         // Register notifications for characteristic
-        if (request.getType() == GattRequest.REGISTER_NOTIFICATION) {
+        if (request[:type] == GattRequestQueue.REGISTER_NOTIFICATION) {
             var descriptor = characteristic.getDescriptor(Ble.cccdUuid());
-            if (descriptor != null) {
-                // TODO(error): ble --> BLE warn write fail, add try catch
-                descriptor.requestWrite(request.getData());
-            } else {
-                // TODO(error) warn: BLE desc not found
-                onRequestFail();
+            if (descriptor == null) {
+                onRequestFail(EM.SUB_BLE_BADSCD | 0x02);
                 return;
             }
 
+            try         { descriptor.requestWrite(request[:data] as ByteArray); }
+            catch (ex)  { onRequestFail(EM.SUB_BLE_WRITE | 0x00); }
+
         // Write request.data in characteristic
         } else {
-            // TODO(error): ble --> BLE warn write fail, add try catch
-            characteristic.requestWrite(request.getData(), {:writeType => Ble.WRITE_TYPE_DEFAULT});
+            try {
+                characteristic.requestWrite(request[:data] as ByteArray, {:writeType => Ble.WRITE_TYPE_DEFAULT});
+            }
+            catch (ex)  { onRequestFail(EM.SUB_BLE_WRITE | 0x00); }
         }
         
         // System.println("[DEBUG]     Write data " + request.getData() + " to char " + request.getUuid());
-        request.startTimer();
+        request[:timer] = getApp().timerController.start(method(:onRequestTimeout), 5, false);
     }
-    
-    public function onRequestProcessed(type as GattRequest.RequestType, uuid as Ble.Uuid, status as Ble.Status) as Void {
-        var request = queue[0];
-        if (request != null and (type==GattRequest.REGISTER_NOTIFICATION or uuid.equals(request.getUuid())) and status==Ble.STATUS_SUCCESS) {
-            request.onResponse();
-            queue = queue.slice(1, queue.size());
-            if (queue.size()>0) {
-                sendRequest();
-            } else {
-                isProcessing = false;
-            }
+
+
+    private function nextRequest() as Void {
+        queue = queue.slice(1, queue.size());
+        if (queue.size()>0) {
+            failCounter = 0;
+            sendRequest();
         } else {
-            // TODO(error): null warning
-            // System.println("[WARNING]   Write operation failed or queue is not synchronized, status: " + status);
+            isProcessing = false;
         }
     }
 
-    public function onRequestFail(/* TODO(error) error as Number */) as Void {
+    
+    public function onRequestProcessed(type as RequestType, uuid as Ble.Uuid, status as Ble.Status) as Void {
+        if (queue.size() < 1) {
+            EM.raise(EM.ERR_COMM, EM.SUB_BLE_NULLQ | 0x04, :WarningErr);
+            isProcessing = false;
+            return;
+        }
+        var request = queue[0];
+        
+        if (status != Ble.STATUS_SUCCESS) {
+            onRequestFail(EM.SUB_BLE_STATUS | 0x03);
+            return;
+        }
+        
+        if (
+            type != GattRequestQueue.REGISTER_NOTIFICATION and
+            !uuid.equals(request[:uuid]) or request[:timer] == null
+        ) {
+            // System.println("[WARNING]   Desynchronized request queue
+            onRequestFail(EM.SUB_BLE_NULLQ | 0x05);
+            return;
+        }
+        
+        (request[:timer] as TimerCallback).stop();
+        nextRequest();
+    }
+
+
+    public function onRequestTimeout() as Void {
+        if (failCounter & ALREADY_FAIL_CNTR_FLAG) {
+            failCounter ^= ALREADY_FAIL_CNTR_FLAG;
+        } else { 
+            onRequestFail(EM.SUB_BLE_TO);
+        }
+
+        if (failCounter < 3)    { sendRequest(); /* retry */ }
+        else                    { nextRequest(); /* skip */ }
+    }
+
+
+    private function onRequestFail(errCode as Number) as Void {
         // TODO(test)
-        // TODO(error)
+        failCounter++;
+        EM.raise(EM.ERR_COMM, errCode, failCounter < 3 ? :SilentErr : :WarningErr);
+
+        if (errCode != EM.SUB_BLE_TO) {
+            failCounter ^= ALREADY_FAIL_CNTR_FLAG;
+        }
         // System.println("[WARNING]   GATT write operation failed");
     }
 
+
     public function close() as Void {
-        while (queue.size()>0) {
-            queue[0].onResponse();
-            queue = queue.slice(1, queue.size());
+        if (isProcessing) {
+            if (queue.size()<1 or queue[0][:timer] == null) {
+                EM.raise(EM.ERR_COMM, EM.SUB_BLE_NULLQ | 0x06, :SilentErr);
+            } else {
+                (queue[0][:timer] as TimerCallback).stop();
+            }
         }
+        queue = [];
         isProcessing = false;
     }
 }
 
 
-(:ble)
-class GattRequest {
-    
-    public enum RequestType {
-        REGISTER_NOTIFICATION,
-        WRITE_CHARACTERISTIC,
-    }
-
-    private var type as RequestType;
-    private var uuid as Ble.Uuid;
-    private var data as ByteArray;
-    private var done as Boolean;
-    private var failCounter as Number;
-    private var queue as WeakReference<GattRequestQueue>;
-
-
-    public function initialize(type as RequestType, uuid as Ble.Uuid, data as ByteArray, queue as GattRequestQueue) {
-        self.type = type;
-        self.uuid = uuid;
-        self.data = data;
-        self.queue = queue.weak();
-        self.done = false;
-        self.failCounter = 0;
-    }
-
-    public function getType() as RequestType {
-        return type;
-    }
-
-    public function getUuid() as Ble.Uuid {
-        return uuid;
-    }
-
-    public function getData() as ByteArray {
-        return data;
-    }
-
-    public function isAnswered() as Boolean {
-        return done;
-    }
-
-    public function startTimer() as Void {
-        if (failCounter==0) {
-            getApp().timerController.start(method(:onTimeOut), 5, false);
-        }
-    }
-
-    public function onTimeOut() as Void {
-        // TODO(error): BLE null queue (refactor, remove done, add timercallback and stop timer onResponse)
-        var queueRef = queue.get();
-        if (!done and queueRef != null) {
-            failCounter++;
-            if (failCounter<3) {
-                queueRef.sendRequest();
-            } else {
-                queueRef.onRequestFail();
-            }
-        }
-    }
-
-    public function onResponse() as Void {
-        done = true;
-    }
-}
-
 (:mobile)
-class GattRequest {
+class GattRequestQueue {
 
     enum RequestType {
         REGISTER_NOTIFICATION,

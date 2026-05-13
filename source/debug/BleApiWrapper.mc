@@ -100,7 +100,9 @@ module BleApiWrapper {
         }
 
         function getRawData() as ByteArray {
-            return []b;
+            var data = new [20]b;
+            data[13] = 60;
+            return data;
         }
 
         function getServiceUuids() as Ble.Iterator {
