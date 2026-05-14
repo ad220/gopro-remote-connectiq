@@ -3,6 +3,7 @@ import Toybox.WatchUi;
 import Toybox.Graphics;
 
 using InterfaceComponentsManager as ICM;
+using ErrorManager as EM;
 
 
 class SettingsMenuItem extends WatchUi.CustomMenuItem {
@@ -54,7 +55,7 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
                     subText = loadResource(subText);
                 }
             } else {
-                if (gopro == null) { throw new Exception(); } // TODO(error): null error
+                if (gopro == null) { EM.raise(EM.ERR_NULL, 7, :CriticalErr); return; }
                 subText = gopro.getDescription();
             }
             dc.drawText(0.6*width, 0.325*height, ICM.fontSmall, label, ICM.JTEXT_MID);

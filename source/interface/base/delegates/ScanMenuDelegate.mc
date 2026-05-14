@@ -5,6 +5,7 @@ import Toybox.System;
 using Toybox.BluetoothLowEnergy as Ble;
 using BleApiWrapper as BleAPI;
 using InterfaceComponentsManager as ICM;
+using ErrorManager as EM;
 
 (:ble)
 class ScanMenuDelegate extends Menu2InputDelegate {
@@ -125,7 +126,10 @@ class ScanMenuDelegate extends Menu2InputDelegate {
 
     public function onSelect(item as MenuItem) as Void {
         var id = item.getId();
-        if (id == null) { return; } // TODO(error): null warning
+        if (id == null) {
+            EM.raise(EM.ERR_NULL, 5, :WarningErr);
+            return;
+        }
         
         switch (id) {
             case 0xF0: // status

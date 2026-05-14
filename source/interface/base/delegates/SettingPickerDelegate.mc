@@ -2,6 +2,8 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 import Toybox.System;
 
+using ErrorManager as EM;
+
 
 class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
 
@@ -17,7 +19,10 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
         var items = getApp().gopro.getAvailableSettings(setting);
         
         var selected = getApp().gopro.getSetting(setting);
-        if (selected==null) { selected = 0xFF as Char; } // TODO(error): settings
+        if (selected == null) {
+            selected = 0xFF as Char;
+            EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x00 << 16, setting, :WarningErr);
+        }
 
         if      (setting == GoProSettings.RESOLUTION)   { titleId = Rez.Strings.Resolution;     comparator = new ResolutionComparator(); }
         else if (setting == GoProSettings.RATIO)        { titleId = Rez.Strings.Ratio;          comparator = new RatioComparator(); }
@@ -27,8 +32,8 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
         else if (setting == GoProSettings.HYPERSMOOTH)  { titleId = Rez.Strings.HyperSmooth; }
         else {
             // System.println("[WARNING]   Unknown Setting id");
-            // TODO(error)
-            throw new Exception();
+            EM.raise(EM.ERR_CAM | EM.SUB_CAM_ID | 0x01 << 16, setting, :CriticalErr);
+            return;
         }
 
         menu.setTitle(new PickerTitle(titleId));

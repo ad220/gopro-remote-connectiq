@@ -3,6 +3,7 @@ import Toybox.WatchUi;
 import Toybox.Graphics;
 
 using InterfaceComponentsManager as ICM;
+using ErrorManager as EM;
 
 (:highend)
 class TogglablesDelegate extends WatchUi.BehaviorDelegate {
@@ -26,8 +27,11 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
         if (keyEvent.getType() == PRESS_TYPE_ACTION) {
             if (keyEvent.getKey() == KEY_ENTER) {
                 var callback = view.getHilighted().behavior;
-                if (callback != null) { method(callback).invoke(); } // TODO(error): null error
-                return true;
+                if (callback != null) {
+                    method(callback).invoke();
+                    return true;
+                }
+                EM.raise(EM.ERR_NULL, 6, :WarningErr);
             }
             else if (keyEvent.getKey() == KEY_UP) {
                 view.nextButton();
@@ -57,11 +61,10 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
 
     public function onFlicker() as Void {
         var flicker = camera.getSetting(GoProSettings.FLICKER);
-        if (flicker != null) {
+        if (flicker != null) { // expected behavior with MAX2 cam
             flicker = flicker.toNumber();
             view.getHilighted().toggleState(flicker & 0x01 == 0);
             camera.sendSetting(GoProSettings.FLICKER, (flicker ^ 0x01) as Char);
-            // TODO(error): settings
         }
     }
     
@@ -85,7 +88,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
             var ledStatus = camera.getSetting(GoProSettings.LED);
             if (ledStatus != null) {
                 var index = available.indexOf(ledStatus);
-                // TODO: error msg if index == -1
+                // TODO(error): if index == -1
                 view.getHilighted().toggleState(
                     ledStatus==GoProSettings.LED_OFF or 
                     ledStatus==GoProSettings.LED_ALL_OFF
