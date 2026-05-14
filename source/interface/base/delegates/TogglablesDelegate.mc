@@ -2,8 +2,8 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 import Toybox.Graphics;
 
-using InterfaceComponentsManager as ICM;
 using ErrorManager as EM;
+
 
 (:highend)
 class TogglablesDelegate extends WatchUi.BehaviorDelegate {
@@ -79,9 +79,9 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
 
         if (available.size()>2) {
             var menu = new CustomMenu(
-                (0.1*ICM.screenH).toNumber()<<1,
+                (0.1*Screen.HEIGHT).toNumber()<<1,
                 Graphics.COLOR_BLACK,
-                {:titleItemHeight => (0.15*ICM.screenH).toNumber() << 1}
+                {:titleItemHeight => (0.15*Screen.HEIGHT).toNumber() << 1}
             );
             getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.LED), SLIDE_LEFT);
         } else {
@@ -110,7 +110,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onStabilize() as Void {
-        var menu = new CustomMenu((0.1*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.15*ICM.screenH).toNumber()<<1});
+        var menu = new CustomMenu((0.1*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.15*Screen.HEIGHT).toNumber()<<1});
         getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.HYPERSMOOTH), SLIDE_LEFT);
     }
 

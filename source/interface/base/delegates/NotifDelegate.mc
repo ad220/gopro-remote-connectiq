@@ -1,8 +1,6 @@
 import Toybox.Lang;
 import Toybox.WatchUi;
 
-using InterfaceComponentsManager as ICM;
-
 
 class NotifDelegate extends WatchUi.BehaviorDelegate {
 

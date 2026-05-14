@@ -21,26 +21,26 @@ class RemoteView extends WatchUi.View {
         // Shutter button
         layout.add(new Button({
             :behavior   => :shutter,
-            :locX       => ICM.screenH * 0.35,
-            :locY       => ICM.screenW * 0.2,
-            :width      => ICM.screenW * 0.4,
-            :height     => ICM.screenH * 0.4
+            :locX       => Screen.HEIGHT * 0.35,
+            :locY       => Screen.WIDTH * 0.2,
+            :width      => Screen.WIDTH * 0.4,
+            :height     => Screen.HEIGHT * 0.4
         }));
         // Hilight button
         layout.add(new Button({
             :behavior   => :hilight,
-            :locX       => ICM.screenH * 0.1,
-            :locY       => ICM.screenW * 0.3,
-            :width      => ICM.screenW * 0.2,
-            :height     => ICM.screenH * 0.2
+            :locX       => Screen.HEIGHT * 0.1,
+            :locY       => Screen.WIDTH * 0.3,
+            :width      => Screen.WIDTH * 0.2,
+            :height     => Screen.HEIGHT * 0.2
         }));
         // Settings button
         layout.add(new Button({
             :behavior   => :onMenu,
-            :locX       => ICM.screenH * 0.2,
-            :locY       => ICM.screenW * 0.65,
-            :width      => ICM.screenW * 0.6,
-            :height     => ICM.screenH * 0.2
+            :locX       => Screen.HEIGHT * 0.2,
+            :locY       => Screen.WIDTH * 0.65,
+            :width      => Screen.WIDTH * 0.6,
+            :height     => Screen.HEIGHT * 0.2
         }));
         setLayout(layout);
     }
@@ -89,7 +89,7 @@ class RemoteView extends WatchUi.View {
             // Draw the recording duration 
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
             var timeString = (recordTime / 60) + ":" + (recordTime % 60).format("%02d");
-            dc.drawText(ICM.halfW, 0.1*height, ICM.fontTiny, timeString, ICM.JTEXT_MID);
+            dc.drawText(Screen.WIDTH * 0.5, 0.1*height, ICM.fontTiny, timeString, ICM.JTEXT_MID);
 
             // Settings button
             dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
