@@ -64,32 +64,37 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
             getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.LED), SLIDE_LEFT);
         } else {
             var ledStatus = gopro.getSetting(GoProSettings.LED);
-            if (ledStatus != null) {
-                var newStatus = available[available.indexOf(ledStatus) ^ 0x01];
-                selected.setSubLabel(GoProSettings.getLabel(GoProSettings.LED, newStatus));
-                gopro.sendSetting(GoProSettings.LED, newStatus);
+            if (ledStatus == null) {
+                EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x01 << 16, GoProSettings.LED, :WarningErr);
+                return;
             }
-            // TODO(error): settings ? not very useful
+            
+            var newStatus = available[available.indexOf(ledStatus) ^ 0x01];
+            selected.setSubLabel(GoProSettings.getLabel(GoProSettings.LED, newStatus));
+            gopro.sendSetting(GoProSettings.LED, newStatus);
         }
     }
     
     public function onFlicker() as Void {
         var flicker = gopro.getSetting(GoProSettings.FLICKER);
-        if (flicker != null) {
-            (selected as ToggleMenuItem).setEnabled(flicker & 0x01 == 0);
-            selected.setSubLabel(flicker & 1 ? "60Hz" : "50Hz");
-            gopro.sendSetting(GoProSettings.FLICKER, (flicker ^ 0x01) as Char);
+        if (flicker == null) {
+            EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x01 << 16, GoProSettings.FLICKER, :WarningErr);
+            return;
         }
-        // TODO(error): settings ? not useful
+
+        (selected as ToggleMenuItem).setEnabled(flicker & 0x01 == 0);
+        selected.setSubLabel(flicker & 1 ? "60Hz" : "50Hz");
+        gopro.sendSetting(GoProSettings.FLICKER, (flicker ^ 0x01) as Char);
     }
     
     public function onGps() as Void {
         var gps = gopro.getSetting(GoProSettings.GPS) as Number?;
-        if (gps!=null) {
-            (selected as ToggleMenuItem).setEnabled(gps & 0x01 == 0);
-            gopro.sendSetting(GoProSettings.GPS, (gps ^ 0x01) as Char);
+        if (gps==null) {
+            EM.raise(EM.ERR_CAM, EM.SUB_CAM_NULL | 0x01 << 16, GoProSettings.GPS, :WarningErr);
         }
-        // TODO(error): settings
+        
+        (selected as ToggleMenuItem).setEnabled(gps & 0x01 == 0);
+        gopro.sendSetting(GoProSettings.GPS, (gps ^ 0x01) as Char);
     }
     
     public function onPower() as Void {

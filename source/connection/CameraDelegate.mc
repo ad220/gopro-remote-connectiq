@@ -87,7 +87,11 @@ class CameraDelegate {
         }
         pairingTimer = null;
 
-        getApp().gopro = new GoProCamera(self, goproId);
+        if (goproId == null) {
+            goproId = 0 as Char;
+            EM.raise(EM.ERR_NULL, 8, :WarningErr);
+        }
+        getApp().gopro = new GoProCamera(self, goproId as Char);
         
         var pushView = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
         pushView.invoke(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
@@ -160,8 +164,8 @@ class CameraDelegate {
             // System.println("[WARNING]   TLV Message too short");
             return;
         }
-        var gopro = getApp().gopro;
-        if (gopro == null) { EM.raise(EM.ERR_NULL, 3, :CriticalErr); }
+        var gopro = getApp().gopro as GoProCamera?;
+        if (gopro == null) { EM.raise(EM.ERR_NULL, 3, :CriticalErr); return; }
 
         var queryId = message[0];
         var status = message[1];
