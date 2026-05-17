@@ -82,14 +82,14 @@ class RemoteView extends WatchUi.View {
 
             // Draw the recording circle, blinks every second
             if (recordTime % 2) {
-                dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLACK);
+                dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_BLACK);
             }
             dc.fillCircle(0.38*width, 0.10*height, 0.025*width);
 
             // Draw the recording duration 
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
             var timeString = (recordTime / 60) + ":" + (recordTime % 60).format("%02d");
-            dc.drawText(Screen.WIDTH * 0.5, 0.1*height, ICM.fontTiny, timeString, ICM.JTEXT_MID);
+            dc.drawText(Screen.WIDTH * 0.5, 0.1*height, ICM.fontTiny, timeString, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
 
             // Settings button
             dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);

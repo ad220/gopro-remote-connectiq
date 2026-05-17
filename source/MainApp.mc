@@ -12,7 +12,7 @@ class GoProRemoteApp extends Application.AppBase {
 
     public var fromGlance as Boolean;
 
-    private var appStarted as Boolean;
+    (:typecheck(false)) private var appStarted as Boolean;
 
     (:initialized) public var timerController as TimerController;
     (:initialized) public var viewController as ViewController;
@@ -63,7 +63,6 @@ class GoProRemoteApp extends Application.AppBase {
         self.timerController = new TimerController(200);
         self.viewController = new ViewController();
 
-        InterfaceComponentsManager.computeInterfaceConstants();
         InterfaceComponentsManager.loadFonts();
         
         var label = lastPairedDevice==null ? WatchUi.loadResource(Rez.Strings.Pair) : WatchUi.loadResource(Rez.Strings.Connect);

@@ -96,7 +96,11 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
 
             var index = available.indexOf(ledStatus);
             if (index == -1) {
-                EM.raise(EM.ERR_CAM, EM.SUB_CAM_AVAIL, :WarningErr);
+                EM.raise(
+                    EM.ERR_CAM | EM.SUB_CAM_AVAIL | 0x01 << 16,
+                    ledStatus.toNumber() << 8 + GoProSettings.LED,
+                    :WarningErr
+                );
             }
 
             view.getHilighted().toggleState(

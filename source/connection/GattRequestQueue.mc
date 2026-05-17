@@ -56,6 +56,8 @@ class GattRequestQueue {
             return;
         }
 
+        request[:timer] = getApp().timerController.start(method(:onRequestTimeout), 5, false);
+
         // Register notifications for characteristic
         if (request[:type] == GattRequestQueue.REGISTER_NOTIFICATION) {
             var descriptor = characteristic.getDescriptor(Ble.cccdUuid());
@@ -76,7 +78,6 @@ class GattRequestQueue {
         }
         
         // System.println("[DEBUG]     Write data " + request.getData() + " to char " + request.getUuid());
-        request[:timer] = getApp().timerController.start(method(:onRequestTimeout), 5, false);
     }
 
 

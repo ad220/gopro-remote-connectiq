@@ -67,10 +67,10 @@ module ErrorManager {
      */
     function raise(code as Number, data as Number, level as Symbol) as Void {
         
-        var app = getApp(); 
+        var app = getApp();
         var goproId = app.gopro!=null ? app.gopro.getGoProId() : 0;
 
-        code |= BUILD_FLAGS | (0x3F & goproId as Number << 24) | (0xFFFF & data);
+        code |= BUILD_FLAGS | (0x3F & goproId.toNumber() << 24) | (0xFFFF & data);
 
         // errorQueue.add(code);
         // if (errorQueue.size() > 64) { errorQueue = errorQueue.slice(1, null); }
