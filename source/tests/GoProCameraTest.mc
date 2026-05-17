@@ -53,6 +53,11 @@ module GoProCameraTest {
         }
     }
 
+    (:test)
+    function testModelIds(logger as Logger) as Boolean {
+        return CameraDelegate.goproModelTable.size() == CameraDelegate.goproModelString.size(); 
+    }
+
 
     (:test)
     function testConnectionSuccess(logger as Logger) as Boolean {

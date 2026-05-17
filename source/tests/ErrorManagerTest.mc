@@ -76,11 +76,11 @@ module ErrorManagerTest {
         }
 
         var expectedQueue = [
-            0x0C2000F5,
-            0x0C970487,
-            0x0C0000DC,
-            0x0C0000DD,
-            0x0C10002A,
+            0x102000F5,
+            0x10970487,
+            0x100000DC,
+            0x100000DD,
+            0x1010002A,
         ] as Array;
 
         if (!TestInit.haveSameData(expectedQueue, EM.errorQueue as Array)) {

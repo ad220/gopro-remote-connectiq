@@ -5,27 +5,31 @@ using ErrorManager as EM;
 
 class CameraDelegate {
 
-    public static const goproModelTable = [0, 12, 13, 19, 21, 22, 24, 30, /*41, *//*44, */51, 55, 57, 58, 60, 62, 64, 65]b;
+    public static const goproModelTable = [0, 12, 13, 19, 21, 22, 24, 30, 32, 33, 34, 50, 51, 55, 57, 58, 60, 62, 64, 65, 66, 70]b;
       
     public static const goproModelString = [
         :UnknownGP,
-        4           /* id:12 -> HERO4 Silver */,
-        4           /* id:13 -> HERO4 Black */,
-        5           /* id:19 -> HERO5 Black */,
-        5           /* id:21 -> HERO5 Session */,
-        :Fusion     /* id:22 -> Fusion */,
-        6           /* id:24 -> HERO6 Black */,
-        7           /* id:30 -> HERO7 Black */,
-        // 4           /* id: -> HERO 2018 */,
-        // 4           /* id: -> HERO8 Black*/,
-        :MAX        /* id:51 -> MAX */,
-        9           /* id:55 -> HERO9 Black */,
-        10          /* id:57 -> HERO10 Black */,
-        11          /* id:58 -> HERO11 Black*/,
-        11          /* id:60 -> HERO11 Black Mini*/,
-        12          /* id:62 -> HERO12 Black*/,
-        :MAX        /* id:64 -> MAX2 */,
-        13          /* id:65 -> HERO13 Black*/,
+        4           /* 01) id:12 -> HERO4 Silver */,
+        4           /* 02) id:13 -> HERO4 Black */,
+        5           /* 03) id:19 -> HERO5 Black */,
+        5           /* 04) id:21 -> HERO5 Session */,
+        :Fusion     /* 05) id:22 -> Fusion */,
+        6           /* 06) id:24 -> HERO6 Black */,
+        7           /* 07) id:30 -> HERO7 Black */,
+        7           /* 08) id:32 -> HERO7 White */,
+        7           /* 09) id:33 -> HERO7 Silver */,
+        2018        /* 10) id:34 -> HERO 2018 */,
+        8           /* 11) id:50 -> HERO8 Black */,
+        :MAX        /* 12) id:51 -> MAX */,
+        9           /* 13) id:55 -> HERO9 Black */,
+        10          /* 14) id:57 -> HERO10 Black */,
+        11          /* 15) id:58 -> HERO11 Black */,
+        11          /* 16) id:60 -> HERO11 Black Mini */,
+        12          /* 17) id:62 -> HERO12 Black */,
+        :MAX        /* 18) id:64 -> MAX2 */,
+        13          /* 19) id:65 -> HERO13 Black */,
+        2024        /* 20) id:66 -> HERO (2024) */,
+        2025        /* 21) id:70 -> HERO Lit */,
     ];
 
     public static function getGoProId(device as Ble.ScanResult) as Char {
