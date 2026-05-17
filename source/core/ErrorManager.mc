@@ -54,7 +54,7 @@ module ErrorManager {
     
     var stable as Boolean = true;
     var running as Boolean = true;
-    // var errorQueue as Array<Number> = [];
+    var errorQueue as Array<Number> = [];
 
 
     /**
@@ -66,16 +66,17 @@ module ErrorManager {
      * @param level     error level, should be on of {:SilentErr, :WarningErr, :CriticalErr} 
      */
     function raise(code as Number, data as Number, level as Symbol) as Void {
+        if (!running) { return; } // don't raise an error if a critical one already occured
         
         var app = getApp();
-        var goproId = app.gopro!=null ? app.gopro.getGoProId() : 0;
+        var goproId = app.gopro != null ? app.gopro.getGoProId() : 0;
 
         code |= BUILD_FLAGS | (0x3F & goproId.toNumber() << 24) | (0xFFFF & data);
 
-        // errorQueue.add(code);
-        // if (errorQueue.size() > 64) { errorQueue = errorQueue.slice(1, null); }
+        errorQueue.add(code);
+        if (errorQueue.size() > 64) { errorQueue = errorQueue.slice(1, null); }
 
-        if (level != :SilentErr and running and (stable or level == :CriticalErr)) {
+        if (level != :SilentErr and (stable or level == :CriticalErr)) {
             if (level != :ConnectErr) { stable = false; }
             if (level == :CriticalErr) { running = false; }
 

@@ -76,7 +76,7 @@ module SettingsMenuDelegateTest {
 
         delegate = viewController.getCurrentDelegate();
         if (!(delegate instanceof RemoteDelegate)) {
-            logger.error("Current delegate should a remote delegate after applying a preset");
+            logger.error("Current delegate should be a remote delegate after applying a preset");
             result = false;
         }
 
