@@ -21,8 +21,8 @@ module BleApiWrapper {
     }
 
     (:inline)
-    function setDelegate(delegate as BluetoothDelegate) as Void {
-        Ble.setDelegate(new BleApiCallbacks(delegate));
+    function setDelegate(delegate as Ble.BleDelegate) as Void {
+        Ble.setDelegate(delegate);
     }
 
     (:inline)

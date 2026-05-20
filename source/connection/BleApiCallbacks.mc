@@ -6,7 +6,7 @@ using Toybox.BluetoothLowEnergy as Ble;
 (:ble :release)
 class BleApiCallbacks extends Ble.BleDelegate {
 
-    private var delegate;
+    private var delegate as BluetoothDelegate;
 
     public function initialize(delegate as BluetoothDelegate) {
         BleDelegate.initialize();
