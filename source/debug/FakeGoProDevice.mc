@@ -55,11 +55,14 @@ using GattProfileManager as GPM;
     }
 
     public function sleep() as Void {
-        BleAPI.callbacks.onConnectedStateChanged(
+        BleAPI.delegate.onConnectedStateChanged(
             gpControlService.device as Ble.Device,
             Ble.CONNECTION_STATE_DISCONNECTED
         );
-        autoSleepTimer = null;
+        if (autoSleepTimer != null) {
+            autoSleepTimer.stop();
+            autoSleepTimer = null;
+        }
     }
 
     public function onSend(uuid as GPM.GoProUuid, data as ByteArray) as Void {
@@ -107,15 +110,22 @@ using GattProfileManager as GPM;
                         statuses.put(GoProCamera.ENCODING, data[3]);
                         responseSplitter(GPM.UUID_COMMAND_RESPONSE_CHAR, [1, 0]b);
                         if (notifStatuses.indexOf(GoProCamera.ENCODING as Char) != -1) {
-                            BleAPI.callbacks.onCharacteristicChanged(
+                            BleAPI.delegate.onCharacteristicChanged(
                                 gpQueryResponseChar as Ble.Characteristic,
                                 [0x05, CameraDelegate.NOTIF_STATUS, 0x00, GoProCamera.ENCODING, 0x01, data[3]]b
                             );
                         }
                         break;
+
                     case GoProCamera.HILIGHT:
                         responseSplitter(GPM.UUID_COMMAND_RESPONSE_CHAR, [commandId, 0]b);
                         hilightCount += 1;
+                        break;
+
+                    case GoProCamera.SLEEP:
+                        sleep();
+                        break;
+
                     default:
                         break;
                 }
@@ -185,13 +195,13 @@ using GattProfileManager as GPM;
         var characteristic = new BleAPI.MockCharacteristic(uuid, gpControlService) as Ble.Characteristic;
 
         if (length<20) {
-            BleAPI.callbacks.onCharacteristicChanged(characteristic, [length]b.addAll(response));
+            BleAPI.delegate.onCharacteristicChanged(characteristic, [length]b.addAll(response));
         }
-        BleAPI.callbacks.onCharacteristicChanged(characteristic, [0x20 | (0x1F & (length>>8)), 0xFF & length]b.addAll(response.slice(0, 18)));
+        BleAPI.delegate.onCharacteristicChanged(characteristic, [0x20 | (0x1F & (length>>8)), 0xFF & length]b.addAll(response.slice(0, 18)));
         var counter = 0;
         response = response.slice(18, null);
         while (response.size()>0) {
-            BleAPI.callbacks.onCharacteristicChanged(characteristic, [0x80 | 0x0F & counter]b.addAll(response.slice(0,19)));
+            BleAPI.delegate.onCharacteristicChanged(characteristic, [0x80 | 0x0F & counter]b.addAll(response.slice(0,19)));
             response = response.slice(19, null);
             counter++;
         }

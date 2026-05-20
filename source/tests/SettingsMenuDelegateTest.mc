@@ -7,7 +7,7 @@ import Toybox.Application;
 
 using BleApiWrapper as BleAPI;
 using GattProfileManager as GPM;
-using InterfaceComponentsManager as ICM;
+
 
 (:test)
 module SettingsMenuDelegateTest {
@@ -21,7 +21,7 @@ module SettingsMenuDelegateTest {
         var device = BleAPI.device as TestInit.SinkGoProDevice;
         device.requests = [];
 
-        var menu = new CustomMenu((0.15*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, null);
+        var menu = new CustomMenu((0.15*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, null);
         var delegate = new SettingsMenuDelegate(menu, SettingsMenuDelegate.CAMERA, []);
         var expected = [
             GPM.UUID_QUERY_CHAR,
@@ -55,7 +55,7 @@ module SettingsMenuDelegateTest {
         var viewController = new ViewDebugController();
         getApp().viewController = viewController;
 
-        var menu = new TestInit.DebugCustomMenu((0.15*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, null);
+        var menu = new TestInit.DebugCustomMenu((0.15*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, null);
         var delegate = new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, []);
 
         viewController.push(menu, delegate, WatchUi.SLIDE_IMMEDIATE);
@@ -76,7 +76,7 @@ module SettingsMenuDelegateTest {
 
         delegate = viewController.getCurrentDelegate();
         if (!(delegate instanceof RemoteDelegate)) {
-            logger.error("Current delegate should a remote delegate after applying a preset");
+            logger.error("Current delegate should be a remote delegate after applying a preset");
             result = false;
         }
 
@@ -94,7 +94,7 @@ module SettingsMenuDelegateTest {
         var viewController = new ViewDebugController();
         getApp().viewController = viewController;
 
-        var menu = new TestInit.DebugCustomMenu((0.15*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, null);
+        var menu = new TestInit.DebugCustomMenu((0.15*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, null);
         var delegate = new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, []);
 
         viewController.push(menu, delegate, WatchUi.SLIDE_IMMEDIATE);
@@ -110,7 +110,7 @@ module SettingsMenuDelegateTest {
         viewController = new ViewDebugController();
         getApp().viewController = viewController;
 
-        menu = new TestInit.DebugCustomMenu((0.15*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, null);
+        menu = new TestInit.DebugCustomMenu((0.15*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, null);
         delegate = new SettingsMenuDelegate(menu, SettingsMenuDelegate.CAMERA, []);
         viewController.push(menu, delegate, WatchUi.SLIDE_IMMEDIATE);
 
@@ -160,7 +160,7 @@ module SettingsMenuDelegateTest {
         var viewController = new ViewDebugController();
         getApp().viewController = viewController;
 
-        var menu = new TestInit.DebugCustomMenu((0.15*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, null);
+        var menu = new TestInit.DebugCustomMenu((0.15*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, null);
         var items = [];
         var delegate = new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, items);
 
@@ -177,7 +177,7 @@ module SettingsMenuDelegateTest {
         viewController = new ViewDebugController();
         getApp().viewController = viewController;
 
-        menu = new TestInit.DebugCustomMenu((0.15*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, null);
+        menu = new TestInit.DebugCustomMenu((0.15*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, null);
         delegate = new SettingsMenuDelegate(menu, SettingsMenuDelegate.PRESET, items);
         viewController.push(menu, delegate, WatchUi.SLIDE_IMMEDIATE);
 

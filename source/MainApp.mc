@@ -36,18 +36,23 @@ class GoProRemoteApp extends Application.AppBase {
     }
 
     // onStop() is called when your application is exiting
-    (:typecheck(false))
+    (:ble :typecheck(false))
     function onStop(state as Dictionary?) as Void {
-        if (viewController!=null) {
-            viewController.returnHome(null, null);
-        }
-        if (timerController!=null) {
-            timerController.stopAll();
-        }
         if (appStarted) {
+            if (viewController != null)     { viewController.returnHome(null, null); }
+            if (timerController != null)    { timerController.stopAll(); }
             BleAPI.setDelegate(null as Ble.BleDelegate);
         }
+        // System.println("[APP DBG]   App stopped");
+    }
 
+    (:mobile :typecheck(false))
+    function onStop(state as Dictionary?) as Void {
+        if (appStarted) {
+            if (viewController != null)     { viewController.returnHome(null, null); }
+            if (timerController!=null)      { timerController.stopAll(); }
+            Communications.registerForPhoneAppMessages(null);
+        }
         // System.println("[APP DBG]   App stopped");
     }
 
@@ -58,7 +63,6 @@ class GoProRemoteApp extends Application.AppBase {
         self.timerController = new TimerController(200);
         self.viewController = new ViewController();
 
-        InterfaceComponentsManager.computeInterfaceConstants();
         InterfaceComponentsManager.loadFonts();
         
         var label = lastPairedDevice==null ? WatchUi.loadResource(Rez.Strings.Pair) : WatchUi.loadResource(Rez.Strings.Connect);

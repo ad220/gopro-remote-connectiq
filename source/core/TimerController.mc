@@ -2,6 +2,9 @@ import Toybox.Lang;
 import Toybox.System;
 import Toybox.Timer;
 
+using ErrorManager as EM;
+
+
 class TimerController {
 
     private var timer as Timer.Timer;
@@ -40,7 +43,7 @@ class TimerController {
             if (callbackList.size()==0) {
                 stopAll();
             }
-        }
+        } // no error raising bc unsafe arg + can't fix anything without context
     }
 
     public function stopAll() as Void {
@@ -74,7 +77,12 @@ class TimerCallback {
 
     public function trigger() as Void {
         tickCount = (tickCount + 1) % period;
-        if (tickCount == 0 and callback!=null) {
+        if (tickCount == 0) {
+            if (callback == null) {
+                EM.raise(EM.ERR_NULL, 4, :SilentErr);
+                return;
+            }
+
             callback.invoke();
             if (!repeat) {
                 stop();

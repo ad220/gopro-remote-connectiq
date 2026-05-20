@@ -53,6 +53,11 @@ module GoProCameraTest {
         }
     }
 
+    (:test)
+    function testModelIds(logger as Logger) as Boolean {
+        return CameraDelegate.goproModelTable.size() == CameraDelegate.goproModelString.size(); 
+    }
+
 
     (:test)
     function testConnectionSuccess(logger as Logger) as Boolean {
@@ -155,7 +160,7 @@ module GoProCameraTest {
         var delegate = new MockBluetoothDelegate();
         delegate.connect(new BleAPI.MockScanResult(0) as Ble.ScanResult);
         
-        BleAPI.callbacks.onConnectedStateChanged(
+        BleAPI.delegate.onConnectedStateChanged(
             delegate.getDevice() as Ble.Device,
             Ble.CONNECTION_STATE_DISCONNECTED
         );
@@ -514,6 +519,7 @@ module GoProCameraTest {
 
     (:test)
     function testShutterCommands(logger as Logger) as Boolean {
+        var result = true;
         TestInit.initDefaults();
         TestInit.initFake();
         TestInit.initConnection();
@@ -537,20 +543,34 @@ module GoProCameraTest {
             return false;
         }
 
+        if (BleAPI.device.hilightCount != 0) {
+            logger.error("Wrong hilight count, expected 0, got " + BleAPI.device.hilightCount);
+            result = false;
+        }
+
         camera.sendCommand(GoProCamera.HILIGHT);
 
         if (BleAPI.device.hilightCount != 1) {
-            logger.error("Wrong hilight count");
+            logger.error("Wrong hilight count, expected 1, got " + BleAPI.device.hilightCount);
+            result = false;
+        }
+
+        camera.sendCommand(GoProCamera.HILIGHT);
+        camera.sendCommand(GoProCamera.HILIGHT);
+
+        if (BleAPI.device.hilightCount != 3) {
+            logger.error("Wrong hilight count, expected 3, got " + BleAPI.device.hilightCount);
+            result = false;
         }
         
         camera.sendCommand(GoProCamera.SHUTTER);
 
         if (camera.isRecording()) {
             logger.error("Camera should not be recording anymore");
-            return false;
+            result = false;
         }
 
-        return true;
+        return result;
     }
 
 

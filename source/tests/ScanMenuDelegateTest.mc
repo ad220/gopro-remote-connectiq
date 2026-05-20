@@ -5,8 +5,8 @@ import Toybox.WatchUi;
 import Toybox.Graphics;
 
 using Toybox.BluetoothLowEnergy as Ble;
-using InterfaceComponentsManager as ICM;
 using BleApiWrapper as BleAPI;
+
 
 (:test)
 module ScanMenuDelegateTest {
@@ -20,9 +20,9 @@ module ScanMenuDelegateTest {
 
     function initMenu() as [TestInit.DebugCustomMenu, ScanMenuDelegate] {
         var menu = new TestInit.DebugCustomMenu(
-            (0.1*ICM.screenH).toNumber()<<1,
+            (0.1*Screen.HEIGHT).toNumber()<<1,
             Graphics.COLOR_BLACK,
-            {:titleItemHeight => (0.30*ICM.screenH).toNumber()}
+            {:titleItemHeight => (0.30*Screen.HEIGHT).toNumber()}
         );
         var delegate = new ScanMenuDelegate(menu, dummyCallback);
 

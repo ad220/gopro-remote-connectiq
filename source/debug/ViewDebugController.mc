@@ -27,7 +27,10 @@ class ViewDebugController extends ViewController {
         if (currentDelegate instanceof NotifDelegate) {
             stack = stack.slice(0, -1);
         }
-        stack[stack.size() - 1] = [view, delegate];
+
+        if (stack.size()>0) {
+            stack[stack.size() - 1] = [view, delegate];
+        }
 
         ViewController.switchTo(view, delegate, slide);
     }

@@ -1,0 +1,17 @@
+<drawables>
+    <bitmap id="LauncherIcon" filename="remote_small.png" automaticPalette="true"/>
+    
+    <bitmap id="Hilight" filename="../../common/drawables/hilight.png" scaleX="9.2%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Settings" filename="../../common/drawables/wheel.png" scaleY="10%" dithering="none" automaticPalette="true"/>
+
+    <bitmap id="Save" filename="save.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Camera" filename="camera.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Eco" filename="battery.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Sport" filename="sport.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Cinema" filename="cinema.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+
+    <bitmap id="Resolution" filename="resolution.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Ratio" filename="ratio.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Lens" filename="lens.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Framerate" filename="framerate.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
+</drawables>

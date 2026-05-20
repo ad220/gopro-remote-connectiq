@@ -2,7 +2,8 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 import Toybox.Graphics;
 
-using InterfaceComponentsManager as ICM;
+using ErrorManager as EM;
+
 
 (:highend)
 class TogglablesDelegate extends WatchUi.BehaviorDelegate {
@@ -26,8 +27,11 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
         if (keyEvent.getType() == PRESS_TYPE_ACTION) {
             if (keyEvent.getKey() == KEY_ENTER) {
                 var callback = view.getHilighted().behavior;
-                if (callback != null) { method(callback).invoke(); }
-                return true;
+                if (callback != null) {
+                    method(callback).invoke();
+                    return true;
+                }
+                EM.raise(EM.ERR_NULL, 6, :WarningErr);
             }
             else if (keyEvent.getKey() == KEY_UP) {
                 view.nextButton();
@@ -57,7 +61,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
 
     public function onFlicker() as Void {
         var flicker = camera.getSetting(GoProSettings.FLICKER);
-        if (flicker != null) {
+        if (flicker != null) { // expected behavior with MAX2 cam
             flicker = flicker.toNumber();
             view.getHilighted().toggleState(flicker & 0x01 == 0);
             camera.sendSetting(GoProSettings.FLICKER, (flicker ^ 0x01) as Char);
@@ -67,47 +71,62 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     public function onPower() as Void {
         view.getHilighted().toggleState(true);
         camera.sendCommand(GoProCamera.SLEEP);
-        getApp().timerController.start(camera.method(:disconnect), 2, false);
     }
     
     public function onLed() as Void {
         var available = camera.getAvailableSettings(GoProSettings.LED);
-        if (available.size() == 0) { return; }
+        if (available.size() == 0) {
+            EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x08 <<16, GoProSettings.LED, :WarningErr);
+            return;
+        }
 
         if (available.size()>2) {
             var menu = new CustomMenu(
-                (0.1*ICM.screenH).toNumber()<<1,
+                (0.1*Screen.HEIGHT).toNumber()<<1,
                 Graphics.COLOR_BLACK,
-                {:titleItemHeight => (0.15*ICM.screenH).toNumber() << 1}
+                {:titleItemHeight => (0.15*Screen.HEIGHT).toNumber() << 1}
             );
             getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.LED), SLIDE_LEFT);
         } else {
             var ledStatus = camera.getSetting(GoProSettings.LED);
-            if (ledStatus != null) {
-                var index = available.indexOf(ledStatus);
-                // TODO: error msg if index == -1
-                view.getHilighted().toggleState(
-                    ledStatus==GoProSettings.LED_OFF or 
-                    ledStatus==GoProSettings.LED_ALL_OFF
-                );
-                camera.sendSetting(
-                    GoProSettings.LED,
-                    available[(index + 1) % available.size()]
+            if (ledStatus == null) {
+                EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x01 << 16, GoProSettings.LED, :WarningErr);
+                return;
+            }
+
+            var index = available.indexOf(ledStatus);
+            if (index == -1) {
+                EM.raise(
+                    EM.ERR_CAM | EM.SUB_CAM_AVAIL | 0x01 << 16,
+                    ledStatus.toNumber() << 8 + GoProSettings.LED,
+                    :WarningErr
                 );
             }
+
+            view.getHilighted().toggleState(
+                ledStatus==GoProSettings.LED_OFF or 
+                ledStatus==GoProSettings.LED_ALL_OFF
+            );
+            camera.sendSetting(
+                GoProSettings.LED,
+                available[(index + 1) % available.size()]
+            );
         }
     }
     
     public function onGps() as Void {
         var gps = camera.getSetting(GoProSettings.GPS) as Number?;
-        if (gps!=null) {
-            view.getHilighted().toggleState(gps & 0x01 == 0);
-            camera.sendSetting(GoProSettings.GPS, (gps ^ 0x01) as Char);
+        if (gps==null) {
+            EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x01 << 16, GoProSettings.GPS, :WarningErr);
+            return;
         }
+        
+        view.getHilighted().toggleState(gps & 0x01 == 0);
+        camera.sendSetting(GoProSettings.GPS, (gps ^ 0x01) as Char);
     }
 
     public function onStabilize() as Void {
-        var menu = new CustomMenu((0.1*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.15*ICM.screenH).toNumber()<<1});
+        var menu = new CustomMenu((0.1*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.15*Screen.HEIGHT).toNumber()<<1});
         getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.HYPERSMOOTH), SLIDE_LEFT);
     }
 

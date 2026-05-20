@@ -4,7 +4,6 @@ import Toybox.Test;
 import Toybox.WatchUi;
 import Toybox.Graphics;
 
-using InterfaceComponentsManager as ICM;
 
 (:test)
 module SettingPickerDelegateTest {
@@ -12,9 +11,9 @@ module SettingPickerDelegateTest {
     
     function initMenu(settingId as GoProSettings.SettingId) as [TestInit.DebugCustomMenu, SettingPickerDelegate] {
         var menu = new TestInit.DebugCustomMenu(
-            (0.1*ICM.screenH).toNumber()<<1,
+            (0.1*Screen.HEIGHT).toNumber()<<1,
             Graphics.COLOR_BLACK,
-            {:titleItemHeight => (0.30*ICM.screenH).toNumber()}
+            {:titleItemHeight => (0.30*Screen.HEIGHT).toNumber()}
         );
         var delegate = new SettingPickerDelegate(menu, settingId);
 

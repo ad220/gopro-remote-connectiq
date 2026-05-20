@@ -123,7 +123,7 @@ module RemoteDelegateTest {
         var delegate = new RemoteDelegate();
         viewController.push(new RemoteView(), delegate, WatchUi.SLIDE_IMMEDIATE);
         
-        BleAPI.callbacks.onCharacteristicChanged(
+        BleAPI.delegate.onCharacteristicChanged(
             BleAPI.device.gpQueryResponseChar as Ble.Characteristic,
             [5, CameraDelegate.NOTIF_STATUS, 0, 10, 1, 1]b
         );

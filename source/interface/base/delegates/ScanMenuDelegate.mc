@@ -4,21 +4,13 @@ import Toybox.System;
 
 using Toybox.BluetoothLowEnergy as Ble;
 using BleApiWrapper as BleAPI;
+using InterfaceComponentsManager as ICM;
+using ErrorManager as EM;
 
 (:ble)
 class ScanMenuDelegate extends Menu2InputDelegate {
 
     typedef ScanEntry as {:name as String, :device as Ble.ScanResult, :menuid as Char};
-
-    private const goproModelTable = {
-        55      => 9,
-        57      => 10,
-        58      => 11,
-        60      => 11,
-        62      => 12,
-        64      => Rez.Strings.MAX2,
-        65      => 13,
-    } as Dictionary<Number, Number or ResourceId>;
 
     private const SCAN_TITLE    = WatchUi.loadResource(Rez.Strings.ScanTitle)       as String;
     private const SCAN_CANCEL   = WatchUi.loadResource(Rez.Strings.ScanCancel)      as String;
@@ -58,7 +50,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
             scanTimer = getApp().timerController.start(method(:stopScan), 100, false);
             animTimer = getApp().timerController.start(method(:animate), 5, true);
 
-            statusItem.setLabel("...");
+            statusItem.setLabel(". . .");
             cancelItem.setLabel(SCAN_CANCEL);
             title.setTitle(SCAN_TITLE);
             WatchUi.requestUpdate();
@@ -80,9 +72,10 @@ class ScanMenuDelegate extends Menu2InputDelegate {
 
     public function animate() as Void {
         if (scanState == Ble.SCAN_STATE_SCANNING) {
-            var label = statusItem.getLabel() + ".";
-            label = label.substring(0, label.length()%4 + 1);
-            statusItem.setLabel(label!=null ? label : "...");
+            var label = statusItem.getLabel() + " .";
+            if (label.length() > 5) { label = "."; }
+            
+            statusItem.setLabel(label);
             WatchUi.requestUpdate();
         }
     }
@@ -92,21 +85,25 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     }
 
     public function onScanResults(results as Array<Ble.ScanResult>) as Void{
-        for(var i=0; i<results.size(); i++) {
+        for(var i=0; i<results.size(); i++){
             if (!isDeviceInMenu(results[i])) {
-                var id = scanResults.size() as Char;
+
                 var label = results[i].getDeviceName();
-                if (label==null) {
-                // from Open GoPro documentation, Model ID is given in byte 13
-                    label = goproModelTable.get(results[i].getRawData()[13]);
-                    if (label == null) { label = Rez.Strings.UnknownGP; }
-                    if (label instanceof Number) {
+
+                if (label == null) {
+                    // from Open GoPro documentation, Model ID is given in byte 13
+                    var camId = CameraDelegate.getGoProId(results[i]) as Number;
+                    if (camId == -1) { camId = 0; }
+
+                    label = CameraDelegate.goproModelString[camId];
+                    if (label instanceof Symbol) {
+                        label = ICM.loadString(label);
+                    } else {
                         label = loadResource(Rez.Strings.HERO) as String + label;
-                    } else if (label instanceof ResourceId) {
-                        label = loadResource(label) as String;
                     }
                 }
 
+                var id = scanResults.size() as Char;
                 var entryItem = new PickerItem(label, id, 0xFF as Char);
                 menu.updateItem(entryItem, scanResults.size());
                 menu.updateItem(statusItem, scanResults.size()+1);
@@ -119,8 +116,8 @@ class ScanMenuDelegate extends Menu2InputDelegate {
 
     private function isDeviceInMenu(device as Ble.ScanResult) as Boolean {
         for (var i=0; i<scanResults.size(); i++) {
-            var dev = scanResults[i].get(:device);
-            if (dev !=null and dev.isSameDevice(device)) {
+            var dev = scanResults[i].get(:device) as Ble.ScanResult;
+            if (dev.isSameDevice(device)) {
                 return true;
             }
         }
@@ -129,7 +126,10 @@ class ScanMenuDelegate extends Menu2InputDelegate {
 
     public function onSelect(item as MenuItem) as Void {
         var id = item.getId();
-        if (id == null) { return; }
+        if (id == null) {
+            EM.raise(EM.ERR_NULL, 5, :WarningErr);
+            return;
+        }
         
         switch (id) {
             case 0xF0: // status

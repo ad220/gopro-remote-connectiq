@@ -2,8 +2,6 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 import Toybox.Graphics;
 
-using InterfaceComponentsManager as ICM;
-
 
 class RemoteDelegate extends WatchUi.BehaviorDelegate {
     private var gopro as GoProCamera;
@@ -23,7 +21,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
 
     public function onMenu() as Boolean {
         if (!gopro.isRecording()) {
-            var menu = new CustomMenu((0.15*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, null);
+            var menu = new CustomMenu((0.15*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, null);
             getApp().viewController.switchTo(menu, new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, []), SLIDE_UP);
             return true;
         }

@@ -3,7 +3,6 @@ import Toybox.System;
 import Toybox.WatchUi;
 import Toybox.Graphics;
 
-using InterfaceComponentsManager as ICM;
 
 (:lowend)
 class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
@@ -39,7 +38,7 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
         var gopro = getApp().gopro;
 
         var sdRemaining = gopro.getStatus(GoProCamera.SD_REMAINING);
-        sdRemaining = sdRemaining ? sdRemaining/3600+":"+sdRemaining%3600/60 : "--:--";
+        sdRemaining = sdRemaining ? sdRemaining / 3600 + ":" + (sdRemaining % 3600 / 60).format("%02d") : "--:--";
 
         var battery = gopro.getStatus(GoProCamera.BATTERY);
         battery = (battery ? battery : "--") + "%";
@@ -53,7 +52,7 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     public function onStab() as Void {
-        var menu = new CustomMenu((0.1*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.15*ICM.screenH).toNumber()<<1});
+        var menu = new CustomMenu((0.1*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.15*Screen.HEIGHT).toNumber()<<1});
         getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.HYPERSMOOTH), SLIDE_LEFT);
         // TODO: update stab sublabel on change
     }
@@ -61,20 +60,28 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
     public function onLed() as Void {
         var available = gopro.getAvailableSettings(GoProSettings.LED);
         if (available.size()>2) {
-            var menu = new CustomMenu((0.1*ICM.screenH).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.15*ICM.screenH).toNumber()<<1});
+            var menu = new CustomMenu((0.1*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.15*Screen.HEIGHT).toNumber()<<1});
             getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.LED), SLIDE_LEFT);
         } else {
             var ledStatus = gopro.getSetting(GoProSettings.LED);
-            if (ledStatus != null) {
-                var newStatus = available[available.indexOf(ledStatus) ^ 0x01];
-                selected.setSubLabel(GoProSettings.getLabel(GoProSettings.LED, newStatus));
-                gopro.sendSetting(GoProSettings.LED, newStatus);
+            if (ledStatus == null) {
+                EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x01 << 16, GoProSettings.LED, :WarningErr);
+                return;
             }
+            
+            var newStatus = available[available.indexOf(ledStatus) ^ 0x01];
+            selected.setSubLabel(GoProSettings.getLabel(GoProSettings.LED, newStatus));
+            gopro.sendSetting(GoProSettings.LED, newStatus);
         }
     }
     
     public function onFlicker() as Void {
-        var flicker = gopro.getSetting(GoProSettings.FLICKER) as Number;
+        var flicker = gopro.getSetting(GoProSettings.FLICKER);
+        if (flicker == null) {
+            EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x01 << 16, GoProSettings.FLICKER, :WarningErr);
+            return;
+        }
+
         (selected as ToggleMenuItem).setEnabled(flicker & 0x01 == 0);
         selected.setSubLabel(flicker & 1 ? "60Hz" : "50Hz");
         gopro.sendSetting(GoProSettings.FLICKER, (flicker ^ 0x01) as Char);
@@ -82,15 +89,16 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
     
     public function onGps() as Void {
         var gps = gopro.getSetting(GoProSettings.GPS) as Number?;
-        if (gps!=null) {
-            (selected as ToggleMenuItem).setEnabled(gps & 0x01 == 0);
-            gopro.sendSetting(GoProSettings.GPS, (gps ^ 0x01) as Char);
+        if (gps==null) {
+            EM.raise(EM.ERR_CAM, EM.SUB_CAM_NULL | 0x01 << 16, GoProSettings.GPS, :WarningErr);
         }
+        
+        (selected as ToggleMenuItem).setEnabled(gps & 0x01 == 0);
+        gopro.sendSetting(GoProSettings.GPS, (gps ^ 0x01) as Char);
     }
     
     public function onPower() as Void {
         gopro.sendCommand(GoProCamera.SLEEP);
-        getApp().timerController.start(gopro.method(:disconnect), 2, false);
     }
     
 

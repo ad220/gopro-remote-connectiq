@@ -34,10 +34,10 @@ class NotifView extends WatchUi.View {
 
         dc.setColor(Graphics.COLOR_WHITE, accentColor);
         dc.clear();
-        dc.drawText(ICM.halfW, ICM.halfH, ICM.fontSmall, msg, Graphics.TEXT_JUSTIFY_CENTER);
-        dc.fillCircle(ICM.halfW, 0.3*ICM.screenH, 0.08*ICM.screenW);
+        dc.drawText(Screen.WIDTH * 0.5, Screen.HEIGHT * 0.5, ICM.fontSmall, msg, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.fillCircle(Screen.WIDTH * 0.5, 0.3*Screen.HEIGHT, 0.08*Screen.WIDTH);
         
         dc.setColor(accentColor, Graphics.COLOR_WHITE);
-        dc.drawText(ICM.halfW, 0.3*ICM.screenH, ICM.fontMedium, textIcon, ICM.JTEXT_MID);
+        dc.drawText(Screen.WIDTH * 0.5, 0.3*Screen.HEIGHT, ICM.fontMedium, textIcon, ICM.JTEXT_MID);
     }
 }

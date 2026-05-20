@@ -127,7 +127,6 @@ module TestInit {
             initStatuses,
             new FakeGoProSpecs.SpecsH11Mini()
         );
-
     }
 
     function initConnection() as Void {

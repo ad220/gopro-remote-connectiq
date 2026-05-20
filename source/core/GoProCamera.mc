@@ -1,6 +1,7 @@
 import Toybox.Lang;
 
 using GattProfileManager as GPM;
+using ErrorManager as EM;
 
 class GoProCamera extends GoProSettings {
 
@@ -25,6 +26,7 @@ class GoProCamera extends GoProSettings {
     }
 
     private     var delegate                as CameraDelegate;
+    private     var goproId                 as Char;
     protected   var statuses                as Dictionary<StatusId or Char, Number>;
     protected   var availableSettings       as TAvailableSettings;
     private     var availableRatios         as Dictionary<Numeric, Array<Char>>;
@@ -32,10 +34,11 @@ class GoProCamera extends GoProSettings {
     protected   var progressTimer           as TimerCallback?;
 
 
-    public function initialize(delegate as CameraDelegate) {
+    public function initialize(delegate as CameraDelegate, goproId as Char) {
         GoProSettings.initialize();
         
         self.delegate = delegate;
+        self.goproId = goproId;
         self.statuses               = {}    as Dictionary<StatusId or Char, Number>;
         self.availableSettings      = {}    as Dictionary<GoProSettings.SettingId or Char, Array<Char>>;
         self.availableRatios        = {}    as Dictionary<Numeric, Array<Char>>;
@@ -43,9 +46,9 @@ class GoProCamera extends GoProSettings {
     }
 
     public function registerSettings() as Void {
-        delegate.send(GattRequest.REGISTER_NOTIFICATION, GPM.UUID_COMMAND_RESPONSE_CHAR, [0x01, 0x00]b);
-        delegate.send(GattRequest.REGISTER_NOTIFICATION, GPM.UUID_SETTINGS_RESPONSE_CHAR, [0x01, 0x00]b);
-        delegate.send(GattRequest.REGISTER_NOTIFICATION, GPM.UUID_QUERY_RESPONSE_CHAR, [0x01, 0x00]b);
+        delegate.send(GattRequestQueue.REGISTER_NOTIFICATION, GPM.UUID_COMMAND_RESPONSE_CHAR, [0x01, 0x00]b);
+        delegate.send(GattRequestQueue.REGISTER_NOTIFICATION, GPM.UUID_SETTINGS_RESPONSE_CHAR, [0x01, 0x00]b);
+        delegate.send(GattRequestQueue.REGISTER_NOTIFICATION, GPM.UUID_QUERY_RESPONSE_CHAR, [0x01, 0x00]b);
         subscribeChanges(CameraDelegate.REGISTER_SETTING, [GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b);
         subscribeChanges(CameraDelegate.REGISTER_STATUS, [ENCODING]b);
     }
@@ -56,13 +59,13 @@ class GoProCamera extends GoProSettings {
             request.addAll([0x01, isRecording() ? 0x00 : 0x01]);
         }
         request[0] = request.size()-1;
-        delegate.send(GattRequest.WRITE_CHARACTERISTIC, GPM.UUID_COMMAND_CHAR, request);
+        delegate.send(GattRequestQueue.WRITE_CHARACTERISTIC, GPM.UUID_COMMAND_CHAR, request);
     }
 
     public function sendSetting(id as GoProSettings.SettingId, value as Char) as Void {
         var request = [0x03, id as Char, 0x01, value]b;
         settings.put(id, value);
-        delegate.send(GattRequest.WRITE_CHARACTERISTIC, GPM.UUID_SETTINGS_CHAR, request);
+        delegate.send(GattRequestQueue.WRITE_CHARACTERISTIC, GPM.UUID_SETTINGS_CHAR, request);
     }
 
     public function sendPreset(preset as GoProPreset) as Void {
@@ -78,40 +81,55 @@ class GoProCamera extends GoProSettings {
     public function requestStatuses(ids as ByteArray) as Void {
         var request = [ids.size()+1, CameraDelegate.GET_STATUS]b;
         request.addAll(ids);
-        delegate.send(GattRequest.WRITE_CHARACTERISTIC, GPM.UUID_QUERY_CHAR, request);
+        delegate.send(GattRequestQueue.WRITE_CHARACTERISTIC, GPM.UUID_QUERY_CHAR, request);
     }
 
     public function subscribeChanges(queryId as CameraDelegate.QueryId, values as ByteArray) as Void {
         var request = [values.size()+1, queryId as Char]b;
         request.addAll(values);
-        delegate.send(GattRequest.WRITE_CHARACTERISTIC, GPM.UUID_QUERY_CHAR, request);
+        delegate.send(GattRequestQueue.WRITE_CHARACTERISTIC, GPM.UUID_QUERY_CHAR, request);
     }
 
     public function onReceiveSetting(id as Char or GoProSettings.SettingId, value as ByteArray) as Void {
-        if (value.size()==0) { return; }
+        if (value.size()==0) { 
+            EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x00 << 16, id as Number, :SilentErr);
+            // TODO(raise): confirm level
+            return;
+        }
 
         settings.put(id as GoProSettings.SettingId, value[0] as Char);
         if (id==RESOLUTION) {
             settings.put(RATIO, value[0] as Char);
 
             var tuple = RESOLUTION_MAP.get(value[0] as Char);
-            if (tuple == null) { return; }
+            if (tuple == null) {
+                EM.raise(
+                    EM.ERR_CAM | EM.SUB_CAM_VAL | 0x00 << 16,
+                    value[0] << 8 + id as Number,
+                    :WarningErr
+                );
+                // TODO(raise): confirm flag
+                return;
+            }
 
             var ratios = availableRatios.get(tuple[0]);
-            if (ratios != null and ratios.size()>0) {
+            if (ratios != null and ratios.size() > 0) { // no error if null because available settings are requested later
                 availableSettings.put(RATIO, ratios);
             }
         }
     }
 
     public function onReceiveStatus(id as Char or StatusId, value as ByteArray) as Void {
-        if (value.size()==0) { return; }
+        if (value.size()==0) { 
+            EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x01 << 16, id as Number, :SilentErr);
+            return;
+        }
 
         if (id==ENCODING) {
             if (value[0]==1) {
                 var request = [0x02, CameraDelegate.GET_STATUS, ENCODING_DURATION]b;
                 statuses.put(ENCODING_DURATION, 0);
-                delegate.send(GattRequest.WRITE_CHARACTERISTIC, GPM.UUID_QUERY_CHAR, request);
+                delegate.send(GattRequestQueue.WRITE_CHARACTERISTIC, GPM.UUID_QUERY_CHAR, request);
                 progressTimer = getApp().timerController.start(method(:incrementEncodingDuration), 5, true);
             } else {
                 getApp().timerController.stop(progressTimer);
@@ -126,7 +144,10 @@ class GoProCamera extends GoProSettings {
     }
 
     public function onReceiveAvailable(id as Char, value as ByteArray) as Void {
-        if (value.size()==0) { return; }
+        if (value.size()==0) {
+            EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x02 << 16, id as Number, :SilentErr);
+            return;
+        }
 
         var available = tmpAvailableSettings.get(id);
         if (available != null) {
@@ -159,7 +180,14 @@ class GoProCamera extends GoProSettings {
                     var availableResolutions = [];
                     for (var j=0; j<tmpValues.size(); j++) {
                         var tuple = RESOLUTION_MAP.get(tmpValues[j]);
-                        if (tuple == null) { continue; }
+                        if (tuple == null) {
+                            EM.raise(
+                                EM.ERR_CAM | EM.SUB_CAM_VAL | 0x01 << 16,
+                                tmpValues[j] as Number << 8 + RESOLUTION,
+                                :WarningErr
+                            );
+                            continue;
+                        }
 
                         if (currentRes == tuple[0]) {
                             currentMap.add(tmpValues[j]);
@@ -175,7 +203,14 @@ class GoProCamera extends GoProSettings {
                     var res = settings.get(RESOLUTION);
                     if (res != null) {
                         var tuple = RESOLUTION_MAP.get(res);
-                        if (tuple != null) {
+                        if (tuple == null) {
+                            EM.raise(
+                                EM.ERR_CAM | EM.SUB_CAM_VAL | 0x02 << 16,
+                                res as Number << 8 + RESOLUTION,
+                                :WarningErr
+                            );
+                        }
+                        else {
                             var avRatios = availableRatios.get(tuple[0]);
                             if (avRatios != null) { availableSettings.put(RATIO, avRatios); }
                         }
@@ -198,6 +233,10 @@ class GoProCamera extends GoProSettings {
             statuses[ENCODING_DURATION]++;
             WatchUi.requestUpdate();
         }
+    }
+
+    public function getGoProId() as Char {
+        return goproId;
     }
 
     public function disconnect() as Void {

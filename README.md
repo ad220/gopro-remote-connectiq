@@ -17,7 +17,7 @@ Please note that this app was mainly developed for personal use, it should now b
 - QR Code generator for GoPro Labs support
 
 ### Planned
-- better info and error pop-ups message with automatic reporting
+- automatic report of error codes
 - better support for MAX2 (switch between single lens and 360 mode)
 - unofficial api support for older cameras (HERO 5+)
 - protune settings and more
@@ -42,6 +42,10 @@ On this view, press the select button on your watch to start recording and the u
 ![](documentation/screenshots/settings.png)
 
 ## Changelog
+
+### v4.1
+- Add error codes
+- Bug fixes
 
 ### v4.0
 - Add theoretical support for non BLE capable watches through companion app v2[(*)](#disclaimer)
