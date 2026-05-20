@@ -24,15 +24,12 @@ class ConnectView extends WatchUi.View {
     }
 
     function onUpdate(dc as Dc) as Void {
-        View.onUpdate(dc);
-        
-        var width = dc.getWidth();
-        var height = dc.getHeight();
+        View.onUpdate(dc);       
         dc.setPenWidth(0.05*Screen.WIDTH);
 
         // Draw button background and inner arc
         dc.setColor(0x00AAFF, Graphics.COLOR_TRANSPARENT);
-        dc.fillRoundedRectangle(0.2*width, 0.7*height, 0.6*width, 0.16*height, 255);
+        dc.fillRoundedRectangle(0.2*Screen.WIDTH, 0.7*Screen.HEIGHT, 0.6*Screen.WIDTH, 0.16*Screen.HEIGHT, 255);
         dc.drawArc(0.33*Screen.WIDTH, 0.58*Screen.HEIGHT, 0.13*Screen.WIDTH, Graphics.ARC_CLOCKWISE, 90, 0);
         
         // Draw middle arc
@@ -45,7 +42,7 @@ class ConnectView extends WatchUi.View {
 
         // Draw button label and logo circle
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(0.5*width, 0.78*height, ICM.fontSmall, label, ICM.JTEXT_MID);
+        dc.drawText(0.5*Screen.WIDTH, 0.78*Screen.HEIGHT, ICM.fontSmall, label, ICM.JTEXT_MID);
         dc.fillCircle(0.34*Screen.WIDTH, 0.57*Screen.HEIGHT, 0.042*Screen.WIDTH);
     }
 }

@@ -56,6 +56,10 @@ class RemoteView extends WatchUi.View {
     }
 
     function onUpdate(dc as Dc) as Void {
+        if (dc has :setAntiAlias) {
+            dc.setAntiAlias(true);
+        }
+
         var gopro = getApp().gopro as GoProCamera?;
         if (gopro == null) {
             // ERA_CRASH(x11v4.0.1, x100v4.0.2): before null check
@@ -63,17 +67,14 @@ class RemoteView extends WatchUi.View {
             return;
         }
 
-        var width = dc.getWidth();
-        var height = dc.getHeight();
-
         View.onUpdate(dc);
 
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLACK);
         dc.clear();
 
         // Hilight and shutter buttons
-        dc.fillCircle(0.20*width, 0.40*height, 0.09*width);
-        dc.fillRoundedRectangle(0.385*width, 0.231*height, 0.346*width, 0.346*height, 0.07*width);
+        dc.fillCircle(0.20*Screen.WIDTH, 0.40*Screen.HEIGHT, 0.09*Screen.WIDTH);
+        dc.fillRoundedRectangle(0.385*Screen.WIDTH, 0.231*Screen.HEIGHT, 0.346*Screen.WIDTH, 0.346*Screen.HEIGHT, 0.07*Screen.WIDTH);
         
         // Record state related elements
         if (gopro.isRecording()) {
@@ -84,32 +85,32 @@ class RemoteView extends WatchUi.View {
             if (recordTime % 2) {
                 dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_BLACK);
             }
-            dc.fillCircle(0.38*width, 0.10*height, 0.025*width);
+            dc.fillCircle(0.38*Screen.WIDTH, 0.10*Screen.HEIGHT, 0.025*Screen.WIDTH);
 
             // Draw the recording duration 
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
             var timeString = (recordTime / 60) + ":" + (recordTime % 60).format("%02d");
-            dc.drawText(Screen.WIDTH * 0.5, 0.1*height, ICM.fontTiny, timeString, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+            dc.drawText(Screen.WIDTH * 0.45, 0.1*Screen.HEIGHT, ICM.fontTiny, timeString, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
 
             // Settings button
             dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
         } else {
-            dc.fillRoundedRectangle(0.175*width, 0.6865*height, 0.65*width, 0.167*height, 255);
+            dc.fillRoundedRectangle(0.175*Screen.WIDTH, 0.6865*Screen.HEIGHT, 0.65*Screen.WIDTH, 0.167*Screen.HEIGHT, 255);
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         }
-        dc.drawText(0.55*width, 0.765*height, ICM.fontTiny, gopro.getDescription(), ICM.JTEXT_MID);
+        dc.drawText(0.55*Screen.WIDTH, 0.765*Screen.HEIGHT, ICM.fontTiny, gopro.getDescription(), ICM.JTEXT_MID);
         
         // Draw icons
         if (hilightIcon!=null and settingsIcon!=null) {
-            dc.drawBitmap(0.156*width, 0.356*height, hilightIcon);
-            dc.drawBitmap(0.21*width, 0.72*height, settingsIcon);
+            dc.drawBitmap(0.156*Screen.WIDTH, 0.356*Screen.HEIGHT, hilightIcon);
+            dc.drawBitmap(0.21*Screen.WIDTH, 0.72*Screen.HEIGHT, settingsIcon);
         } else {
             EM.raise(EM.ERR_NULL, 8, :WarningErr);
         }
 
         // Draw record circle
         dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_DK_GRAY);
-        dc.setPenWidth(0.03*width);
-        dc.drawCircle(0.558*width, 0.404*height, 0.1*width);
+        dc.setPenWidth(0.03*Screen.WIDTH);
+        dc.drawCircle(0.558*Screen.WIDTH, 0.404*Screen.HEIGHT, 0.1*Screen.WIDTH);
     }
 }
