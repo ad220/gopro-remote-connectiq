@@ -113,15 +113,8 @@ class GoProCamera extends GoProSettings {
             }
 
             var ratios = availableRatios.get(tuple[0]);
-            if (ratios != null and ratios.size()>0) {
+            if (ratios != null and ratios.size() > 0) { // no error if null because available settings are requested later
                 availableSettings.put(RATIO, ratios);
-            }
-            else if (availableRatios.size() < 1) {
-                EM.raise(
-                    EM.ERR_CAM | EM.SUB_CAM_AVAIL | 0x00 << 16,
-                    value[0] << 8 + id as Number,
-                    :WarningErr
-                );
             }
         }
     }

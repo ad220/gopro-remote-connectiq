@@ -116,12 +116,15 @@ using GattProfileManager as GPM;
                             );
                         }
                         break;
+
                     case GoProCamera.HILIGHT:
                         responseSplitter(GPM.UUID_COMMAND_RESPONSE_CHAR, [commandId, 0]b);
                         hilightCount += 1;
+                        break;
 
                     case GoProCamera.SLEEP:
                         sleep();
+                        break;
 
                     default:
                         break;

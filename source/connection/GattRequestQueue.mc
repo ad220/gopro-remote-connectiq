@@ -77,7 +77,7 @@ class GattRequestQueue {
             catch (ex)  { onRequestFail(EM.SUB_BLE_WRITE | 0x00); }
         }
         
-        // System.println("[DEBUG]     Write data " + request.getData() + " to char " + request.getUuid());
+        // System.println("[DEBUG]     Write data " + request[:data] + " to char " + request[:uuid]);
     }
 
 
@@ -109,7 +109,7 @@ class GattRequestQueue {
             type != GattRequestQueue.REGISTER_NOTIFICATION and
             !uuid.equals(request[:uuid]) or request[:timer] == null
         ) {
-            // System.println("[WARNING]   Desynchronized request queue
+            // System.println("[WARNING]   Desynchronized request queue");
             onRequestFail(EM.SUB_BLE_NULLQ | 0x05);
             return;
         }

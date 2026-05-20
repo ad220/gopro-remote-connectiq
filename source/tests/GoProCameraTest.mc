@@ -519,6 +519,7 @@ module GoProCameraTest {
 
     (:test)
     function testShutterCommands(logger as Logger) as Boolean {
+        var result = true;
         TestInit.initDefaults();
         TestInit.initFake();
         TestInit.initConnection();
@@ -542,27 +543,34 @@ module GoProCameraTest {
             return false;
         }
 
+        if (BleAPI.device.hilightCount != 0) {
+            logger.error("Wrong hilight count, expected 0, got " + BleAPI.device.hilightCount);
+            result = false;
+        }
+
         camera.sendCommand(GoProCamera.HILIGHT);
 
         if (BleAPI.device.hilightCount != 1) {
-            logger.error("Wrong hilight count");
+            logger.error("Wrong hilight count, expected 1, got " + BleAPI.device.hilightCount);
+            result = false;
         }
 
         camera.sendCommand(GoProCamera.HILIGHT);
         camera.sendCommand(GoProCamera.HILIGHT);
 
         if (BleAPI.device.hilightCount != 3) {
-            logger.error("Wrong hilight count");
+            logger.error("Wrong hilight count, expected 3, got " + BleAPI.device.hilightCount);
+            result = false;
         }
         
         camera.sendCommand(GoProCamera.SHUTTER);
 
         if (camera.isRecording()) {
             logger.error("Camera should not be recording anymore");
-            return false;
+            result = false;
         }
 
-        return true;
+        return result;
     }
 
 
