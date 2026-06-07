@@ -5,6 +5,7 @@ import Toybox.System;
 
 using Toybox.BluetoothLowEnergy as Ble;
 using BleApiWrapper as BleAPI;
+using ErrorManager as EM;
 
 
 (:glance)
@@ -30,6 +31,11 @@ class GoProRemoteApp extends Application.AppBase {
         // System.println("[APP DBG]   App started");
 
         lastPairedDevice = Storage.getValue("lastPairedDevice") as Ble.ScanResult;
+        EM.errorQueue = Storage.getValue("errorQueue") as Array<Number>?;
+
+        if (EM.errorQueue == null) { EM.errorQueue = []; }
+        ErrorManager.report();
+        
         if (state!=null) {
             fromGlance = state.get(:launchedFromGlance) as Boolean == true;
         }
@@ -43,6 +49,8 @@ class GoProRemoteApp extends Application.AppBase {
             if (timerController != null)    { timerController.stopAll(); }
             BleAPI.setDelegate(null as Ble.BleDelegate);
         }
+
+        Storage.setValue("errorQueue", EM.errorQueue);
         // System.println("[APP DBG]   App stopped");
     }
 
@@ -53,6 +61,8 @@ class GoProRemoteApp extends Application.AppBase {
             if (timerController!=null)      { timerController.stopAll(); }
             Communications.registerForPhoneAppMessages(null);
         }
+        
+        Storage.setValue("errorQueue", EM.errorQueue);
         // System.println("[APP DBG]   App stopped");
     }
 

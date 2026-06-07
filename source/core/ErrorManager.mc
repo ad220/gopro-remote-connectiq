@@ -1,5 +1,8 @@
 import Toybox.Lang;
 import Toybox.WatchUi;
+import Toybox.System;
+import Toybox.Communications;
+import Toybox.PersistedContent;
 
 using InterfaceComponentsManager as ICM;
 
@@ -19,7 +22,7 @@ using InterfaceComponentsManager as ICM;
  * - EC (error code):
  *      check ERR constants below for more information
  */
- 
+
 module ErrorManager {
 
     (:ble)              const BUILD_FLAGS = 0;
@@ -54,7 +57,7 @@ module ErrorManager {
     
     var stable as Boolean = true;
     var running as Boolean = true;
-    var errorQueue as Array<Number> = [];
+    (:initialized :glance) var errorQueue as Array<Number>;
 
 
     /**
@@ -98,11 +101,39 @@ module ErrorManager {
         }
     }
 
-    function getApiUrl() as String {
+    (:glance)
+    function report() as Void {
+        if (errorQueue.size() == 0) { return; }
+
         var url = "";
         for (var i = 0; i < Secrets.API_URL.size(); i++) {
             url += (Secrets.API_URL[i] ^ Secrets.API_KEY[i]).toChar();
         }
-        return url;
+
+        var hexKey = "";
+        for (var i = 0; i < Secrets.API_KEY.size(); i++) {
+            hexKey += Secrets.API_KEY[i].format("%02x");
+        }
+
+        Communications.makeWebRequest(
+            url,
+            {"errors" => errorQueue},
+            {
+                :method       => Communications.HTTP_REQUEST_METHOD_POST,
+                :headers      => {
+                    "X-API-Key"    => hexKey,
+                    "Content-Type" => Communications.REQUEST_CONTENT_TYPE_JSON
+                },
+                :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_TEXT_PLAIN
+            },
+            new Method(self, :reportCallback)
+        );
+    }
+
+    (:glance)
+    function reportCallback(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+        if (responseCode == 200) {
+            errorQueue = [];
+        }
     }
 }

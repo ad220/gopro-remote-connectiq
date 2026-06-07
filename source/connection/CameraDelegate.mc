@@ -94,7 +94,7 @@ class CameraDelegate {
 
         if (goproId == null) {
             goproId = 0;
-            EM.raise(EM.ERR_NULL, 8, :WarningErr);
+            EM.raise(EM.ERR_NULL, 9, :WarningErr);
         }
         getApp().gopro = new GoProCamera(self, goproId);
         

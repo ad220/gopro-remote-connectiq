@@ -183,10 +183,10 @@ class BluetoothDelegate extends CameraDelegate {
 
             CameraDelegate.disconnect();
         }
-        else {
-            // System.println("[WARNING]   onDisconnect called while camera already disconnected");
-            EM.raise(EM.ERR_COMM, EM.SUB_BLE_CONN | 0x00, :SilentErr); // paranoid
-        }
+        // else {
+        //     // System.println("[WARNING]   onDisconnect called while camera already disconnected");
+        //     EM.raise(EM.ERR_COMM, EM.SUB_BLE_CONN | 0x00, :SilentErr); // paranoid
+        // }
     }
 
     public function send(
