@@ -1,6 +1,6 @@
 project.manifest = manifest.xml
 
-base.sourcePath = source/
+base.sourcePath = source/; include/secrets
 base.excludeAnnotations = mobile; lowend; debugoff
 base.resourcePath = resources/common; resources/highend; resources/lang/en
 base.lang.fre = resources/lang/fre
@@ -19,17 +19,17 @@ round-390x390.resourcePath = $(base.resourcePath); resources/typefaces/resources
 round-416x416.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-416x416
 round-454x454.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-454x454
 
-round-218x218.sourcePath        = $(base.sourcePath); include/round-218x218.mc
-round-240x240.sourcePath        = $(base.sourcePath); include/round-240x240.mc
-round-260x260.sourcePath        = $(base.sourcePath); include/round-260x260.mc
-round-280x280.sourcePath        = $(base.sourcePath); include/round-280x280.mc
-round-360x360.sourcePath        = $(base.sourcePath); include/round-360x360.mc
-round-390x390.sourcePath        = $(base.sourcePath); include/round-390x390.mc
-round-416x416.sourcePath        = $(base.sourcePath); include/round-416x416.mc
-round-454x454.sourcePath        = $(base.sourcePath); include/round-454x454.mc
-rectangle-240x240.sourcePath    = $(base.sourcePath); include/rectangle-240x240.mc
-rectangle-320x360.sourcePath    = $(base.sourcePath); include/rectangle-320x360.mc
-rectangle-448x486.sourcePath    = $(base.sourcePath); include/rectangle-448x486.mc
+round-218x218.sourcePath        = $(base.sourcePath); include/screen/round-218x218.mc
+round-240x240.sourcePath        = $(base.sourcePath); include/screen/round-240x240.mc
+round-260x260.sourcePath        = $(base.sourcePath); include/screen/round-260x260.mc
+round-280x280.sourcePath        = $(base.sourcePath); include/screen/round-280x280.mc
+round-360x360.sourcePath        = $(base.sourcePath); include/screen/round-360x360.mc
+round-390x390.sourcePath        = $(base.sourcePath); include/screen/round-390x390.mc
+round-416x416.sourcePath        = $(base.sourcePath); include/screen/round-416x416.mc
+round-454x454.sourcePath        = $(base.sourcePath); include/screen/round-454x454.mc
+rectangle-240x240.sourcePath    = $(base.sourcePath); include/screen/rectangle-240x240.mc
+rectangle-320x360.sourcePath    = $(base.sourcePath); include/screen/rectangle-320x360.mc
+rectangle-448x486.sourcePath    = $(base.sourcePath); include/screen/rectangle-448x486.mc
 
 # Oddly shaped devices with BLE comm
 venux1.resourcePath = $(round-454x454.resourcePath)

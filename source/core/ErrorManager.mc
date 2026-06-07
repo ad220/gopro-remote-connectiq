@@ -97,4 +97,12 @@ module ErrorManager {
             }
         }
     }
+
+    function getApiUrl() as String {
+        var url = "";
+        for (var i = 0; i < Secrets.API_URL.size(); i++) {
+            url += (Secrets.API_URL[i] ^ Secrets.API_KEY[i]).toChar();
+        }
+        return url;
+    }
 }
