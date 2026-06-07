@@ -131,7 +131,7 @@ module TestInit {
 
     function initConnection() as Void {
         var delegate = new BluetoothDelegate();
-        delegate.connect(new BleAPI.MockScanResult(0) as Ble.ScanResult);
+        delegate.connect(new BleAPI.MockScanResult(0, null) as Ble.ScanResult);
     }
 
 }

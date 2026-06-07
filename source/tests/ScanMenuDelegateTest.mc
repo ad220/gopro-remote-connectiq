@@ -36,8 +36,8 @@ module ScanMenuDelegateTest {
 
         // Test that scan results are processed correctly
         var scanResults = [
-            new BleAPI.MockScanResult(1),
-            new BleAPI.MockScanResult(2)
+            new BleAPI.MockScanResult(1, "mock"),
+            new BleAPI.MockScanResult(2, null)
         ] as Array<Ble.ScanResult>;
 
         menu[1].onScanResults(scanResults);
@@ -48,11 +48,11 @@ module ScanMenuDelegateTest {
         }
 
         scanResults = [
-            new BleAPI.MockScanResult(1),
-            new BleAPI.MockScanResult(2),
-            new BleAPI.MockScanResult(3),
-            new BleAPI.MockScanResult(4),
-            new BleAPI.MockScanResult(5)
+            new BleAPI.MockScanResult(1, "mock1"),
+            new BleAPI.MockScanResult(2, "mock2"),
+            new BleAPI.MockScanResult(3, null),
+            new BleAPI.MockScanResult(4, "mock4"),
+            new BleAPI.MockScanResult(5, null)
         ] as Array<Ble.ScanResult>;
 
         menu[1].onScanResults(scanResults);
@@ -75,8 +75,8 @@ module ScanMenuDelegateTest {
         callbackCount = 0;
 
         var scanResults = [
-            new BleAPI.MockScanResult(1),
-            new BleAPI.MockScanResult(2)
+            new BleAPI.MockScanResult(1, null),
+            new BleAPI.MockScanResult(2, null)
         ] as Array<Ble.ScanResult>;
 
         menu[1].onScanResults(scanResults);
