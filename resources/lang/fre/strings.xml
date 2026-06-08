@@ -18,6 +18,11 @@
     <!-- $$$ Small -->
     <string id="UnknownGP">GoPro inconnue</string>
 
+    <!-- HomeMenu -->
+    <!-- $$$ -->
+    <string id="StartScan">Chercher une nouvelle caméra</string>
+    <string id="ToggleReports">Envoyer rapports d'erreurs</string>
+
     <!-- ScanMenu -->
     <!-- $$$ Small -->
     <string id="ScanTitle">Recherche\nen cours...</string>

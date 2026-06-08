@@ -20,6 +20,11 @@
     <string id="MAX2" translatable="false">GoPro MAX2</string>
     <string id="UnknownGP">Unknown GoPro</string>
 
+    <!-- HomeMenu -->
+    <!-- $$$ -->
+    <string id="StartScan">Scan for new cameras</string>
+    <string id="ToggleReports">Toggle error reports</string>
+
     <!-- ScanMenu -->
     <!-- $$$ Small -->
     <string id="ScanTitle">Scanning\nfor GoPros...</string>

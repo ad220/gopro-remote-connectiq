@@ -4,6 +4,7 @@ import Toybox.Graphics;
 import Toybox.Application;
 
 using Toybox.BluetoothLowEnergy as Ble;
+using InterfaceComponentsManager as ICM;
 using BleApiWrapper as BleAPI;
 
 
@@ -89,13 +90,14 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
 
     (:ble)
     public function onMenu() as Boolean {
-        startScan();
+        var menu = new Menu2(null);
+        getApp().viewController.push(menu, new HomeMenuDelegate(menu, self), SLIDE_IMMEDIATE);
         return true;
     }
 
     (:ble)
-    private function startScan() as Void {
-        var scanMenu = new CustomMenu((0.1*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.30*Screen.HEIGHT).toNumber()});
+    public function startScan() as Void {
+        var scanMenu = ICM.newCustomMenu(0.1, 0.3);
         var menuDelegate = new ScanMenuDelegate(scanMenu, method(:onScanResult));
         (delegate as BluetoothDelegate).setScanMenuDelegate(menuDelegate);
         menuDelegate.startScan();
