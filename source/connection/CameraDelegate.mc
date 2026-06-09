@@ -29,7 +29,7 @@ class CameraDelegate {
         :MAX        /* 18) id:64 -> MAX2 */,
         13          /* 19) id:65 -> HERO13 Black */,
         2024        /* 20) id:66 -> HERO (2024) */,
-        2025        /* 21) id:70 -> HERO Lit */,
+        "Lit"       /* 21) id:70 -> HERO Lit */,
     ];
 
     public static function getGoProId(device as Ble.ScanResult) as Number {
