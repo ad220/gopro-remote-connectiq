@@ -123,8 +123,7 @@ module ErrorManager {
                 :headers      => {
                     "X-API-Key"    => hexKey,
                     "Content-Type" => Communications.REQUEST_CONTENT_TYPE_JSON
-                },
-                :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_URL_ENCODED
+                }
             },
             new Method(self, :reportCallback)
         );
