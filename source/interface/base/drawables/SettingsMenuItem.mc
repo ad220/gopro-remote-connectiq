@@ -38,12 +38,14 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
     }
 
     public function draw(dc as Dc) as Void {
+        if (dc has :setAntiAlias) { dc.setAntiAlias(true); }
+
         var width = dc.getWidth();
         var height = dc.getHeight();
         var id = getId() as Char;
         var isMenuCamera = menuId == SettingsMenuDelegate.CAMERA;
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.fillRoundedRectangle(0.05*width, 0.125*height, 0.9*width, 0.75*height, 0xFF);
+        dc.fillRoundedRectangle(0.05*width, 0.125*height, 0.9*width, 0.75*height, 0.38*height);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         dc.drawBitmap(0.125*width, 0.333*height, icon);
         

@@ -52,7 +52,7 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     public function onStab() as Void {
-        var menu = new CustomMenu((0.1*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.15*Screen.HEIGHT).toNumber()<<1});
+        var menu = ICM.newCustomMenu(0.1, 0.15);
         getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.HYPERSMOOTH), SLIDE_LEFT);
         // TODO: update stab sublabel on change
     }
@@ -60,7 +60,7 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
     public function onLed() as Void {
         var available = gopro.getAvailableSettings(GoProSettings.LED);
         if (available.size()>2) {
-            var menu = new CustomMenu((0.1*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.15*Screen.HEIGHT).toNumber()<<1});
+            var menu = ICM.newCustomMenu(0.1, 0.15);
             getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.LED), SLIDE_LEFT);
         } else {
             var ledStatus = gopro.getSetting(GoProSettings.LED);

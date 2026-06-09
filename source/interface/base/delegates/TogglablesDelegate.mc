@@ -3,6 +3,7 @@ import Toybox.WatchUi;
 import Toybox.Graphics;
 
 using ErrorManager as EM;
+using InterfaceComponentsManager as ICM;
 
 
 (:highend)
@@ -59,6 +60,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
         return false;
     }
 
+    (:keep)
     public function onFlicker() as Void {
         var flicker = camera.getSetting(GoProSettings.FLICKER);
         if (flicker != null) { // expected behavior with MAX2 cam
@@ -68,11 +70,13 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
         }
     }
     
+    (:keep)
     public function onPower() as Void {
         view.getHilighted().toggleState(true);
         camera.sendCommand(GoProCamera.SLEEP);
     }
     
+    (:keep)
     public function onLed() as Void {
         var available = camera.getAvailableSettings(GoProSettings.LED);
         if (available.size() == 0) {
@@ -81,11 +85,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
         }
 
         if (available.size()>2) {
-            var menu = new CustomMenu(
-                (0.1*Screen.HEIGHT).toNumber()<<1,
-                Graphics.COLOR_BLACK,
-                {:titleItemHeight => (0.15*Screen.HEIGHT).toNumber() << 1}
-            );
+            var menu = ICM.newCustomMenu(0.1, 0.15);
             getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.LED), SLIDE_LEFT);
         } else {
             var ledStatus = camera.getSetting(GoProSettings.LED);
@@ -114,6 +114,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
         }
     }
     
+    (:keep)
     public function onGps() as Void {
         var gps = camera.getSetting(GoProSettings.GPS) as Number?;
         if (gps==null) {
@@ -125,8 +126,9 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
         camera.sendSetting(GoProSettings.GPS, (gps ^ 0x01) as Char);
     }
 
+    (:keep)
     public function onStabilize() as Void {
-        var menu = new CustomMenu((0.1*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.15*Screen.HEIGHT).toNumber()<<1});
+        var menu = ICM.newCustomMenu(0.1, 0.15);
         getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.HYPERSMOOTH), SLIDE_LEFT);
     }
 

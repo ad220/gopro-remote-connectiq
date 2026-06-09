@@ -32,8 +32,9 @@ class CameraDelegate {
         2025        /* 21) id:70 -> HERO Lit */,
     ];
 
-    public static function getGoProId(device as Ble.ScanResult) as Char {
-        return goproModelTable.indexOf(device.getRawData()[13]).toChar();
+    public static function getGoProId(device as Ble.ScanResult) as Number {
+        var id = goproModelTable.indexOf(device.getRawData()[13]);
+        return id != -1 ? id : 0;
     }
 
     public enum QueryId {
@@ -52,7 +53,7 @@ class CameraDelegate {
     }
 
     protected var connected as Boolean;
-    protected var goproId as Char?;
+    protected var goproId as Number?;
     private var pairingTimer as TimerCallback?;
     private var queryReplyLength as Number?;
     private var queryReplyBuffer as ByteArray?;
@@ -92,10 +93,10 @@ class CameraDelegate {
         pairingTimer = null;
 
         if (goproId == null) {
-            goproId = 0 as Char;
-            EM.raise(EM.ERR_NULL, 8, :WarningErr);
+            goproId = 0;
+            EM.raise(EM.ERR_NULL, 9, :WarningErr);
         }
-        getApp().gopro = new GoProCamera(self, goproId as Char);
+        getApp().gopro = new GoProCamera(self, goproId);
         
         var pushView = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
         pushView.invoke(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
@@ -123,7 +124,7 @@ class CameraDelegate {
                 pairingTimer = null;
             }
 
-            if (goproId == null) { goproId = 0 as Char; }
+            if (goproId == null) { goproId = 0; }
             EM.raise(EM.ERR_COMM, errCode + goproId.toNumber() << 24, :ConnectErr);
         } else {
             EM.raise(EM.ERR_COMM, EM.SUB_BLE_CONN | 0x0F, :WarningErr);

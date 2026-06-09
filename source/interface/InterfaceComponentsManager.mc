@@ -31,6 +31,11 @@ module InterfaceComponentsManager {
     function loadString(rez as Symbol) as String {
         return WatchUi.loadResource(Rez.Strings[rez]);
     }
+
+    function newCustomMenu(itemHeight as Float, titleHeight as Float?) as CustomMenu {
+        var options = titleHeight != null ? {:titleItemHeight => (0.30*Screen.HEIGHT).toNumber()} : null;
+        return new CustomMenu((itemHeight*Screen.HEIGHT).toNumber() << 1, Graphics.COLOR_BLACK, options);
+    }
 }
 
 

@@ -2,6 +2,7 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 import Toybox.Graphics;
 
+using InterfaceComponentsManager as ICM;
 
 class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
 
@@ -53,13 +54,13 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
         var id = item.getId() as Number;
         
         if (menuId == CAMERA) {
-            var newMenu = new CustomMenu((0.1*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, {:titleItemHeight => (0.30*Screen.HEIGHT).toNumber()});
+            var newMenu = ICM.newCustomMenu(0.1, 0.3);
             viewController.push(newMenu, new SettingPickerDelegate(newMenu, id as GoProSettings.SettingId), SLIDE_UP);
         } else if (id == SettingsMenuItem.MANUALLY) {
-            var newMenu = new CustomMenu((0.15*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, null);
+            var newMenu = ICM.newCustomMenu(0.15, null);
             viewController.switchTo(newMenu, new SettingsMenuDelegate(newMenu, CAMERA, []), SLIDE_LEFT);
         } else if (id == SettingsMenuItem.SAVEAS) {
-            var newMenu = new CustomMenu((0.15*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, null);
+            var newMenu = ICM.newCustomMenu(0.15, null);
             viewController.switchTo(newMenu, new SettingsMenuDelegate(newMenu, PRESET, items), SLIDE_LEFT);
         } else if (menuId == PRESET) {
             ((item as SettingsMenuItem).gopro as GoProPreset).sync();
@@ -76,7 +77,7 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
         }
         else if (menuId == CAMERA) {
             unsubscribeAvailable();
-            var menu = new CustomMenu((0.15*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, {});
+            var menu = ICM.newCustomMenu(0.15, null);
             var delegate = new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, []);
             menu.setFocus(3);
             viewController.switchTo(menu, delegate, SLIDE_DOWN);

@@ -7,6 +7,7 @@ import Toybox.Application;
 
 using BleApiWrapper as BleAPI;
 using GattProfileManager as GPM;
+using InterfaceComponentsManager as ICM;
 
 
 (:test)
@@ -21,7 +22,7 @@ module SettingsMenuDelegateTest {
         var device = BleAPI.device as TestInit.SinkGoProDevice;
         device.requests = [];
 
-        var menu = new CustomMenu((0.15*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, null);
+        var menu = ICM.newCustomMenu(0.15, null);
         var delegate = new SettingsMenuDelegate(menu, SettingsMenuDelegate.CAMERA, []);
         var expected = [
             GPM.UUID_QUERY_CHAR,

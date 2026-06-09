@@ -92,8 +92,7 @@ class ScanMenuDelegate extends Menu2InputDelegate {
 
                 if (label == null) {
                     // from Open GoPro documentation, Model ID is given in byte 13
-                    var camId = CameraDelegate.getGoProId(results[i]) as Number;
-                    if (camId == -1) { camId = 0; }
+                    var camId = CameraDelegate.getGoProId(results[i]);
 
                     label = CameraDelegate.goproModelString[camId];
                     if (label instanceof Symbol) {

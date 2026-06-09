@@ -31,7 +31,7 @@ module BleApiWrapper {
     var nullPairing                 as Boolean                  = false;
     var connectionStatus            as Ble.ConnectionState      = Ble.CONNECTION_STATE_CONNECTED;
     var hasGoProService             as Boolean                  = true;
-    var scannedDevices              as Array<MockScanResult>    = [new MockScanResult(0)];
+    var scannedDevices              as Array<MockScanResult>    = [new MockScanResult(0, null)];
 
 
     function registerProfile(profile as GattProfile) as Void {
@@ -90,13 +90,15 @@ module BleApiWrapper {
     class MockScanResult {
 
         var id as Number;
+        var name as String?;
 
-        function initialize(id as Number) {
+        function initialize(id as Number, name as String?) {
             self.id = id;
+            self.name = name;
         }
 
         function getDeviceName() as String? {
-            return "MockResult";
+            return name;
         }
 
         function getRawData() as ByteArray {
