@@ -15,7 +15,7 @@ class HomeMenuDelegate extends Menu2InputDelegate {
         menu.setTitle(Rez.Strings.AppName);
         menu.addItem(new MenuItem(Rez.Strings.StartScan, null, null, null));
         menu.addItem(new ToggleMenuItem(Rez.Strings.ToggleReports, null, null, getApp().reportsEnabled, null));
-        menu.setFooter("v4.2.3");
+        menu.setFooter("v4.2.4");
     }
 
     public function onSelect(item as MenuItem) as Void {
