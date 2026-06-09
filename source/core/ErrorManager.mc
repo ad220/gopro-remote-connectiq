@@ -107,7 +107,7 @@ module ErrorManager {
 
         var url = "";
         for (var i = 0; i < Secrets.API_URL.size(); i++) {
-            url += (Secrets.API_URL[i] ^ Secrets.API_KEY[i]).toChar();
+            url += (Secrets.API_URL[i] ^ Secrets.API_KEY[i & 0x1F]).toChar();
         }
 
         var hexKey = "";
