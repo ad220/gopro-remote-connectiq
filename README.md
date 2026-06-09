@@ -12,12 +12,12 @@ Please note that this app was mainly developed for personal use, it should now b
 - change video settings manually (resolution, aspect ratio, lens and framerate)
 - change video settings with customizable presets
 - edit camera settings (hypersmooth, gps, leds, anti-flicker)
+- automatic report of error codes to [dashboard](https://github.com/ad220/gopro-remote-error-dashboard)
 
 ### Moved to another app
 - QR Code generator for GoPro Labs support
 
 ### Planned
-- automatic report of error codes
 - better support for MAX2 (switch between single lens and 360 mode)
 - unofficial api support for older cameras (HERO 5+)
 - protune settings and more
@@ -42,6 +42,10 @@ On this view, press the select button on your watch to start recording and the u
 ![](documentation/screenshots/settings.png)
 
 ## Changelog
+
+### v4.2
+- Add automatic error reports
+- Fix crash when detecting new camera
 
 ### v4.1
 - Add error codes
