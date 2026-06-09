@@ -95,7 +95,7 @@ class RemoteView extends WatchUi.View {
             // Settings button
             dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
         } else {
-            dc.fillRoundedRectangle(0.175*Screen.WIDTH, 0.6865*Screen.HEIGHT, 0.65*Screen.WIDTH, 0.167*Screen.HEIGHT, 255);
+            dc.fillRoundedRectangle(0.175*Screen.WIDTH, 0.6865*Screen.HEIGHT, 0.65*Screen.WIDTH, 0.167*Screen.HEIGHT, 0.084*Screen.HEIGHT);
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         }
         dc.drawText(0.55*Screen.WIDTH, 0.765*Screen.HEIGHT, ICM.fontTiny, gopro.getDescription(), ICM.JTEXT_MID);
