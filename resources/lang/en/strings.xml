@@ -17,7 +17,8 @@
     <!-- GoPro Models -->
     <!-- $$$ Small -->
     <string id="HERO" translatable="false">GoPro HERO</string>
-    <string id="MAX2" translatable="false">GoPro MAX2</string>
+    <string id="Fusion" translatable="false">GoPro Fusion</string>
+    <string id="MAX" translatable="false">GoPro MAX</string>
     <string id="UnknownGP">Unknown GoPro</string>
 
     <!-- HomeMenu -->
