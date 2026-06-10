@@ -62,8 +62,8 @@ class BluetoothDelegate extends CameraDelegate {
             return;
         }
 
-        CameraDelegate.connect(device);
         goproId = getGoProId(device);
+        CameraDelegate.connect(device);
 
         try {
             camera = BleAPI.pairDevice(device);

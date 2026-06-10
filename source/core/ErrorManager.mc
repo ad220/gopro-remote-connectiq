@@ -25,13 +25,13 @@ using InterfaceComponentsManager as ICM;
 
 module ErrorManager {
 
-    (:ble)              const BUILD_FLAGS = 0;
-    (:mobile :highend)  const BUILD_FLAGS = 1 << 30;
-    (:mobile :lowend)   const BUILD_FLAGS = 3 << 30;
+    (:glance :ble)              const BUILD_FLAGS = 0;
+    (:glance :mobile :highend)  const BUILD_FLAGS = 1 << 30;
+    (:glance :mobile :lowend)   const BUILD_FLAGS = 3 << 30;
 
     const   ERR_CAM         = 0x80 << 16;   // gopro settings error
     const   ERR_MSG         = 0x40 << 16;   // message encoding / decoding error
-    const   ERR_EXT         = 0x30 << 16;   // reserved for extended error codes
+    (:glance) const ERR_EXT = 0x30 << 16;   // reserved for extended error codes
     const   ERR_COMM        = 0x20 << 16;   // communication error (ble or mobile)
     const   ERR_SYS         = 0x10 << 16;   // system api exception
     const   ERR_NULL        = 0x00;         // unexpected null exception
@@ -54,6 +54,7 @@ module ErrorManager {
     const   SUB_MSG_STRUCT  = 0x20 << 16;   // bad message structure
     // const   SUB_MSG_        = 0x30 << 16;
 
+    (:glance) const   SUB_EXT_HTTP    = 0x00 << 16;   // http error
     
     var stable as Boolean = true;
     var running as Boolean = true;
@@ -133,6 +134,10 @@ module ErrorManager {
     function reportCallback(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
         if (responseCode == 200) {
             errorQueue = [];
+        } else {
+            var hexCode = new [2]b;
+            hexCode.encodeNumber(responseCode, Lang.NUMBER_FORMAT_SINT16, {});
+            errorQueue.add(BUILD_FLAGS | ERR_EXT | SUB_EXT_HTTP | hexCode[1] << 16 | hexCode[0]);
         }
     }
 }

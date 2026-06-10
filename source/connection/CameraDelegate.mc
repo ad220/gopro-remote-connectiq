@@ -33,8 +33,13 @@ class CameraDelegate {
     ];
 
     public static function getGoProId(device as Ble.ScanResult) as Number {
-        var id = goproModelTable.indexOf(device.getRawData()[13]);
-        return id != -1 ? id : 0;
+        var raw_id = device.getRawData()[13];
+        var id = goproModelTable.indexOf(raw_id);
+        if (id == -1) {
+            EM.raise(EM.ERR_CAM | EM.SUB_CAM_ID | 0x0F << 16, raw_id, :SilentErr);
+            id = 0;
+        }
+        return id;
     }
 
     public enum QueryId {
