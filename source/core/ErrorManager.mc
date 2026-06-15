@@ -97,7 +97,7 @@ module ErrorManager {
                 app.viewController.returnHome(null, null);
                 app.viewController.switchTo(view, null, WatchUi.SLIDE_IMMEDIATE);
 
-                if (app.gopro instanceof GoProCamera) { app.gopro.disconnect(); }
+                if (app.gopro != null) { app.gopro.disconnect(); }
             }
         }
     }
