@@ -130,7 +130,7 @@ class CameraDelegate {
             }
 
             if (goproId == null) { goproId = 0; }
-            EM.raise(EM.ERR_COMM, errCode + goproId.toNumber() << 24, :ConnectErr);
+            EM.raise(EM.ERR_COMM + goproId.toNumber() << 24, errCode, :ConnectErr);
         } else {
             EM.raise(EM.ERR_COMM, EM.SUB_BLE_CONN | 0x0F, :WarningErr);
         }
