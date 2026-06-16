@@ -29,7 +29,7 @@ class CameraDelegate {
         :MAX        /* 18) id:64 -> MAX2 */,
         13          /* 19) id:65 -> HERO13 Black */,
         2024        /* 20) id:66 -> HERO (2024) */,
-        "Lit"       /* 21) id:70 -> HERO Lit */,
+        " Lit"      /* 21) id:70 -> HERO Lit */,
     ];
 
     public static function getGoProId(device as Ble.ScanResult) as Number {
@@ -130,7 +130,7 @@ class CameraDelegate {
             }
 
             if (goproId == null) { goproId = 0; }
-            EM.raise(EM.ERR_COMM + goproId.toNumber() << 24, errCode, :ConnectErr);
+            EM.raise(EM.ERR_COMM + goproId << 24, errCode, :ConnectErr);
         } else {
             EM.raise(EM.ERR_COMM, EM.SUB_BLE_CONN | 0x0F, :WarningErr);
         }
