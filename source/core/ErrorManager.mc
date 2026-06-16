@@ -137,7 +137,7 @@ module ErrorManager {
         } else {
             var hexCode = new [2]b;
             hexCode.encodeNumber(responseCode, Lang.NUMBER_FORMAT_SINT16, {});
-            errorQueue.add(BUILD_FLAGS | ERR_EXT | SUB_EXT_HTTP | hexCode[1] << 16 | hexCode[0]);
+            errorQueue.add(BUILD_FLAGS | ERR_EXT | SUB_EXT_HTTP | hexCode[1] << 8 | hexCode[0]);
         }
     }
 }
