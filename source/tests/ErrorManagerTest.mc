@@ -11,6 +11,8 @@ module ErrorManagerTest {
     function testRaise(logger as Logger) as Boolean {
         var result = true;
 
+        EM.errorQueue = [];
+
         TestInit.initSink();
         TestInit.initConnection();
 
@@ -18,7 +20,7 @@ module ErrorManagerTest {
         getApp().viewController = viewController;
 
         if (EM.errorQueue.size() != 0) {
-            logger.error("ErrorManager not properly inntialized, queue is not empty");
+            logger.error("Error queue should still be empty");
             return false;
         }
 
