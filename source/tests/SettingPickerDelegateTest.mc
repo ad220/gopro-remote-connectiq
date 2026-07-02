@@ -44,7 +44,7 @@ module SettingPickerDelegateTest {
             GoProSettings.LED,
             GoProSettings.HYPERSMOOTH
         ];
-        getApp().gopro.subscribeChanges(CameraDelegate.GET_AVAILABLE, []b.addAll(settings));
+        getApp().gopro.queryValues(CameraDelegate.GET_AVAILABLE, []b.addAll(settings));
 
         var expectedLabels = [
             ["5.3K", "4K", "2.7K", "1080p"],
@@ -87,7 +87,7 @@ module SettingPickerDelegateTest {
             GoProSettings.LED,
             GoProSettings.HYPERSMOOTH
         ];
-        getApp().gopro.subscribeChanges(CameraDelegate.REGISTER_AVAILABLE, []b.addAll(settings));
+        getApp().gopro.queryValues(CameraDelegate.REGISTER_AVAILABLE, []b.addAll(settings));
 
         var indexes = [0, 2, 4, 0, 0, 3];
 

@@ -38,7 +38,7 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
                 menu.addItem(items[id]);
             }
         } else {
-            getApp().gopro.subscribeChanges(
+            getApp().gopro.queryValues(
                 CameraDelegate.REGISTER_AVAILABLE,
                 [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE]b
             );
@@ -95,7 +95,7 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     private function unsubscribeAvailable() as Void {
-        getApp().gopro.subscribeChanges(
+        getApp().gopro.queryValues(
             CameraDelegate.UNREGISTER_AVAILABLE,
             [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE]b
         );

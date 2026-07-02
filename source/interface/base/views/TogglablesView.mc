@@ -32,7 +32,7 @@ class TogglablesView extends WatchUi.View {
     public function onShow() as Void {
         View.onShow();
         var camera = getApp().gopro;
-        camera.requestStatuses([GoProCamera.BATTERY, GoProCamera.SD_REMAINING]b);
+        camera.queryValues(CameraDelegate.GET_STATUS, [GoProCamera.BATTERY, GoProCamera.SD_REMAINING]b);
 
         var flicker = camera.getSetting(GoProSettings.FLICKER);
         (findDrawableById("FlickerButton") as Togglable).toggleState(

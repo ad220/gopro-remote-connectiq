@@ -19,6 +19,7 @@
     <string id="HERO" translatable="false">GoPro HERO</string>
     <string id="Fusion" translatable="false">GoPro Fusion</string>
     <string id="MAX" translatable="false">GoPro MAX</string>
+    <string id="Mission1" translatable="false">GoPro Mission1</string>
     <string id="UnknownGP">Unknown GoPro</string>
 
     <!-- HomeMenu -->

@@ -311,7 +311,7 @@ module GoProCameraTest {
 
         var camera = getApp().gopro;
 
-        camera.requestStatuses([GoProCamera.BATTERY, GoProCamera.SD_REMAINING]b);
+        camera.queryValues(CameraDelegate.GET_STATUS, [GoProCamera.BATTERY, GoProCamera.SD_REMAINING]b);
         
         var battery = camera.getStatus(GoProCamera.BATTERY);
         if (battery != 42) {
@@ -338,7 +338,7 @@ module GoProCameraTest {
 
         var camera = getApp().gopro;
 
-        camera.subscribeChanges(CameraDelegate.REGISTER_STATUS, [
+        camera.queryValues(CameraDelegate.REGISTER_STATUS, [
             GoProCamera.BATTERY,
             GoProCamera.SD_REMAINING
         ]b);
@@ -384,7 +384,7 @@ module GoProCameraTest {
 
         var camera = getApp().gopro;
                 
-        camera.subscribeChanges(
+        camera.queryValues(
             CameraDelegate.GET_AVAILABLE,
             [
                 GoProSettings.RESOLUTION,
@@ -434,7 +434,7 @@ module GoProCameraTest {
 
         var camera = getApp().gopro;
                 
-        camera.subscribeChanges(
+        camera.queryValues(
             CameraDelegate.REGISTER_AVAILABLE,
             [
                 GoProSettings.RESOLUTION,
@@ -484,7 +484,7 @@ module GoProCameraTest {
 
         var camera = getApp().gopro;
                 
-        camera.subscribeChanges(
+        camera.queryValues(
             CameraDelegate.REGISTER_AVAILABLE,
             [
                 GoProSettings.RESOLUTION,

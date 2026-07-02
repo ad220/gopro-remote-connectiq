@@ -49,8 +49,8 @@ class GoProCamera extends GoProSettings {
         delegate.send(GattRequestQueue.REGISTER_NOTIFICATION, GPM.UUID_COMMAND_RESPONSE_CHAR, [0x01, 0x00]b);
         delegate.send(GattRequestQueue.REGISTER_NOTIFICATION, GPM.UUID_SETTINGS_RESPONSE_CHAR, [0x01, 0x00]b);
         delegate.send(GattRequestQueue.REGISTER_NOTIFICATION, GPM.UUID_QUERY_RESPONSE_CHAR, [0x01, 0x00]b);
-        subscribeChanges(CameraDelegate.REGISTER_SETTING, [GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b);
-        subscribeChanges(CameraDelegate.REGISTER_STATUS, [ENCODING]b);
+        queryValues(CameraDelegate.REGISTER_SETTING, [GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b);
+        queryValues(CameraDelegate.REGISTER_STATUS, [ENCODING]b);
     }
 
     public function sendCommand(command as CommandId) as Void {
@@ -63,7 +63,10 @@ class GoProCamera extends GoProSettings {
     }
 
     public function sendSetting(id as GoProSettings.SettingId, value as Char) as Void {
-        var request = [0x03, id as Char, 0x01, value]b;
+        var request = goproId == CameraDelegate.GP_MISSION1 or goproId == CameraDelegate.GP_MISSION1PRO ?
+            [0x05, 0xFF, 0x00]b : [0x03]b;
+        request.addAll([id as Char, 0x01, value]b);
+
         settings.put(id, value);
         delegate.send(GattRequestQueue.WRITE_CHARACTERISTIC, GPM.UUID_SETTINGS_CHAR, request);
     }
@@ -78,14 +81,22 @@ class GoProCamera extends GoProSettings {
         }  
     }
 
-    public function requestStatuses(ids as ByteArray) as Void {
-        var request = [ids.size()+1, CameraDelegate.GET_STATUS]b;
-        request.addAll(ids);
-        delegate.send(GattRequestQueue.WRITE_CHARACTERISTIC, GPM.UUID_QUERY_CHAR, request);
-    }
+    public function queryValues(queryId as CameraDelegate.QueryId, values as ByteArray) as Void {
+        var idsSize = values.size();
+        var request = [idsSize + 1, queryId as Number]b;
+        
+        if (goproId == CameraDelegate.GP_MISSION1 or goproId == CameraDelegate.GP_MISSION1PRO) {
+            idsSize *= 2;
+            request = [idsSize + 1, queryId + 3]b;
+            var idsBuffer = new [idsSize]b;
 
-    public function subscribeChanges(queryId as CameraDelegate.QueryId, values as ByteArray) as Void {
-        var request = [values.size()+1, queryId as Char]b;
+            for (var i=0; i<idsSize; i+=2) {
+                idsBuffer[i]    = 0x00;
+                idsBuffer[i+1]  = values[i >> 1];
+            }
+            values = idsBuffer;
+        }
+
         request.addAll(values);
         delegate.send(GattRequestQueue.WRITE_CHARACTERISTIC, GPM.UUID_QUERY_CHAR, request);
     }
