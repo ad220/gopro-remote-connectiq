@@ -123,7 +123,7 @@ class GoProCamera extends GoProSettings {
                 return;
             }
 
-            var ratios = availableRatios.get(tuple[0]);
+            var ratios = availableRatios.get(tuple >> 16);
             if (ratios != null and ratios.size() > 0) { // no error if null because available settings are requested later
                 availableSettings.put(RATIO, ratios);
             }
@@ -200,10 +200,10 @@ class GoProCamera extends GoProSettings {
                             continue;
                         }
 
-                        if (currentRes == tuple[0]) {
+                        if (currentRes == tuple >> 16) {
                             currentMap.add(tmpValues[j]);
                         } else {
-                            currentRes = tuple[0];
+                            currentRes = tuple >> 16;
                             currentMap = [tmpValues[j]];
                             availableRatios.put(currentRes, currentMap);
                             availableResolutions.add(tmpValues[j]);
@@ -222,7 +222,7 @@ class GoProCamera extends GoProSettings {
                             );
                         }
                         else {
-                            var avRatios = availableRatios.get(tuple[0]);
+                            var avRatios = availableRatios.get(tuple >> 16);
                             if (avRatios != null) { availableSettings.put(RATIO, avRatios); }
                         }
                     }

@@ -20,34 +20,34 @@ class GoProSettings {
     }
 
     public static const RESOLUTION_MAP = {
-        1   => [4000,   16 + 9  << 16],
-        4   => [2700,   16 + 9  << 16],
-        6   => [2700,   4  + 3  << 16],
-        7   => [1440,   16 + 9  << 16],
-        9   => [1080,   16 + 9  << 16],
-        12  => [720,    16 + 9  << 16],
-        18  => [4000,   4  + 3  << 16],
-        21  => [5600,   360 << 16],
-        24  => [5000,   16 + 9  << 16],
-        25  => [5000,   4  + 3  << 16],
-        26  => [5300,   8  + 7  << 16],
-        27  => [5300,   4  + 3  << 16],
-        28  => [4000,   8  + 7  << 16],
-        31  => [8000,   360 << 16],
-        35  => [5300,   21 + 9  << 16],
-        36  => [4000,   21 + 9  << 16],
-        37  => [4000,   1  + 1  << 16],
-        38  => [900,    16 + 9  << 16],
-        39  => [4000,   360 << 16],
-        100 => [5300,   16 + 9  << 16],
-        107 => [5300,   8  + 7  << 16],
-        108 => [4000,   8  + 7  << 16],
-        109 => [4000,   9  + 16 << 16],
-        110 => [1080,   9  + 16 << 16],
-        111 => [2700,   4  + 3  << 16],
-        112 => [4000,   4  + 3  << 16],
-        113 => [5300,   4  + 3  << 16],
-    } as Dictionary<Char, [Number, Number]>;
+        1   => 4000 << 16 +   16 + 9  << 8,
+        4   => 2700 << 16 +   16 + 9  << 8,
+        6   => 2700 << 16 +   4  + 3  << 8,
+        7   => 1440 << 16 +   16 + 9  << 8,
+        9   => 1080 << 16 +   16 + 9  << 8,
+        12  => 720  << 16 +   16 + 9  << 8,
+        18  => 4000 << 16 +   4  + 3  << 8,
+        21  => 5600 << 16 +   360,
+        24  => 5000 << 16 +   16 + 9  << 8,
+        25  => 5000 << 16 +   4  + 3  << 8,
+        26  => 5300 << 16 +   8  + 7  << 8,
+        27  => 5300 << 16 +   4  + 3  << 8,
+        28  => 4000 << 16 +   8  + 7  << 8,
+        31  => 8000 << 16 +   360,
+        35  => 5300 << 16 +   21 + 9  << 8,
+        36  => 4000 << 16 +   21 + 9  << 8,
+        37  => 4000 << 16 +   1  + 1  << 8,
+        38  => 900  << 16 +   16 + 9  << 8,
+        39  => 4000 << 16 +   360,
+        100 => 5300 << 16 +   16 + 9  << 8,
+        107 => 5300 << 16 +   8  + 7  << 8,
+        108 => 4000 << 16 +   8  + 7  << 8,
+        109 => 4000 << 16 +   9  + 16 << 8,
+        110 => 1080 << 16 +   9  + 16 << 8,
+        111 => 2700 << 16 +   4  + 3  << 8,
+        112 => 4000 << 16 +   4  + 3  << 8,
+        113 => 5300 << 16 +   4  + 3  << 8,
+    } as Dictionary<Char, Number>;
 
     public static const FRAMERATE_MAP = {
         0  => 240,
@@ -170,20 +170,20 @@ class GoProSettings {
             {
                 // Resolution label
                 if (id == RESOLUTION) {
-                    var res = tuple[0];
+                    var res = tuple >> 16;
                     if (res < 2000) {
                         return res + "p";
                     } else {
                         return res%1000==0 ? res/1000+"K" : (res/1000.0).format("%.1f")+"K"; 
                     }
-                
+                }
                 // Ratio label
-                } else {
-                    var ratio = tuple[1];
-                    if (ratio & 0xFFFF != 0) {
-                        return ratio & 0xFF + ":" + ratio >> 16;
+                else {
+                    var ratio = tuple & 0xFFFF;
+                    if (ratio != 360) {
+                        return ratio & 0xFF + ":" + ratio >> 8;
                     } else {
-                        return ratio >> 16 + "°";
+                        return "360°";
                     }
                 }
             }
@@ -236,24 +236,25 @@ class GoProSettings {
     }
 }
 
-(:typecheck(false))
+
 class ResolutionComparator {
     public function wrappedCompare(a as Char, b as Char, id as Number) as Numeric {
         var tupleA = GoProSettings.RESOLUTION_MAP.get(a);
         var tupleB = GoProSettings.RESOLUTION_MAP.get(b);
 
-        if (tupleA == null) { tupleA = [0,0]; }
-        if (tupleB == null) { tupleB = [0,0]; }
+        if (tupleA == null) { tupleA = 0; }
+        if (tupleB == null) { tupleB = 0; }
 
         if (id == 0) {
-            return tupleA[0] - tupleB[0];
+            return tupleA >> 16 - tupleB >> 16;
         } else {
-            var ratioA = tupleA[1];
-            var ratioB = tupleB[1];
-            return (ratioB & 0xFFFF / (ratioB >> 16).toFloat()) - (ratioA & 0xFFFF / (ratioA >> 16).toFloat());
+            var ratioA = tupleA & 0xFFFF;
+            var ratioB = tupleB & 0xFFFF;
+            return (ratioB & 0xFF / (ratioB >> 8).toFloat()) - (ratioA & 0xFF / (ratioA >> 8).toFloat());
         }
     }
 
+    (:typecheck(false))
     public function compare(resolutionA, resolutionB) as Numeric {
         return wrappedCompare(resolutionA as Char, resolutionB as Char, 0);
     }
