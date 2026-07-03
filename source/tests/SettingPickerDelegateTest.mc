@@ -34,7 +34,7 @@ module SettingPickerDelegateTest {
         var result = true;
         TestInit.initDefaults();
         TestInit.initFake();
-        TestInit.initConnection();
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
 
         var settings = [
             GoProSettings.RESOLUTION,
@@ -77,7 +77,7 @@ module SettingPickerDelegateTest {
     function testSelectItem(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
         TestInit.initFake();
-        TestInit.initConnection();
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
 
         var settings = [
             GoProSettings.RESOLUTION,

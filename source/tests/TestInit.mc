@@ -129,9 +129,10 @@ module TestInit {
         );
     }
 
-    function initConnection() as Void {
+    function initConnection(goproId as Number) as Void {
         var delegate = new BluetoothDelegate();
-        delegate.connect(new BleAPI.MockScanResult(0, null) as Ble.ScanResult);
+        delegate.connect(new BleAPI.MockScanResult(0, null,
+            CameraDelegate.goproModelTable[goproId]) as Ble.ScanResult);
     }
 
 }

@@ -14,7 +14,7 @@ module ErrorManagerTest {
         EM.errorQueue = [];
 
         TestInit.initSink();
-        TestInit.initConnection();
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
 
         var viewController = new ViewDebugController();
         getApp().viewController = viewController;

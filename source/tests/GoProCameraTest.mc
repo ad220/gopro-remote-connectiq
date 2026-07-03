@@ -68,7 +68,8 @@ module GoProCameraTest {
         
         var result = true;
         var delegate = new MockBluetoothDelegate();
-        delegate.connect(new BleAPI.MockScanResult(0, null) as Ble.ScanResult);
+        delegate.connect(new BleAPI.MockScanResult(0, null, 
+            CameraDelegate.goproModelTable[CameraDelegate.GP_HERO11]) as Ble.ScanResult);
 
         if (delegate.getDevice() == null) {
             logger.error("Delegate's BLE device is null after connection");
@@ -117,7 +118,8 @@ module GoProCameraTest {
         
         var result = true;
         var delegate = new MockBluetoothDelegate();
-        delegate.connect(new BleAPI.MockScanResult(0, null) as Ble.ScanResult);
+        delegate.connect(new BleAPI.MockScanResult(0, null,
+            CameraDelegate.goproModelTable[CameraDelegate.GP_HERO11]) as Ble.ScanResult);
 
         // following can't be tested as in a debug run, pairing fail occurs in the call stack of pairDevice()
         // thus BluetoothDelegate.camera is not modified after the pairDevice affectation and never set to null 
@@ -158,7 +160,8 @@ module GoProCameraTest {
         
         var result = true;
         var delegate = new MockBluetoothDelegate();
-        delegate.connect(new BleAPI.MockScanResult(0, null) as Ble.ScanResult);
+        delegate.connect(new BleAPI.MockScanResult(0, null,
+            CameraDelegate.goproModelTable[CameraDelegate.GP_HERO11M]) as Ble.ScanResult);
         
         BleAPI.delegate.onConnectedStateChanged(
             delegate.getDevice() as Ble.Device,
@@ -188,7 +191,7 @@ module GoProCameraTest {
     function testSendSetting(logger as Logger) as Boolean {
         TestInit.initDefaults();
         TestInit.initSink();
-        TestInit.initConnection();
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
 
         var device = BleAPI.device as TestInit.SinkGoProDevice;
         var camera = getApp().gopro;
@@ -228,7 +231,7 @@ module GoProCameraTest {
     function testSendPreset(logger as Logger) as Boolean {
         TestInit.initDefaults();
         TestInit.initSink();
-        TestInit.initConnection();
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
 
         var device = BleAPI.device as TestInit.SinkGoProDevice;
         var camera = getApp().gopro;
@@ -279,7 +282,7 @@ module GoProCameraTest {
     function testNotifSettings(logger as Logger) as Boolean {
         TestInit.initDefaults();
         TestInit.initFake();
-        TestInit.initConnection();
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
 
         var camera = getApp().gopro;
         
@@ -307,7 +310,7 @@ module GoProCameraTest {
         var result = true;
         TestInit.initDefaults();
         TestInit.initFake();
-        TestInit.initConnection();
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
 
         var camera = getApp().gopro;
 
@@ -334,7 +337,7 @@ module GoProCameraTest {
         var result = true;
         TestInit.initDefaults();
         TestInit.initFake();
-        TestInit.initConnection();
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
 
         var camera = getApp().gopro;
 
@@ -380,7 +383,7 @@ module GoProCameraTest {
         var result = true;
         TestInit.initDefaults();
         TestInit.initFake();
-        TestInit.initConnection();
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
 
         var camera = getApp().gopro;
                 
@@ -430,7 +433,7 @@ module GoProCameraTest {
         var result = true;
         TestInit.initDefaults();
         TestInit.initFake();
-        TestInit.initConnection();
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
 
         var camera = getApp().gopro;
                 
@@ -480,7 +483,7 @@ module GoProCameraTest {
             new FakeGoProSpecs.SpecsUnknown()
         );
 
-        TestInit.initConnection();
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
 
         var camera = getApp().gopro;
                 
@@ -522,7 +525,7 @@ module GoProCameraTest {
         var result = true;
         TestInit.initDefaults();
         TestInit.initFake();
-        TestInit.initConnection();
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
         
         var camera = getApp().gopro;
 
@@ -578,7 +581,7 @@ module GoProCameraTest {
     function testRecordingCamera(logger as Logger) as Boolean {
         TestInit.initDefaults();
         TestInit.initFake();
-        TestInit.initConnection();
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
         
         var camera = getApp().gopro;
         
@@ -614,7 +617,7 @@ module GoProCameraTest {
         var result = true;
         TestInit.initDefaults();
         TestInit.initFake();
-        TestInit.initConnection();
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
         
         var camera = getApp().gopro;
         var label;
@@ -662,7 +665,7 @@ module GoProCameraTest {
         TestInit.initSettings.put(GoProSettings.HYPERSMOOTH, 26);
 
         TestInit.initFake();
-        TestInit.initConnection();
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
         
         var camera = getApp().gopro;
         var label;
