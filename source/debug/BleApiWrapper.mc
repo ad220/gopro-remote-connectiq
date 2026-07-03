@@ -31,8 +31,7 @@ module BleApiWrapper {
     var nullPairing                 as Boolean                  = false;
     var connectionStatus            as Ble.ConnectionState      = Ble.CONNECTION_STATE_CONNECTED;
     var hasGoProService             as Boolean                  = true;
-    var scannedDevices              as Array<MockScanResult>    = [new MockScanResult(0, null,
-        CameraDelegate.goproModelTable[CameraDelegate.GP_HERO11M])];
+    var scannedDevices              as Array<MockScanResult>    = [new MockScanResult(0, null, CameraDelegate.GP_HERO11M)];
 
 
     function registerProfile(profile as GattProfile) as Void {
@@ -106,7 +105,7 @@ module BleApiWrapper {
 
         function getRawData() as ByteArray {
             var data = new [20]b;
-            data[13] = goproId;
+            data[13] = CameraDelegate.goproModelTable[goproId];
             return data;
         }
 
