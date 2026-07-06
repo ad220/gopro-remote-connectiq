@@ -135,13 +135,18 @@ using GattProfileManager as GPM;
                 var minSettingChanged = 0xFF;
                 response = [CameraDelegate.NOTIF_SETTING, 0x00]b;
                 for (var i=1; i<data.size(); i+=2+data[i+1]) {
-                    settings.put(data[i] as Char, data[i+2]);
-                    if (notifSettings.indexOf(data[i] as Char)!=-1) {
-                        response.addAll([data[i], 0x01, data[i+2]]);
+                    var id = data[i] as Char;
+                    var value = data[i+2] as Char;
+
+                    if (id == GoProSettings.FOV) { id = GoProSettings.LENS as Char; }
+
+                    settings.put(id, value);
+                    if (notifSettings.indexOf(id) != -1) {
+                        response.addAll([data[i], 0x01, value]);
                     }
-                    minSettingChanged = data[i]==GoProSettings.RESOLUTION ? data[i] : \
-                                        data[i]==GoProSettings.LENS and minSettingChanged!=GoProSettings.RESOLUTION ? data[i] : \
-                                        data[i]==GoProSettings.FRAMERATE and minSettingChanged==0xFF ? data[i] : minSettingChanged;
+                    minSettingChanged = id == GoProSettings.RESOLUTION ? id : \
+                                        id == GoProSettings.LENS and minSettingChanged != GoProSettings.RESOLUTION ? id : \
+                                        id == GoProSettings.FRAMERATE and minSettingChanged==0xFF ? id : minSettingChanged;
                 }
                 responseSplitter(GPM.UUID_SETTINGS_RESPONSE_CHAR, [1, 0]b);
                 if (response.size()>2) {
@@ -160,8 +165,11 @@ using GattProfileManager as GPM;
                             settings.put(GoProSettings.LENS as Char, iter[0] as Char);
                         }
                         if (notifAvailable.indexOf(GoProSettings.LENS as Char) != -1) {
+                            var lensId = specs.cameraId < CameraDelegate.GP_MAX
+                                ? GoProSettings.FOV : GoProSettings.LENS;
+
                             for (j=0; j<iter.size(); j++) {
-                                response.addAll([GoProSettings.LENS, 0x01, iter[j]]);
+                                response.addAll([lensId, 0x01, iter[j]]);
                             }
                         }
                     case GoProSettings.LENS:
@@ -216,10 +224,11 @@ using GattProfileManager as GPM;
     }
 
     public function onReceiveSetting(id as Char, response as ByteArray, query as Char) as Void {
-        updateNotif(notifSettings, query, id);
+        var internalId = id == GoProSettings.FOV ? GoProSettings.LENS as Char : id;
+        updateNotif(notifSettings, query, internalId);
         if (query >= 0x70) { return; }
 
-        var value = settings.get(id);
+        var value = settings.get(internalId);
         if (value == null) {
             // System.println("[DBG WARN]  onReceiveSetting null value, id="+id);
             return;
@@ -249,11 +258,12 @@ using GattProfileManager as GPM;
     }
     
     public function onReceiveAvailable(id as Char, response as ByteArray, query as Char) as Void {
-        updateNotif(notifAvailable, query, id);
+        var internalId = id == GoProSettings.FOV ? GoProSettings.LENS as Char : id;
+        updateNotif(notifAvailable, query, internalId);
         if (query >= 0x70) { return; }
 
         var available;
-        switch (id) {
+        switch (internalId) {
             case GoProSettings.RESOLUTION:
                 available = specs.availableSettingsMap.keys();
                 break;

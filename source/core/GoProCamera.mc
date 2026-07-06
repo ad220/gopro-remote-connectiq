@@ -63,6 +63,10 @@ class GoProCamera extends GoProSettings {
     }
 
     public function sendSetting(id as GoProSettings.SettingId, value as Char) as Void {
+        if (goproId < CameraDelegate.GP_MAX and id == GoProSettings.LENS) {
+            id = GoProSettings.FOV;
+        }
+
         var request = goproId == CameraDelegate.GP_MISSION1 or goproId == CameraDelegate.GP_MISSION1PRO ?
             [0x05, 0xFF, 0x00]b : [0x03]b;
         request.addAll([id as Char, 0x01, value]b);
@@ -97,6 +101,11 @@ class GoProCamera extends GoProSettings {
             values = idsBuffer;
         }
 
+        if (goproId < CameraDelegate.GP_MAX and queryId & 0xF == 0x2) {
+            var lensIdx = values.indexOf(GoProSettings.LENS);
+            if (lensIdx != -1) { values[lensIdx] = GoProSettings.FOV; }
+        }
+
         request.addAll(values);
         delegate.send(GattRequestQueue.WRITE_CHARACTERISTIC, GPM.UUID_QUERY_CHAR, request);
     }
@@ -106,6 +115,10 @@ class GoProCamera extends GoProSettings {
             EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x00 << 16, id as Number, :SilentErr);
             // TODO(raise): confirm level
             return;
+        }
+
+        if (id == GoProSettings.FOV) {
+            id = GoProSettings.LENS;
         }
 
         settings.put(id as GoProSettings.SettingId, value[0] as Char);
@@ -158,6 +171,10 @@ class GoProCamera extends GoProSettings {
         if (value.size()==0) {
             EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x02 << 16, id as Number, :SilentErr);
             return;
+        }
+
+        if (id == GoProSettings.FOV) {
+            id = GoProSettings.LENS;
         }
 
         var available = tmpAvailableSettings.get(id);

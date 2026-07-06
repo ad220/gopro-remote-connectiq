@@ -6,6 +6,7 @@ module FakeGoProSpecs {
     typedef SpecsMap as Dictionary<Char or Number, Dictionary<GoProSettings.LensId or Char, Array<Char or Number>>>;
 
     typedef ISpecs as interface {
+        var cameraId                as Number;
         var availableSettingsMap    as SpecsMap;
         var availableFlicker        as Array<Char>;
         var availableHypersmooth    as Array<Char>;
@@ -15,6 +16,8 @@ module FakeGoProSpecs {
 
 
     class SpecsH11Mini {
+        const cameraId = CameraDelegate.GP_HERO11M;
+
         const availableSettingsMap = {
             26  => {
                 GoProSettings.WIDE        => [8,9],
@@ -105,6 +108,8 @@ module FakeGoProSpecs {
     }
 
     class SpecsUnknown {
+        const cameraId = CameraDelegate.GP_UNKNOWN;
+
         const availableSettingsMap    = {
             42  => {
                 220     => [20,21,22,28],
@@ -128,6 +133,7 @@ module FakeGoProSpecs {
     }
 
     class SpecsEmpty {
+        const cameraId                = CameraDelegate.GP_UNKNOWN;
         const availableSettingsMap    = {} as SpecsMap;
         const availableFlicker        = [] as Array<Char>;
         const availableHypersmooth    = [] as Array<Char>;

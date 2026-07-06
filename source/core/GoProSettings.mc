@@ -10,6 +10,7 @@ class GoProSettings {
     public enum SettingId {
         RESOLUTION  = 2,
         FRAMERATE   = 3,
+        FOV         = 4,
         GPS         = 83,
         LED         = 91,
         LENS        = 121,
