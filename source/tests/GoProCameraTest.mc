@@ -66,7 +66,9 @@ module GoProCameraTest {
             return [5, 0xFF, 0, id, 1, value]b;
         }
         else if (k < CameraDelegate.GP_MAX) {
-            if (id == GoProSettings.LENS)      { id = GoProSettings.FOV; }
+            if      (id == GoProSettings.LENS)          { id = GoProSettings.FOV; }
+            else if (id == GoProSettings.FLICKER)       { id = GoProSettings.FORMAT; }
+            else if (id == GoProSettings.HYPERSMOOTH)   { id = GoProSettings.EIS; }
         }
         return [3, id, 1, value]b;
     }
@@ -234,8 +236,8 @@ module GoProCameraTest {
         var device = BleAPI.device as TestInit.SinkGoProDevice;
         var camera = getApp().gopro;
         
-        var ids = [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE, GoProSettings.HYPERSMOOTH];
-        var values = [1, 3, 5, 1] as Array<Char>; // 4K 16:9, SuperView, 60fps, Low
+        var ids = [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE, GoProSettings.HYPERSMOOTH, GoProSettings.FLICKER];
+        var values = [1, 3, 5, 1, GoProSettings.PAL ] as Array<Char>; // 4K 16:9, SuperView, 60fps, Low, 50Hz
 
         device.requests = [];
 
@@ -336,8 +338,20 @@ module GoProCameraTest {
 
         var camera = getApp().gopro;
         
-        var ids = [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.FRAMERATE];
-        var values = [9, GoProSettings.SUPERVIEW, GoProSettings.HZ50, 6]; // 1080p 50fps
+        var ids = [
+            GoProSettings.RESOLUTION,
+            GoProSettings.LENS,
+            GoProSettings.FLICKER,
+            GoProSettings.FRAMERATE,
+            GoProSettings.HYPERSMOOTH,
+        ];
+        var values = [
+            9,
+            GoProSettings.SUPERVIEW,
+            GoProSettings.HZ50,
+            6,
+            GoProSettings.HS_OFF,
+        ]; // 1080p 50fps
         
         for (var i=0; i<ids.size(); i+=1) {
             BleAPI.device.setSetting(ids[i], values[i]);

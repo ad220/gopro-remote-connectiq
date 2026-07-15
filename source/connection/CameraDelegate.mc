@@ -194,7 +194,7 @@ class CameraDelegate {
         }
         else if ((response[0] & 0x80) == 0x80) { // Continuation packet
             if (queryReplyBuffer == null) {
-                EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x00 << 16, 0, :WarningErr); 
+                EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x03 << 16, 0, :WarningErr); 
                 return;
             } /* TODO(raise): complete data field */ 
 
@@ -239,6 +239,7 @@ class CameraDelegate {
         var length;
         var value;
 
+        // TODO(error): safe data access and throw struct error if needed
         for (var i=0; i<data.size(); i+=2+length) {
             type = data[i] as Char;
             if (type == 0xFF) {

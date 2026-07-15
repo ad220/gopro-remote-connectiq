@@ -65,8 +65,10 @@ class GoProCamera extends GoProSettings {
     public function sendSetting(id as GoProSettings.SettingId, value as Char) as Void {
         settings.put(id, value);
 
-        if (goproId < CameraDelegate.GP_MAX and id == GoProSettings.LENS) {
-            id = GoProSettings.FOV;
+        if (goproId < CameraDelegate.GP_MAX) {
+            if      (id == GoProSettings.LENS)          { id = GoProSettings.FOV; }
+            else if (id == GoProSettings.FLICKER)       { id = GoProSettings.FORMAT; }
+            else if (id == GoProSettings.HYPERSMOOTH)   { id = GoProSettings.EIS; }
         }
 
         var request = goproId == CameraDelegate.GP_MISSION1 or goproId == CameraDelegate.GP_MISSION1PRO ?
@@ -106,8 +108,16 @@ class GoProCamera extends GoProSettings {
         }
 
         if (goproId < CameraDelegate.GP_MAX and queryId & 0xF == 0x2) {
-            var lensIdx = values.indexOf(GoProSettings.LENS);
-            if (lensIdx != -1) { values[lensIdx] = GoProSettings.FOV; }
+            var idx;
+            
+            idx = values.indexOf(GoProSettings.LENS);
+            if (idx != -1)  { values[idx] = GoProSettings.FOV; }
+
+            idx = values.indexOf(GoProSettings.FLICKER);
+            if (idx != -1)  { values[idx] = GoProSettings.FORMAT; }
+
+            idx = values.indexOf(GoProSettings.HYPERSMOOTH);
+            if (idx != -1)  { values[idx] = GoProSettings.EIS; }
         }
 
         request.addAll(values);
@@ -121,9 +131,9 @@ class GoProCamera extends GoProSettings {
             return;
         }
 
-        if (id == GoProSettings.FOV) {
-            id = GoProSettings.LENS;
-        }
+        if      (id == GoProSettings.FOV)           { id = GoProSettings.LENS; }
+        else if (id == GoProSettings.FORMAT)        { id = GoProSettings.FLICKER; }
+        else if (id == GoProSettings.EIS)           { id = GoProSettings.HYPERSMOOTH; }
 
         settings.put(id as GoProSettings.SettingId, value[0] as Char);
         if (id==RESOLUTION) {
@@ -177,9 +187,9 @@ class GoProCamera extends GoProSettings {
             return;
         }
 
-        if (id == GoProSettings.FOV) {
-            id = GoProSettings.LENS;
-        }
+        if      (id == GoProSettings.FOV)           { id = GoProSettings.LENS; }
+        else if (id == GoProSettings.FORMAT)        { id = GoProSettings.FLICKER; }
+        else if (id == GoProSettings.EIS)           { id = GoProSettings.HYPERSMOOTH; }
 
         var available = tmpAvailableSettings.get(id);
         if (available != null) {

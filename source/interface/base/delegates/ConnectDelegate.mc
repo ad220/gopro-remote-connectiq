@@ -63,7 +63,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
                 GoProCamera.SD_REMAINING        => 6942,
                 GoProCamera.BATTERY             => 42
             } as FakeGoProDevice.FakeGoProStatuses,
-            new FakeGoProSpecs.SpecsH11Mini()
+            new FakeGoProSpecs.SpecsH5Session()
         );
         BleAPI.scannedDevices[0].goproId = BleAPI.device.specs.cameraId;
     }

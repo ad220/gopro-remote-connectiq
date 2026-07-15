@@ -150,7 +150,9 @@ using GattProfileManager as GPM;
                         id = data[i] as Char;
                     }
 
-                    if (id == GoProSettings.FOV) { id = GoProSettings.LENS as Char; }
+                    if      (id == GoProSettings.FOV)       { id = GoProSettings.LENS as Char; }
+                    else if (id == GoProSettings.FORMAT)    { id = GoProSettings.FLICKER as Char; }
+                    else if (id == GoProSettings.EIS)       { id = GoProSettings.HYPERSMOOTH as Char; }
 
                     var value = data[i+2] as Char;
 
@@ -238,7 +240,12 @@ using GattProfileManager as GPM;
     }
 
     public function onReceiveSetting(id as Char, response as ByteArray, query as Char) as Void {
-        var internalId = id == GoProSettings.FOV ? GoProSettings.LENS as Char : id;
+        var internalId = id;
+
+        if      (id == GoProSettings.FOV)       { internalId = GoProSettings.LENS as Char; }
+        else if (id == GoProSettings.FORMAT)    { internalId = GoProSettings.FLICKER as Char; }
+        else if (id == GoProSettings.EIS)       { internalId = GoProSettings.HYPERSMOOTH as Char; }
+
         updateNotif(notifSettings, query, internalId);
         if (query >= 0x70) { return; }
 
@@ -276,7 +283,12 @@ using GattProfileManager as GPM;
     }
     
     public function onReceiveAvailable(id as Char, response as ByteArray, query as Char) as Void {
-        var internalId = id == GoProSettings.FOV ? GoProSettings.LENS as Char : id;
+        var internalId = id;
+
+        if      (id == GoProSettings.FOV)       { internalId = GoProSettings.LENS as Char; }
+        else if (id == GoProSettings.FORMAT)    { internalId = GoProSettings.FLICKER as Char; }
+        else if (id == GoProSettings.EIS)       { internalId = GoProSettings.HYPERSMOOTH as Char; }
+
         updateNotif(notifAvailable, query, internalId);
         if (query >= 0x70) { return; }
 
@@ -317,8 +329,14 @@ using GattProfileManager as GPM;
     }
 
     function setSetting(id as GoProSettings.SettingId or Char, value as Char or Number) as Void {
-        var msg = specs.cameraId < CameraDelegate.GP_MISSION1PRO
-                ? [3]b : [5, 0xFF, 0]b;
+        var msg = specs.cameraId < CameraDelegate.GP_MISSION1PRO ? [3]b : [5, 0xFF, 0]b;
+
+        if (specs.cameraId < CameraDelegate.GP_MAX) {
+            if      (id == GoProSettings.LENS)          { id = GoProSettings.FOV; }
+            else if (id == GoProSettings.FLICKER)       { id = GoProSettings.FORMAT; }
+            else if (id == GoProSettings.HYPERSMOOTH)   { id = GoProSettings.EIS; }
+        }
+
         msg.addAll([id, 1, value]);
         onSend(GPM.UUID_SETTINGS_CHAR, msg);
     }
