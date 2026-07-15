@@ -132,7 +132,6 @@ class GattRequestQueue {
 
 
     private function onRequestFail(errCode as Number) as Void {
-        // TODO(test)
         failCounter++;
         EM.raise(EM.ERR_COMM, errCode, failCounter < 3 ? :SilentErr : :WarningErr);
 

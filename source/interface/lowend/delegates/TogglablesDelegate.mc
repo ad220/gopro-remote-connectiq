@@ -54,7 +54,7 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
     public function onStab() as Void {
         var menu = ICM.newCustomMenu(0.1, 0.15);
         getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.HYPERSMOOTH), SLIDE_LEFT);
-        // TODO: update stab sublabel on change
+        // TODO(mobile): update stab sublabel on change
     }
     
     public function onLed() as Void {

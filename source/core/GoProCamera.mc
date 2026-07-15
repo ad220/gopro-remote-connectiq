@@ -125,9 +125,8 @@ class GoProCamera extends GoProSettings {
     }
 
     public function onReceiveSetting(id as Char or GoProSettings.SettingId, value as ByteArray) as Void {
-        if (value.size()==0) { 
+        if (value.size()==0) {
             EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x00 << 16, id as Number, :SilentErr);
-            // TODO(raise): confirm level
             return;
         }
 
@@ -141,12 +140,12 @@ class GoProCamera extends GoProSettings {
 
             var tuple = RESOLUTION_MAP.get(value[0] as Char);
             if (tuple == null) {
+                // TODO(photo): this may occur when camera is in photo mode
                 EM.raise(
                     EM.ERR_CAM | EM.SUB_CAM_VAL | 0x00 << 16,
                     value[0] << 8 + id as Number,
                     :WarningErr
                 );
-                // TODO(raise): confirm flag
                 return;
             }
 

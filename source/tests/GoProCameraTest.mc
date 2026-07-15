@@ -10,28 +10,14 @@ using GattProfileManager as GPM;
 module GoProCameraTest {
     
     /* 
-        TODOv4:
+        TODO(test):
 
-        [X] check sendSetting
-        [X] check sendPreset
-        [-] test command
-            * shutter + hilight
-                - isRecording
-                - duration after a few seconds
-                - hilight
-                - shutter again
-                - isRecording
+        [ ] test command
             * sleep
-        [ ] check keep alive (use sink, without timer)
-        
-        [ ] test available with unknown resolutions
-        [X] test getLabel / getDescription
+            * keep alive (use sink, without timer loop)
         [ ] test unknown status ids (useful ?)
-
-        [X] test request ~~settings~~ / statuses / available
-        [X] test notif settings / statuses / available
-
-        [ ] test init / deinit for intended behavior, blocked msg, camera crash,  
+        [ ] test init / deinit for intended behavior, blocked msg, camera crash, request fail  
+        [ ] test unregister settings, status, available (with sink, useful ?)
     */
 
     const testDeviceIds = [
@@ -369,7 +355,6 @@ module GoProCameraTest {
 
         } // end of testDevice loop
 
-        // TODOv4: test unregister
         return true;
     }
     
@@ -454,7 +439,6 @@ module GoProCameraTest {
 
         } // end of testDevice loop
 
-        // TODOv4: test unregister
         return result;
     }
 
@@ -584,7 +568,6 @@ module GoProCameraTest {
 
         } // end of testDevice loop
 
-        // TODOv4: test unregister
         return result;
     }
 

@@ -196,7 +196,7 @@ class CameraDelegate {
             if (queryReplyBuffer == null) {
                 EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x03 << 16, 0, :WarningErr); 
                 return;
-            } /* TODO(raise): complete data field */ 
+            }
 
             queryReplyBuffer.addAll(response.slice(1, null));
             if (queryReplyBuffer.size() == queryReplyLength) {
@@ -219,8 +219,8 @@ class CameraDelegate {
         var decoder = null;
 
         if (status != 0) {
-            // TODO(raise): skip msg, check for queue impact ? confirm err_flag
-            EM.raise(EM.ERR_MSG | EM.SUB_MSG_STATUS | 0x00 << 16, 0, :SilentErr);
+            // Error flag switched to warning because never raised as of v4.2.7
+            EM.raise(EM.ERR_MSG | EM.SUB_MSG_STATUS | 0x00 << 16, 0, :WarningErr);
             // System.println("[WARNING]   Wrong query status received from camera, value: " + status.toNumber());
         }
         
@@ -229,8 +229,8 @@ class CameraDelegate {
         else if (mask ^ 0x13 == 0 or mask ^ 0x16 == 0)                      { decoder = :onReceiveStatus; }
         else if (mask ^ 0x02 == 0 or queryId == 0x32)                       { decoder = :onReceiveAvailable; }
         else {
-            // TODO(raise): skip msg, check for queue impact ? confirm err_flag
-            EM.raise(EM.ERR_MSG | EM.SUB_MSG_QUERY | 0x00 << 16, 0, :SilentErr);
+            // Error flag switched to warning because never raised as of v4.2.7
+            EM.raise(EM.ERR_MSG | EM.SUB_MSG_QUERY | 0x00 << 16, 0, :WarningErr);
             // System.println("[WARNING]   Unknown queryId: " + queryId.toNumber());
             return;
         }
@@ -239,14 +239,22 @@ class CameraDelegate {
         var length;
         var value;
 
-        // TODO(error): safe data access and throw struct error if needed
         for (var i=0; i<data.size(); i+=2+length) {
             type = data[i] as Char;
             if (type == 0xFF) {
                 i += 2;
-                type = data[i];
+
+                try { type = data[i]; } catch (ex) {
+                    EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x05 << 16, 0, :WarningErr);
+                    break;
+                }
             }
-            length = data[i+1];
+
+            try { length = data[i+1]; } catch (ex) {
+                EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x04 << 16, 0, :WarningErr);
+                break;
+            }
+
             value = data.slice(i+2, i+2+length);
             gopro.method(decoder).invoke(type, value);
         }
