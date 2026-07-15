@@ -10,7 +10,9 @@ class GoProSettings {
     public enum SettingId {
         RESOLUTION  = 2,
         FRAMERATE   = 3,
-        FOV         = 4,
+        FOV         = 4,    // deprecated for lens
+        FORMAT      = 57,   // deprecated for anti-flicker
+        EIS         = 78,   // deprecated for hypersmooth
         GPS         = 83,
         LED         = 91,
         LENS        = 121,
@@ -22,11 +24,20 @@ class GoProSettings {
 
     public static const RESOLUTION_MAP = {
         1   => 4000 << 16 +   16 + 9  << 8,
+        2   => 4000 << 16 +   16 + 9  << 8, // superview
         4   => 2700 << 16 +   16 + 9  << 8,
+        5   => 2700 << 16 +   16 + 9  << 8, // superview
         6   => 2700 << 16 +   4  + 3  << 8,
-        7   => 1440 << 16 +   16 + 9  << 8,
+        7   => 1440 << 16 +   4  + 3  << 8,
+        8   => 1080 << 16 +   16 + 9  << 8, // superview
         9   => 1080 << 16 +   16 + 9  << 8,
+        10  => 960  << 16 +   4  + 3  << 8,
+        11  => 720  << 16 +   16 + 9  << 8, // superview
         12  => 720  << 16 +   16 + 9  << 8,
+        13  => 480  << 16 +   16 + 9  << 8,
+        14  => 5200 << 16 +   360,
+        15  => 3000 << 16 +   360,
+        17  => 480  << 16 +   16 + 9  << 8,
         18  => 4000 << 16 +   4  + 3  << 8,
         21  => 5600 << 16 +   360,
         24  => 5000 << 16 +   16 + 9  << 8,
@@ -34,12 +45,14 @@ class GoProSettings {
         26  => 5300 << 16 +   8  + 7  << 8,
         27  => 5300 << 16 +   4  + 3  << 8,
         28  => 4000 << 16 +   8  + 7  << 8,
-        31  => 8000 << 16 +   360,
+        31  => 8000 << 16 +   16 + 9  << 8,
         35  => 5300 << 16 +   21 + 9  << 8,
         36  => 4000 << 16 +   21 + 9  << 8,
         37  => 4000 << 16 +   1  + 1  << 8,
         38  => 900  << 16 +   16 + 9  << 8,
         39  => 4000 << 16 +   360,
+        40  => 8000 << 16 +   4  + 3  << 8,
+        44  => 1440 << 16 +   4  + 3  << 8,
         100 => 5300 << 16 +   16 + 9  << 8,
         107 => 5300 << 16 +   8  + 7  << 8,
         108 => 4000 << 16 +   8  + 7  << 8,
@@ -55,21 +68,29 @@ class GoProSettings {
         1  => 120,
         2  => 100,
         3  => 90,
+        4  => 80,
         5  => 60,
         6  => 50,
+        7  => 48,
         8  => 30,
         9  => 25,
         10 => 24,
+        11 => 15,
+        12 => 12,
         13 => 200,
         15 => 400,
         16 => 360,
         17 => 300,
+        18 => 480,
+        19 => 960,
+        20 => 800,
     } as Dictionary<Char, Number>;
 
     public static const FRAMERATE_LABEL = WatchUi.loadResource(Rez.Strings._FPS) as String;
 
     public enum LedId {
         LED_OFF         = 0,
+        LED_FROFF       = 1,
         LED_ON          = 2,
         LED_ALL_ON      = 3,
         LED_ALL_OFF     = 4,
@@ -79,6 +100,7 @@ class GoProSettings {
 
     public static const LED_LABELS = {
         LED_OFF         => Rez.Strings.Off,
+        LED_FROFF       => Rez.Strings.FrontOffOnly,
         LED_ON          => Rez.Strings.On,
         LED_ALL_ON      => Rez.Strings.AllOn,
         LED_ALL_OFF     => Rez.Strings.AllOff,
@@ -88,9 +110,12 @@ class GoProSettings {
 
     public enum LensId {
         WIDE            = 0,
+        MEDIUM          = 1,
         NARROW          = 2,
         SUPERVIEW       = 3,
         LINEAR          = 4,
+        DUAL360         = 5,
+        NARROWMAX       = 6,
         MAXSUPERVIEW    = 7,
         LINEARLEVEL     = 8,
         HYPERVIEW       = 9,
@@ -104,9 +129,12 @@ class GoProSettings {
 
     public static const LENS_LABELS = {
         WIDE            => Rez.Strings._WIDE,
+        MEDIUM          => Rez.Strings._MEDIUM,
         NARROW          => Rez.Strings._NARROW,
         SUPERVIEW       => Rez.Strings._SUPERVIEW,
         LINEAR          => Rez.Strings._LINEAR,
+        DUAL360         => Rez.Strings._DUAL360,
+        NARROWMAX       => Rez.Strings._NARROW,
         MAXSUPERVIEW    => Rez.Strings._MAXSUPERVIEW,
         LINEARLEVEL     => Rez.Strings._LINEARLEVEL,
         HYPERVIEW       => Rez.Strings._HYPERVIEW,
