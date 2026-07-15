@@ -34,6 +34,43 @@ module GoProCameraTest {
         [ ] test init / deinit for intended behavior, blocked msg, camera crash,  
     */
 
+    const testDeviceIds = [
+        CameraDelegate.GP_HERO5S,
+        CameraDelegate.GP_HERO11M,
+        // CameraDelegate.GP_MAX2,
+        CameraDelegate.GP_MISSION1PRO,
+    ];
+
+    const testDeviceSpecs = [
+        new Method(FakeGoProSpecs, :getSpecsH5S),
+        new Method(FakeGoProSpecs, :getSpecsH11M),
+        // new Method(FakeGoProSpecs, :getSpecsMAX2),
+        new Method(FakeGoProSpecs, :getSpecsM1Pro),
+    ] as Array<Method() as FakeGoProSpecs.ISpecs>;
+
+    const testDeviceNames = [
+        "HERO5 Session",
+        "HERO11 Mini",
+        // "MAX2",
+        "Mission1 Pro",
+    ];
+
+    function logDeviceError(logger as Logger, message as String, k as Number) as Void {
+        logger.error(message);
+        logger.error("with gopro: " + testDeviceNames[k]);
+    }
+
+    function expectedSettingRequest(id as Number, value as Char, k as Number) as ByteArray {
+        k = testDeviceIds[k];
+        if      (k == CameraDelegate.GP_MISSION1PRO or k == CameraDelegate.GP_MISSION1) {
+            return [5, 0xFF, 0, id, 1, value]b;
+        }
+        else if (k < CameraDelegate.GP_MAX) {
+            if (id == GoProSettings.LENS)      { id = GoProSettings.FOV; }
+        }
+        return [3, id, 1, value]b;
+    }
+
     class MockBluetoothDelegate extends BluetoothDelegate {
 
         function initialize() {
@@ -62,7 +99,7 @@ module GoProCameraTest {
     (:test)
     function testConnectionSuccess(logger as Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initSink();
+        TestInit.initSink(null);
 
         BleAPI.pairedDevices = [];
         
@@ -110,7 +147,7 @@ module GoProCameraTest {
     (:test)
     function testPairingFail(logger as Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initSink();
+        TestInit.initSink(null);
 
         BleAPI.pairedDevices = [];
         BleAPI.connectionStatus = Ble.CONNECTION_STATE_REJECTED;
@@ -152,7 +189,7 @@ module GoProCameraTest {
     (:test)
     function testAsyncDisconnect(logger as Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initSink();
+        TestInit.initSink(null);
 
         BleAPI.pairedDevices = [];
         
@@ -186,9 +223,13 @@ module GoProCameraTest {
 
     (:test)
     function testSendSetting(logger as Logger) as Boolean {
+
+        for (var k=0; k<testDeviceIds.size(); k+=1)
+        { // start of testDevice loop
+
         TestInit.initDefaults();
-        TestInit.initSink();
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initSink(testDeviceSpecs[k].invoke());
+        TestInit.initConnection(testDeviceIds[k]);
 
         var device = BleAPI.device as TestInit.SinkGoProDevice;
         var camera = getApp().gopro;
@@ -203,32 +244,39 @@ module GoProCameraTest {
         }
 
         for (var i=0; i<ids.size(); i+=1) {
-            var expectedRequest = [GPM.UUID_SETTINGS_CHAR, [3, ids[i], 1, values[i]]b];
+            var expectedRequest = [GPM.UUID_SETTINGS_CHAR, expectedSettingRequest(ids[i], values[i], k)];
             if (
                 !device.requests[i][0].equals(expectedRequest[0]) or
                 !device.requests[i][1].equals(expectedRequest[1])
             ) {
-                logger.error("Wrong request sent, expected: " + expectedRequest + ", got: " + device.requests[i]);
+                logDeviceError(logger, "Wrong request sent, expected: " + expectedRequest + ", got: " + device.requests[i], k);
                 return false;
             }
         }
 
         for (var i=0; i<ids.size(); i+=1) {
-            if (camera.getSetting(ids[i]) != values[i]) {
-                logger.error("Setting was not stored correctly");
+            var camSetting = camera.getSetting(ids[i]);
+            if (camSetting != values[i]) {
+                logDeviceError(logger, "Setting was not stored correctly, id: " + ids[i] \
+                                        + ", expected: " + values[i] \
+                                        + ", got: " + camSetting, k);
                 return false;
             }
         }
 
+        } // end of testDevice loop
         return true;
     }
 
     
     (:test)
     function testSendPreset(logger as Logger) as Boolean {
+        for (var k=0; k<testDeviceIds.size(); k+=1)
+        { // start of testDevice loop
+        
         TestInit.initDefaults();
-        TestInit.initSink();
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initSink(testDeviceSpecs[k].invoke());
+        TestInit.initConnection(testDeviceIds[k]);
 
         var device = BleAPI.device as TestInit.SinkGoProDevice;
         var camera = getApp().gopro;
@@ -249,27 +297,29 @@ module GoProCameraTest {
         var values = [GoProSettings.HZ50, 9, GoProSettings.LINEAR, 9];
 
         if (device.requests.size() != ids.size()) {
-            logger.error("Wrong number of requests, expected 4, got: " + device.requests.size());
+            logDeviceError(logger, "Wrong number of requests, expected 4, got: " + device.requests.size(), k);
             return false;
         }
 
         for (var i=0; i<ids.size(); i+=1) {
-            var expectedRequest = [GPM.UUID_SETTINGS_CHAR, [3, ids[i], 1, values[i]]b];
+            var expectedRequest = [GPM.UUID_SETTINGS_CHAR, expectedSettingRequest(ids[i], values[i] as Char, k)];
             if (
                 !device.requests[i][0].equals(expectedRequest[0]) or
                 !device.requests[i][1].equals(expectedRequest[1])
             ) {
-                logger.error("Wrong request sent, expected: " + expectedRequest + ", got: " + device.requests[i]);
+                logDeviceError(logger, "Wrong request sent, expected: " + expectedRequest + ", got: " + device.requests[i], k);
                 return false;
             }
         }
 
         for (var i=0; i<ids.size(); i+=1) {
             if (camera.getSetting(ids[i]) != values[i]) {
-                logger.error("Setting was not stored correctly");
+                logDeviceError(logger, "Setting was not stored correctly", k);
                 return false;
             }
         }
+
+        } // end of testDevice loop
 
         return true;
     }
@@ -277,9 +327,12 @@ module GoProCameraTest {
         
     (:test)
     function testNotifSettings(logger as Logger) as Boolean {
+        for (var k=0; k<testDeviceIds.size(); k+=1)
+        { // start of testDevice loop
+
         TestInit.initDefaults();
-        TestInit.initFake();
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initFake(testDeviceSpecs[k].invoke());
+        TestInit.initConnection(testDeviceIds[k]);
 
         var camera = getApp().gopro;
         
@@ -291,11 +344,16 @@ module GoProCameraTest {
         }
 
         for (var i=0; i<ids.size(); i+=1) {
-            if (camera.getSetting(ids[i]) != values[i]) {
-                logger.error("Setting was not updated correctly");
+            var camSetting = camera.getSetting(ids[i]);
+            if (camSetting != values[i]) {
+                logDeviceError(logger, "Setting was not updated correctly id: " + ids[i] \
+                                        + ", expected: " + values[i] \
+                                        + ", got: " + camSetting, k);
                 return false;
             }
         }
+
+        } // end of testDevice loop
 
         // TODOv4: test unregister
         return true;
@@ -305,9 +363,13 @@ module GoProCameraTest {
     (:test)
     function testRequestStatus(logger as Logger) as Boolean {
         var result = true;
+
+        for (var k=0; k<testDeviceIds.size(); k+=1)
+        { // start of testDevice loop
+
         TestInit.initDefaults();
-        TestInit.initFake();
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initFake(testDeviceSpecs[k].invoke());
+        TestInit.initConnection(testDeviceIds[k]);
 
         var camera = getApp().gopro;
 
@@ -315,15 +377,17 @@ module GoProCameraTest {
         
         var battery = camera.getStatus(GoProCamera.BATTERY);
         if (battery != 42) {
-            logger.error("Wrong battery percentage, expected 42, got: " + battery);
+            logDeviceError(logger, "Wrong battery percentage, expected 42, got: " + battery, k);
             result = false;
         }
 
         var sd = camera.getStatus(GoProCamera.SD_REMAINING);
         if (sd != 6942) {
-            logger.error("Wrong battery percentage, expected 6942, got: " + sd);
+            logDeviceError(logger, "Wrong battery percentage, expected 6942, got: " + sd, k);
             result = false;
         }
+
+        } // end of testDevice loop
 
         return result;
     }
@@ -332,9 +396,13 @@ module GoProCameraTest {
     (:test)
     function testNotifStatus(logger as Logger) as Boolean {
         var result = true;
+
+        for (var k=0; k<testDeviceIds.size(); k+=1)
+        { // start of testDevice loop
+
         TestInit.initDefaults();
-        TestInit.initFake();
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initFake(testDeviceSpecs[k].invoke());
+        TestInit.initConnection(testDeviceIds[k]);
 
         var camera = getApp().gopro;
 
@@ -345,13 +413,13 @@ module GoProCameraTest {
         
         var battery = camera.getStatus(GoProCamera.BATTERY);
         if (battery != 42) {
-            logger.error("Wrong battery percentage, expected 42, got: " + battery);
+            logDeviceError(logger, "Wrong battery percentage, expected 42, got: " + battery, k);
             result = false;
         }
 
         var sd = camera.getStatus(GoProCamera.SD_REMAINING);
         if (sd != 6942) {
-            logger.error("Wrong battery percentage, expected 6942, got: " + sd);
+            logDeviceError(logger, "Wrong battery percentage, expected 6942, got: " + sd, k);
             result = false;
         }
         
@@ -360,15 +428,17 @@ module GoProCameraTest {
         
         battery = camera.getStatus(GoProCamera.BATTERY);
         if (battery != 90) {
-            logger.error("Wrong battery percentage, expected 90, got: " + battery);
+            logDeviceError(logger, "Wrong battery percentage, expected 90, got: " + battery, k);
             result = false;
         }
 
         sd = camera.getStatus(GoProCamera.SD_REMAINING);
         if (sd != 7200) {
-            logger.error("Wrong battery percentage, expected 7200, got: " + sd);
+            logDeviceError(logger, "Wrong battery percentage, expected 7200, got: " + sd, k);
             result = false;
         }
+
+        } // end of testDevice loop
 
         // TODOv4: test unregister
         return result;
@@ -378,9 +448,13 @@ module GoProCameraTest {
     (:test)
     function testRequestAvailable(logger as Logger) as Boolean {
         var result = true;
+
+        for (var k=0; k<testDeviceIds.size(); k+=1)
+        { // start of testDevice loop
+
         TestInit.initDefaults();
-        TestInit.initFake();
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initFake(testDeviceSpecs[k].invoke());
+        TestInit.initConnection(testDeviceIds[k]);
 
         var camera = getApp().gopro;
                 
@@ -394,32 +468,50 @@ module GoProCameraTest {
             ]b
         );
 
-        var expectedFramerates = [8, 1, 10, 9, 5, 2, 6];
-        var expectedRatios = [1, 18, 28];
-        var expectedHypersmooth = [
+        var expectedFramerates = [
+            [8, 9],
+            [8, 1, 10, 9, 5, 2, 6],
+            [0, 13, 1, 2, 5, 6, 8, 9, 10]
+        ];
+        var expectedRatios = [
+            [1],
+            [1, 18, 28],
+            [109, 112, 1],
+        ];
+        var expectedHypersmooth = [[
+            GoProSettings.HS_OFF,
+            GoProSettings.HS_LOW
+        ],  [
             GoProSettings.HS_OFF,
             GoProSettings.HS_LOW,
             GoProSettings.HS_BOOST,
             GoProSettings.HS_AUTO_BOOST,
-        ];
+        ], [
+            GoProSettings.HS_OFF,
+            GoProSettings.HS_LOW,
+            GoProSettings.HS_AUTO_BOOST,
+        ]];
         
         var availableFramerates = camera.getAvailableSettings(GoProSettings.FRAMERATE);
-        if (!TestInit.haveSameData(availableFramerates as Array, expectedFramerates)) {
-            logger.error("Wrong available framerates, expected: " + expectedFramerates + ", got: " + availableFramerates);
+        if (!TestInit.haveSameData(availableFramerates as Array, expectedFramerates[k])) {
+            logDeviceError(logger, "Wrong available framerates, expected: " + expectedFramerates[k] + ", got: " + availableFramerates, k);
             result = false;
         }
 
         var availableRatios = camera.getAvailableSettings(GoProSettings.RATIO);
-        if (!TestInit.haveSameData(availableRatios as Array, expectedRatios)) {
-            logger.error("Wrong available ratios, expected: " + expectedRatios + ", got: " + availableRatios);
+        if (!TestInit.haveSameData(availableRatios as Array, expectedRatios[k])) {
+            logDeviceError(logger, "Wrong available ratios, expected: " + expectedRatios[k] + ", got: " + availableRatios, k);
             result = false;
         }
 
         var availableHypersmooth = camera.getAvailableSettings(GoProSettings.HYPERSMOOTH);
-        if (!TestInit.haveSameData(availableHypersmooth as Array, expectedHypersmooth)) {
-            logger.error("Wrong available hypersmooth, expected: " + expectedHypersmooth + ", got: " + availableHypersmooth);
+        if (!TestInit.haveSameData(availableHypersmooth as Array, expectedHypersmooth[k])) {
+            logDeviceError(logger, "Wrong available hypersmooth, expected: " + expectedHypersmooth[k] + ", got: " + availableHypersmooth, k);
             result = false;
         }
+
+        } // end of testDevice loop
+        
 
         return result;
     }
@@ -428,9 +520,13 @@ module GoProCameraTest {
     (:test)
     function testNotifAvailable(logger as Logger) as Boolean {
         var result = true;
+
+        for (var k=0; k<testDeviceIds.size(); k+=1)
+        { // start of testDevice loop
+
         TestInit.initDefaults();
-        TestInit.initFake();
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initFake(testDeviceSpecs[k].invoke());
+        TestInit.initConnection(testDeviceIds[k]);
 
         var camera = getApp().gopro;
                 
@@ -444,25 +540,35 @@ module GoProCameraTest {
             ]b
         );
 
-        BleAPI.device.setSetting(GoProSettings.RESOLUTION, 6);
+        BleAPI.device.setSetting(GoProSettings.RESOLUTION, 9);
         BleAPI.device.setSetting(GoProSettings.LENS, GoProSettings.LINEAR);
         BleAPI.device.setSetting(GoProSettings.FLICKER, GoProSettings.HZ60);
         BleAPI.device.setSetting(GoProSettings.FRAMERATE, 5);
 
-        var expectedFramerates = [1, 2, 5, 6];
-        var expectedRatios = [4, 6];
+        var expectedFramerates = [
+            [5, 6, 8, 9, 10],
+            [0, 1, 2, 5, 6, 8, 9, 10, 13],
+            [18, 15, 0, 13, 1, 2, 5, 6, 8, 9, 10],
+        ];
+        var expectedRatios = [
+            [9, 8],
+            [9],
+            [9, 110],
+        ];
         
         var availableFramerates = camera.getAvailableSettings(GoProSettings.FRAMERATE);
-        if (!TestInit.haveSameData(availableFramerates as Array, expectedFramerates)) {
-            logger.error("Wrong available framerates, expected: " + expectedFramerates + ", got: " + availableFramerates);
+        if (!TestInit.haveSameData(availableFramerates as Array, expectedFramerates[k])) {
+            logDeviceError(logger, "Wrong available framerates, expected: " + expectedFramerates[k] + ", got: " + availableFramerates, k);
             result = false;
         }
 
         var availableRatios = camera.getAvailableSettings(GoProSettings.RATIO);
-        if (!TestInit.haveSameData(availableRatios as Array, expectedRatios)) {
-            logger.error("Wrong available ratios, expected: " + expectedRatios + ", got: " + availableRatios);
+        if (!TestInit.haveSameData(availableRatios as Array, expectedRatios[k])) {
+            logDeviceError(logger, "Wrong available ratios, expected: " + expectedRatios[k] + ", got: " + availableRatios, k);
             result = false;
         }
+
+        } // end of testDevice loop
 
         // TODOv4: test unregister
         return result;
@@ -521,7 +627,7 @@ module GoProCameraTest {
     function testShutterCommands(logger as Logger) as Boolean {
         var result = true;
         TestInit.initDefaults();
-        TestInit.initFake();
+        TestInit.initFake(null);
         TestInit.initConnection(CameraDelegate.GP_HERO11M);
         
         var camera = getApp().gopro;
@@ -577,7 +683,7 @@ module GoProCameraTest {
     (:test)
     function testRecordingCamera(logger as Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake();
+        TestInit.initFake(null);
         TestInit.initConnection(CameraDelegate.GP_HERO11M);
         
         var camera = getApp().gopro;
@@ -613,7 +719,7 @@ module GoProCameraTest {
     function testLabelKnown(logger as Logger) as Boolean {
         var result = true;
         TestInit.initDefaults();
-        TestInit.initFake();
+        TestInit.initFake(null);
         TestInit.initConnection(CameraDelegate.GP_HERO11M);
         
         var camera = getApp().gopro;
@@ -629,7 +735,7 @@ module GoProCameraTest {
             GoProSettings.FLICKER,
             GoProSettings.HYPERSMOOTH,
         ];
-        var expected = ["4K", "16:9", Rez.Strings._WIDE, "60 fps", "", Rez.Strings.On, "", Rez.Strings.Boost];
+        var expected = ["4K", "16:9", Rez.Strings._WIDE, "60 fps", "", Rez.Strings.On, "", Rez.Strings.Low];
 
         for (var i=0; i<ids.size(); i+=1) {
             label = camera.getLabel(ids[i], null);
@@ -661,7 +767,7 @@ module GoProCameraTest {
         TestInit.initSettings.put(GoProSettings.FLICKER, 78);
         TestInit.initSettings.put(GoProSettings.HYPERSMOOTH, 26);
 
-        TestInit.initFake();
+        TestInit.initFake(null);
         TestInit.initConnection(CameraDelegate.GP_HERO11M);
         
         var camera = getApp().gopro;

@@ -65,6 +65,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
             } as FakeGoProDevice.FakeGoProStatuses,
             new FakeGoProSpecs.SpecsH11Mini()
         );
+        BleAPI.scannedDevices[0].goproId = BleAPI.device.specs.cameraId;
     }
 
     

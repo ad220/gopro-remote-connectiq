@@ -33,7 +33,7 @@ module SettingPickerDelegateTest {
     function testItemOrder(logger as Test.Logger) as Boolean {
         var result = true;
         TestInit.initDefaults();
-        TestInit.initFake();
+        TestInit.initFake(null);
         TestInit.initConnection(CameraDelegate.GP_HERO11M);
 
         var settings = [
@@ -76,7 +76,7 @@ module SettingPickerDelegateTest {
     (:test)
     function testSelectItem(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake();
+        TestInit.initFake(null);
         TestInit.initConnection(CameraDelegate.GP_HERO11M);
 
         var settings = [

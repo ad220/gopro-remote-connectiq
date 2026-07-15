@@ -16,7 +16,7 @@ module SettingsMenuDelegateTest {
     (:test)
     function testInit(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initSink();
+        TestInit.initSink(null);
         TestInit.initConnection(CameraDelegate.GP_HERO11M);
 
         var device = BleAPI.device as TestInit.SinkGoProDevice;
@@ -49,7 +49,7 @@ module SettingsMenuDelegateTest {
     (:test)
     function testSelectPreset(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake();
+        TestInit.initFake(null);
         TestInit.initConnection(CameraDelegate.GP_HERO11M);
         Application.Storage.clearValues();
 
@@ -88,7 +88,7 @@ module SettingsMenuDelegateTest {
     (:test)
     function testSelectManual(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake();
+        TestInit.initFake(null);
         TestInit.initConnection(CameraDelegate.GP_HERO11M);
 
         // test selecting manual edit
@@ -153,7 +153,7 @@ module SettingsMenuDelegateTest {
     (:test)
     function testSelectSaveAs(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake();
+        TestInit.initFake(null);
         TestInit.initConnection(CameraDelegate.GP_HERO11M);
         Application.Storage.clearValues();
 

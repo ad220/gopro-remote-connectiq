@@ -77,13 +77,19 @@ using GattProfileManager as GPM;
 
                 switch (queryId) {
                     case CameraDelegate.GET_SETTING:
+                    case CameraDelegate.GET_SETTING_2B:
                     case CameraDelegate.REGISTER_SETTING:
+                    case CameraDelegate.REGISTER_SETTING_2B:
                     case CameraDelegate.UNREGISTER_SETTING:
+                    case CameraDelegate.UNREGISTER_SETTING_2B:
                         decoder = method(:onReceiveSetting);
                         break;
                     case CameraDelegate.GET_STATUS:
+                    case CameraDelegate.GET_STATUS_2B:
                     case CameraDelegate.REGISTER_STATUS:
+                    case CameraDelegate.REGISTER_STATUS_2B:
                     case CameraDelegate.UNREGISTER_STATUS:
+                    case CameraDelegate.UNREGISTER_STATUS_2B:
                         decoder = method(:onReceiveStatus);
                         break;
                     case CameraDelegate.GET_AVAILABLE:
@@ -94,9 +100,11 @@ using GattProfileManager as GPM;
                     default:
                         // System.println("[DBG WARN]  Unknown queryId: " + queryId.toNumber());
                 }
+                var isQuery2B = queryId & 0x0F > 3;
                 if (decoder instanceof Method) {
                     response = [queryId, 0x00]b;
-                    for (var i=0; i<data.size(); i++) {
+                    for (var i=0; i<data.size(); i+=1) {
+                        if (isQuery2B) { i+=1; }
                         decoder.invoke(data[i] as Char, response, queryId);
                     }
                     responseSplitter(GPM.UUID_QUERY_RESPONSE_CHAR, response);
@@ -136,9 +144,15 @@ using GattProfileManager as GPM;
                 response = [CameraDelegate.NOTIF_SETTING, 0x00]b;
                 for (var i=1; i<data.size(); i+=2+data[i+1]) {
                     var id = data[i] as Char;
-                    var value = data[i+2] as Char;
+
+                    if (id == 0xFF) {
+                        i += 2;
+                        id = data[i] as Char;
+                    }
 
                     if (id == GoProSettings.FOV) { id = GoProSettings.LENS as Char; }
+
+                    var value = data[i+2] as Char;
 
                     settings.put(id, value);
                     if (notifSettings.indexOf(id) != -1) {
@@ -232,13 +246,17 @@ using GattProfileManager as GPM;
         if (value == null) {
             // System.println("[DBG WARN]  onReceiveSetting null value, id="+id);
             return;
-        } 
+        }
+
+        if (specs.cameraId < CameraDelegate.GP_MISSION1PRO) { response.addAll([0xFF, 0]); }
         response.addAll([id, 0x01, value]b);
     }
 
     public function onReceiveStatus(id as Char, response as ByteArray, query as Char) as Void {
         updateNotif(notifStatuses, query, id);
         if (query >= 0x70) { return; }
+
+        if (specs.cameraId < CameraDelegate.GP_MISSION1PRO) { response.addAll([0xFF, 0]); }
 
         if (id==GoProCamera.SD_REMAINING or id==GoProCamera.ENCODING_DURATION) {
             response.addAll([id, 0x04]b);
@@ -299,7 +317,10 @@ using GattProfileManager as GPM;
     }
 
     function setSetting(id as GoProSettings.SettingId or Char, value as Char or Number) as Void {
-        onSend(GPM.UUID_SETTINGS_CHAR, [3, id as Char, 1, value]b);
+        var msg = specs.cameraId < CameraDelegate.GP_MISSION1PRO
+                ? [3]b : [5, 0xFF, 0]b;
+        msg.addAll([id, 1, value]);
+        onSend(GPM.UUID_SETTINGS_CHAR, msg);
     }
 
     function setStatus(id as GoProCamera.StatusId or Char, value as Number) as Void {

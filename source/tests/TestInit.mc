@@ -83,7 +83,7 @@ module TestInit {
         GoProSettings.LENS              => GoProSettings.WIDE,
         GoProSettings.FRAMERATE         => 5,
         GoProSettings.FLICKER           => GoProSettings.HZ60,
-        GoProSettings.HYPERSMOOTH       => GoProSettings.HS_BOOST,
+        GoProSettings.HYPERSMOOTH       => GoProSettings.HS_LOW,
         GoProSettings.LED               => GoProSettings.LED_ON
     };
 
@@ -113,19 +113,21 @@ module TestInit {
         }
     }
 
-    function initFake() as Void {
+    function initFake(specs as FakeGoProSpecs.ISpecs?) as Void {
+        if (specs == null) { specs = FakeGoProSpecs.getSpecsH11M(); }
         BleAPI.device = new FakeGoProDevice(
             initSettings,
             initStatuses,
-            new FakeGoProSpecs.SpecsH11Mini()
+            specs
         );
     }
 
-    function initSink() as Void {
+    function initSink(specs as FakeGoProSpecs.ISpecs?) as Void {
+        if (specs == null) { specs = FakeGoProSpecs.getSpecsH11M(); }
         BleAPI.device = new SinkGoProDevice(
             initSettings,
             initStatuses,
-            new FakeGoProSpecs.SpecsH11Mini()
+            specs
         );
     }
 

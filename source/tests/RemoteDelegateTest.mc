@@ -14,7 +14,7 @@ module RemoteDelegateTest {
     (:test)
     function testSettings(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake();
+        TestInit.initFake(null);
         TestInit.initConnection(CameraDelegate.GP_HERO11M);
         
         var camera = getApp().gopro;
@@ -47,7 +47,7 @@ module RemoteDelegateTest {
     (:test)
     function testTogglables(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake();
+        TestInit.initFake(null);
         TestInit.initConnection(CameraDelegate.GP_HERO11M);
         
         var camera = getApp().gopro;
@@ -80,7 +80,7 @@ module RemoteDelegateTest {
     (:test)
     function testShutter(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake();
+        TestInit.initFake(null);
         TestInit.initConnection(CameraDelegate.GP_HERO11M);
         
         var camera = getApp().gopro;
@@ -112,7 +112,7 @@ module RemoteDelegateTest {
     (:test)
     function testHilight(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initSink();
+        TestInit.initSink(null);
         TestInit.initConnection(CameraDelegate.GP_HERO11M);
         
         var device = BleAPI.device as TestInit.SinkGoProDevice;
@@ -142,7 +142,7 @@ module RemoteDelegateTest {
     (:test)
     function testBack(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initSink();
+        TestInit.initSink(null);
         TestInit.initConnection(CameraDelegate.GP_HERO11M);
         
         var device = BleAPI.device as TestInit.SinkGoProDevice;

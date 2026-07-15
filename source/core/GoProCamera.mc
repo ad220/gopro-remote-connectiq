@@ -63,6 +63,8 @@ class GoProCamera extends GoProSettings {
     }
 
     public function sendSetting(id as GoProSettings.SettingId, value as Char) as Void {
+        settings.put(id, value);
+
         if (goproId < CameraDelegate.GP_MAX and id == GoProSettings.LENS) {
             id = GoProSettings.FOV;
         }
@@ -71,7 +73,6 @@ class GoProCamera extends GoProSettings {
             [0x05, 0xFF, 0x00]b : [0x03]b;
         request.addAll([id as Char, 0x01, value]b);
 
-        settings.put(id, value);
         delegate.send(GattRequestQueue.WRITE_CHARACTERISTIC, GPM.UUID_SETTINGS_CHAR, request);
     }
 
@@ -91,13 +92,16 @@ class GoProCamera extends GoProSettings {
         
         if (goproId == CameraDelegate.GP_MISSION1 or goproId == CameraDelegate.GP_MISSION1PRO) {
             idsSize *= 2;
-            request = [idsSize + 1, queryId + 3]b;
+
+            if ((queryId & 0x1F) ^ 0x02 != 0 and queryId != 0x32) { queryId += 3; }
+            request = [idsSize + 1, queryId as Number]b;
+
             var idsBuffer = new [idsSize]b;
 
             for (var i=0; i<idsSize; i+=2) {
-                idsBuffer[i]    = 0x00;
                 idsBuffer[i+1]  = values[i >> 1];
             }
+
             values = idsBuffer;
         }
 
