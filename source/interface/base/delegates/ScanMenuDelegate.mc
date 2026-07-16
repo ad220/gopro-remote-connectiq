@@ -10,7 +10,7 @@ using ErrorManager as EM;
 (:ble)
 class ScanMenuDelegate extends Menu2InputDelegate {
 
-    typedef ScanEntry as {:name as String, :device as Ble.ScanResult, :menuid as Char};
+    typedef ScanEntry as {:name as String, :device as Ble.ScanResult, :menuid as Number};
 
     private const SCAN_TITLE    = WatchUi.loadResource(Rez.Strings.ScanTitle)       as String;
     private const SCAN_CANCEL   = WatchUi.loadResource(Rez.Strings.ScanCancel)      as String;
@@ -34,8 +34,8 @@ class ScanMenuDelegate extends Menu2InputDelegate {
     public function initialize(menu as CustomMenu, callback as Method(device as Ble.ScanResult?) as Void) {
         Menu2InputDelegate.initialize();
         self.menu = menu;
-        self.statusItem = new PickerItem("status", 0xF0 as Char, 0xFF as Char);
-        self.cancelItem = new PickerItem("cancel", 0xF8 as Char, 0xFF as Char);
+        self.statusItem = new PickerItem("status", 0xF0, 0xFF);
+        self.cancelItem = new PickerItem("cancel", 0xF8, 0xFF);
         self.scanResults = [];
         self.scanResultCallback = callback;
         self.title = new PickerTitle("scan");
@@ -102,8 +102,8 @@ class ScanMenuDelegate extends Menu2InputDelegate {
                     }
                 }
 
-                var id = scanResults.size() as Char;
-                var entryItem = new PickerItem(label, id, 0xFF as Char);
+                var id = scanResults.size();
+                var entryItem = new PickerItem(label, id, 0xFF);
                 menu.updateItem(entryItem, scanResults.size());
                 menu.updateItem(statusItem, scanResults.size()+1);
                 menu.addItem(cancelItem);

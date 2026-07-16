@@ -71,8 +71,8 @@ module TestInit {
     }
 
     class MockPreset extends GoProPreset {
-        function initialize(settings as Dictionary<GoProSettings.SettingId, Char>) {
-            GoProPreset.initialize(0 as Char);
+        function initialize(settings as Dictionary<GoProSettings.SettingId, Number>) {
+            GoProPreset.initialize(0);
 
             self.settings = settings;
         }

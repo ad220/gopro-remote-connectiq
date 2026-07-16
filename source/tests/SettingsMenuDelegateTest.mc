@@ -185,7 +185,7 @@ module SettingsMenuDelegateTest {
         delegate.onSelect(menu.debugItems[2]);
         delegate = viewController.getCurrentDelegate();
 
-        var preset = new GoProPreset(2 as Char);
+        var preset = new GoProPreset(2);
         var ids = [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE, GoProSettings.FLICKER];
         var result = true;
         var gopro = getApp().gopro;

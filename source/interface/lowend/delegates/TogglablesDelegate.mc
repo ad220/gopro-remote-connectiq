@@ -84,7 +84,7 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
 
         (selected as ToggleMenuItem).setEnabled(flicker & 0x01 == 0);
         selected.setSubLabel(flicker & 1 ? "60Hz" : "50Hz");
-        gopro.sendSetting(GoProSettings.FLICKER, (flicker ^ 0x01) as Char);
+        gopro.sendSetting(GoProSettings.FLICKER, flicker ^ 0x01);
     }
     
     public function onGps() as Void {
@@ -94,7 +94,7 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
         }
         
         (selected as ToggleMenuItem).setEnabled(gps & 0x01 == 0);
-        gopro.sendSetting(GoProSettings.GPS, (gps ^ 0x01) as Char);
+        gopro.sendSetting(GoProSettings.GPS, gps ^ 0x01);
     }
     
     public function onPower() as Void {

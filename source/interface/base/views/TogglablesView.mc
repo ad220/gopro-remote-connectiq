@@ -36,7 +36,7 @@ class TogglablesView extends WatchUi.View {
 
         var flicker = camera.getSetting(GoProSettings.FLICKER);
         (findDrawableById("FlickerButton") as Togglable).toggleState(
-            flicker != null ? flicker.toNumber() & 1 != 0 : false
+            flicker != null ? flicker & 1 != 0 : false
         );
         
         var gps = camera.getSetting(GoProSettings.GPS);

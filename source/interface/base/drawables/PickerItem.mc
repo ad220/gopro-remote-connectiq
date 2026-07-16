@@ -7,10 +7,10 @@ using InterfaceComponentsManager as ICM;
 
 class PickerItem extends WatchUi.CustomMenuItem {
 
-    private static var selected as Char;
+    private static var selected as Number;
 
 
-    public function initialize(label as String or ResourceId, id as Char, selected as Char) {
+    public function initialize(label as String or ResourceId, id as Number, selected as Number) {
         CustomMenuItem.initialize(id, {});
         self.selected = selected;
 
@@ -27,6 +27,6 @@ class PickerItem extends WatchUi.CustomMenuItem {
     }
 
     public function select() as Void {
-        selected = getId() as Char;
+        selected = getId() as Number;
     }
 }

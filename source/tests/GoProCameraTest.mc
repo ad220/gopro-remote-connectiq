@@ -46,7 +46,7 @@ module GoProCameraTest {
         logger.error("with gopro: " + testDeviceNames[k]);
     }
 
-    function expectedSettingRequest(id as Number, value as Char, k as Number) as ByteArray {
+    function expectedSettingRequest(id as Number, value as Number, k as Number) as ByteArray {
         k = testDeviceIds[k];
         if      (k == CameraDelegate.GP_MISSION1PRO or k == CameraDelegate.GP_MISSION1) {
             return [5, 0xFF, 0, id, 1, value]b;
@@ -223,7 +223,7 @@ module GoProCameraTest {
         var camera = getApp().gopro;
         
         var ids = [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE, GoProSettings.HYPERSMOOTH, GoProSettings.FLICKER];
-        var values = [1, 3, 5, 1, GoProSettings.PAL ] as Array<Char>; // 4K 16:9, SuperView, 60fps, Low, 50Hz
+        var values = [1, 3, 5, 1, GoProSettings.PAL ]; // 4K 16:9, SuperView, 60fps, Low, 50Hz
 
         device.requests = [];
 
@@ -278,7 +278,7 @@ module GoProCameraTest {
             GoProSettings.FRAMERATE     => 9
         };
         
-        var preset = new TestInit.MockPreset(settings as Dictionary<GoProSettings.SettingId, Char>);
+        var preset = new TestInit.MockPreset(settings as Dictionary<GoProSettings.SettingId, Number>);
         camera.sendPreset(preset);
 
         var ids = [GoProSettings.FLICKER, GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE];
@@ -290,7 +290,7 @@ module GoProCameraTest {
         }
 
         for (var i=0; i<ids.size(); i+=1) {
-            var expectedRequest = [GPM.UUID_SETTINGS_CHAR, expectedSettingRequest(ids[i], values[i] as Char, k)];
+            var expectedRequest = [GPM.UUID_SETTINGS_CHAR, expectedSettingRequest(ids[i], values[i], k)];
             if (
                 !device.requests[i][0].equals(expectedRequest[0]) or
                 !device.requests[i][1].equals(expectedRequest[1])

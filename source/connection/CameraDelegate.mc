@@ -137,7 +137,7 @@ class CameraDelegate {
             goproId = 0;
             EM.raise(EM.ERR_NULL, 9, :WarningErr);
         }
-        getApp().gopro = new GoProCamera(self, goproId);
+        getApp().gopro = new GoProCamera(self, goproId as Number);
         
         var pushView = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
         pushView.invoke(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
@@ -221,7 +221,7 @@ class CameraDelegate {
         if (status != 0) {
             // Error flag switched to warning because never raised as of v4.2.7
             EM.raise(EM.ERR_MSG | EM.SUB_MSG_STATUS | 0x00 << 16, 0, :WarningErr);
-            // System.println("[WARNING]   Wrong query status received from camera, value: " + status.toNumber());
+            // System.println("[WARNING]   Wrong query status received from camera, value: " + status);
         }
         
         var mask = queryId & 0x1F;
@@ -231,7 +231,7 @@ class CameraDelegate {
         else {
             // Error flag switched to warning because never raised as of v4.2.7
             EM.raise(EM.ERR_MSG | EM.SUB_MSG_QUERY | 0x00 << 16, 0, :WarningErr);
-            // System.println("[WARNING]   Unknown queryId: " + queryId.toNumber());
+            // System.println("[WARNING]   Unknown queryId: " + queryId);
             return;
         }
 
@@ -240,7 +240,7 @@ class CameraDelegate {
         var value;
 
         for (var i=0; i<data.size(); i+=2+length) {
-            type = data[i] as Char;
+            type = data[i];
             if (type == 0xFF) {
                 i += 2;
 

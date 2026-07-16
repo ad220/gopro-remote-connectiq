@@ -64,9 +64,8 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     public function onFlicker() as Void {
         var flicker = camera.getSetting(GoProSettings.FLICKER);
         if (flicker != null) { // expected behavior with MAX2 cam
-            flicker = flicker.toNumber();
             view.getHilighted().toggleState(flicker & 0x01 == 0);
-            camera.sendSetting(GoProSettings.FLICKER, (flicker ^ 0x01) as Char);
+            camera.sendSetting(GoProSettings.FLICKER, flicker ^ 0x01);
         }
     }
     
@@ -98,7 +97,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
             if (index == -1) {
                 EM.raise(
                     EM.ERR_CAM | EM.SUB_CAM_AVAIL | 0x01 << 16,
-                    ledStatus.toNumber() << 8 + GoProSettings.LED,
+                    ledStatus << 8 + GoProSettings.LED,
                     :WarningErr
                 );
             }
@@ -123,7 +122,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
         }
         
         view.getHilighted().toggleState(gps & 0x01 == 0);
-        camera.sendSetting(GoProSettings.GPS, (gps ^ 0x01) as Char);
+        camera.sendSetting(GoProSettings.GPS, gps ^ 0x01);
     }
 
     (:keep)

@@ -16,11 +16,12 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
 
         var titleId;
         var comparator = null;
-        var items = getApp().gopro.getAvailableSettings(setting);
+        var gopro = getApp().gopro;
+        var items = gopro.getAvailableSettings(setting);
         
-        var selected = getApp().gopro.getSetting(setting);
+        var selected = gopro.getSetting(setting);
         if (selected == null) {
-            selected = 0xFF as Char;
+            selected = 0xFF;
             EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x00 << 16, setting, :WarningErr);
         }
 
@@ -39,7 +40,7 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
         menu.setTitle(new PickerTitle(titleId));
         Helper.sort(items as Array, comparator);
         for (var i=0; i<items.size(); i++) {
-            menu.addItem(new PickerItem(GoProSettings.getLabel(setting, items[i]), items[i] as Char, selected));
+            menu.addItem(new PickerItem(GoProSettings.getLabel(setting, items[i]), items[i], selected));
         }
         menu.setFocus(items.indexOf(selected));
 
@@ -47,7 +48,7 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     public function onSelect(item) {
-        getApp().gopro.sendSetting(setting==GoProSettings.RATIO ? GoProSettings.RESOLUTION : setting, item.getId() as Char);
+        getApp().gopro.sendSetting(setting == GoProSettings.RATIO ? GoProSettings.RESOLUTION : setting, item.getId() as Number);
         (item as PickerItem).select();
         requestUpdate();
     }
