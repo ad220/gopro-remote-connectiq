@@ -8,7 +8,7 @@ using InterfaceComponentsManager as ICM;
 using ErrorManager as EM;
 
 (:ble)
-class ScanMenuDelegate extends Menu2InputDelegate {
+class ScanMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     typedef ScanEntry as {:name as String, :device as Ble.ScanResult, :menuid as Number};
 

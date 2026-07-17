@@ -126,7 +126,7 @@ module ErrorManager {
                     "Content-Type" => Communications.REQUEST_CONTENT_TYPE_JSON
                 }
             },
-            new Method(self, :reportCallback)
+            new Lang.Method(self, :reportCallback)
         );
     }
 

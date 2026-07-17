@@ -3,7 +3,7 @@ import Toybox.WatchUi;
 import Toybox.Graphics;
 
 
-class HomeMenuDelegate extends Menu2InputDelegate {
+class HomeMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     private var parent as ConnectDelegate;
 

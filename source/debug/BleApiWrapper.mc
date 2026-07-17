@@ -53,7 +53,7 @@ module BleApiWrapper {
                 scanTimer = null;
             }
         } else if (state == Ble.SCAN_STATE_SCANNING and scanState!=state) {
-            scanTimer = getApp().timerController.start(new Method(self, :updateScan), 10, true);
+            scanTimer = getApp().timerController.start(new Lang.Method(self, :updateScan), 10, true);
         }
 
         self.scanState = state;
@@ -87,12 +87,13 @@ module BleApiWrapper {
     }
 
 
-    class MockScanResult {
+    class MockScanResult extends Ble.ScanResult {
 
         var id as Number;
         var name as String?;
         var goproId as Number;
 
+        (:typecheck(false))
         function initialize(id as Number, name as String?, goproId as Number) {
             self.id = id;
             self.name = name;
@@ -119,10 +120,13 @@ module BleApiWrapper {
         }
     }
 
-    class MockDevice {
+    class MockDevice extends Ble.Device {
 
         var connected       as Boolean      = false;
         var bonded          as Boolean      = false;
+
+        (:typecheck(false))
+        public function initialize() {}
 
         function getName() as String? {
             return "MockGoPro";
@@ -159,12 +163,13 @@ module BleApiWrapper {
         }
     }
 
-    class MockService {
+    class MockService extends Ble.Service {
 
         var uuid        as Ble.Uuid;
         var device      as MockDevice;
         var profile     as ServiceProfile;
 
+        (:typecheck(false))
         function initialize(uuid as Ble.Uuid, device as MockDevice) {
             self.uuid = uuid;
             self.device = device;
@@ -217,12 +222,13 @@ module BleApiWrapper {
 
     }
 
-    class MockCharacteristic {
+    class MockCharacteristic extends Ble.Characteristic {
         
         var uuid        as Ble.Uuid;
         var service     as MockService;
         var profile     as Array<Ble.Uuid>;
 
+        (:typecheck(false))
         function initialize(uuid as Ble.Uuid, service as MockService) {
             self.uuid = uuid;
             self.service = service;
@@ -274,11 +280,12 @@ module BleApiWrapper {
     }
 
 
-    class MockDescriptor {
+    class MockDescriptor extends Ble.Descriptor {
 
         var uuid            as Ble.Uuid;
         var characteristic  as MockCharacteristic;
 
+        (:typecheck(false))
         function initialize(uuid as Ble.Uuid, characteristic as MockCharacteristic) {
             self.uuid = uuid;
             self.characteristic = characteristic;
