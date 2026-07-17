@@ -39,6 +39,6 @@ class GoProPreset extends GoProSettings {
         for (var i=0; i<ids.size(); i+=1) {
             settings[ids[i]] = gopro.getSetting(ids[i]) as Number; // could be null
         }
-        Application.Storage.setValue(id, settings as Dictionary<PropertyKeyType, PropertyValueType>);
+        Application.Storage.setValue(id, settings as Dictionary<Storage.KeyType, Storage.ValueType>);
     }
 }

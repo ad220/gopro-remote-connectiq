@@ -38,7 +38,7 @@ module BleApiWrapper {
         if (registeredProfiles.size() < 3) {
             self.registeredProfiles.add(profile);
         } else {
-            throw new Ble.ProfileRegistrationException();
+            throw new Lang.Exception();
         }
     }
 
@@ -66,7 +66,7 @@ module BleApiWrapper {
 
     function pairDevice(device as Ble.ScanResult) as Ble.Device? {
         if (failPairing or pairedDevices.size() >= 3) {
-            throw new Ble.DevicePairException();
+            throw new Lang.Exception();
 
         } else if (nullPairing) {
             return null;
