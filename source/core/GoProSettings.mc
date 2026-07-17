@@ -267,7 +267,7 @@ class GoProSettings {
 
 
 class ResolutionComparator {
-    public function wrappedCompare(a as Number, b as Number, id as Number) as Numeric {
+    public function wrappedCompare(a as Number, b as Number, id as Number) as Number {
         var tupleA = GoProSettings.RESOLUTION_MAP.get(a);
         var tupleB = GoProSettings.RESOLUTION_MAP.get(b);
 
@@ -279,26 +279,28 @@ class ResolutionComparator {
         } else {
             var ratioA = tupleA & 0xFFFF;
             var ratioB = tupleB & 0xFFFF;
-            return (ratioB & 0xFF / (ratioB >> 8).toFloat()) - (ratioA & 0xFF / (ratioA >> 8).toFloat());
+            ratioA = ratioA & 0xFF / (ratioA >> 8).toFloat();
+            ratioB = ratioB & 0xFF / (ratioB >> 8).toFloat();
+            return (1000 * ratioB - 1000 * ratioA).toNumber();
         }
     }
 
-    (:typecheck(false))
-    public function compare(resolutionA, resolutionB) as Numeric {
+
+    public function compare(resolutionA as Object, resolutionB as Object) as Number {
         return wrappedCompare(resolutionA as Number, resolutionB as Number, 0);
     }
 }
 
 (:typecheck(false))
 class RatioComparator extends ResolutionComparator {
-    public function compare(ratioA, ratioB) as Numeric {
+    public function compare(ratioA as Object, ratioB as Object) as Number {
         return wrappedCompare(ratioA as Number, ratioB as Number, 1);
     }
 }
-// 
-(:typecheck(false))
+
+
 class FramerateComparator {
-    public function compare(framerateA, framerateB) as Numeric {
+    public function compare(framerateA as Object, framerateB as Object) as Number {
         var a = GoProSettings.FRAMERATE_MAP.get(framerateA as Number);
         var b = GoProSettings.FRAMERATE_MAP.get(framerateB as Number);
 
