@@ -9,7 +9,7 @@ module HelperTest {
     function testSort(logger as Logger) as Boolean {
         var array = [-12, 2.3, 0, -2, 7, 1, 1l << 48, 5.2d/42, -45, 0, -5.0];
 
-        Helper.sort(array as Array, null);
+        Helper.customSort(array as Array, null);
         
         var sortedArray = [-45, -12, -5.0, -2, 0, 0, 5.2d/42, 1, 2.3, 7, 1l<<48];
 
@@ -31,7 +31,7 @@ module HelperTest {
         var array = [];
 
         try {
-            Helper.sort(array as Array, null);
+            Helper.customSort(array as Array, null);
         } catch (ex) {
             logger.error(ex.getErrorMessage() + "");
             return false;

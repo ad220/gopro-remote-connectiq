@@ -497,7 +497,7 @@ module GoProCameraTest {
         }
 
         var availableRatios = camera.getAvailableSettings(GoProSettings.RATIO);
-        Helper.sort(availableRatios as Array, new RatioComparator());
+        Helper.customSort(availableRatios as Array, new RatioComparator());
         if (!TestInit.haveSameData(availableRatios as Array, expectedRatios[k] as Array)) {
             logDeviceError(logger, "Wrong available ratios, expected: " + expectedRatios[k] + ", got: " + availableRatios, k);
             result = false;
@@ -562,7 +562,7 @@ module GoProCameraTest {
         }
 
         var availableRatios = camera.getAvailableSettings(GoProSettings.RATIO);
-        Helper.sort(availableRatios as Array, new RatioComparator());
+        Helper.customSort(availableRatios as Array, new RatioComparator());
         if (!TestInit.haveSameData(availableRatios as Array, expectedRatios[k] as Array)) {
             logDeviceError(logger, "Wrong available ratios, expected: " + expectedRatios[k] + ", got: " + availableRatios, k);
             result = false;

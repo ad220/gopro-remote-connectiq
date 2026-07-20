@@ -2,7 +2,7 @@ import Toybox.Lang;
 
 module Helper {
     (:mobile)
-    function sort(array as Array, comp as Lang.Comparator?) as Void {
+    function customSort(array as Array, comp as Lang.Comparator?) as Void {
         if (comp == null) {
             comp = new NumericComparator();
         }
@@ -23,7 +23,7 @@ module Helper {
     }
 
     (:ble :inline)
-    function sort(array as Array, comp as Lang.Comparator?) as Void {
+    function customSort(array as Array, comp as Lang.Comparator?) as Void {
         array.sort(comp);
     }
 
