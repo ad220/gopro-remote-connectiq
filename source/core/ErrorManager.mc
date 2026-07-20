@@ -106,7 +106,7 @@ module ErrorManager {
     function report() as Void {
         if (errorQueue.size() == 0) { return; }
 
-        var url = "";
+        var url = "https://";
         for (var i = 0; i < Secrets.API_URL.size(); i++) {
             url += (Secrets.API_URL[i] ^ Secrets.API_KEY[i & 0x1F]).toChar();
         }
