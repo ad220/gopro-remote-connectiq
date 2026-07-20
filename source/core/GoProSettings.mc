@@ -10,6 +10,9 @@ class GoProSettings {
     public enum SettingId {
         RESOLUTION  = 2,
         FRAMERATE   = 3,
+        FOV         = 4,    // deprecated for lens
+        FORMAT      = 57,   // deprecated for anti-flicker
+        EIS         = 78,   // deprecated for hypersmooth
         GPS         = 83,
         LED         = 91,
         LENS        = 121,
@@ -20,55 +23,74 @@ class GoProSettings {
     }
 
     public static const RESOLUTION_MAP = {
-        1   => [4000,   16 + 9  << 16],
-        4   => [2700,   16 + 9  << 16],
-        6   => [2700,   4  + 3  << 16],
-        7   => [1440,   16 + 9  << 16],
-        9   => [1080,   16 + 9  << 16],
-        12  => [720,    16 + 9  << 16],
-        18  => [4000,   4  + 3  << 16],
-        21  => [5600,   360 << 16],
-        24  => [5000,   16 + 9  << 16],
-        25  => [5000,   4  + 3  << 16],
-        26  => [5300,   8  + 7  << 16],
-        27  => [5300,   4  + 3  << 16],
-        28  => [4000,   8  + 7  << 16],
-        31  => [8000,   360 << 16],
-        35  => [5300,   21 + 9  << 16],
-        36  => [4000,   21 + 9  << 16],
-        37  => [4000,   1  + 1  << 16],
-        38  => [900,    16 + 9  << 16],
-        39  => [4000,   360 << 16],
-        100 => [5300,   16 + 9  << 16],
-        107 => [5300,   8  + 7  << 16],
-        108 => [4000,   8  + 7  << 16],
-        109 => [4000,   9  + 16 << 16],
-        110 => [1080,   9  + 16 << 16],
-        111 => [2700,   4  + 3  << 16],
-        112 => [4000,   4  + 3  << 16],
-        113 => [5300,   4  + 3  << 16],
-    } as Dictionary<Char, [Number, Number]>;
+        1   => 4000 << 16 +   16 + 9  << 8,
+        2   => 4000 << 16 +   16 + 9  << 8, // superview
+        4   => 2700 << 16 +   16 + 9  << 8,
+        5   => 2700 << 16 +   16 + 9  << 8, // superview
+        6   => 2700 << 16 +   4  + 3  << 8,
+        7   => 1440 << 16 +   4  + 3  << 8,
+        8   => 1080 << 16 +   16 + 9  << 8, // superview
+        9   => 1080 << 16 +   16 + 9  << 8,
+        10  => 960  << 16 +   4  + 3  << 8,
+        11  => 720  << 16 +   16 + 9  << 8, // superview
+        12  => 720  << 16 +   16 + 9  << 8,
+        13  => 480  << 16 +   16 + 9  << 8,
+        14  => 5200 << 16 +   360,
+        15  => 3000 << 16 +   360,
+        17  => 480  << 16 +   16 + 9  << 8,
+        18  => 4000 << 16 +   4  + 3  << 8,
+        21  => 5600 << 16 +   360,
+        24  => 5000 << 16 +   16 + 9  << 8,
+        25  => 5000 << 16 +   4  + 3  << 8,
+        26  => 5300 << 16 +   8  + 7  << 8,
+        27  => 5300 << 16 +   4  + 3  << 8,
+        28  => 4000 << 16 +   8  + 7  << 8,
+        31  => 8000 << 16 +   16 + 9  << 8,
+        35  => 5300 << 16 +   21 + 9  << 8,
+        36  => 4000 << 16 +   21 + 9  << 8,
+        37  => 4000 << 16 +   1  + 1  << 8,
+        38  => 900  << 16 +   16 + 9  << 8,
+        39  => 4000 << 16 +   360,
+        40  => 8000 << 16 +   4  + 3  << 8,
+        44  => 1440 << 16 +   4  + 3  << 8,
+        100 => 5300 << 16 +   16 + 9  << 8,
+        107 => 5300 << 16 +   8  + 7  << 8,
+        108 => 4000 << 16 +   8  + 7  << 8,
+        109 => 4000 << 16 +   9  + 16 << 8,
+        110 => 1080 << 16 +   9  + 16 << 8,
+        111 => 2700 << 16 +   4  + 3  << 8,
+        112 => 4000 << 16 +   4  + 3  << 8,
+        113 => 5300 << 16 +   4  + 3  << 8,
+    } as Dictionary<Number, Number>;
 
     public static const FRAMERATE_MAP = {
         0  => 240,
         1  => 120,
         2  => 100,
         3  => 90,
+        4  => 80,
         5  => 60,
         6  => 50,
+        7  => 48,
         8  => 30,
         9  => 25,
         10 => 24,
+        11 => 15,
+        12 => 12,
         13 => 200,
         15 => 400,
         16 => 360,
         17 => 300,
-    } as Dictionary<Char, Number>;
+        18 => 480,
+        19 => 960,
+        20 => 800,
+    } as Dictionary<Number, Number>;
 
     public static const FRAMERATE_LABEL = WatchUi.loadResource(Rez.Strings._FPS) as String;
 
     public enum LedId {
         LED_OFF         = 0,
+        LED_FROFF       = 1,
         LED_ON          = 2,
         LED_ALL_ON      = 3,
         LED_ALL_OFF     = 4,
@@ -78,18 +100,22 @@ class GoProSettings {
 
     public static const LED_LABELS = {
         LED_OFF         => Rez.Strings.Off,
+        LED_FROFF       => Rez.Strings.FrontOffOnly,
         LED_ON          => Rez.Strings.On,
         LED_ALL_ON      => Rez.Strings.AllOn,
         LED_ALL_OFF     => Rez.Strings.AllOff,
         LED_FRONT_OFF   => Rez.Strings.FrontOffOnly,
         LED_BACK_ONLY   => Rez.Strings.BackOnly,
-    } as Dictionary<LedId or Char, ResourceId>;
+    } as Dictionary<LedId or Number, ResourceId>;
 
     public enum LensId {
         WIDE            = 0,
+        MEDIUM          = 1,
         NARROW          = 2,
         SUPERVIEW       = 3,
         LINEAR          = 4,
+        DUAL360         = 5,
+        NARROWMAX       = 6,
         MAXSUPERVIEW    = 7,
         LINEARLEVEL     = 8,
         HYPERVIEW       = 9,
@@ -103,9 +129,12 @@ class GoProSettings {
 
     public static const LENS_LABELS = {
         WIDE            => Rez.Strings._WIDE,
+        MEDIUM          => Rez.Strings._MEDIUM,
         NARROW          => Rez.Strings._NARROW,
         SUPERVIEW       => Rez.Strings._SUPERVIEW,
         LINEAR          => Rez.Strings._LINEAR,
+        DUAL360         => Rez.Strings._DUAL360,
+        NARROWMAX       => Rez.Strings._NARROW,
         MAXSUPERVIEW    => Rez.Strings._MAXSUPERVIEW,
         LINEARLEVEL     => Rez.Strings._LINEARLEVEL,
         HYPERVIEW       => Rez.Strings._HYPERVIEW,
@@ -115,7 +144,7 @@ class GoProSettings {
         ULTRAWIDE       => Rez.Strings._ULTRAWIDE,
         ULTRALINEAR     => Rez.Strings._ULTRALINEAR,
         ULTRAHYPERVIEW  => Rez.Strings._ULTRAHYPERVIEW,
-    } as Dictionary<LensId or Char, ResourceId>;
+    } as Dictionary<LensId or Number, ResourceId>;
 
     public enum FlickerId {
         NTSC,
@@ -140,23 +169,23 @@ class GoProSettings {
         HS_BOOST        => Rez.Strings.Boost,
         HS_AUTO_BOOST   => Rez.Strings.AutoBoost,
         HS_STANDARD     => Rez.Strings.Standard,
-    } as Dictionary<HypersmoothId or Char, ResourceId>;
+    } as Dictionary<HypersmoothId or Number, ResourceId>;
 
-    protected var settings as Dictionary<SettingId, Char>;
+    protected var settings as Dictionary<SettingId, Number>;
 
     function initialize() {
-        self.settings = {} as Dictionary<SettingId, Char>;
+        self.settings = {} as Dictionary<SettingId, Number>;
     }
 
-    public function getSetting(id as SettingId) as Char? {
+    public function getSetting(id as SettingId) as Number? {
         return settings.get(id);
     }
 
-    public function getSettings() as Dictionary<SettingId, Char> {
+    protected function getSettings() as Dictionary<SettingId, Number> {
         return settings;
     }
 
-    public static function getLabel(id as GoProSettings.SettingId, setting as Char?) as String or ResourceId {
+    public static function getLabel(id as GoProSettings.SettingId, setting as Number?) as String or ResourceId {
         var label = "";
 
         if (setting == null) {
@@ -170,20 +199,20 @@ class GoProSettings {
             {
                 // Resolution label
                 if (id == RESOLUTION) {
-                    var res = tuple[0];
+                    var res = tuple >> 16;
                     if (res < 2000) {
                         return res + "p";
                     } else {
                         return res%1000==0 ? res/1000+"K" : (res/1000.0).format("%.1f")+"K"; 
                     }
-                
+                }
                 // Ratio label
-                } else {
-                    var ratio = tuple[1];
-                    if (ratio & 0xFFFF != 0) {
-                        return ratio & 0xFF + ":" + ratio >> 16;
+                else {
+                    var ratio = tuple & 0xFFFF;
+                    if (ratio != 360) {
+                        return ratio & 0xFF + ":" + ratio >> 8;
                     } else {
-                        return ratio >> 16 + "°";
+                        return "360°";
                     }
                 }
             }
@@ -236,45 +265,48 @@ class GoProSettings {
     }
 }
 
-(:typecheck(false))
+
 class ResolutionComparator {
-    public function wrappedCompare(a as Char, b as Char, id as Number) as Numeric {
+    public function wrappedCompare(a as Number, b as Number, compRes as Boolean) as Number {
         var tupleA = GoProSettings.RESOLUTION_MAP.get(a);
         var tupleB = GoProSettings.RESOLUTION_MAP.get(b);
 
-        if (tupleA == null) { tupleA = [0,0]; }
-        if (tupleB == null) { tupleB = [0,0]; }
+        if (tupleA == null) { tupleA = 0; }
+        if (tupleB == null) { tupleB = 0; }
 
-        if (id == 0) {
-            return tupleA[0] - tupleB[0];
+        if (compRes) {
+            return tupleB >> 16 - tupleA >> 16;
         } else {
-            var ratioA = tupleA[1];
-            var ratioB = tupleB[1];
-            return (ratioB & 0xFFFF / (ratioB >> 16).toFloat()) - (ratioA & 0xFFFF / (ratioA >> 16).toFloat());
+            var ratioA = tupleA & 0xFFFF;
+            var ratioB = tupleB & 0xFFFF;
+            ratioA = ratioA & 0xFF / (ratioA >> 8).toFloat();
+            ratioB = ratioB & 0xFF / (ratioB >> 8).toFloat();
+            return ratioA >= ratioB ? 1 : -1;
         }
     }
 
-    public function compare(resolutionA, resolutionB) as Numeric {
-        return wrappedCompare(resolutionA as Char, resolutionB as Char, 0);
+
+    public function compare(resolutionA as Object, resolutionB as Object) as Number {
+        return wrappedCompare(resolutionA as Number, resolutionB as Number, true);
     }
 }
 
 (:typecheck(false))
 class RatioComparator extends ResolutionComparator {
-    public function compare(ratioA, ratioB) as Numeric {
-        return wrappedCompare(ratioA as Char, ratioB as Char, 1);
+    public function compare(ratioA as Object, ratioB as Object) as Number {
+        return wrappedCompare(ratioA as Number, ratioB as Number, false);
     }
 }
 
-(:typecheck(false))
-class FramerateComparator {
-    public function compare(framerateA, framerateB) as Numeric {
-        var a = GoProSettings.FRAMERATE_MAP.get(framerateA as Char);
-        var b = GoProSettings.FRAMERATE_MAP.get(framerateB as Char);
 
-        if (a == null) { a=0; }
-        if (b == null) { b=0; }
+class FramerateComparator {
+    public function compare(framerateA as Object, framerateB as Object) as Number {
+        var a = GoProSettings.FRAMERATE_MAP.get(framerateA as Number);
+        var b = GoProSettings.FRAMERATE_MAP.get(framerateB as Number);
+
+        if (a == null) { a = 0; }
+        if (b == null) { b = 0; }
         
-        return a-b;
+        return b - a;
     }
 }

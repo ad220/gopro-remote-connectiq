@@ -7,10 +7,9 @@ module HelperTest {
     
     (:test)
     function testSort(logger as Logger) as Boolean {
-        var comparator = new Helper.NumericComparator();
         var array = [-12, 2.3, 0, -2, 7, 1, 1l << 48, 5.2d/42, -45, 0, -5.0];
 
-        Helper.sort(array, comparator);
+        Helper.customSort(array as Array, null);
         
         var sortedArray = [-45, -12, -5.0, -2, 0, 0, 5.2d/42, 1, 2.3, 7, 1l<<48];
 
@@ -32,7 +31,7 @@ module HelperTest {
         var array = [];
 
         try {
-            Helper.sort(array, null);
+            Helper.customSort(array as Array, null);
         } catch (ex) {
             logger.error(ex.getErrorMessage() + "");
             return false;
@@ -40,7 +39,7 @@ module HelperTest {
         
         var result = array.size() == 0;
         if (!result) {
-            logger.error("Empty array size changed suring sort");
+            logger.error("Empty array size changed during sort");
         }
         return result;
     }

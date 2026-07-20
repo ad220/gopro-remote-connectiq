@@ -14,8 +14,8 @@ module RemoteDelegateTest {
     (:test)
     function testSettings(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake();
-        TestInit.initConnection();
+        TestInit.initFake(null);
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
         
         var camera = getApp().gopro;
 
@@ -47,8 +47,8 @@ module RemoteDelegateTest {
     (:test)
     function testTogglables(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake();
-        TestInit.initConnection();
+        TestInit.initFake(null);
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
         
         var camera = getApp().gopro;
 
@@ -80,8 +80,8 @@ module RemoteDelegateTest {
     (:test)
     function testShutter(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake();
-        TestInit.initConnection();
+        TestInit.initFake(null);
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
         
         var camera = getApp().gopro;
 
@@ -112,8 +112,8 @@ module RemoteDelegateTest {
     (:test)
     function testHilight(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initSink();
-        TestInit.initConnection();
+        TestInit.initSink(null);
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
         
         var device = BleAPI.device as TestInit.SinkGoProDevice;
 
@@ -131,7 +131,7 @@ module RemoteDelegateTest {
         device.requests = [];
         delegate.onPreviousPage();
 
-        if (!TestInit.haveSameData(device.requests[0], [GPM.UUID_COMMAND_CHAR, [1, GoProCamera.HILIGHT]b])) {
+        if (!TestInit.haveSameData(device.requests[0] as Array, [GPM.UUID_COMMAND_CHAR, [1, GoProCamera.HILIGHT]b])) {
             logger.error("Wrong hilight command");
             return false;
         }
@@ -142,8 +142,8 @@ module RemoteDelegateTest {
     (:test)
     function testBack(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initSink();
-        TestInit.initConnection();
+        TestInit.initSink(null);
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
         
         var device = BleAPI.device as TestInit.SinkGoProDevice;
 
@@ -156,7 +156,7 @@ module RemoteDelegateTest {
         device.requests = [];
         delegate.onBack();
 
-        if (!TestInit.haveSameData(device.requests[0], [GPM.UUID_COMMAND_CHAR, [1, GoProCamera.SLEEP]b])) {
+        if (!TestInit.haveSameData(device.requests[0] as Array, [GPM.UUID_COMMAND_CHAR, [1, GoProCamera.SLEEP]b])) {
             logger.error("Wrong sleep command");
             return false;
         }

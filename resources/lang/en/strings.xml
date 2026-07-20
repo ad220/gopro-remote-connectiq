@@ -19,6 +19,7 @@
     <string id="HERO" translatable="false">GoPro HERO</string>
     <string id="Fusion" translatable="false">GoPro Fusion</string>
     <string id="MAX" translatable="false">GoPro MAX</string>
+    <string id="Mission1" translatable="false">GoPro Mission1</string>
     <string id="UnknownGP">Unknown GoPro</string>
 
     <!-- HomeMenu -->
@@ -76,10 +77,12 @@
     <string id="_HYPERVIEW" translatable="false">HyperView</string>
     <string id="_SUPERVIEW" translatable="false">SuperView</string>
     <string id="_WIDE">Wide</string>
+    <string id="_MEDIUM">Medium</string>
     <string id="_LINEAR">Linear</string>
     <string id="_LINEARLOCK">Linear + HLock</string>
     <string id="_LINEARLEVEL">Linear + HLvl</string>
     <string id="_NARROW">Narrow</string>
+    <string id="_DUAL360" translatable="false">360</string>
     <string id="_MAXHYPERVIEW" translatable="false">MAX HyperView</string>
     <string id="_MAXSUPERVIEW" translatable="false">MAX SuperView</string>
     <string id="_ULTRAHYPERVIEW" translatable="false">Ultra Hyperview</string>

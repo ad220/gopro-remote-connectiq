@@ -11,14 +11,16 @@ module ErrorManagerTest {
     function testRaise(logger as Logger) as Boolean {
         var result = true;
 
-        TestInit.initSink();
-        TestInit.initConnection();
+        EM.errorQueue = [];
+
+        TestInit.initSink(null);
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
 
         var viewController = new ViewDebugController();
         getApp().viewController = viewController;
 
         if (EM.errorQueue.size() != 0) {
-            logger.error("ErrorManager not properly inntialized, queue is not empty");
+            logger.error("Error queue should still be empty");
             return false;
         }
 

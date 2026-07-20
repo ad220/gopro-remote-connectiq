@@ -1,12 +1,22 @@
 # <p align="center"> <br/> <img src="documentation/remote128.png" alt="remote icon" width="128"/> <br/> <br/> GoPro Remote for Garmin<br/> </p>
 A ConnectIQ widget to control your GoPro from your wrist. It uses the [Open GoPro Bluetooth Low Energy API](https://gopro.github.io/OpenGoPro/ble/index.html) and the [Garmin ConnectIQ SDK](https://developer.garmin.com/connect-iq/overview/).
 
-The widget should support every Garmin watch compatible with encrypted BLE connection (see devices supported by the [requestBond method](https://developer.garmin.com/connect-iq/api-docs/Toybox/BluetoothLowEnergy/Device.html#requestBond-instance_function)) and every GoPro camera compatible with the Open GoPro API (HERO9+). However, it has only been tested with a HERO11 Black Mini. A previous version of this app for smartwatches without BLE capabilities can be found and built with the [legacy branch](https://github.com/ad220/gopro-remote-connectiq/tree/legacy) or in the GitHub releases versions prior to 3.0.
+## Supported devices
 
-Please note that this app was mainly developed for personal use, it should now be stable enough but you may still encounter a few bugs.
+### Garmin
+The widget supports every Garmin watch compatible with encrypted BLE connection (see devices supported by the [requestBond method](https://developer.garmin.com/connect-iq/api-docs/Toybox/BluetoothLowEnergy/Device.html#requestBond-instance_function)).
+
+A previous version of this app for smartwatches without BLE capabilities can be found and built with the [legacy branch](https://github.com/ad220/gopro-remote-connectiq/tree/legacy) or in the GitHub releases versions prior to 3.0.
+
+### GoPro
+Every BLE capable GoPro camera is now supported (HERO4+ except HERO Session - RIP). However, cameras older than HERO9 don't have an open API. Special thanks to KonradIT for his work on its [unofficial GoPro API](https://github.com/KonradIT/goprowifihack). Communication with older GoPros heavily relies on it.
+
+> [!IMPORTANT]
+> While the app *should* now support every BLE capable camera, it was only tested with the HERO11 Mini I own.
+> Any constructive feedback which could help me enhance compatibility with every GoPro model is welcome !
 
 ## Features
-- allows a Garmin watch to control a GoPro HERO 9/10/11/11 Mini/12/13 and MAX2
+- allows a Garmin watch to control any BLE capable GoPro camera.
 - press shutter (start and stop video)
 - add hilight when recording
 - change video settings manually (resolution, aspect ratio, lens and framerate)
@@ -14,21 +24,22 @@ Please note that this app was mainly developed for personal use, it should now b
 - edit camera settings (hypersmooth, gps, leds, anti-flicker)
 - automatic report of error codes to [dashboard](https://github.com/ad220/gopro-remote-error-dashboard)
 
-### Moved to another app
-- QR Code generator for GoPro Labs support
-
 ### Planned
-- better support for MAX2 (switch between single lens and 360 mode)
-- unofficial api support for older cameras (HERO 5+)
+- better support for 360 cameras (switch between single lens and 360 mode)
 - protune settings and more
 - add photo and timelapse support
 
-## Installation
-The widget is available on the [Garmin Connect IQ store](https://apps.garmin.com/apps/f9e09224-1c60-4e94-a616-f9ef10932fdf). You can install it directly from your Garmin Connect app on your smartphone.
+### Moved to another app
+- QR Code generator for GoPro Labs support (see [QR Control CIQ](https://github.com/ad220/gopro-qr-control-connectiq/) project)
 
-You can also build the widget for your specific device with the Garmin SDK and the VSCode extension. Then, plug your watch to the computer with the USB cable in mass storage mode, and copy the generated `.prg` file to the `/GARMIN/APPS` folder on your device.
+## User Guide
+The full user guide is available [here](./USER_GUIDE.md)
 
-## How to use it
+### Installation
+
+Install the widget from the [Garmin Connect IQ store](https://apps.garmin.com/apps/f9e09224-1c60-4e94-a616-f9ef10932fdf) using the Garmin Connect app on your phone.
+
+### Getting started
 On the first launch, press the pair button on the main screen of the widget and put your GoPro in pairing mode. After being scanned by the watch, select the camera and wait for it to validate pairing. Once it is done, you should see the remote screen with the shutter button and the GoPro current settings.
 
 On this view, press the select button on your watch to start recording and the up button to hilight during capture. Using the up button when the camera is idle will open the camera settings menu and while the down down button will open the video settings menu. In this menu, you can apply a defined preset, manually change video settings or save the current applied video settings as a preset. Be careful as applying a preset with another anti-flicker setting than the current one (i.e. 50/60 fps) won't work properly.
@@ -42,6 +53,11 @@ On this view, press the select button on your watch to start recording and the u
 ![](documentation/screenshots/settings.png)
 
 ## Changelog
+
+### v4.3
+- Add support for Mission1 cameras (not tested)
+- Add support for older cameras (not tested)
+- Add user guide
 
 ### v4.2
 - Add automatic error reports

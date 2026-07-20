@@ -23,7 +23,7 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
     public var gopro as GoProSettings?;
 
 
-    public function initialize(menuId as SettingsMenuDelegate.MenuId, itemId as Char, labelId as ResourceId, iconId as ResourceId) {
+    public function initialize(menuId as SettingsMenuDelegate.MenuId, itemId as Number, labelId as ResourceId, iconId as ResourceId) {
         self.menuId = menuId;
         self.label = loadResource(labelId) as String;
         self.icon = loadResource(iconId) as BitmapResource;
@@ -42,7 +42,7 @@ class SettingsMenuItem extends WatchUi.CustomMenuItem {
 
         var width = dc.getWidth();
         var height = dc.getHeight();
-        var id = getId() as Char;
+        var id = getId() as Number;
         var isMenuCamera = menuId == SettingsMenuDelegate.CAMERA;
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.fillRoundedRectangle(0.05*width, 0.125*height, 0.9*width, 0.75*height, 0.38*height);

@@ -33,7 +33,7 @@ class MobileDelegate extends CameraDelegate {
     }
     
     protected function onPairingFailed() as Void {
-        CameraDelegate.onPairingFailed();
+        CameraDelegate.onPairingFailed(0);
         disconnect();
     }
 
@@ -78,7 +78,7 @@ class MobileDelegate extends CameraDelegate {
         if (queue.size()>0) {
             if (failCount>3) {
                 connected = false;
-                onDisconnect();
+                disconnect();
                 return;
             }
             failCount++;

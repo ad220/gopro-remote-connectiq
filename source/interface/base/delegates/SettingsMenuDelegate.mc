@@ -31,22 +31,22 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
                 var labels = [Rez.Strings.Cinema, Rez.Strings.Sport, Rez.Strings.Eco, Rez.Strings.Manually, Rez.Strings.SaveP7];
                 var icons = [Rez.Drawables.Cinema, Rez.Drawables.Sport, Rez.Drawables.Eco, Rez.Drawables.Camera, Rez.Drawables.Save];
                 for (var id=0; id<5; id++) {
-                    items.add(new SettingsMenuItem(menuId, id as Char, labels[id], icons[id]));
+                    items.add(new SettingsMenuItem(menuId, id, labels[id], icons[id]));
                 }
             }
             for (var id=0; id < (menuId==PRESET ? 3 : 5); id++) {
                 menu.addItem(items[id]);
             }
         } else {
-            getApp().gopro.subscribeChanges(
+            getApp().gopro.queryValues(
                 CameraDelegate.REGISTER_AVAILABLE,
                 [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE]b
             );
 
-            menu.addItem(new SettingsMenuItem(menuId, GoProSettings.RESOLUTION as Char, Rez.Strings.Resolution, Rez.Drawables.Resolution));
-            menu.addItem(new SettingsMenuItem(menuId, GoProSettings.RATIO as Char, Rez.Strings.Ratio, Rez.Drawables.Ratio));
-            menu.addItem(new SettingsMenuItem(menuId, GoProSettings.LENS as Char, Rez.Strings.Lens, Rez.Drawables.Lens));
-            menu.addItem(new SettingsMenuItem(menuId, GoProSettings.FRAMERATE as Char, Rez.Strings.Framerate, Rez.Drawables.Framerate));
+            menu.addItem(new SettingsMenuItem(menuId, GoProSettings.RESOLUTION, Rez.Strings.Resolution, Rez.Drawables.Resolution));
+            menu.addItem(new SettingsMenuItem(menuId, GoProSettings.RATIO, Rez.Strings.Ratio, Rez.Drawables.Ratio));
+            menu.addItem(new SettingsMenuItem(menuId, GoProSettings.LENS, Rez.Strings.Lens, Rez.Drawables.Lens));
+            menu.addItem(new SettingsMenuItem(menuId, GoProSettings.FRAMERATE, Rez.Strings.Framerate, Rez.Drawables.Framerate));
         }
     }
 
@@ -95,7 +95,7 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     private function unsubscribeAvailable() as Void {
-        getApp().gopro.subscribeChanges(
+        getApp().gopro.queryValues(
             CameraDelegate.UNREGISTER_AVAILABLE,
             [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE]b
         );

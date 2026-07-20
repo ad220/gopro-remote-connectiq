@@ -16,7 +16,7 @@ class RemoteView extends WatchUi.View {
     }
 
     function onLayout(dc as Dc) as Void {
-        var layout = [];
+        var layout = [] as Array<Drawable>;
 
         // Shutter button
         layout.add(new Button({

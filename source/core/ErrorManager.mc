@@ -75,7 +75,7 @@ module ErrorManager {
         var app = getApp();
         var goproId = app.gopro != null ? app.gopro.getGoProId() : 0;
 
-        code |= BUILD_FLAGS | (0x3F & goproId.toNumber() << 24) | (0xFFFF & data);
+        code |= BUILD_FLAGS | (0x3F & goproId << 24) | (0xFFFF & data);
 
         errorQueue.add(code);
         if (errorQueue.size() > 64) { errorQueue = errorQueue.slice(1, null); }
@@ -126,7 +126,7 @@ module ErrorManager {
                     "Content-Type" => Communications.REQUEST_CONTENT_TYPE_JSON
                 }
             },
-            new Method(self, :reportCallback)
+            new Lang.Method(self, :reportCallback)
         );
     }
 

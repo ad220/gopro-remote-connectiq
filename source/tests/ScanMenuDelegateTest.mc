@@ -15,7 +15,7 @@ module ScanMenuDelegateTest {
         callbackCount += 1;
     }
 
-    var dummyCallback as Method(scanResult as Ble.ScanResult?) as Void = new Method(self, :callback);
+    var dummyCallback as Method(scanResult as Ble.ScanResult?) as Void = new Lang.Method(self, :callback);
     var callbackCount as Number = 0;
 
     function initMenu() as [TestInit.DebugCustomMenu, ScanMenuDelegate] {
@@ -36,8 +36,8 @@ module ScanMenuDelegateTest {
 
         // Test that scan results are processed correctly
         var scanResults = [
-            new BleAPI.MockScanResult(1, "mock"),
-            new BleAPI.MockScanResult(2, null)
+            new BleAPI.MockScanResult(1, "mock", 0),
+            new BleAPI.MockScanResult(2, null, 0)
         ] as Array<Ble.ScanResult>;
 
         menu[1].onScanResults(scanResults);
@@ -48,11 +48,11 @@ module ScanMenuDelegateTest {
         }
 
         scanResults = [
-            new BleAPI.MockScanResult(1, "mock1"),
-            new BleAPI.MockScanResult(2, "mock2"),
-            new BleAPI.MockScanResult(3, null),
-            new BleAPI.MockScanResult(4, "mock4"),
-            new BleAPI.MockScanResult(5, null)
+            new BleAPI.MockScanResult(1, "mock1", 0),
+            new BleAPI.MockScanResult(2, "mock2", 0),
+            new BleAPI.MockScanResult(3, null, 0),
+            new BleAPI.MockScanResult(4, "mock4", 0),
+            new BleAPI.MockScanResult(5, null, 0)
         ] as Array<Ble.ScanResult>;
 
         menu[1].onScanResults(scanResults);
@@ -66,6 +66,83 @@ module ScanMenuDelegateTest {
     }
 
     (:test)
+    function testScanResultName(logger as Test.Logger) as Boolean {
+        var menu = initMenu();
+
+        var scanResults = [
+            new BleAPI.MockScanResult(10, "GoPro 4269", CameraDelegate.GP_UNKNOWN),
+            new BleAPI.MockScanResult(11, null, CameraDelegate.GP_HERO4S),
+            new BleAPI.MockScanResult(12, null, CameraDelegate.GP_HERO4B),
+            new BleAPI.MockScanResult(13, null, CameraDelegate.GP_HERO5B),
+            new BleAPI.MockScanResult(14, null, CameraDelegate.GP_HERO5S),
+            new BleAPI.MockScanResult(15, null, CameraDelegate.GP_FUSION),
+            new BleAPI.MockScanResult(16, null, CameraDelegate.GP_HERO6B),
+            new BleAPI.MockScanResult(17, null, CameraDelegate.GP_HERO7B),
+            new BleAPI.MockScanResult(18, null, CameraDelegate.GP_HERO7W),
+            new BleAPI.MockScanResult(19, null, CameraDelegate.GP_HERO7S),
+            new BleAPI.MockScanResult(20, null, CameraDelegate.GP_HERO2018),
+            new BleAPI.MockScanResult(21, null, CameraDelegate.GP_HERO8),
+            new BleAPI.MockScanResult(22, null, CameraDelegate.GP_MAX),
+            new BleAPI.MockScanResult(23, null, CameraDelegate.GP_HERO9),
+            new BleAPI.MockScanResult(24, null, CameraDelegate.GP_HERO10),
+            new BleAPI.MockScanResult(25, null, CameraDelegate.GP_HERO11),
+            new BleAPI.MockScanResult(26, null, CameraDelegate.GP_HERO11M),
+            new BleAPI.MockScanResult(27, null, CameraDelegate.GP_HERO12),
+            new BleAPI.MockScanResult(28, null, CameraDelegate.GP_MAX2),
+            new BleAPI.MockScanResult(29, null, CameraDelegate.GP_HERO13),
+            new BleAPI.MockScanResult(30, null, CameraDelegate.GP_HERO2024),
+            new BleAPI.MockScanResult(31, null, CameraDelegate.GP_HEROLIT),
+            new BleAPI.MockScanResult(32, null, CameraDelegate.GP_MISSION1PRO),
+            new BleAPI.MockScanResult(33, null, CameraDelegate.GP_MISSION1),
+        ] as Array<Ble.ScanResult>;
+
+        var expectedNames = [
+            "GoPro 4269",
+            "GoPro HERO4",
+            "GoPro HERO4",
+            "GoPro HERO5",
+            "GoPro HERO5",
+            "GoPro Fusion",
+            "GoPro HERO6",
+            "GoPro HERO7",
+            "GoPro HERO7",
+            "GoPro HERO7",
+            "GoPro HERO2018",
+            "GoPro HERO8",
+            "GoPro MAX",
+            "GoPro HERO9",
+            "GoPro HERO10",
+            "GoPro HERO11",
+            "GoPro HERO11",
+            "GoPro HERO12",
+            "GoPro MAX",
+            "GoPro HERO13",
+            "GoPro HERO2024",
+            "GoPro HERO Lit",
+            "GoPro Mission1",
+            "GoPro Mission1",
+        ];
+
+        menu[1].onScanResults(scanResults);
+
+        if (menu[0].debugItems.size() != 24 + 2) {
+            logger.error("Should have 24 scan results, got " + (menu[0].debugItems.size() - 2));
+            return false;
+        }
+
+        var result = true;
+        for (var i=0; i<menu[0].debugItems.size() - 2; i+=1) {
+            var itemName = menu[0].debugItems[i].getLabel();
+            if (!itemName.equals(expectedNames[i])) {
+                logger.error("Wrong scan result name, expected: " + expectedNames[i] + " got: " + itemName);
+                result = false;
+            }
+        }
+
+        return result;
+    }
+
+    (:test)
     function testSelectDevice(logger as Test.Logger) as Boolean {
         var viewController = new ViewDebugController();
         getApp().viewController = viewController;
@@ -75,8 +152,8 @@ module ScanMenuDelegateTest {
         callbackCount = 0;
 
         var scanResults = [
-            new BleAPI.MockScanResult(1, null),
-            new BleAPI.MockScanResult(2, null)
+            new BleAPI.MockScanResult(1, null, 0),
+            new BleAPI.MockScanResult(2, null, 0)
         ] as Array<Ble.ScanResult>;
 
         menu[1].onScanResults(scanResults);

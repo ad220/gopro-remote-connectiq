@@ -71,8 +71,8 @@ module TestInit {
     }
 
     class MockPreset extends GoProPreset {
-        function initialize(settings as Dictionary<GoProSettings.SettingId, Char>) {
-            GoProPreset.initialize(0 as Char);
+        function initialize(settings as Dictionary<GoProSettings.SettingId, Number>) {
+            GoProPreset.initialize(0);
 
             self.settings = settings;
         }
@@ -83,7 +83,7 @@ module TestInit {
         GoProSettings.LENS              => GoProSettings.WIDE,
         GoProSettings.FRAMERATE         => 5,
         GoProSettings.FLICKER           => GoProSettings.HZ60,
-        GoProSettings.HYPERSMOOTH       => GoProSettings.HS_BOOST,
+        GoProSettings.HYPERSMOOTH       => GoProSettings.HS_LOW,
         GoProSettings.LED               => GoProSettings.LED_ON
     };
 
@@ -113,25 +113,27 @@ module TestInit {
         }
     }
 
-    function initFake() as Void {
+    function initFake(specs as FakeGoProSpecs.ISpecs?) as Void {
+        if (specs == null) { specs = FakeGoProSpecs.getSpecsH11M(); }
         BleAPI.device = new FakeGoProDevice(
             initSettings,
             initStatuses,
-            new FakeGoProSpecs.SpecsH11Mini()
+            specs
         );
     }
 
-    function initSink() as Void {
+    function initSink(specs as FakeGoProSpecs.ISpecs?) as Void {
+        if (specs == null) { specs = FakeGoProSpecs.getSpecsH11M(); }
         BleAPI.device = new SinkGoProDevice(
             initSettings,
             initStatuses,
-            new FakeGoProSpecs.SpecsH11Mini()
+            specs
         );
     }
 
-    function initConnection() as Void {
+    function initConnection(goproId as Number) as Void {
         var delegate = new BluetoothDelegate();
-        delegate.connect(new BleAPI.MockScanResult(0, null) as Ble.ScanResult);
+        delegate.connect(new BleAPI.MockScanResult(0, null, goproId) as Ble.ScanResult);
     }
 
 }

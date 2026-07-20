@@ -55,7 +55,8 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
                 GoProSettings.FRAMERATE         => 5,
                 GoProSettings.FLICKER           => GoProSettings.HZ60,
                 GoProSettings.HYPERSMOOTH       => GoProSettings.HS_HIGH,
-                GoProSettings.LED               => GoProSettings.LED_ON
+                GoProSettings.LED               => GoProSettings.LED_ALL_ON,
+                GoProSettings.GPS               => 1,
             } as FakeGoProDevice.FakeGoProSettings,
             {
                 GoProCamera.ENCODING            => 0,
@@ -63,8 +64,9 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
                 GoProCamera.SD_REMAINING        => 6942,
                 GoProCamera.BATTERY             => 42
             } as FakeGoProDevice.FakeGoProStatuses,
-            new FakeGoProSpecs.SpecsH11Mini()
+            new FakeGoProSpecs.SpecsMission1Pro()
         );
+        BleAPI.scannedDevices[0].goproId = BleAPI.device.specs.cameraId;
     }
 
     
@@ -106,11 +108,22 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
 
     (:ble)
     public function onScanResult(device as Ble.ScanResult?) as Void {
-        if (device instanceof Ble.ScanResult and !device.equals(lastPairedDevice)) {
-            Storage.setValue("lastPairedDevice", device as Application.PropertyValueType);
+        if (scanResultToStorage(device)) {
+            Application.Storage.setValue("lastPairedDevice", device as Storage.ValueType);
         }
         (delegate as BluetoothDelegate).setScanMenuDelegate(null);
         BleAPI.setScanState(Ble.SCAN_STATE_SCANNING);
         delegate.connect(device);
+    }
+
+    (:ble :inline :release)
+    public function scanResultToStorage(device as Ble.ScanResult?) as Boolean {
+        return device instanceof Ble.ScanResult and !device.equals(lastPairedDevice);
+    }
+
+    (:ble :inline :debug)
+    public function scanResultToStorage(device as Ble.ScanResult?) as Boolean {
+        return device instanceof Ble.ScanResult and !device.equals(lastPairedDevice)
+            and !(device instanceof BleApiWrapper.MockScanResult);
     }
 }

@@ -31,14 +31,14 @@ module BleApiWrapper {
     var nullPairing                 as Boolean                  = false;
     var connectionStatus            as Ble.ConnectionState      = Ble.CONNECTION_STATE_CONNECTED;
     var hasGoProService             as Boolean                  = true;
-    var scannedDevices              as Array<MockScanResult>    = [new MockScanResult(0, null)];
+    var scannedDevices              as Array<MockScanResult>    = [new MockScanResult(0, null, CameraDelegate.GP_HERO11M)];
 
 
     function registerProfile(profile as GattProfile) as Void {
         if (registeredProfiles.size() < 3) {
             self.registeredProfiles.add(profile);
         } else {
-            throw new Ble.ProfileRegistrationException();
+            throw new Lang.Exception();
         }
     }
 
@@ -53,7 +53,7 @@ module BleApiWrapper {
                 scanTimer = null;
             }
         } else if (state == Ble.SCAN_STATE_SCANNING and scanState!=state) {
-            scanTimer = getApp().timerController.start(new Method(self, :updateScan), 10, true);
+            scanTimer = getApp().timerController.start(new Lang.Method(self, :updateScan), 10, true);
         }
 
         self.scanState = state;
@@ -66,7 +66,7 @@ module BleApiWrapper {
 
     function pairDevice(device as Ble.ScanResult) as Ble.Device? {
         if (failPairing or pairedDevices.size() >= 3) {
-            throw new Ble.DevicePairException();
+            throw new Lang.Exception();
 
         } else if (nullPairing) {
             return null;
@@ -87,14 +87,17 @@ module BleApiWrapper {
     }
 
 
-    class MockScanResult {
+    class MockScanResult extends Ble.ScanResult {
 
         var id as Number;
         var name as String?;
+        var goproId as Number;
 
-        function initialize(id as Number, name as String?) {
+        (:typecheck(false))
+        function initialize(id as Number, name as String?, goproId as Number) {
             self.id = id;
             self.name = name;
+            self.goproId = goproId;
         }
 
         function getDeviceName() as String? {
@@ -103,7 +106,7 @@ module BleApiWrapper {
 
         function getRawData() as ByteArray {
             var data = new [20]b;
-            data[13] = 60;
+            data[13] = CameraDelegate.goproModelTable[goproId];
             return data;
         }
 
@@ -117,10 +120,13 @@ module BleApiWrapper {
         }
     }
 
-    class MockDevice {
+    class MockDevice extends Ble.Device {
 
         var connected       as Boolean      = false;
         var bonded          as Boolean      = false;
+
+        (:typecheck(false))
+        public function initialize() {}
 
         function getName() as String? {
             return "MockGoPro";
@@ -157,12 +163,13 @@ module BleApiWrapper {
         }
     }
 
-    class MockService {
+    class MockService extends Ble.Service {
 
         var uuid        as Ble.Uuid;
         var device      as MockDevice;
         var profile     as ServiceProfile;
 
+        (:typecheck(false))
         function initialize(uuid as Ble.Uuid, device as MockDevice) {
             self.uuid = uuid;
             self.device = device;
@@ -215,12 +222,13 @@ module BleApiWrapper {
 
     }
 
-    class MockCharacteristic {
+    class MockCharacteristic extends Ble.Characteristic {
         
         var uuid        as Ble.Uuid;
         var service     as MockService;
         var profile     as Array<Ble.Uuid>;
 
+        (:typecheck(false))
         function initialize(uuid as Ble.Uuid, service as MockService) {
             self.uuid = uuid;
             self.service = service;
@@ -259,13 +267,13 @@ module BleApiWrapper {
         }
 
         function requestRead() as Void {
-            // TODO
             throw new Exception();
         }
 
-        (:typecheck(false))
         function requestWrite(value as ByteArray, options as { :writeType as Ble.WriteType }) as Void {
-            var gpxx = uuid.toString().substring(4,8).toNumber();
+            var gpxx = uuid.toString().substring(4,8);
+            if (gpxx == null) { throw new Exception(); }
+            gpxx = gpxx.toNumber() as GattProfileManager.GoProUuid;
             delegate.onCharacteristicWrite(self as Ble.Characteristic, Ble.STATUS_SUCCESS);
             device.onSend(gpxx, value);
         }
@@ -273,11 +281,12 @@ module BleApiWrapper {
     }
 
 
-    class MockDescriptor {
+    class MockDescriptor extends Ble.Descriptor {
 
         var uuid            as Ble.Uuid;
         var characteristic  as MockCharacteristic;
 
+        (:typecheck(false))
         function initialize(uuid as Ble.Uuid, characteristic as MockCharacteristic) {
             self.uuid = uuid;
             self.characteristic = characteristic;
@@ -292,13 +301,11 @@ module BleApiWrapper {
         }
 
         function requestRead() as Void {
-            // TODO
             throw new Exception();
         }
 
-        (:typecheck(false))
         function requestWrite(value as ByteArray) as Void {
-            delegate.onDescriptorWrite(self as Ble.Characteristic, Ble.STATUS_SUCCESS);
+            delegate.onDescriptorWrite(self, Ble.STATUS_SUCCESS);
         }
     }
 

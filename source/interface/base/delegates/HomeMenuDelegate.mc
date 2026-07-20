@@ -3,7 +3,7 @@ import Toybox.WatchUi;
 import Toybox.Graphics;
 
 
-class HomeMenuDelegate extends Menu2InputDelegate {
+class HomeMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     private var parent as ConnectDelegate;
 
@@ -15,7 +15,7 @@ class HomeMenuDelegate extends Menu2InputDelegate {
         menu.setTitle(Rez.Strings.AppName);
         menu.addItem(new MenuItem(Rez.Strings.StartScan, null, null, null));
         menu.addItem(new ToggleMenuItem(Rez.Strings.ToggleReports, null, null, getApp().reportsEnabled, null));
-        menu.setFooter("v4.2.7");
+        menu.setFooter("v4.3.0");
     }
 
     public function onSelect(item as MenuItem) as Void {

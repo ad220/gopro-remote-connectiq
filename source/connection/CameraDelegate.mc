@@ -5,7 +5,33 @@ using ErrorManager as EM;
 
 class CameraDelegate {
 
-    public static const goproModelTable = [0, 12, 13, 19, 21, 22, 24, 30, 32, 33, 34, 50, 51, 55, 57, 58, 60, 62, 64, 65, 66, 70]b;
+    public static const goproModelTable = [0, 12, 13, 19, 21, 22, 24, 30, 32, 33, 34, 50, 51, 55, 57, 58, 60, 62, 64, 65, 66, 70, 69, 71]b;
+
+    static const GP_UNKNOWN                 = 0;
+    static const GP_HERO4S                  = 1;
+    static const GP_HERO4B                  = 2;
+    static const GP_HERO5B                  = 3;
+    static const GP_HERO5S                  = 4;
+    static const GP_FUSION                  = 5;
+    static const GP_HERO6B                  = 6;
+    static const GP_HERO7B                  = 7;
+    static const GP_HERO7W                  = 8;
+    static const GP_HERO7S                  = 9;
+    static const GP_HERO2018                = 10;
+    static const GP_HERO8                   = 11;
+    static const GP_MAX                     = 12;
+    static const GP_HERO9                   = 13;
+    static const GP_HERO10                  = 14;
+    static const GP_HERO11                  = 15;
+    static const GP_HERO11M                 = 16;
+    static const GP_HERO12                  = 17;
+    static const GP_MAX2                    = 18;
+    static const GP_HERO13                  = 19;
+    static const GP_HERO2024                = 20;
+    static const GP_HEROLIT                 = 21;
+    static const GP_MISSION1PRO             = 22;
+    static const GP_MISSION1                = 23;
+
       
     public static const goproModelString = [
         :UnknownGP,
@@ -30,6 +56,8 @@ class CameraDelegate {
         13          /* 19) id:65 -> HERO13 Black */,
         2024        /* 20) id:66 -> HERO (2024) */,
         " Lit"      /* 21) id:70 -> HERO Lit */,
+        :Mission1   /* 22) id:69 -> Mission1 Pro */,
+        :Mission1   /* 23) id:71 -> Mission1 */,
     ];
 
     public static function getGoProId(device as Ble.ScanResult) as Number {
@@ -45,15 +73,23 @@ class CameraDelegate {
     public enum QueryId {
         GET_SETTING             = 0x12,
         GET_STATUS              = 0x13,
+        GET_SETTING_2B          = 0x15,
+        GET_STATUS_2B           = 0x16,
         GET_AVAILABLE           = 0x32,
         REGISTER_SETTING        = 0x52,
         REGISTER_STATUS         = 0x53,
+        REGISTER_SETTING_2B     = 0x55,
+        REGISTER_STATUS_2B      = 0x56,
         REGISTER_AVAILABLE      = 0x62,
         UNREGISTER_SETTING      = 0x72,
         UNREGISTER_STATUS       = 0x73,
+        UNREGISTER_SETTING_2B   = 0x75,
+        UNREGISTER_STATUS_2B    = 0x76,
         UNREGISTER_AVAILABLE    = 0x82,
         NOTIF_SETTING           = 0x92,
         NOTIF_STATUS            = 0x93,
+        NOTIF_SETTING_2B        = 0x95,
+        NOTIF_STATUS_2B         = 0x96,
         NOTIF_AVAILABLE         = 0xA2,
     }
 
@@ -101,7 +137,7 @@ class CameraDelegate {
             goproId = 0;
             EM.raise(EM.ERR_NULL, 9, :WarningErr);
         }
-        getApp().gopro = new GoProCamera(self, goproId);
+        getApp().gopro = new GoProCamera(self, goproId as Number);
         
         var pushView = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
         pushView.invoke(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
@@ -158,9 +194,9 @@ class CameraDelegate {
         }
         else if ((response[0] & 0x80) == 0x80) { // Continuation packet
             if (queryReplyBuffer == null) {
-                EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x00 << 16, 0, :WarningErr); 
+                EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x03 << 16, 0, :WarningErr); 
                 return;
-            } /* TODO(raise): complete data field */ 
+            }
 
             queryReplyBuffer.addAll(response.slice(1, null));
             if (queryReplyBuffer.size() == queryReplyLength) {
@@ -183,19 +219,19 @@ class CameraDelegate {
         var decoder = null;
 
         if (status != 0) {
-            // TODO(raise): skip msg, check for queue impact ? confirm err_flag
-            EM.raise(EM.ERR_MSG | EM.SUB_MSG_STATUS | 0x00 << 16, 0, :SilentErr);
-            // System.println("[WARNING]   Wrong query status received from camera, value: " + status.toNumber());
+            // Error flag switched to warning because never raised as of v4.2.7
+            EM.raise(EM.ERR_MSG | EM.SUB_MSG_STATUS | 0x00 << 16, 0, :WarningErr);
+            // System.println("[WARNING]   Wrong query status received from camera, value: " + status);
         }
         
         var mask = queryId & 0x1F;
-        if      (mask ^ 0x12 == 0 and queryId != 0x32)  { decoder = :onReceiveSetting; }
-        else if (mask ^ 0x13 == 0)                      { decoder = :onReceiveStatus; }
-        else if (mask ^ 0x02 == 0 or queryId == 0x32)   { decoder = :onReceiveAvailable; }
+        if      (mask ^ 0x12 == 0 and queryId != 0x32 or mask ^ 0x15 == 0)  { decoder = :onReceiveSetting; }
+        else if (mask ^ 0x13 == 0 or mask ^ 0x16 == 0)                      { decoder = :onReceiveStatus; }
+        else if (mask ^ 0x02 == 0 or queryId == 0x32)                       { decoder = :onReceiveAvailable; }
         else {
-            // TODO(raise): skip msg, check for queue impact ? confirm err_flag
-            EM.raise(EM.ERR_MSG | EM.SUB_MSG_QUERY | 0x00 << 16, 0, :SilentErr);
-            // System.println("[WARNING]   Unknown queryId: " + queryId.toNumber());
+            // Error flag switched to warning because never raised as of v4.2.7
+            EM.raise(EM.ERR_MSG | EM.SUB_MSG_QUERY | 0x00 << 16, 0, :WarningErr);
+            // System.println("[WARNING]   Unknown queryId: " + queryId);
             return;
         }
 
@@ -204,8 +240,21 @@ class CameraDelegate {
         var value;
 
         for (var i=0; i<data.size(); i+=2+length) {
-            type = data[i] as Char;
-            length = data[i+1];
+            type = data[i];
+            if (type == 0xFF) {
+                i += 2;
+
+                try { type = data[i]; } catch (ex) {
+                    EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x05 << 16, 0, :WarningErr);
+                    break;
+                }
+            }
+
+            try { length = data[i+1]; } catch (ex) {
+                EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x04 << 16, 0, :WarningErr);
+                break;
+            }
+
             value = data.slice(i+2, i+2+length);
             gopro.method(decoder).invoke(type, value);
         }

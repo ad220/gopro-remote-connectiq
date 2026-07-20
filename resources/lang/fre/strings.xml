@@ -68,6 +68,7 @@
     <!-- Objectifs -->
     <!-- $$$ Small Tiny -->
     <string id="_WIDE">Large</string>
+    <string id="_MEDIUM">Moyen</string>
     <string id="_LINEAR">Linéaire</string>
     <string id="_LINEARLOCK">Linéaire + VH</string>
     <string id="_LINEARLEVEL">Linear + NH</string>

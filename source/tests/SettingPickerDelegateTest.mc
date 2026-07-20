@@ -33,8 +33,8 @@ module SettingPickerDelegateTest {
     function testItemOrder(logger as Test.Logger) as Boolean {
         var result = true;
         TestInit.initDefaults();
-        TestInit.initFake();
-        TestInit.initConnection();
+        TestInit.initFake(null);
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
 
         var settings = [
             GoProSettings.RESOLUTION,
@@ -44,7 +44,7 @@ module SettingPickerDelegateTest {
             GoProSettings.LED,
             GoProSettings.HYPERSMOOTH
         ];
-        getApp().gopro.subscribeChanges(CameraDelegate.GET_AVAILABLE, []b.addAll(settings));
+        getApp().gopro.queryValues(CameraDelegate.GET_AVAILABLE, []b.addAll(settings));
 
         var expectedLabels = [
             ["5.3K", "4K", "2.7K", "1080p"],
@@ -59,7 +59,7 @@ module SettingPickerDelegateTest {
             var menu = initMenu(settings[i]);
             var labels = getLabels(menu[0]);
 
-            if (!TestInit.haveSameData(labels as Array, expectedLabels[i])) {
+            if (!TestInit.haveSameData(labels as Array, expectedLabels[i] as Array)) {
                 logger.error(
                     "Unexpected items/order for setting id: " + settings[i] +
                     ", expected: " + expectedLabels[i] +
@@ -76,8 +76,8 @@ module SettingPickerDelegateTest {
     (:test)
     function testSelectItem(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake();
-        TestInit.initConnection();
+        TestInit.initFake(null);
+        TestInit.initConnection(CameraDelegate.GP_HERO11M);
 
         var settings = [
             GoProSettings.RESOLUTION,
@@ -87,7 +87,7 @@ module SettingPickerDelegateTest {
             GoProSettings.LED,
             GoProSettings.HYPERSMOOTH
         ];
-        getApp().gopro.subscribeChanges(CameraDelegate.REGISTER_AVAILABLE, []b.addAll(settings));
+        getApp().gopro.queryValues(CameraDelegate.REGISTER_AVAILABLE, []b.addAll(settings));
 
         var indexes = [0, 2, 4, 0, 0, 3];
 
