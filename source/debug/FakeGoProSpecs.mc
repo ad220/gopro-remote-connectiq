@@ -163,7 +163,7 @@ module FakeGoProSpecs {
         ]b;
 
         const availableLed = [
-            GoProSettings.LED_ON,
+            GoProSettings.LED_ALL_ON,
             GoProSettings.LED_BACK_ONLY,
         ]b;
 

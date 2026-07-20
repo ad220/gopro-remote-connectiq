@@ -78,12 +78,14 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     (:keep)
     public function onLed() as Void {
         var available = camera.getAvailableSettings(GoProSettings.LED);
-        if (available.size() == 0) {
+
+        var availableCount = available.size();
+        if (availableCount == 0) {
             EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x08 <<16, GoProSettings.LED, :WarningErr);
             return;
         }
 
-        if (available.size()>2) {
+        if (availableCount > 2) {
             var menu = ICM.newCustomMenu(0.1, 0.15);
             getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.LED), SLIDE_LEFT);
         } else {
@@ -102,14 +104,13 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
                 );
             }
 
+            var newStatus = available[(index + 1) % availableCount];
             view.getHilighted().toggleState(
-                ledStatus==GoProSettings.LED_OFF or 
-                ledStatus==GoProSettings.LED_ALL_OFF
+                newStatus != GoProSettings.LED_OFF and
+                newStatus != GoProSettings.LED_ALL_OFF and 
+                newStatus != GoProSettings.LED_BACK_ONLY
             );
-            camera.sendSetting(
-                GoProSettings.LED,
-                available[(index + 1) % available.size()]
-            );
+            camera.sendSetting(GoProSettings.LED, newStatus);
         }
     }
     

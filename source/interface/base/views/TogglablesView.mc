@@ -45,7 +45,8 @@ class TogglablesView extends WatchUi.View {
         var led = camera.getSetting(GoProSettings.LED);
         (findDrawableById("LedButton") as Togglable).toggleState(
             led != GoProSettings.LED_OFF and
-            led != GoProSettings.LED_ALL_OFF
+            led != GoProSettings.LED_ALL_OFF and 
+            led != GoProSettings.LED_BACK_ONLY
         );
         
         var hypersmooth = camera.getSetting(GoProSettings.HYPERSMOOTH);
