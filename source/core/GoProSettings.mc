@@ -267,34 +267,34 @@ class GoProSettings {
 
 
 class ResolutionComparator {
-    public function wrappedCompare(a as Number, b as Number, id as Number) as Number {
+    public function wrappedCompare(a as Number, b as Number, compRes as Boolean) as Number {
         var tupleA = GoProSettings.RESOLUTION_MAP.get(a);
         var tupleB = GoProSettings.RESOLUTION_MAP.get(b);
 
         if (tupleA == null) { tupleA = 0; }
         if (tupleB == null) { tupleB = 0; }
 
-        if (id == 0) {
-            return tupleA >> 16 - tupleB >> 16;
+        if (compRes) {
+            return tupleB >> 16 - tupleA >> 16;
         } else {
             var ratioA = tupleA & 0xFFFF;
             var ratioB = tupleB & 0xFFFF;
             ratioA = ratioA & 0xFF / (ratioA >> 8).toFloat();
             ratioB = ratioB & 0xFF / (ratioB >> 8).toFloat();
-            return (1000 * ratioB - 1000 * ratioA).toNumber();
+            return ratioA >= ratioB ? 1 : -1;
         }
     }
 
 
     public function compare(resolutionA as Object, resolutionB as Object) as Number {
-        return wrappedCompare(resolutionA as Number, resolutionB as Number, 0);
+        return wrappedCompare(resolutionA as Number, resolutionB as Number, true);
     }
 }
 
 (:typecheck(false))
 class RatioComparator extends ResolutionComparator {
     public function compare(ratioA as Object, ratioB as Object) as Number {
-        return wrappedCompare(ratioA as Number, ratioB as Number, 1);
+        return wrappedCompare(ratioA as Number, ratioB as Number, false);
     }
 }
 
@@ -304,9 +304,9 @@ class FramerateComparator {
         var a = GoProSettings.FRAMERATE_MAP.get(framerateA as Number);
         var b = GoProSettings.FRAMERATE_MAP.get(framerateB as Number);
 
-        if (a == null) { a=0; }
-        if (b == null) { b=0; }
+        if (a == null) { a = 0; }
+        if (b == null) { b = 0; }
         
-        return a-b;
+        return b - a;
     }
 }

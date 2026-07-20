@@ -59,7 +59,7 @@ module SettingPickerDelegateTest {
             var menu = initMenu(settings[i]);
             var labels = getLabels(menu[0]);
 
-            if (!TestInit.haveSameData(labels as Array, expectedLabels[i])) {
+            if (!TestInit.haveSameData(labels as Array, expectedLabels[i] as Array)) {
                 logger.error(
                     "Unexpected items/order for setting id: " + settings[i] +
                     ", expected: " + expectedLabels[i] +

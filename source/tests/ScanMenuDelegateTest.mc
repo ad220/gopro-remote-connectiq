@@ -15,7 +15,7 @@ module ScanMenuDelegateTest {
         callbackCount += 1;
     }
 
-    var dummyCallback as Method(scanResult as Ble.ScanResult?) as Void = new Method(self, :callback);
+    var dummyCallback as Method(scanResult as Ble.ScanResult?) as Void = new Lang.Method(self, :callback);
     var callbackCount as Number = 0;
 
     function initMenu() as [TestInit.DebugCustomMenu, ScanMenuDelegate] {

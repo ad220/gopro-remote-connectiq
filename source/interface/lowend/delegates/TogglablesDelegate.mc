@@ -3,6 +3,9 @@ import Toybox.System;
 import Toybox.WatchUi;
 import Toybox.Graphics;
 
+using InterfaceComponentsManager as ICM;
+using ErrorManager as EM;
+
 
 (:lowend)
 class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
@@ -16,7 +19,7 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
 
         self.menu = menu;
         self.gopro = getApp().gopro;
-        gopro.requestStatuses([GoProCamera.BATTERY, GoProCamera.SD_REMAINING]b);
+        gopro.queryValues(CameraDelegate.GET_STATUS, [GoProCamera.BATTERY, GoProCamera.SD_REMAINING]b);
 
         var flicker = gopro.getSetting(GoProSettings.FLICKER);
         if (flicker == null) { flicker = 0; }
@@ -90,7 +93,7 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
     public function onGps() as Void {
         var gps = gopro.getSetting(GoProSettings.GPS) as Number?;
         if (gps==null) {
-            EM.raise(EM.ERR_CAM, EM.SUB_CAM_NULL | 0x01 << 16, GoProSettings.GPS, :WarningErr);
+            EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x01 << 16, GoProSettings.GPS, :WarningErr);
         }
         
         (selected as ToggleMenuItem).setEnabled(gps & 0x01 == 0);

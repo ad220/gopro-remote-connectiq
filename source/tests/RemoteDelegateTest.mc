@@ -131,7 +131,7 @@ module RemoteDelegateTest {
         device.requests = [];
         delegate.onPreviousPage();
 
-        if (!TestInit.haveSameData(device.requests[0], [GPM.UUID_COMMAND_CHAR, [1, GoProCamera.HILIGHT]b])) {
+        if (!TestInit.haveSameData(device.requests[0] as Array, [GPM.UUID_COMMAND_CHAR, [1, GoProCamera.HILIGHT]b])) {
             logger.error("Wrong hilight command");
             return false;
         }
@@ -156,7 +156,7 @@ module RemoteDelegateTest {
         device.requests = [];
         delegate.onBack();
 
-        if (!TestInit.haveSameData(device.requests[0], [GPM.UUID_COMMAND_CHAR, [1, GoProCamera.SLEEP]b])) {
+        if (!TestInit.haveSameData(device.requests[0] as Array, [GPM.UUID_COMMAND_CHAR, [1, GoProCamera.SLEEP]b])) {
             logger.error("Wrong sleep command");
             return false;
         }

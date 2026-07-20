@@ -28,10 +28,10 @@ module GoProCameraTest {
     ];
 
     const testDeviceSpecs = [
-        new Method(FakeGoProSpecs, :getSpecsH5S),
-        new Method(FakeGoProSpecs, :getSpecsH11M),
-        // new Method(FakeGoProSpecs, :getSpecsMAX2),
-        new Method(FakeGoProSpecs, :getSpecsM1Pro),
+        new Lang.Method(FakeGoProSpecs, :getSpecsH5S),
+        new Lang.Method(FakeGoProSpecs, :getSpecsH11M),
+        // new Lang.Method(FakeGoProSpecs, :getSpecsMAX2),
+        new Lang.Method(FakeGoProSpecs, :getSpecsM1Pro),
     ] as Array<Method() as FakeGoProSpecs.ISpecs>;
 
     const testDeviceNames = [
@@ -473,7 +473,7 @@ module GoProCameraTest {
         ];
         var expectedRatios = [
             [1],
-            [1, 18, 28],
+            [28, 18, 1],
             [109, 112, 1],
         ];
         var expectedHypersmooth = [[
@@ -491,19 +491,20 @@ module GoProCameraTest {
         ]];
         
         var availableFramerates = camera.getAvailableSettings(GoProSettings.FRAMERATE);
-        if (!TestInit.haveSameData(availableFramerates as Array, expectedFramerates[k])) {
+        if (!TestInit.haveSameData(availableFramerates as Array, expectedFramerates[k] as Array)) {
             logDeviceError(logger, "Wrong available framerates, expected: " + expectedFramerates[k] + ", got: " + availableFramerates, k);
             result = false;
         }
 
         var availableRatios = camera.getAvailableSettings(GoProSettings.RATIO);
-        if (!TestInit.haveSameData(availableRatios as Array, expectedRatios[k])) {
+        Helper.sort(availableRatios as Array, new RatioComparator());
+        if (!TestInit.haveSameData(availableRatios as Array, expectedRatios[k] as Array)) {
             logDeviceError(logger, "Wrong available ratios, expected: " + expectedRatios[k] + ", got: " + availableRatios, k);
             result = false;
         }
 
         var availableHypersmooth = camera.getAvailableSettings(GoProSettings.HYPERSMOOTH);
-        if (!TestInit.haveSameData(availableHypersmooth as Array, expectedHypersmooth[k])) {
+        if (!TestInit.haveSameData(availableHypersmooth as Array, expectedHypersmooth[k] as Array)) {
             logDeviceError(logger, "Wrong available hypersmooth, expected: " + expectedHypersmooth[k] + ", got: " + availableHypersmooth, k);
             result = false;
         }
@@ -549,19 +550,20 @@ module GoProCameraTest {
             [18, 15, 0, 13, 1, 2, 5, 6, 8, 9, 10],
         ];
         var expectedRatios = [
-            [9, 8],
+            [8, 9],
             [9],
-            [9, 110],
+            [110, 9],
         ];
         
         var availableFramerates = camera.getAvailableSettings(GoProSettings.FRAMERATE);
-        if (!TestInit.haveSameData(availableFramerates as Array, expectedFramerates[k])) {
+        if (!TestInit.haveSameData(availableFramerates as Array, expectedFramerates[k] as Array)) {
             logDeviceError(logger, "Wrong available framerates, expected: " + expectedFramerates[k] + ", got: " + availableFramerates, k);
             result = false;
         }
 
         var availableRatios = camera.getAvailableSettings(GoProSettings.RATIO);
-        if (!TestInit.haveSameData(availableRatios as Array, expectedRatios[k])) {
+        Helper.sort(availableRatios as Array, new RatioComparator());
+        if (!TestInit.haveSameData(availableRatios as Array, expectedRatios[k] as Array)) {
             logDeviceError(logger, "Wrong available ratios, expected: " + expectedRatios[k] + ", got: " + availableRatios, k);
             result = false;
         }
@@ -605,13 +607,13 @@ module GoProCameraTest {
         var expectedRatios = [];
         
         var availableFramerates = camera.getAvailableSettings(GoProSettings.FRAMERATE);
-        if (!TestInit.haveSameData(availableFramerates as Array, expectedFramerates)) {
+        if (!TestInit.haveSameData(availableFramerates as Array, expectedFramerates as Array)) {
             logger.error("Wrong available framerates, expected: " + expectedFramerates + ", got: " + availableFramerates);
             result = false;
         }
 
         var availableRatios = camera.getAvailableSettings(GoProSettings.RATIO);
-        if (!TestInit.haveSameData(availableRatios as Array, expectedRatios)) {
+        if (!TestInit.haveSameData(availableRatios as Array, expectedRatios as Array)) {
             logger.error("Wrong available ratios, expected: " + expectedRatios + ", got: " + availableRatios);
             result = false;
         }

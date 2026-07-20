@@ -29,7 +29,7 @@ module SettingsMenuDelegateTest {
             [4, CameraDelegate.REGISTER_AVAILABLE, GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE]b
         ];
 
-        if (!TestInit.haveSameData(device.requests[0], expected)) {
+        if (!TestInit.haveSameData(device.requests[0] as Array, expected as Array)) {
             logger.error("Invalid request, expected: " + expected + ", got: " + device.requests[0]);
         }
 
@@ -38,7 +38,7 @@ module SettingsMenuDelegateTest {
         expected[1][1] = CameraDelegate.UNREGISTER_AVAILABLE;
 
         
-        if (!TestInit.haveSameData(device.requests[0], expected)) {
+        if (!TestInit.haveSameData(device.requests[0] as Array, expected as Array)) {
             logger.error("Invalid request, expected: " + expected + ", got: " + device.requests[0]);
         }
 
@@ -163,7 +163,7 @@ module SettingsMenuDelegateTest {
 
         var menu = new TestInit.DebugCustomMenu((0.15*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, null);
         var items = [];
-        var delegate = new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, items);
+        var delegate = new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, items as Array<SettingsMenuItem>);
 
         viewController.push(menu, delegate, WatchUi.SLIDE_IMMEDIATE);
         delegate.onSelect(menu.debugItems[4]);
@@ -179,7 +179,7 @@ module SettingsMenuDelegateTest {
         getApp().viewController = viewController;
 
         menu = new TestInit.DebugCustomMenu((0.15*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, null);
-        delegate = new SettingsMenuDelegate(menu, SettingsMenuDelegate.PRESET, items);
+        delegate = new SettingsMenuDelegate(menu, SettingsMenuDelegate.PRESET, items as Array<SettingsMenuItem>);
         viewController.push(menu, delegate, WatchUi.SLIDE_IMMEDIATE);
 
         delegate.onSelect(menu.debugItems[2]);

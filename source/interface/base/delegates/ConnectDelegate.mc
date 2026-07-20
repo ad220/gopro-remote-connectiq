@@ -108,7 +108,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
     (:ble)
     public function onScanResult(device as Ble.ScanResult?) as Void {
         if (device instanceof Ble.ScanResult and !device.equals(lastPairedDevice)) {
-            Storage.setValue("lastPairedDevice", device as Storage.ValueType);
+            Application.Storage.setValue("lastPairedDevice", device as Storage.ValueType);
         }
         (delegate as BluetoothDelegate).setScanMenuDelegate(null);
         BleAPI.setScanState(Ble.SCAN_STATE_SCANNING);

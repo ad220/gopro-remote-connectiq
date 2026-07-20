@@ -270,9 +270,10 @@ module BleApiWrapper {
             throw new Exception();
         }
 
-        (:typecheck(false))
         function requestWrite(value as ByteArray, options as { :writeType as Ble.WriteType }) as Void {
-            var gpxx = uuid.toString().substring(4,8).toNumber();
+            var gpxx = uuid.toString().substring(4,8);
+            if (gpxx == null) { throw new Exception(); }
+            gpxx = gpxx.toNumber() as GattProfileManager.GoProUuid;
             delegate.onCharacteristicWrite(self as Ble.Characteristic, Ble.STATUS_SUCCESS);
             device.onSend(gpxx, value);
         }
@@ -303,9 +304,8 @@ module BleApiWrapper {
             throw new Exception();
         }
 
-        (:typecheck(false))
         function requestWrite(value as ByteArray) as Void {
-            delegate.onDescriptorWrite(self as Ble.Characteristic, Ble.STATUS_SUCCESS);
+            delegate.onDescriptorWrite(self, Ble.STATUS_SUCCESS);
         }
     }
 
