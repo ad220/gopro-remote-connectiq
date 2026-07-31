@@ -19,7 +19,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
         self.camera = getApp().gopro;
 
         camera.queryValues(
-            CameraDelegate.GET_AVAILABLE,
+            GoProDecoder.GET_AVAILABLE,
             [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.HYPERSMOOTH]b
         );
     }

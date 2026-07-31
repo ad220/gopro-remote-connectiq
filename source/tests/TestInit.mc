@@ -51,25 +51,6 @@ module TestInit {
         }
     }
 
-    class SinkGoProDevice extends FakeGoProDevice {
-
-        var requests as Array<[GPM.GoProUuid, ByteArray]>;
-
-        function initialize(
-            settings as FakeGoProDevice.FakeGoProSettings,
-            statuses as FakeGoProDevice.FakeGoProStatuses,
-            specs as FakeGoProSpecs.ISpecs
-        ) {
-            FakeGoProDevice.initialize(settings, statuses, specs);
-
-            self.requests = [];
-        }
-
-        function onSend(uuid as GPM.GoProUuid, data as ByteArray) as Void {
-            requests.add([uuid, data]);
-        }       
-    }
-
     class MockPreset extends GoProPreset {
         function initialize(settings as Dictionary<GoProSettings.SettingId, Number>) {
             GoProPreset.initialize(0);
@@ -122,18 +103,10 @@ module TestInit {
         );
     }
 
-    function initSink(specs as FakeGoProSpecs.ISpecs?) as Void {
-        if (specs == null) { specs = FakeGoProSpecs.getSpecsH11M(); }
-        BleAPI.device = new SinkGoProDevice(
-            initSettings,
-            initStatuses,
-            specs
-        );
-    }
-
     function initConnection(goproId as Number) as Void {
         var delegate = new BluetoothDelegate();
         delegate.connect(new BleAPI.MockScanResult(0, null, goproId) as Ble.ScanResult);
+        BleAPI.device.processRequests();
     }
 
 }

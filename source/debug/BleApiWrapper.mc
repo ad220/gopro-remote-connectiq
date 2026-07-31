@@ -18,7 +18,7 @@ module BleApiWrapper {
 
     typedef ServiceProfile as Array<{:uuid as Ble.Uuid, :descriptors as Array<Ble.Uuid>}>;
 
-    (:initialized) var delegate     as Ble.BleDelegate;
+    (:initialized) var delegate     as Ble.BleDelegate or BluetoothDelegate;
     (:initialized) var device       as FakeGoProDevice;
 
     var registeredProfiles          as Array<GattProfile>       = [];
@@ -31,7 +31,7 @@ module BleApiWrapper {
     var nullPairing                 as Boolean                  = false;
     var connectionStatus            as Ble.ConnectionState      = Ble.CONNECTION_STATE_CONNECTED;
     var hasGoProService             as Boolean                  = true;
-    var scannedDevices              as Array<MockScanResult>    = [new MockScanResult(0, null, CameraDelegate.GP_HERO11M)];
+    var scannedDevices              as Array<MockScanResult>    = [new MockScanResult(0, null, GoProCamera.GP_HERO11M)];
 
 
     function registerProfile(profile as GattProfile) as Void {
@@ -43,7 +43,11 @@ module BleApiWrapper {
     }
 
     function setDelegate(delegate as Ble.BleDelegate) as Void {
-        self.delegate = delegate;
+        if (delegate instanceof BleApiCallbacks) {
+            self.delegate = delegate.delegate as BluetoothDelegate;
+        } else {
+            self.delegate = delegate;
+        }
     }
 
     function setScanState(state as Ble.ScanState) as Void {
@@ -106,7 +110,7 @@ module BleApiWrapper {
 
         function getRawData() as ByteArray {
             var data = new [20]b;
-            data[13] = CameraDelegate.goproModelTable[goproId];
+            data[13] = GoProCamera.modelIdTable[goproId];
             return data;
         }
 
@@ -275,7 +279,7 @@ module BleApiWrapper {
             if (gpxx == null) { throw new Exception(); }
             gpxx = gpxx.toNumber() as GattProfileManager.GoProUuid;
             delegate.onCharacteristicWrite(self as Ble.Characteristic, Ble.STATUS_SUCCESS);
-            device.onSend(gpxx, value);
+            device.onSend([gpxx, value]);
         }
 
     }

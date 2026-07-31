@@ -19,7 +19,7 @@ module FakeGoProSpecs {
     function getSpecsH5S()      as ISpecs { return new SpecsH5Session(); }
 
     class SpecsH11Mini {
-        const cameraId = CameraDelegate.GP_HERO11M;
+        const cameraId = GoProCamera.GP_HERO11M;
 
         const availableSettingsMap = {
             26  => {
@@ -111,7 +111,7 @@ module FakeGoProSpecs {
     }
 
     class SpecsMission1Pro {
-        const cameraId = CameraDelegate.GP_MISSION1PRO;
+        const cameraId = GoProCamera.GP_MISSION1PRO;
 
         const availableSettingsMap = {
             40  => {
@@ -177,7 +177,7 @@ module FakeGoProSpecs {
     }
 
     class SpecsH5Session {
-        const cameraId = CameraDelegate.GP_HERO5S;
+        const cameraId = GoProCamera.GP_HERO5S;
 
         const availableSettingsMap = {
             1   => {
@@ -238,7 +238,7 @@ module FakeGoProSpecs {
     }
 
     class SpecsUnknown {
-        const cameraId = CameraDelegate.GP_UNKNOWN;
+        const cameraId = GoProCamera.GP_UNKNOWN;
 
         const availableSettingsMap    = {
             42  => {
@@ -263,7 +263,7 @@ module FakeGoProSpecs {
     }
 
     class SpecsEmpty {
-        const cameraId                = CameraDelegate.GP_UNKNOWN;
+        const cameraId                = GoProCamera.GP_UNKNOWN;
         const availableSettingsMap    = {} as SpecsMap;
         const availableFlicker        = []b;
         const availableHypersmooth    = []b;

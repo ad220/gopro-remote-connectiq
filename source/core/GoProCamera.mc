@@ -2,8 +2,64 @@ import Toybox.Lang;
 
 using GattProfileManager as GPM;
 using ErrorManager as EM;
+using Toybox.BluetoothLowEnergy as Ble;
 
 class GoProCamera extends GoProSettings {
+
+    public static const modelIdTable = [0, 12, 13, 19, 21, 22, 24, 30, 32, 33, 34, 50, 51, 55, 57, 58, 60, 62, 64, 65, 66, 70, 69, 71]b;
+
+    static const GP_UNKNOWN                 = 0;
+    static const GP_HERO4S                  = 1;
+    static const GP_HERO4B                  = 2;
+    static const GP_HERO5B                  = 3;
+    static const GP_HERO5S                  = 4;
+    static const GP_FUSION                  = 5;
+    static const GP_HERO6B                  = 6;
+    static const GP_HERO7B                  = 7;
+    static const GP_HERO7W                  = 8;
+    static const GP_HERO7S                  = 9;
+    static const GP_HERO2018                = 10;
+    static const GP_HERO8                   = 11;
+    static const GP_MAX                     = 12;
+    static const GP_HERO9                   = 13;
+    static const GP_HERO10                  = 14;
+    static const GP_HERO11                  = 15;
+    static const GP_HERO11M                 = 16;
+    static const GP_HERO12                  = 17;
+    static const GP_MAX2                    = 18;
+    static const GP_HERO13                  = 19;
+    static const GP_HERO2024                = 20;
+    static const GP_HEROLIT                 = 21;
+    static const GP_MISSION1PRO             = 22;
+    static const GP_MISSION1                = 23;
+
+      
+    public static const modelStringTable = [
+        :UnknownGP,
+        4           /* 01) id:12 -> HERO4 Silver */,
+        4           /* 02) id:13 -> HERO4 Black */,
+        5           /* 03) id:19 -> HERO5 Black */,
+        5           /* 04) id:21 -> HERO5 Session */,
+        :Fusion     /* 05) id:22 -> Fusion */,
+        6           /* 06) id:24 -> HERO6 Black */,
+        7           /* 07) id:30 -> HERO7 Black */,
+        7           /* 08) id:32 -> HERO7 White */,
+        7           /* 09) id:33 -> HERO7 Silver */,
+        2018        /* 10) id:34 -> HERO 2018 */,
+        8           /* 11) id:50 -> HERO8 Black */,
+        :MAX        /* 12) id:51 -> MAX */,
+        9           /* 13) id:55 -> HERO9 Black */,
+        10          /* 14) id:57 -> HERO10 Black */,
+        11          /* 15) id:58 -> HERO11 Black */,
+        11          /* 16) id:60 -> HERO11 Black Mini */,
+        12          /* 17) id:62 -> HERO12 Black */,
+        :MAX        /* 18) id:64 -> MAX2 */,
+        13          /* 19) id:65 -> HERO13 Black */,
+        2024        /* 20) id:66 -> HERO (2024) */,
+        " Lit"      /* 21) id:70 -> HERO Lit */,
+        :Mission1   /* 22) id:69 -> Mission1 Pro */,
+        :Mission1   /* 23) id:71 -> Mission1 */,
+    ];
 
     typedef TAvailableSettings as Dictionary<Number, Array<Number>>;
 
@@ -26,6 +82,7 @@ class GoProCamera extends GoProSettings {
     }
 
     private     var delegate                as CameraDelegate;
+    private     var decoder                 as GoProDecoder;
     private     var goproId                 as Number;
     protected   var statuses                as Dictionary<StatusId or Number, Number>;
     protected   var availableSettings       as TAvailableSettings;
@@ -38,44 +95,37 @@ class GoProCamera extends GoProSettings {
         GoProSettings.initialize();
         
         self.delegate = delegate;
-        self.goproId = goproId;
+        self.goproId                = goproId;
+        self.decoder                = new GoProDecoder(goproId);
         self.statuses               = {}    as Dictionary<StatusId or Number, Number>;
         self.availableSettings      = {}    as TAvailableSettings;
         self.availableRatios        = {}    as TAvailableSettings;
         self.tmpAvailableSettings   = {}    as TAvailableSettings;
+
+        statuses[ENCODING] = 0;
     }
 
     public function registerSettings() as Void {
-        delegate.send(GattRequestQueue.REGISTER_NOTIFICATION, GPM.UUID_COMMAND_RESPONSE_CHAR, [0x01, 0x00]b);
-        delegate.send(GattRequestQueue.REGISTER_NOTIFICATION, GPM.UUID_SETTINGS_RESPONSE_CHAR, [0x01, 0x00]b);
-        delegate.send(GattRequestQueue.REGISTER_NOTIFICATION, GPM.UUID_QUERY_RESPONSE_CHAR, [0x01, 0x00]b);
-        queryValues(CameraDelegate.REGISTER_SETTING, [GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b);
-        queryValues(CameraDelegate.REGISTER_STATUS, [ENCODING]b);
+        decoder.enableNotifications(delegate);
+        queryValues(GoProDecoder.REGISTER_SETTING, [GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.GPS, GoProSettings.LED, GoProSettings.LENS, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b);
+        queryValues(GoProDecoder.REGISTER_STATUS, [ENCODING]b);
     }
 
     public function sendCommand(command as CommandId) as Void {
-        var request = [0xFF, command as Number]b;
-        if (command==SHUTTER) {
-            request.addAll([0x01, isRecording() ? 0x00 : 0x01]);
-        }
-        request[0] = request.size()-1;
-        delegate.send(GattRequestQueue.WRITE_CHARACTERISTIC, GPM.UUID_COMMAND_CHAR, request);
+        delegate.send(
+            GattRequestQueue.WRITE_CHARACTERISTIC,
+            GPM.UUID_COMMAND_CHAR,
+            decoder.encodeCommand(command)
+        );
     }
 
     public function sendSetting(id as GoProSettings.SettingId, value as Number) as Void {
         settings.put(id, value);
-
-        if (goproId < CameraDelegate.GP_MAX) {
-            if      (id == GoProSettings.LENS)          { id = GoProSettings.FOV; }
-            else if (id == GoProSettings.FLICKER)       { id = GoProSettings.FORMAT; }
-            else if (id == GoProSettings.HYPERSMOOTH)   { id = GoProSettings.EIS; }
-        }
-
-        var request = goproId == CameraDelegate.GP_MISSION1 or goproId == CameraDelegate.GP_MISSION1PRO ?
-            [0x05, 0xFF, 0x00]b : [0x03]b;
-        request.addAll([id as Number, 0x01, value]b);
-
-        delegate.send(GattRequestQueue.WRITE_CHARACTERISTIC, GPM.UUID_SETTINGS_CHAR, request);
+        delegate.send(
+            GattRequestQueue.WRITE_CHARACTERISTIC,
+            GPM.UUID_SETTINGS_CHAR,
+            decoder.encodeSettings(id, value)
+        );
     }
 
     public function sendPreset(preset as GoProPreset) as Void {
@@ -88,54 +138,17 @@ class GoProCamera extends GoProSettings {
         }  
     }
 
-    public function queryValues(queryId as CameraDelegate.QueryId, values as ByteArray) as Void {
-        var idsSize = values.size();
-        var request = [idsSize + 1, queryId as Number]b;
-        
-        if (goproId == CameraDelegate.GP_MISSION1 or goproId == CameraDelegate.GP_MISSION1PRO) {
-            idsSize *= 2;
-
-            if ((queryId & 0x1F) ^ 0x02 != 0 and queryId != 0x32) { queryId += 3; }
-            request = [idsSize + 1, queryId as Number]b;
-
-            var idsBuffer = new [idsSize]b;
-
-            for (var i=0; i<idsSize; i+=2) {
-                idsBuffer[i+1]  = values[i >> 1];
-            }
-
-            values = idsBuffer;
-        }
-
-        if (goproId < CameraDelegate.GP_MAX and queryId & 0xF == 0x2) {
-            var idx;
-            
-            idx = values.indexOf(GoProSettings.LENS);
-            if (idx != -1)  { values[idx] = GoProSettings.FOV; }
-
-            idx = values.indexOf(GoProSettings.FLICKER);
-            if (idx != -1)  { values[idx] = GoProSettings.FORMAT; }
-
-            idx = values.indexOf(GoProSettings.HYPERSMOOTH);
-            if (idx != -1)  { values[idx] = GoProSettings.EIS; }
-        }
-
-        request.addAll(values);
-        delegate.send(GattRequestQueue.WRITE_CHARACTERISTIC, GPM.UUID_QUERY_CHAR, request);
+    public function queryValues(queryId as GoProDecoder.QueryId, values as ByteArray) as Void {
+        delegate.send(
+            GattRequestQueue.WRITE_CHARACTERISTIC,
+            GPM.UUID_QUERY_CHAR,
+            decoder.encodeQuery(queryId, values)
+        );
     }
 
-    public function onReceiveSetting(id as Number or GoProSettings.SettingId, value as ByteArray) as Void {
-        if (value.size()==0) {
-            EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x00 << 16, id as Number, :SilentErr);
-            return;
-        }
-
-        if      (id == GoProSettings.FOV)           { id = GoProSettings.LENS; }
-        else if (id == GoProSettings.FORMAT)        { id = GoProSettings.FLICKER; }
-        else if (id == GoProSettings.EIS)           { id = GoProSettings.HYPERSMOOTH; }
-
-        value = value[0];
+    public function onReceiveSetting(id as Number or GoProSettings.SettingId, value as Number) as Void {
         settings.put(id as GoProSettings.SettingId, value);
+
         if (id==RESOLUTION) {
             settings.put(RATIO, value);
             
@@ -157,41 +170,21 @@ class GoProCamera extends GoProSettings {
         }
     }
 
-    public function onReceiveStatus(id as Number or StatusId, value as ByteArray) as Void {
-        if (value.size()==0) { 
-            EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x01 << 16, id as Number, :SilentErr);
-            return;
-        }
-
-        if (id==ENCODING) {
-            if (value[0]==1) {
-                var request = [0x02, CameraDelegate.GET_STATUS, ENCODING_DURATION]b;
+    public function onReceiveStatus(id as Number or StatusId, value as Number) as Void {
+        if (id == ENCODING) {
+            if (value == 1) {
                 statuses.put(ENCODING_DURATION, 0);
-                delegate.send(GattRequestQueue.WRITE_CHARACTERISTIC, GPM.UUID_QUERY_CHAR, request);
+                queryValues(GoProDecoder.GET_STATUS, [ENCODING_DURATION]b);
                 progressTimer = getApp().timerController.start(method(:incrementEncodingDuration), 5, true);
             } else {
                 getApp().timerController.stop(progressTimer);
             }
         }
-        if (id==ENCODING_DURATION or id==SD_REMAINING) {
-            statuses.put(id, value.decodeNumber(Lang.NUMBER_FORMAT_UINT32, {:endianness => Lang.ENDIAN_BIG}) as Number);
-        } else {
-            statuses.put(id, value[0]);
-        }
-        if (statuses.get(ENCODING) == null) { statuses.put(ENCODING, 0); }
+
+        statuses.put(id, value);
     }
 
-    public function onReceiveAvailable(id as Number, value as ByteArray) as Void {
-        if (value.size()==0) {
-            EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | 0x02 << 16, id as Number, :SilentErr);
-            return;
-        }
-
-        if      (id == GoProSettings.FOV)           { id = GoProSettings.LENS; }
-        else if (id == GoProSettings.FORMAT)        { id = GoProSettings.FLICKER; }
-        else if (id == GoProSettings.EIS)           { id = GoProSettings.HYPERSMOOTH; }
-
-        value = value[0];
+    public function onReceiveAvailable(id as Number, value as Number) as Void {
         var available = tmpAvailableSettings.get(id);
         if (available != null) {
             available.add(value);
@@ -280,8 +273,12 @@ class GoProCamera extends GoProSettings {
         }
     }
 
-    public function getGoProId() as Number {
+    public function getId() as Number {
         return goproId;
+    }
+
+    public function getDecoder() as GoProDecoder {
+        return decoder;
     }
 
     public function disconnect() as Void {

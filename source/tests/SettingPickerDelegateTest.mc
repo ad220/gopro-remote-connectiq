@@ -4,6 +4,7 @@ import Toybox.Test;
 import Toybox.WatchUi;
 import Toybox.Graphics;
 
+using BleApiWrapper as BleAPI;
 
 (:test)
 module SettingPickerDelegateTest {
@@ -34,25 +35,26 @@ module SettingPickerDelegateTest {
         var result = true;
         TestInit.initDefaults();
         TestInit.initFake(null);
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
 
         var settings = [
             GoProSettings.RESOLUTION,
-            GoProSettings.RATIO,
             GoProSettings.LENS,
             GoProSettings.FRAMERATE,
             GoProSettings.LED,
             GoProSettings.HYPERSMOOTH
         ];
-        getApp().gopro.queryValues(CameraDelegate.GET_AVAILABLE, []b.addAll(settings));
+        getApp().gopro.queryValues(GoProDecoder.GET_AVAILABLE, []b.addAll(settings));
+        BleAPI.device.processRequests();
 
+        (settings as Array).add(GoProSettings.RATIO);
         var expectedLabels = [
             ["5.3K", "4K", "2.7K", "1080p"],
-            ["8:7", "4:3", "16:9"],
             ["Wide", "SuperView", "Linear", "Linear + HLvl", "HyperView", "Linear + HLock"],
             ["120 fps", "100 fps", "60 fps", "50 fps", "30 fps", "25 fps", "24 fps"],
             ["Disabled", "Enabled"],
             ["Disabled", "Low", "Boost", "AutoBoost"],
+            ["8:7", "4:3", "16:9"],
         ];
 
         for (var i=0; i<settings.size(); i+=1) {
@@ -77,9 +79,19 @@ module SettingPickerDelegateTest {
     function testSelectItem(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
         TestInit.initFake(null);
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
 
-        var settings = [
+        var settingsCamera = [
+            GoProSettings.RESOLUTION,
+            GoProSettings.LENS,
+            GoProSettings.FRAMERATE,
+            GoProSettings.LED,
+            GoProSettings.HYPERSMOOTH
+        ];
+        getApp().gopro.queryValues(GoProDecoder.REGISTER_AVAILABLE, []b.addAll(settingsCamera));
+        BleAPI.device.processRequests();
+
+        var settingsIface = [
             GoProSettings.RESOLUTION,
             GoProSettings.RATIO,
             GoProSettings.LENS,
@@ -87,25 +99,23 @@ module SettingPickerDelegateTest {
             GoProSettings.LED,
             GoProSettings.HYPERSMOOTH
         ];
-        getApp().gopro.queryValues(CameraDelegate.REGISTER_AVAILABLE, []b.addAll(settings));
-
         var indexes = [0, 2, 4, 0, 0, 3];
 
-        for (var i=0; i<settings.size(); i+=1) {
-            var menu = initMenu(settings[i]);
+        for (var i=0; i<settingsIface.size(); i+=1) {
+            var menu = initMenu(settingsIface[i]);
             menu[1].onSelect(menu[0].debugItems[indexes[i]]);
+            BleAPI.device.processRequests();
         }
         
-        settings = [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE, GoProSettings.LED, GoProSettings.HYPERSMOOTH];
         var expectedValues = [100, 9, 8, 0, 4];
         var gopro = getApp().gopro;
         var result = true;
 
-        for (var i=0; i<settings.size(); i+=1) {
-            if (gopro.getSetting(settings[i]) != expectedValues[i]) {
-                logger.error("Unexpected setting for id: " + settings[i] +
+        for (var i=0; i<settingsCamera.size(); i+=1) {
+            if (gopro.getSetting(settingsCamera[i]) != expectedValues[i]) {
+                logger.error("Unexpected setting for id: " + settingsCamera[i] +
                     ", expected: " + expectedValues[i] +
-                    ", got: " + gopro.getSetting(settings[i])
+                    ", got: " + gopro.getSetting(settingsCamera[i])
                 );
                 result = false;
             }

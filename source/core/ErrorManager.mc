@@ -73,7 +73,7 @@ module ErrorManager {
         if (!running) { return; } // don't raise an error if a critical one already occured
         
         var app = getApp();
-        var goproId = app.gopro != null ? app.gopro.getGoProId() : 0;
+        var goproId = app.gopro != null ? app.gopro.getId() : 0;
 
         code |= BUILD_FLAGS | (0x3F & goproId << 24) | (0xFFFF & data);
 

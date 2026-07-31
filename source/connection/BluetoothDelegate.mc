@@ -4,6 +4,7 @@ import Toybox.Lang;
 using Toybox.BluetoothLowEnergy as Ble;
 using BleApiWrapper as BleAPI;
 using ErrorManager as EM;
+using GattProfileManager as GPM;
 
 (:ble)
 class BluetoothDelegate extends CameraDelegate {
@@ -62,7 +63,7 @@ class BluetoothDelegate extends CameraDelegate {
             return;
         }
 
-        goproId = getGoProId(device);
+        goproId = GoProDecoder.getGoProId(device);
         CameraDelegate.connect(device);
 
         try {
@@ -202,9 +203,9 @@ class BluetoothDelegate extends CameraDelegate {
     }
 
     public function onCharacteristicChanged(characteristic as Ble.Characteristic, value as ByteArray) as Void {
-        if (characteristic.getUuid().equals(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR))) {
-            decodeQuery(value);
-        }
+        var charId = characteristic.getUuid().toString().substring(4,8);
+        if (charId == null) { EM.raise(EM.ERR_NULL, 10, :WarningErr); return; }
+        onMessage(charId.toNumber() as GPM.GoProUuid, value);
     }
 
     public function onCharacteristicRead(characteristic as Ble.Characteristic, status as Ble.Status, value as ByteArray) as Void {
@@ -213,9 +214,8 @@ class BluetoothDelegate extends CameraDelegate {
             EM.raise(EM.ERR_COMM, EM.SUB_BLE_STATUS | 0x02, :SilentErr);
             return;
         }
-        if (characteristic.getUuid().equals(GattProfileManager.getUuid(GattProfileManager.UUID_QUERY_RESPONSE_CHAR))) {
-            decodeQuery(value);
-        }
+
+        onCharacteristicChanged(characteristic, value);
     }
 
     public function onCharacteristicWrite(characteristic as Ble.Characteristic, status as Ble.Status) as Void {
