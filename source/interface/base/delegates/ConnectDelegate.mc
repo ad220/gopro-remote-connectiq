@@ -59,10 +59,12 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
                 GoProSettings.GPS               => 1,
             } as FakeGoProDevice.FakeGoProSettings,
             {
+                GoProCamera.CAPTURE_MODE        => GoProCamera.MODE_VIDEO,
                 GoProCamera.ENCODING            => 0,
                 GoProCamera.ENCODING_DURATION   => 0,
                 GoProCamera.SD_REMAINING        => 6942,
-                GoProCamera.BATTERY             => 42
+                GoProCamera.BATTERY             => 42,
+                GoProCamera.PHOTOS_TAKEN        => 1234,
             } as FakeGoProDevice.FakeGoProStatuses,
             new FakeGoProSpecs.SpecsMission1Pro()
         );

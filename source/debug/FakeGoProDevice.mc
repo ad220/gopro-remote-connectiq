@@ -289,7 +289,10 @@ using GattProfileManager as GPM;
 
         if (specs.cameraId < GoProCamera.GP_MISSION1PRO) { response.addAll([0xFF, 0]); }
 
-        if (id==GoProCamera.SD_REMAINING or id==GoProCamera.ENCODING_DURATION) {
+        if (id == GoProCamera.SD_REMAINING
+            or id == GoProCamera.ENCODING_DURATION
+            or id == GoProCamera.PHOTOS_TAKEN)
+        {
             response.addAll([id, 0x04]b);
             var valueN = statuses.get(id);
             var valueB = [0,0,0,0]b;

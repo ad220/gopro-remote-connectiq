@@ -65,14 +65,17 @@ module TestInit {
         GoProSettings.FRAMERATE         => 5,
         GoProSettings.FLICKER           => GoProSettings.HZ60,
         GoProSettings.HYPERSMOOTH       => GoProSettings.HS_LOW,
-        GoProSettings.LED               => GoProSettings.LED_ON
+        GoProSettings.LED               => GoProSettings.LED_ON,
+        GoProSettings.PHOTO_LENS        => GoProSettings.WIDE_FULL,
     };
 
     const defaultStatuses = {
+        GoProCamera.CAPTURE_MODE        => 0,
         GoProCamera.ENCODING            => 0,
         GoProCamera.ENCODING_DURATION   => 0,
         GoProCamera.SD_REMAINING        => 6942,
-        GoProCamera.BATTERY             => 42
+        GoProCamera.BATTERY             => 42,
+        GoProCamera.PHOTOS_TAKEN        => 1234,
     };
 
     (:initialized) var initSettings as FakeGoProDevice.FakeGoProSettings;

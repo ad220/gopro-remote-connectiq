@@ -11,11 +11,13 @@ class GoProSettings {
         RESOLUTION  = 2,
         FRAMERATE   = 3,
         FOV         = 4,    // deprecated for lens
+        PHOTO_RES   = 17,   // deprecated for photo lens
         FORMAT      = 57,   // deprecated for anti-flicker
         EIS         = 78,   // deprecated for hypersmooth
         GPS         = 83,
         LED         = 91,
         LENS        = 121,
+        PHOTO_LENS  = 122,
         FLICKER     = 134,
         HYPERSMOOTH = 135,
 
@@ -126,6 +128,46 @@ class GoProSettings {
         ULTRALINEAR     = 14,
         ULTRAHYPERVIEW  = 104,
     }
+
+    public enum PhotoLensId {
+        WIDE_12MP       = 0,
+        LINEAR_12MP     = 10,
+        WIDE_9MP        = 15,
+        NARROW_FULL     = 19,
+        WIDE_23MP       = 27,
+        LINEAR_23MP     = 28,
+        WIDE_27MP       = 31,
+        LINEAR_27MP     = 32,
+        LINEAR_9MP      = 37,
+        LINEAR_13MP     = 38,
+        WIDE_13MP       = 39,
+        UWIDE_13MP      = 40,
+        UWIDE_12MP      = 41,
+        ULINEAR_13MP    = 44,
+        MAXSV_FULL      = 100,
+        WIDE_FULL       = 101,
+        LINEAR_FULL     = 102,
+    }
+
+    public static const PHOTO_LENS_MAP = {
+        WIDE_12MP       => 12   + WIDE          << 8,
+        LINEAR_12MP     => 12   + LINEAR        << 8,
+        WIDE_9MP        => 9    + WIDE          << 8,
+        NARROW_FULL     => 0    + NARROW        << 8,
+        WIDE_23MP       => 23   + WIDE          << 8,
+        LINEAR_23MP     => 23   + LINEAR        << 8,
+        WIDE_27MP       => 27   + WIDE          << 8,
+        LINEAR_27MP     => 27   + LINEAR        << 8,
+        LINEAR_9MP      => 9    + LINEAR        << 8,
+        LINEAR_13MP     => 13   + LINEAR        << 8,
+        WIDE_13MP       => 13   + WIDE          << 8,
+        UWIDE_13MP      => 13   + ULTRAWIDE     << 8,
+        UWIDE_12MP      => 12   + ULTRAWIDE     << 8,
+        ULINEAR_13MP    => 13   + ULTRALINEAR   << 8,
+        MAXSV_FULL      => 0    + MAXSUPERVIEW  << 8,
+        WIDE_FULL       => 0    + WIDE          << 8,
+        LINEAR_FULL     => 0    + LINEAR        << 8,
+    };
 
     public static const LENS_LABELS = {
         WIDE            => Rez.Strings._WIDE,

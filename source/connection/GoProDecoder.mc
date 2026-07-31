@@ -39,12 +39,14 @@ class GoProDecoder {
         GoProSettings.FOV, 
         GoProSettings.FORMAT, 
         GoProSettings.EIS,
+        GoProSettings.PHOTO_RES,
     ]b;
 
     private static const NEW_SETTINGS   = [
         GoProSettings.LENS,
         GoProSettings.FLICKER,
         GoProSettings.HYPERSMOOTH,
+        GoProSettings.PHOTO_LENS,
     ]b;
 
 
@@ -103,6 +105,11 @@ class GoProDecoder {
         if      (command == GoProCamera.SHUTTER) {
             request.addAll([0x01, cam.isRecording() ? 0x00 : 0x01]);
         }
+        else if (command == GoProCamera.SWITCH_MODE) {
+            var mode = cam.getStatus(GoProCamera.CAPTURE_MODE);
+            if (mode == null) { mode = 0; }
+            request.addAll([0x01, mode ^ 0x01]);
+        }
 
         request[0] = request.size()-1;
         return request;
@@ -112,7 +119,8 @@ class GoProDecoder {
         as [Number or GoProCamera.StatusId,  Number]
     {
         if (id == GoProCamera.ENCODING_DURATION
-            or id == GoProCamera.SD_REMAINING)
+            or id == GoProCamera.SD_REMAINING
+            or id == GoProCamera.PHOTOS_TAKEN)
         {
             value = value.decodeNumber(Lang.NUMBER_FORMAT_UINT32, {:endianness => Lang.ENDIAN_BIG}) as Number;
         } else {
