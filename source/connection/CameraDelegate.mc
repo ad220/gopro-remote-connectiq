@@ -62,7 +62,7 @@ class CameraDelegate {
             connected = false;
 
             getApp().viewController.returnHome(Rez.Strings.Disconnected, NotifView.NOTIF_INFO);
-            getApp().gopro = null as GoProCamera;
+            getApp().gopro = Helper.createNullObject() as GoProCamera;
         }
     }
 

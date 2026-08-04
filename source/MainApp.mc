@@ -50,9 +50,9 @@ class GoProRemoteApp extends Application.AppBase {
     (:ble :typecheck(false))
     function onStop(state as Dictionary?) as Void {
         if (appStarted) {
-            if (viewController != null)     { viewController.returnHome(null, null); }
-            if (timerController != null)    { timerController.stopAll(); }
-            BleAPI.setDelegate(null as Ble.BleDelegate);
+            if (viewController instanceof ViewController)   { viewController.returnHome(null, null); }
+            if (timerController instanceof TimerController) { timerController.stopAll(); }
+            BleAPI.setDelegate(Helper.createNullObject() as Ble.BleDelegate);
         }
 
         Storage.setValue("reportsEnabled", reportsEnabled);
@@ -63,8 +63,8 @@ class GoProRemoteApp extends Application.AppBase {
     (:mobile :typecheck(false))
     function onStop(state as Dictionary?) as Void {
         if (appStarted) {
-            if (viewController != null)     { viewController.returnHome(null, null); }
-            if (timerController!=null)      { timerController.stopAll(); }
+            if (viewController instanceof ViewController)   { viewController.returnHome(null, null); }
+            if (timerController instanceof TimerController) { timerController.stopAll(); }
             Communications.registerForPhoneAppMessages(null);
         }
         

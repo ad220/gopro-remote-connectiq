@@ -2,6 +2,7 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 import Toybox.Graphics;
 
+using ErrorManager as EM;
 
 (:highend)
 class TogglablesView extends WatchUi.View {
@@ -58,7 +59,8 @@ class TogglablesView extends WatchUi.View {
             dc.setAntiAlias(true);
         }
 
-        var camera = getApp().gopro;
+        var camera = Helper.safeGoProAccess(11);
+        if (camera == null) { return; }
 
         var sdRemaining = camera.getStatus(GoProCamera.SD_REMAINING);
         if (sdRemaining!=null) {

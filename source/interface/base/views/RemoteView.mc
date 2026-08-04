@@ -60,12 +60,8 @@ class RemoteView extends WatchUi.View {
             dc.setAntiAlias(true);
         }
 
-        var gopro = getApp().gopro as GoProCamera?;
-        if (gopro == null) {
-            // ERA_CRASH(x11v4.0.1, x100v4.0.2): before null check
-            EM.raise(EM.ERR_NULL, 7, :CriticalErr);
-            return;
-        }
+        var gopro = Helper.safeGoProAccess(7);
+        if (gopro == null) { return; } // ERA_CRASH(x11v4.0.1, x100v4.0.2): before null check
 
         View.onUpdate(dc);
 

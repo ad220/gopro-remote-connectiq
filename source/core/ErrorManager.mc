@@ -73,7 +73,8 @@ module ErrorManager {
         if (!running) { return; } // don't raise an error if a critical one already occured
         
         var app = getApp();
-        var goproId = app.gopro != null ? app.gopro.getId() : 0;
+        var goproExists = Helper.safeGoProAccess(null) != null;
+        var goproId = goproExists ? app.gopro.getId() : 0;
 
         code |= BUILD_FLAGS | (0x3F & goproId << 24) | (0xFFFF & data);
 
@@ -97,7 +98,7 @@ module ErrorManager {
                 app.viewController.returnHome(null, null);
                 app.viewController.switchTo(view, null, WatchUi.SLIDE_IMMEDIATE);
 
-                if (app.gopro != null) { app.gopro.disconnect(); }
+                if (goproExists) { app.gopro.disconnect(); }
             }
         }
     }
