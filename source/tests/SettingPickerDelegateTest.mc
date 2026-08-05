@@ -37,14 +37,38 @@ module SettingPickerDelegateTest {
         TestInit.initFake(null);
         TestInit.initConnection(GoProCamera.GP_HERO11M);
 
+        var gopro = getApp().gopro;
+        var specs = BleAPI.device.specs;
+
+        specs.availablePhotoLens.addAll([
+            GoProSettings.WIDE_12MP,
+            GoProSettings.MEDIUM_12MP,
+            GoProSettings.NARROW_12MP,
+            GoProSettings.LINEAR_12MP,
+            GoProSettings.WIDE_9MP,
+            GoProSettings.NARROW_FULL,
+            GoProSettings.WIDE_27MP,
+            GoProSettings.LINEAR_27MP,
+            GoProSettings.LINEAR_13MP,
+            GoProSettings.WIDE_13MP,
+            GoProSettings.UWIDE_13MP,
+            GoProSettings.UWIDE_12MP,
+            GoProSettings.ULINEAR_13MP,
+            GoProSettings.MAXSV_FULL,
+            GoProSettings.WIDE_FULL,
+            GoProSettings.LINEAR_FULL,
+        ]b);
+
         var settings = [
             GoProSettings.RESOLUTION,
             GoProSettings.LENS,
             GoProSettings.FRAMERATE,
             GoProSettings.LED,
-            GoProSettings.HYPERSMOOTH
+            GoProSettings.HYPERSMOOTH,
+            GoProSettings.PHOTO_LENS,
         ];
-        getApp().gopro.queryValues(GoProDecoder.GET_AVAILABLE, []b.addAll(settings));
+
+        gopro.queryValues(GoProDecoder.GET_AVAILABLE, []b.addAll(settings));
         BleAPI.device.processRequests();
 
         (settings as Array).add(GoProSettings.RATIO);
@@ -54,6 +78,10 @@ module SettingPickerDelegateTest {
             ["120 fps", "100 fps", "60 fps", "50 fps", "30 fps", "25 fps", "24 fps"],
             ["Disabled", "Enabled"],
             ["Disabled", "Low", "Boost", "AutoBoost"],
+            ["Wide", "Narrow", "Linear", "MAX SuperView", "27MP Wide", "27MP Linear",
+                "13MP Wide", "13MP Linear", "13MP Ultra Wide", "13MP Ultra Linear",
+                "12MP Wide", "12MP Medium", "12MP Narrow", "12MP Linear", "12MP Ultra Wide",
+                "9MP Wide"],
             ["8:7", "4:3", "16:9"],
         ];
 

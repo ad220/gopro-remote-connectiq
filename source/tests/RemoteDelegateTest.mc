@@ -38,8 +38,19 @@ module RemoteDelegateTest {
         BleAPI.device.processRequests();
         delegate.onMenu();
         
-        if (!(viewController.getCurrentDelegate() instanceof SettingsMenuDelegate)) {
+        var tmpDlgt = viewController.getCurrentDelegate();
+        if (!(tmpDlgt instanceof SettingsMenuDelegate)) {
             logger.error("Current view should be settings menu");
+            return false;
+        }
+        tmpDlgt.onBack();
+
+        camera.sendCommand(GoProCamera.SWITCH_MODE);
+        BleAPI.device.processRequests();
+        delegate.onMenu();
+
+        if (!(viewController.getCurrentDelegate() instanceof SettingPickerDelegate)) {
+            logger.error("Current view should be setting picker menu");
             return false;
         }
 

@@ -131,6 +131,11 @@ class GoProSettings {
 
     public enum PhotoLensId {
         WIDE_12MP       = 0,
+        WIDE_7MP        = 1,
+        MEDIUM_7MP      = 2,
+        WIDE_5MP        = 3,
+        MEDIUM_12MP     = 8,
+        NARROW_12MP     = 9,
         LINEAR_12MP     = 10,
         WIDE_9MP        = 15,
         NARROW_FULL     = 19,
@@ -151,6 +156,11 @@ class GoProSettings {
 
     public static const PHOTO_LENS_MAP = {
         WIDE_12MP       => 12   + WIDE          << 8,
+        WIDE_7MP        => 7    + WIDE          << 8,
+        MEDIUM_7MP      => 7    + MEDIUM        << 8,
+        WIDE_5MP        => 5    + WIDE          << 8,
+        MEDIUM_12MP     => 12   + MEDIUM        << 8,
+        NARROW_12MP     => 12   + NARROW        << 8,
         LINEAR_12MP     => 12   + LINEAR        << 8,
         WIDE_9MP        => 9    + WIDE          << 8,
         NARROW_FULL     => 0    + NARROW        << 8,
@@ -267,6 +277,16 @@ class GoProSettings {
         }
         else if (id == LED)          { label = LED_LABELS.get(setting); }
         else if (id == HYPERSMOOTH)  { label = HYPERSMOOTH_LABELS.get(setting); }
+        else if (id == PHOTO_LENS)   {
+            var lens = PHOTO_LENS_MAP.get(setting) as Number?;
+            if (lens != null) {
+                var rez = LENS_LABELS.get(lens >> 8);
+                if (rez != null)    { label = WatchUi.loadResource(rez) as String; }
+
+                lens &= 0xFF;
+                if (lens != 0)      { label = lens + "MP " + label; }
+            }
+        }
         else {
             // System.println("[WARNING]   Unknown setting ID requested for label");
             EM.raise(
@@ -350,5 +370,17 @@ class FramerateComparator {
         if (b == null) { b = 0; }
         
         return b - a;
+    }
+}
+
+class PhotoLensComparator {
+    public function compare(lensA as Object, lensB as Object) as Number {
+        var a = GoProSettings.PHOTO_LENS_MAP.get(lensA as Number) as Number?;
+        var b = GoProSettings.PHOTO_LENS_MAP.get(lensB as Number) as Number?;
+
+        if (a == null) { a = 0; }
+        if (b == null) { b = 0; }
+        
+        return (b-1) & 0xFF << 8 - (b >> 8) - (a-1) & 0xFF << 8 + (a >> 8);
     }
 }

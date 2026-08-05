@@ -136,13 +136,24 @@ using GattProfileManager as GPM;
                 var commandId = data[1];
                 switch (commandId) {
                     case GoProCamera.SHUTTER:
-                        statuses.put(GoProCamera.ENCODING, data[3]);
-                        responseSplitter(GPM.UUID_COMMAND_RESPONSE_CHAR, [1, 0]b);
-                        if (notifStatuses.indexOf(GoProCamera.ENCODING) != -1) {
-                            BleAPI.delegate.onCharacteristicChanged(
-                                gpQueryResponseChar as Ble.Characteristic,
-                                [0x05, GoProDecoder.NOTIF_STATUS, 0x00, GoProCamera.ENCODING, 0x01, data[3]]b
-                            );
+                        if (statuses[GoProCamera.CAPTURE_MODE] == GoProCamera.MODE_VIDEO) {
+                            statuses.put(GoProCamera.ENCODING, data[3]);
+                            responseSplitter(GPM.UUID_COMMAND_RESPONSE_CHAR, [1, 0]b);
+                            if (notifStatuses.indexOf(GoProCamera.ENCODING) != -1) {
+                                BleAPI.delegate.onCharacteristicChanged(
+                                    gpQueryResponseChar as Ble.Characteristic,
+                                    [0x05, GoProDecoder.NOTIF_STATUS, 0x00, GoProCamera.ENCODING, 0x01, data[3]]b
+                                );
+                            }
+                        } else {
+                            var pt = 1 + statuses[GoProCamera.PHOTOS_TAKEN] as Number;
+                            statuses[GoProCamera.PHOTOS_TAKEN] = pt;
+                            if (notifStatuses.indexOf(GoProCamera.PHOTOS_TAKEN) != -1) {
+                                BleAPI.delegate.onCharacteristicChanged(
+                                    gpQueryResponseChar as Ble.Characteristic,
+                                    [0x08, GoProDecoder.NOTIF_STATUS, 0x00, GoProCamera.PHOTOS_TAKEN, 0x04, 0, 0, pt >> 8, pt & 0xFF]b
+                                );
+                            }
                         }
                         break;
 
@@ -153,6 +164,17 @@ using GattProfileManager as GPM;
 
                     case GoProCamera.SLEEP:
                         sleep();
+                        break;
+
+                    case GoProCamera.SWITCH_MODE:
+                        var modeId = GoProCamera.CAPTURE_MODE;
+                        statuses.put(modeId, data[3]);
+                        if (notifStatuses.indexOf(modeId) != -1) {
+                            responseSplitter(
+                                GPM.UUID_QUERY_RESPONSE_CHAR,
+                                [GoProDecoder.NOTIF_STATUS, 0x00, modeId, 1, data[3]]b
+                            );
+                        }
                         break;
 
                     default:
@@ -312,9 +334,8 @@ using GattProfileManager as GPM;
     public function onReceiveAvailable(id as Number, response as ByteArray, query as Number) as Void {
         var internalId = id;
 
-        if      (id == GoProSettings.FOV)       { internalId = GoProSettings.LENS; }
-        else if (id == GoProSettings.FORMAT)    { internalId = GoProSettings.FLICKER; }
-        else if (id == GoProSettings.EIS)       { internalId = GoProSettings.HYPERSMOOTH; }
+        var idx = GoProDecoder.OLD_SETTINGS.indexOf(id);
+        if (idx != -1) { internalId = GoProDecoder.NEW_SETTINGS[idx]; }
 
         updateNotif(notifAvailable, query, internalId);
         if (query >= 0x70) { return; }
@@ -344,6 +365,9 @@ using GattProfileManager as GPM;
                 break;
             case GoProSettings.HYPERSMOOTH:
                 available = specs.availableHypersmooth;
+                break;
+            case GoProSettings.PHOTO_LENS:
+                available = specs.availablePhotoLens;
                 break;
             default:
                 available = []b;

@@ -126,10 +126,11 @@ class GoProCamera extends GoProSettings {
     private function registerMode(invertFlag as Number) as Void {
         // invertFlag should be 0x20 to register for photo mode, 0 for video.
         var videoSettings = [GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.LENS]b;
-        queryValues((GoProDecoder.REGISTER_SETTING   + invertFlag) as GoProDecoder.QueryId, videoSettings);
-        queryValues((GoProDecoder.REGISTER_STATUS    + invertFlag) as GoProDecoder.QueryId, [ENCODING]b);
-        queryValues((GoProDecoder.UNREGISTER_SETTING - invertFlag) as GoProDecoder.QueryId, [GoProSettings.PHOTO_LENS]b);
-        queryValues((GoProDecoder.UNREGISTER_STATUS  - invertFlag) as GoProDecoder.QueryId, [PHOTOS_TAKEN]b);
+        queryValues((GoProDecoder.REGISTER_SETTING      + invertFlag) as GoProDecoder.QueryId, videoSettings);
+        queryValues((GoProDecoder.REGISTER_STATUS       + invertFlag) as GoProDecoder.QueryId, [ENCODING]b);
+        queryValues((GoProDecoder.UNREGISTER_SETTING    - invertFlag) as GoProDecoder.QueryId, [GoProSettings.PHOTO_LENS]b);
+        queryValues((GoProDecoder.UNREGISTER_STATUS     - invertFlag) as GoProDecoder.QueryId, [PHOTOS_TAKEN]b);
+        queryValues((GoProDecoder.UNREGISTER_AVAILABLE  - invertFlag) as GoProDecoder.QueryId, [GoProSettings.PHOTO_LENS]b);
     }
 
 
@@ -297,6 +298,21 @@ class GoProCamera extends GoProSettings {
         if (isRecording()) {
             statuses[ENCODING_DURATION]++;
             WatchUi.requestUpdate();
+        }
+    }
+
+    public function getDescription() as String {
+        if (statuses.get(CAPTURE_MODE) == MODE_VIDEO) {
+            return GoProSettings.getDescription();
+        } else {
+            var lens = settings[PHOTO_LENS];
+            if (lens == null) { return ". . ."; }
+            
+            lens = PHOTO_LENS_MAP.get(lens) as Number?;
+            if (lens == null) { return ". . ."; }
+
+            lens &= 0xFF;
+            return lens == 0 ? "Photo" : lens + " MP"; 
         }
     }
 

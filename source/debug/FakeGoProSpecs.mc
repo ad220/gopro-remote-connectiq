@@ -12,6 +12,7 @@ module FakeGoProSpecs {
         var availableHypersmooth    as ByteArray;
         var availableLed            as ByteArray;
         var availableGps            as ByteArray;
+        var availablePhotoLens      as ByteArray;
     };
 
     function getSpecsH11M()     as ISpecs { return new SpecsH11Mini(); }
@@ -108,6 +109,8 @@ module FakeGoProSpecs {
         ]b;
 
         const availableGps = []b;
+
+        const availablePhotoLens = []b;
     }
 
     class SpecsMission1Pro {
@@ -174,6 +177,10 @@ module FakeGoProSpecs {
         ]b;
 
         const availableGps = [0, 1]b;
+        const availablePhotoLens = [
+            GoProSettings.WIDE_FULL,
+            GoProSettings.LINEAR_FULL,
+        ]b;
     }
 
     class SpecsH5Session {
@@ -235,6 +242,11 @@ module FakeGoProSpecs {
         ]b;
 
         const availableGps = [0, 1]b;
+        const availablePhotoLens = [
+            GoProSettings.WIDE_5MP,
+            GoProSettings.WIDE_7MP,
+            GoProSettings.MEDIUM_7MP,
+        ]b;
     }
 
     class SpecsUnknown {
@@ -260,6 +272,7 @@ module FakeGoProSpecs {
         const availableHypersmooth    = [52, 63]b;
         const availableLed            = [7, 8]b;
         const availableGps            = [9, 10]b;
+        const availablePhotoLens      = [78, 91]b;
     }
 
     class SpecsEmpty {
@@ -269,5 +282,6 @@ module FakeGoProSpecs {
         const availableHypersmooth    = []b;
         const availableLed            = []b;
         const availableGps            = []b;
+        const availablePhotoLens      = []b;
     }
 }

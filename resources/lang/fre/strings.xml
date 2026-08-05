@@ -55,6 +55,7 @@
     <string id="Ratio">Format</string>
     <string id="Lens">Objectif</string>
     <string id="Framerate">Fréq. d'image</string>
+    <string id="PhotoLens">Format photo</string>
 
     <!-- Paramètres de la caméra pour appareils avec peu de mémoire -->
      <!-- $$$ -->

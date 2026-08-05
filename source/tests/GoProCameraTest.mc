@@ -701,6 +701,64 @@ module GoProCameraTest {
         return result;
     }
 
+    (:test)
+    function testPhotoMode(logger as Logger) as Boolean {
+        var result = true;
+        TestInit.initDefaults();
+        TestInit.initFake(FakeGoProSpecs.getSpecsM1Pro());
+        TestInit.initConnection(GoProCamera.GP_MISSION1PRO);
+        
+        var camera = getApp().gopro;
+        BleAPI.device.processRequests();
+
+        if (camera.getStatus(GoProCamera.PHOTOS_TAKEN) != null) {
+            logger.error("Camera photos taken status should still be null");
+        }
+
+        camera.sendCommand(GoProCamera.SWITCH_MODE);
+        BleAPI.device.processRequests();
+
+        if (camera.getStatus(GoProCamera.CAPTURE_MODE) != GoProCamera.MODE_PHOTO) {
+            logger.error("Camera should be in photo mode");
+            result = false;
+        }
+
+        var photosTaken = camera.getStatus(GoProCamera.PHOTOS_TAKEN);
+        if (photosTaken != 1234) {
+            logger.error("There should be 1234 photos taken, got: " + photosTaken);
+            result = false;
+        }
+
+        camera.sendCommand(GoProCamera.SHUTTER);
+        BleAPI.device.processRequests();
+
+        if (camera.isRecording()) {
+            logger.error("Camera is in photo mode, it shouuld not be recording");
+            result = false;
+        }
+
+        photosTaken = camera.getStatus(GoProCamera.PHOTOS_TAKEN);
+        if (photosTaken != 1235) {
+            logger.error("There should be 1235 photos taken, got: " + photosTaken);
+            result = false;
+        }
+
+
+        camera.sendCommand(GoProCamera.SHUTTER);
+        camera.sendCommand(GoProCamera.SHUTTER);
+        camera.sendCommand(GoProCamera.SHUTTER);
+        camera.sendCommand(GoProCamera.SHUTTER);
+        BleAPI.device.processRequests();
+
+        photosTaken = camera.getStatus(GoProCamera.PHOTOS_TAKEN);
+        if (photosTaken != 1239) {
+            logger.error("There should be 1239 photos taken, got: " + photosTaken);
+            result = false;
+        }
+
+        return result;
+    }
+
 
     (:test)
     function testRecordingCamera(logger as Logger) as Boolean {
@@ -743,6 +801,7 @@ module GoProCameraTest {
     function testLabelKnown(logger as Logger) as Boolean {
         var result = true;
         TestInit.initDefaults();
+        TestInit.initSettings[GoProSettings.PHOTO_LENS] = GoProSettings.WIDE_27MP; 
         TestInit.initFake(null);
         TestInit.initConnection(GoProCamera.GP_HERO11M);
         
@@ -776,6 +835,21 @@ module GoProCameraTest {
             result = false;
         }
 
+        camera.sendCommand(GoProCamera.SWITCH_MODE);
+        BleAPI.device.processRequests();
+
+        label = camera.getLabel(GoProCamera.PHOTO_LENS, null);
+        if (!label.equals("27MP Wide")) {
+            logger.error("Wrong label, expected: '27MP Wide', got :" + label);
+            result = false;
+        }
+
+        label = camera.getDescription();
+        if (!label.equals("27 MP")) {
+            logger.error("Wrong description, expected '27 MP', got :" + label);
+            result = false;
+        }
+
         return result;
     }
 
@@ -791,6 +865,7 @@ module GoProCameraTest {
         TestInit.initSettings.put(GoProSettings.LED, 69);
         TestInit.initSettings.put(GoProSettings.FLICKER, 78);
         TestInit.initSettings.put(GoProSettings.HYPERSMOOTH, 26);
+        TestInit.initSettings.put(GoProSettings.PHOTO_LENS, 91);
 
         TestInit.initFake(null);
         TestInit.initConnection(GoProCamera.GP_HERO11M);
@@ -807,7 +882,8 @@ module GoProCameraTest {
             GoProSettings.GPS,
             GoProSettings.LED,
             GoProSettings.FLICKER,
-            GoProSettings.HYPERSMOOTH
+            GoProSettings.HYPERSMOOTH,
+            GoProSettings.PHOTO_LENS,
         ];
 
         for (var i=0; i<ids.size(); i+=1) {
@@ -817,7 +893,16 @@ module GoProCameraTest {
                 return false;
             }
         }
-        
+
+        label = camera.getDescription();
+        if (!label.equals(". . .")) {
+            logger.error("Expected placeholder description as '. . .' got :" + label);
+            return false;
+        }
+
+        camera.sendCommand(GoProCamera.SWITCH_MODE);
+        BleAPI.device.processRequests();
+
         label = camera.getDescription();
         if (!label.equals(". . .")) {
             logger.error("Expected placeholder description as '. . .' got :" + label);

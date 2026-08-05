@@ -59,6 +59,7 @@
     <string id="Lens">Lens</string>
     <string id="Resolution">Resolution</string>
     <string id="Ratio">Aspect ratio</string>
+    <string id="PhotoLens">Photo Lens</string>
     <string id="Gps" translatable="false">GPS</string>
     <string id="Led" translatable="false">LED</string>
     <string id="HyperSmooth" translatable="false">HyperSmooth</string>

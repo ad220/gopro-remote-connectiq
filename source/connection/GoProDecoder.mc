@@ -35,14 +35,14 @@ class GoProDecoder {
         QTYPE_AVAILABLE,
     }
     
-    private static const OLD_SETTINGS   = [
+    public static const OLD_SETTINGS   = [
         GoProSettings.FOV, 
         GoProSettings.FORMAT, 
         GoProSettings.EIS,
         GoProSettings.PHOTO_RES,
     ]b;
 
-    private static const NEW_SETTINGS   = [
+    public static const NEW_SETTINGS   = [
         GoProSettings.LENS,
         GoProSettings.FLICKER,
         GoProSettings.HYPERSMOOTH,
@@ -191,8 +191,8 @@ class GoProDecoder {
             // System.println("[WARNING]   TLV Message too short");
             return;
         }
-        var gopro = getApp().gopro as GoProCamera?;
-        if (gopro == null) { EM.raise(EM.ERR_NULL, 3, :CriticalErr); return; }
+        var gopro = Helper.safeGoProAccess(3);
+        if (gopro == null) { return; }
 
         var queryId = message[0];
         var status = message[1];
