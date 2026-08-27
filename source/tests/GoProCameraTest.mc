@@ -845,8 +845,8 @@ module GoProCameraTest {
         }
 
         label = camera.getDescription();
-        if (!label.equals("27 MP")) {
-            logger.error("Wrong description, expected '27 MP', got :" + label);
+        if (!label.equals("27MP Wide")) {
+            logger.error("Wrong description, expected '27MP Wide', got :" + label);
             result = false;
         }
 
@@ -904,8 +904,8 @@ module GoProCameraTest {
         BleAPI.device.processRequests();
 
         label = camera.getDescription();
-        if (!label.equals(". . .")) {
-            logger.error("Expected placeholder description as '. . .' got :" + label);
+        if (!label.equals("")) {
+            logger.error("Expected empty placeholder description got :" + label);
             return false;
         }
 

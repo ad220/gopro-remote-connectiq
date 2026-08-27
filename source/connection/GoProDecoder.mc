@@ -248,8 +248,12 @@ class GoProDecoder {
             tuple = method(decoder).invoke(type, value) as [Number, Number];
             gopro.method(receiver).invoke(tuple[0], tuple[1]);
         }
-        if (receiver == :onReceiveAvailable) {
+
+        if      (receiver == :onReceiveAvailable) {
             gopro.applyAvailableSettings();
+        }
+        else if (receiver == :onReceiveSetting) {
+            gopro.updateDescription();
         }
         $.Toybox.WatchUi.requestUpdate();
     }

@@ -100,6 +100,7 @@ class GoProCamera extends GoProSettings {
     private     var availableRatios         as TAvailableSettings;
     private     var tmpAvailableSettings    as TAvailableSettings;
     protected   var progressTimer           as TimerCallback?;
+    private     var description             as String;
 
 
     public function initialize(delegate as CameraDelegate, goproId as Number) {
@@ -112,6 +113,7 @@ class GoProCamera extends GoProSettings {
         self.availableSettings      = {}    as TAvailableSettings;
         self.availableRatios        = {}    as TAvailableSettings;
         self.tmpAvailableSettings   = {}    as TAvailableSettings;
+        self.description            = ". . .";
 
         statuses[ENCODING] = 0;
     }
@@ -302,17 +304,14 @@ class GoProCamera extends GoProSettings {
     }
 
     public function getDescription() as String {
-        if (statuses.get(CAPTURE_MODE) == MODE_VIDEO) {
-            return GoProSettings.getDescription();
-        } else {
-            var lens = settings[PHOTO_LENS];
-            if (lens == null) { return ". . ."; }
-            
-            lens = PHOTO_LENS_MAP.get(lens) as Number?;
-            if (lens == null) { return ". . ."; }
+        return description;
+    }
 
-            lens &= 0xFF;
-            return lens == 0 ? "Photo" : lens + " MP"; 
+    public function updateDescription() as Void {
+        if (statuses.get(CAPTURE_MODE) == MODE_VIDEO) {
+            description = GoProSettings.getDescription();
+        } else {
+            description = getLabel(PHOTO_LENS, settings[PHOTO_LENS]) as String;
         }
     }
 
