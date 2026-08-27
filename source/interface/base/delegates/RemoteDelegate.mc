@@ -24,6 +24,15 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
         if (gopro.isRecording()) { return false; }
 
         var vc = getApp().viewController;
+        var menu = new Menu2(null);
+        vc.push(menu, new RemoteMenuDelegate(menu), SLIDE_IMMEDIATE);
+        return true;
+    }
+
+    public function onNextPage() as Boolean {
+        if (gopro.isRecording()) { return false; }
+
+        var vc = getApp().viewController;
         if (gopro.getStatus(GoProCamera.CAPTURE_MODE) == GoProCamera.MODE_VIDEO) {
             var menu = ICM.newCustomMenu(0.15, null);
             vc.switchTo(menu, new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, []), SLIDE_UP);
@@ -32,10 +41,6 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
             vc.push(menu, new SettingPickerDelegate(menu, GoProSettings.PHOTO_LENS), SLIDE_UP);
         }
         return true;
-    }
-
-    public function onNextPage() as Boolean {
-        return onMenu();
     }
 
     (:highend)

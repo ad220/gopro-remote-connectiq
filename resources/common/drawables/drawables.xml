@@ -1,8 +1,10 @@
 <drawables>
     <bitmap id="LauncherIcon" filename="remote_small.png" automaticPalette="true"/>
     
-    <bitmap id="Hilight" filename="../../common/drawables/hilight.png" scaleX="9.2%"  dithering="none" automaticPalette="true"/>
-    <bitmap id="Settings" filename="../../common/drawables/wheel.png" scaleY="10%" dithering="none" automaticPalette="true"/>
+    <bitmap id="Hilight" filename="hilight.png" scaleX="9.2%"  dithering="none" automaticPalette="true"/>
+    <bitmap id="Settings" filename="wheel.png" scaleY="10%" dithering="none" automaticPalette="true"/>
+
+    <bitmap id="CaptureMode" filename="capture_mode.png" scaleY="10%" dithering="none" automaticPalette="true"/>
 
     <bitmap id="Save" filename="save.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
     <bitmap id="Camera" filename="camera.png" scaleY="10%"  dithering="none" automaticPalette="true"/>

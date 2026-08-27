@@ -36,7 +36,7 @@ class RemoteView extends WatchUi.View {
         }));
         // Settings button
         layout.add(new Button({
-            :behavior   => :onMenu,
+            :behavior   => :onNextPage,
             :locX       => Screen.HEIGHT * 0.2,
             :locY       => Screen.WIDTH * 0.65,
             :width      => Screen.WIDTH * 0.6,

@@ -27,6 +27,53 @@ module RemoteDelegateTest {
         
         camera.sendCommand(GoProCamera.SHUTTER);
         BleAPI.device.processRequests();
+        delegate.onNextPage();
+
+        if (viewController.getCurrentDelegate() != delegate) {
+            logger.error("Camera is recording, settings shouldn't be available");
+            return false;
+        }
+        
+        camera.sendCommand(GoProCamera.SHUTTER);
+        BleAPI.device.processRequests();
+        delegate.onNextPage();
+        
+        var tmpDlgt = viewController.getCurrentDelegate();
+        if (!(tmpDlgt instanceof SettingsMenuDelegate)) {
+            logger.error("Current view should be settings menu");
+            return false;
+        }
+        tmpDlgt.onBack();
+
+        camera.sendCommand(GoProCamera.SWITCH_MODE);
+        BleAPI.device.processRequests();
+        delegate.onNextPage();
+
+        if (!(viewController.getCurrentDelegate() instanceof SettingPickerDelegate)) {
+            logger.error("Current view should be setting picker menu");
+            return false;
+        }
+
+        return true;
+    }
+
+
+    (:test)
+    function testMenu(logger as Test.Logger) as Boolean {
+        TestInit.initDefaults();
+        TestInit.initFake(null);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
+        
+        var camera = getApp().gopro;
+
+        var viewController = new ViewDebugController();
+        getApp().viewController = viewController;
+        
+        var delegate = new RemoteDelegate();
+        viewController.push(new RemoteView(), delegate, WatchUi.SLIDE_IMMEDIATE);
+        
+        camera.sendCommand(GoProCamera.SHUTTER);
+        BleAPI.device.processRequests();
         delegate.onMenu();
 
         if (viewController.getCurrentDelegate() != delegate) {
@@ -39,18 +86,8 @@ module RemoteDelegateTest {
         delegate.onMenu();
         
         var tmpDlgt = viewController.getCurrentDelegate();
-        if (!(tmpDlgt instanceof SettingsMenuDelegate)) {
+        if (!(tmpDlgt instanceof RemoteMenuDelegate)) {
             logger.error("Current view should be settings menu");
-            return false;
-        }
-        tmpDlgt.onBack();
-
-        camera.sendCommand(GoProCamera.SWITCH_MODE);
-        BleAPI.device.processRequests();
-        delegate.onMenu();
-
-        if (!(viewController.getCurrentDelegate() instanceof SettingPickerDelegate)) {
-            logger.error("Current view should be setting picker menu");
             return false;
         }
 

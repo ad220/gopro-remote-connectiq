@@ -36,6 +36,13 @@
     <!-- $$$ Small -->
     <string id="Pair">APPAIRER</string>
     <string id="Connect">CONNEXION</string>
+
+    <!-- Remote Menu -->
+    <!-- $$$ -->
+    <string id="AdvancedSettings">Paramètres avancés</string>
+    <string id="SwitchMode">Changer de mode</string>
+    <!-- <string id="Photo">Photo</string>
+    <string id="Video">Vidéo</string> -->
     
     <!-- PresetPick -->
     <!-- $$$ Small -->

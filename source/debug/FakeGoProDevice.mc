@@ -193,9 +193,8 @@ using GattProfileManager as GPM;
                         id = data[i];
                     }
 
-                    if      (id == GoProSettings.FOV)       { id = GoProSettings.LENS; }
-                    else if (id == GoProSettings.FORMAT)    { id = GoProSettings.FLICKER; }
-                    else if (id == GoProSettings.EIS)       { id = GoProSettings.HYPERSMOOTH; }
+                    var idx = GoProDecoder.OLD_SETTINGS.indexOf(id);
+                    if (idx != -1) { id = GoProDecoder.NEW_SETTINGS[idx]; }
 
                     var value = data[i+2];
 
@@ -288,9 +287,8 @@ using GattProfileManager as GPM;
     public function onReceiveSetting(id as Number, response as ByteArray, query as Number) as Void {
         var internalId = id;
 
-        if      (id == GoProSettings.FOV)       { internalId = GoProSettings.LENS; }
-        else if (id == GoProSettings.FORMAT)    { internalId = GoProSettings.FLICKER; }
-        else if (id == GoProSettings.EIS)       { internalId = GoProSettings.HYPERSMOOTH; }
+        var idx = GoProDecoder.OLD_SETTINGS.indexOf(id);
+        if (idx != -1) { id = GoProDecoder.NEW_SETTINGS[idx]; }
 
         updateNotif(notifSettings, query, internalId);
         if (query >= 0x70) { return; }
@@ -383,9 +381,8 @@ using GattProfileManager as GPM;
         var msg = specs.cameraId < GoProCamera.GP_MISSION1PRO ? [3]b : [5, 0xFF, 0]b;
 
         if (specs.cameraId < GoProCamera.GP_MAX) {
-            if      (id == GoProSettings.LENS)          { id = GoProSettings.FOV; }
-            else if (id == GoProSettings.FLICKER)       { id = GoProSettings.FORMAT; }
-            else if (id == GoProSettings.HYPERSMOOTH)   { id = GoProSettings.EIS; }
+            var idx = GoProDecoder.NEW_SETTINGS.indexOf(id);
+            if (idx != -1) { id = GoProDecoder.OLD_SETTINGS[idx]; }
         }
 
         msg.addAll([id, 1, value]);

@@ -57,6 +57,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
                 GoProSettings.HYPERSMOOTH       => GoProSettings.HS_HIGH,
                 GoProSettings.LED               => GoProSettings.LED_ALL_ON,
                 GoProSettings.GPS               => 1,
+                GoProSettings.PHOTO_LENS        => GoProSettings.WIDE_7MP,
             } as FakeGoProDevice.FakeGoProSettings,
             {
                 GoProCamera.CAPTURE_MODE        => GoProCamera.MODE_VIDEO,
@@ -66,9 +67,12 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
                 GoProCamera.BATTERY             => 42,
                 GoProCamera.PHOTOS_TAKEN        => 1234,
             } as FakeGoProDevice.FakeGoProStatuses,
-            new FakeGoProSpecs.SpecsMission1Pro()
+            new FakeGoProSpecs.SpecsH5Session()
         );
         BleAPI.scannedDevices[0].goproId = BleAPI.device.specs.cameraId;
+
+        var processMethod = BleAPI.device.method(:processRequests);
+        getApp().timerController.start(processMethod, 1, true);
     }
 
     

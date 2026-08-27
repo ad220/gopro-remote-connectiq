@@ -40,7 +40,14 @@
     <!-- $$$ Small -->
     <string id="Pair">PAIR</string>
     <string id="Connect">CONNECT</string>
-    
+
+    <!-- Remote Menu -->
+    <!-- $$$ -->
+    <string id="AdvancedSettings">Advanced settings</string>
+    <string id="SwitchMode">Switch capture mode</string>
+    <!-- <string id="Photo">Photo</string>
+    <string id="Video">Video</string> -->
+
     <!-- SettingsMenu -->
     <!-- $$$ Small -->
     <string id="Cinema">Cinema</string>
