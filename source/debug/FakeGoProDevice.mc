@@ -288,7 +288,7 @@ using GattProfileManager as GPM;
         var internalId = id;
 
         var idx = GoProDecoder.OLD_SETTINGS.indexOf(id);
-        if (idx != -1) { id = GoProDecoder.NEW_SETTINGS[idx]; }
+        if (idx != -1) { internalId = GoProDecoder.NEW_SETTINGS[idx]; }
 
         updateNotif(notifSettings, query, internalId);
         if (query >= 0x70) { return; }
@@ -299,7 +299,7 @@ using GattProfileManager as GPM;
             return;
         }
 
-        if (specs.cameraId < GoProCamera.GP_MISSION1PRO) { response.addAll([0xFF, 0]); }
+        if (specs.cameraId >= GoProCamera.GP_MISSION1PRO) { response.addAll([0xFF, 0]); }
         response.addAll([id, 0x01, value]b);
     }
 
@@ -307,7 +307,7 @@ using GattProfileManager as GPM;
         updateNotif(notifStatuses, query, id);
         if (query >= 0x70) { return; }
 
-        if (specs.cameraId < GoProCamera.GP_MISSION1PRO) { response.addAll([0xFF, 0]); }
+        if (specs.cameraId >= GoProCamera.GP_MISSION1PRO) { response.addAll([0xFF, 0]); }
 
         if (id == GoProCamera.SD_REMAINING
             or id == GoProCamera.ENCODING_DURATION

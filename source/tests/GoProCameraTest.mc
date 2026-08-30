@@ -315,6 +315,8 @@ module GoProCameraTest {
         
     (:test)
     function testNotifSettings(logger as Logger) as Boolean {
+        var ret = true;
+
         for (var k=0; k<testDeviceIds.size(); k+=1)
         { // start of testDevice loop
 
@@ -351,13 +353,13 @@ module GoProCameraTest {
                 logDeviceError(logger, "Setting was not updated correctly id: " + ids[i] \
                                         + ", expected: " + values[i] \
                                         + ", got: " + camSetting, k);
-                return false;
+                ret = false;
             }
         }
 
         } // end of testDevice loop
 
-        return true;
+        return ret;
     }
     
 
