@@ -230,7 +230,8 @@ class CameraDelegate {
         else if (mask ^ 0x02 == 0 or queryId == 0x32)                       { decoder = :onReceiveAvailable; }
         else {
             // Error flag switched to warning because never raised as of v4.2.7
-            EM.raise(EM.ERR_MSG | EM.SUB_MSG_QUERY | 0x00 << 16, 0, :WarningErr);
+            // Now raised in v4.3.0
+            EM.raise(EM.ERR_MSG | EM.SUB_MSG_QUERY | 0x00 << 16, queryId, :WarningErr);
             // System.println("[WARNING]   Unknown queryId: " + queryId);
             return;
         }

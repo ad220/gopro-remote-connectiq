@@ -135,7 +135,7 @@ module ErrorManager {
         if (responseCode == 200 or responseCode == -400) {
             errorQueue = [];
         }
-        else if (responseCode != -104) {
+        else if (responseCode != -104 and responseCode != -300 and responseCode != 403) {
             var hexCode = new [2]b;
             hexCode.encodeNumber(responseCode, Lang.NUMBER_FORMAT_SINT16, {});
             errorQueue.add(BUILD_FLAGS | ERR_EXT | SUB_EXT_HTTP | hexCode[1] << 8 | hexCode[0]);
