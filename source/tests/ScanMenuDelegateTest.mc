@@ -94,6 +94,7 @@ module ScanMenuDelegateTest {
             new BleAPI.MockScanResult(31, null, CameraDelegate.GP_HEROLIT),
             new BleAPI.MockScanResult(32, null, CameraDelegate.GP_MISSION1PRO),
             new BleAPI.MockScanResult(33, null, CameraDelegate.GP_MISSION1),
+            new BleAPI.MockScanResult(34, null, CameraDelegate.GP_MISSION1PROILS),
         ] as Array<Ble.ScanResult>;
 
         var expectedNames = [
@@ -121,12 +122,13 @@ module ScanMenuDelegateTest {
             "GoPro HERO Lit",
             "GoPro Mission1",
             "GoPro Mission1",
+            "GoPro Mission1",
         ];
 
         menu[1].onScanResults(scanResults);
 
-        if (menu[0].debugItems.size() != 24 + 2) {
-            logger.error("Should have 24 scan results, got " + (menu[0].debugItems.size() - 2));
+        if (menu[0].debugItems.size() != expectedNames.size() + 2) {
+            logger.error("Should have 25 scan results, got " + (menu[0].debugItems.size() - 2));
             return false;
         }
 

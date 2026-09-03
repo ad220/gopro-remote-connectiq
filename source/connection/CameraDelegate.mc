@@ -5,7 +5,7 @@ using ErrorManager as EM;
 
 class CameraDelegate {
 
-    public static const goproModelTable = [0, 12, 13, 19, 21, 22, 24, 30, 32, 33, 34, 50, 51, 55, 57, 58, 60, 62, 64, 65, 66, 70, 69, 71]b;
+    public static const goproModelTable = [0, 12, 13, 19, 21, 22, 24, 30, 32, 33, 34, 50, 51, 55, 57, 58, 60, 62, 64, 65, 66, 70, 69, 71, 74]b;
 
     static const GP_UNKNOWN                 = 0;
     static const GP_HERO4S                  = 1;
@@ -31,6 +31,7 @@ class CameraDelegate {
     static const GP_HEROLIT                 = 21;
     static const GP_MISSION1PRO             = 22;
     static const GP_MISSION1                = 23;
+    static const GP_MISSION1PROILS          = 24;
 
       
     public static const goproModelString = [
@@ -58,6 +59,7 @@ class CameraDelegate {
         " Lit"      /* 21) id:70 -> HERO Lit */,
         :Mission1   /* 22) id:69 -> Mission1 Pro */,
         :Mission1   /* 23) id:71 -> Mission1 */,
+        :Mission1   /* 23) id:74 -> Mission1 Pro ILS */,
     ];
 
     public static function getGoProId(device as Ble.ScanResult) as Number {
