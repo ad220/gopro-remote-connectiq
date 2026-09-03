@@ -18,6 +18,7 @@ round-360x360.resourcePath = $(base.resourcePath); resources/typefaces/resources
 round-390x390.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-390x390
 round-416x416.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-416x416
 round-454x454.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-454x454
+round-466x466.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-454x454
 
 round-218x218.sourcePath        = $(base.sourcePath); include/screen/round-218x218.mc
 round-240x240.sourcePath        = $(base.sourcePath); include/screen/round-240x240.mc
@@ -27,6 +28,7 @@ round-360x360.sourcePath        = $(base.sourcePath); include/screen/round-360x3
 round-390x390.sourcePath        = $(base.sourcePath); include/screen/round-390x390.mc
 round-416x416.sourcePath        = $(base.sourcePath); include/screen/round-416x416.mc
 round-454x454.sourcePath        = $(base.sourcePath); include/screen/round-454x454.mc
+round-466x466.sourcePath        = $(base.sourcePath); include/screen/round-466x466.mc
 rectangle-240x240.sourcePath    = $(base.sourcePath); include/screen/rectangle-240x240.mc
 rectangle-320x360.sourcePath    = $(base.sourcePath); include/screen/rectangle-320x360.mc
 rectangle-448x486.sourcePath    = $(base.sourcePath); include/screen/rectangle-448x486.mc

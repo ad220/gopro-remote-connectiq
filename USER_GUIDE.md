@@ -78,7 +78,7 @@ This guide explains how to install, pair, and use the GoPro Remote widget on you
 The widget is available on the [Garmin Connect IQ store](https://apps.garmin.com/apps/f9e09224-1c60-4e94-a616-f9ef10932fdf). You can install it directly from your Garmin Connect app on your smartphone.
 
 ### GitHub release
-1. Download [latest release](https://github.com/ad220/gopro-qr-control-connectiq/releases/latest) from GitHub
+1. Download [latest release](https://github.com/ad220/gopro-remote-connectiq/releases/latest) from GitHub
 2. Connect your watch to your computer using a USB cable
 3. Find your device in Garmin's [Device Reference](https://developer.garmin.com/connect-iq/device-reference/)
 4. Scroll down to "Part Number" and write it down
