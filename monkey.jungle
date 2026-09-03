@@ -2,23 +2,22 @@ project.manifest = manifest.xml
 
 base.sourcePath = source/; include/secrets
 base.excludeAnnotations = mobile; lowend; debugoff
-base.resourcePath = resources/common; resources/highend; resources/lang/en
+base.resourcePath = resources/common; resources/lang/en
 base.lang.fre = resources/lang/fre
 
-mobile_excludeAnnotations = ble; lowend; debugoff
+mobile_exclude = ble; lowend; debugoff
 
-mobile-light_excludeAnnotations = ble; highend; debugoff
-mobile-light_resourcePath = resources/common; resources/lowend; resources/typefaces/resources-round-240x240
+mobile-light_exclude = ble; highend; debugoff
 
-round-218x218.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-218x218
-round-240x240.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-240x240
-round-260x260.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-260x260
-round-280x280.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-280x280
-round-360x360.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-360x360
-round-390x390.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-390x390
-round-416x416.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-416x416
-round-454x454.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-454x454
-round-466x466.resourcePath = $(base.resourcePath); resources/typefaces/resources-round-454x454
+round-218x218.resourcePath      = $(base.resourcePath); resources/typefaces/resources-round-218x218
+round-240x240.resourcePath      = $(base.resourcePath); resources/typefaces/resources-round-240x240
+round-260x260.resourcePath      = $(base.resourcePath); resources/typefaces/resources-round-260x260
+round-280x280.resourcePath      = $(base.resourcePath); resources/typefaces/resources-round-280x280
+round-360x360.resourcePath      = $(base.resourcePath); resources/typefaces/resources-round-360x360
+round-390x390.resourcePath      = $(base.resourcePath); resources/typefaces/resources-round-390x390
+round-416x416.resourcePath      = $(base.resourcePath); resources/typefaces/resources-round-416x416
+round-454x454.resourcePath      = $(base.resourcePath); resources/typefaces/resources-round-454x454
+round-466x466.resourcePath      = $(base.resourcePath); resources/typefaces/resources-round-454x454
 
 round-218x218.sourcePath        = $(base.sourcePath); include/screen/round-218x218.mc
 round-240x240.sourcePath        = $(base.sourcePath); include/screen/round-240x240.mc
@@ -33,93 +32,206 @@ rectangle-240x240.sourcePath    = $(base.sourcePath); include/screen/rectangle-2
 rectangle-320x360.sourcePath    = $(base.sourcePath); include/screen/rectangle-320x360.mc
 rectangle-448x486.sourcePath    = $(base.sourcePath); include/screen/rectangle-448x486.mc
 
+
+################################
+# BLE capable devices
+################################
+
+approachs7042mm.resourcePath                = resources/highend; $(approachs7042mm.resourcePath)
+approachs7047mm.resourcePath                = resources/highend; $(approachs7047mm.resourcePath)
+d2mach1.resourcePath                        = resources/highend; $(d2mach1.resourcePath)
+d2mach2.resourcePath                        = resources/highend; $(d2mach2.resourcePath)
+descentg2.resourcePath                      = resources/highend; $(descentg2.resourcePath)
+descentmk343mm.resourcePath                 = resources/highend; $(descentmk343mm.resourcePath)
+descentmk351mm.resourcePath                 = resources/highend; $(descentmk351mm.resourcePath)
+enduro3.resourcePath                        = resources/highend; $(enduro3.resourcePath)
+epix2.resourcePath                          = resources/highend; $(epix2.resourcePath)
+epix2pro42mm.resourcePath                   = resources/highend; $(epix2pro42mm.resourcePath)
+epix2pro47mm.resourcePath                   = resources/highend; $(epix2pro47mm.resourcePath)
+epix2pro51mm.resourcePath                   = resources/highend; $(epix2pro51mm.resourcePath)
+fenix7.resourcePath                         = resources/highend; $(fenix7.resourcePath)
+fenix7pro.resourcePath                      = resources/highend; $(fenix7pro.resourcePath)
+fenix7pronowifi.resourcePath                = resources/highend; $(fenix7pronowifi.resourcePath)
+fenix7s.resourcePath                        = resources/highend; $(fenix7s.resourcePath)
+fenix7spro.resourcePath                     = resources/highend; $(fenix7spro.resourcePath)
+fenix7x.resourcePath                        = resources/highend; $(fenix7x.resourcePath)
+fenix7xpro.resourcePath                     = resources/highend; $(fenix7xpro.resourcePath)
+fenix7xpronowifi.resourcePath               = resources/highend; $(fenix7xpronowifi.resourcePath)
+fenix843mm.resourcePath                     = resources/highend; $(fenix843mm.resourcePath)
+fenix847mm.resourcePath                     = resources/highend; $(fenix847mm.resourcePath)
+fenix8pro47mm.resourcePath                  = resources/highend; $(fenix8pro47mm.resourcePath)
+fenix8solar47mm.resourcePath                = resources/highend; $(fenix8solar47mm.resourcePath)
+fenix8solar51mm.resourcePath                = resources/highend; $(fenix8solar51mm.resourcePath)
+fenix943mm.resourcePath                     = resources/highend; $(fenix943mm.resourcePath)
+fenix947mm.resourcePath                     = resources/highend; $(fenix947mm.resourcePath)
+fenix9pro43mm.resourcePath                  = resources/highend; $(fenix9pro43mm.resourcePath)
+fenix9pro47mm.resourcePath                  = resources/highend; $(fenix9pro47mm.resourcePath)
+fenix9pro51mm.resourcePath                  = resources/highend; $(fenix9pro51mm.resourcePath)
+fenix9prosolar47mm.resourcePath             = resources/highend; $(fenix9prosolar47mm.resourcePath)
+fenix9prosolar51mm.resourcePath             = resources/highend; $(fenix9prosolar51mm.resourcePath)
+fenixe.resourcePath                         = resources/highend; $(fenixe.resourcePath)
+fr255.resourcePath                          = resources/highend; $(fr255.resourcePath)
+fr255m.resourcePath                         = resources/highend; $(fr255m.resourcePath)
+fr255s.resourcePath                         = resources/highend; $(fr255s.resourcePath)
+fr255sm.resourcePath                        = resources/highend; $(fr255sm.resourcePath)
+fr265.resourcePath                          = resources/highend; $(fr265.resourcePath)
+fr265s.resourcePath                         = resources/highend; $(fr265s.resourcePath)
+fr57042mm.resourcePath                      = resources/highend; $(fr57042mm.resourcePath)
+fr57047mm.resourcePath                      = resources/highend; $(fr57047mm.resourcePath)
+fr955.resourcePath                          = resources/highend; $(fr955.resourcePath)
+fr965.resourcePath                          = resources/highend; $(fr965.resourcePath)
+fr970.resourcePath                          = resources/highend; $(fr970.resourcePath)
+instinct3amoled45mm.resourcePath            = resources/highend; $(instinct3amoled45mm.resourcePath)
+instinct3amoled50mm.resourcePath            = resources/highend; $(instinct3amoled50mm.resourcePath)
+marq2.resourcePath                          = resources/highend; $(marq2.resourcePath)
+marq2aviator.resourcePath                   = resources/highend; $(marq2aviator.resourcePath)
+venu441mm.resourcePath                      = resources/highend; $(venu441mm.resourcePath)
+venu445mm.resourcePath                      = resources/highend; $(venu445mm.resourcePath)
+venux1.resourcePath                         = resources/highend; $(venux1.resourcePath)
+vivoactive6.resourcePath                    = resources/highend; $(vivoactive6.resourcePath)
+
 # Oddly shaped devices with BLE comm
-venux1.resourcePath = $(round-454x454.resourcePath)
+venux1.resourcePath                         = resources/highend; $(round-454x454.resourcePath)
 
 
+################################
 # Devices using mobile communication (with enough memory to use the full interface)
+################################
 
-approachs50.excludeAnnotations              = $(mobile_excludeAnnotations)
-d2air.excludeAnnotations                    = $(mobile_excludeAnnotations)
-d2airx10.excludeAnnotations                 = $(mobile_excludeAnnotations)
-d2delta.excludeAnnotations                  = $(mobile_excludeAnnotations)
-d2deltapx.excludeAnnotations                = $(mobile_excludeAnnotations)
-d2deltas.excludeAnnotations                 = $(mobile_excludeAnnotations)
-descentmk1.excludeAnnotations               = $(mobile_excludeAnnotations)
-descentmk2.excludeAnnotations               = $(mobile_excludeAnnotations)
-descentmk2s.excludeAnnotations              = $(mobile_excludeAnnotations)
-fenix5plus.excludeAnnotations               = $(mobile_excludeAnnotations)
-fenix5splus.excludeAnnotations              = $(mobile_excludeAnnotations)
-fenix5x.excludeAnnotations                  = $(mobile_excludeAnnotations)
-fenix5xplus.excludeAnnotations              = $(mobile_excludeAnnotations)
-fenix6pro.excludeAnnotations                = $(mobile_excludeAnnotations)
-fenix6spro.excludeAnnotations               = $(mobile_excludeAnnotations)
-fenix6xpro.excludeAnnotations               = $(mobile_excludeAnnotations)
-fr165.excludeAnnotations                    = $(mobile_excludeAnnotations)
-fr165m.excludeAnnotations                   = $(mobile_excludeAnnotations)
-fr245m.excludeAnnotations                   = $(mobile_excludeAnnotations)
-fr645m.excludeAnnotations                   = $(mobile_excludeAnnotations)
-fr745.excludeAnnotations                    = $(mobile_excludeAnnotations)
-fr945.excludeAnnotations                    = $(mobile_excludeAnnotations)
-fr945lte.excludeAnnotations                 = $(mobile_excludeAnnotations)
-legacyherocaptainmarvel.excludeAnnotations  = $(mobile_excludeAnnotations)
-legacyherofirstavenger.excludeAnnotations   = $(mobile_excludeAnnotations)
-legacysagadarthvader.excludeAnnotations     = $(mobile_excludeAnnotations)
-legacysagarey.excludeAnnotations            = $(mobile_excludeAnnotations)
-marqadventurer.excludeAnnotations           = $(mobile_excludeAnnotations)
-marqathlete.excludeAnnotations              = $(mobile_excludeAnnotations)
-marqaviator.excludeAnnotations              = $(mobile_excludeAnnotations)
-marqcaptain.excludeAnnotations              = $(mobile_excludeAnnotations)
-marqcommander.excludeAnnotations            = $(mobile_excludeAnnotations)
-marqdriver.excludeAnnotations               = $(mobile_excludeAnnotations)
-marqexpedition.excludeAnnotations           = $(mobile_excludeAnnotations)
-marqgolfer.excludeAnnotations               = $(mobile_excludeAnnotations)
-venu.excludeAnnotations                     = $(mobile_excludeAnnotations)
-venu2.excludeAnnotations                    = $(mobile_excludeAnnotations)
-venu2plus.excludeAnnotations                = $(mobile_excludeAnnotations)
-venu2s.excludeAnnotations                   = $(mobile_excludeAnnotations)
-venu3.excludeAnnotations                    = $(mobile_excludeAnnotations)
-venu3s.excludeAnnotations                   = $(mobile_excludeAnnotations)
-venud.excludeAnnotations                    = $(mobile_excludeAnnotations)
-venusq2.excludeAnnotations                  = $(mobile_excludeAnnotations)
-venusq2m.excludeAnnotations                 = $(mobile_excludeAnnotations)
-venusqm.excludeAnnotations                  = $(mobile_excludeAnnotations)
-vivoactive3m.excludeAnnotations             = $(mobile_excludeAnnotations)
-vivoactive3mlte.excludeAnnotations          = $(mobile_excludeAnnotations)
-vivoactive4.excludeAnnotations              = $(mobile_excludeAnnotations)
-vivoactive4s.excludeAnnotations             = $(mobile_excludeAnnotations)
-vivoactive5.excludeAnnotations              = $(mobile_excludeAnnotations)
+approachs50.resourcePath                    = resources/highend; $(approachs50.resourcePath)
+d2airx10.resourcePath                       = resources/highend; $(d2airx10.resourcePath)
+fenix6pro.resourcePath                      = resources/highend; $(fenix6pro.resourcePath)
+fenix6spro.resourcePath                     = resources/highend; $(fenix6spro.resourcePath)
+fenix6xpro.resourcePath                     = resources/highend; $(fenix6xpro.resourcePath)
+fr165.resourcePath                          = resources/highend; $(fr165.resourcePath)
+fr165m.resourcePath                         = resources/highend; $(fr165m.resourcePath)
+fr945lte.resourcePath                       = resources/highend; $(fr945lte.resourcePath)
+marqadventurer.resourcePath                 = resources/highend; $(marqadventurer.resourcePath)
+marqathlete.resourcePath                    = resources/highend; $(marqathlete.resourcePath)
+marqaviator.resourcePath                    = resources/highend; $(marqaviator.resourcePath)
+marqcaptain.resourcePath                    = resources/highend; $(marqcaptain.resourcePath)
+marqcommander.resourcePath                  = resources/highend; $(marqcommander.resourcePath)
+marqdriver.resourcePath                     = resources/highend; $(marqdriver.resourcePath)
+marqexpedition.resourcePath                 = resources/highend; $(marqexpedition.resourcePath)
+marqgolfer.resourcePath                     = resources/highend; $(marqgolfer.resourcePath)
+venu2.resourcePath                          = resources/highend; $(venu2.resourcePath)
+venu2plus.resourcePath                      = resources/highend; $(venu2plus.resourcePath)
+venu2s.resourcePath                         = resources/highend; $(venu2s.resourcePath)
+venu3.resourcePath                          = resources/highend; $(venu3.resourcePath)
+venu3s.resourcePath                         = resources/highend; $(venu3s.resourcePath)
+venusq2.resourcePath                        = resources/highend; $(venusq2.resourcePath)
+venusq2m.resourcePath                       = resources/highend; $(venusq2m.resourcePath)
+vivoactive5.resourcePath                    = resources/highend; $(vivoactive5.resourcePath)
 
 # Oddly shaped devices with mobile connection
-
 venu.resourcePath                           = $(round-240x240.resourcePath)
 venusq2.resourcePath                        = $(round-360x360.resourcePath)
 venusq2m.resourcePath                       = $(round-360x360.resourcePath)
 venusqm.resourcePath                        = $(round-240x240.resourcePath)
 
+approachs50.excludeAnnotations              = $(mobile_exclude)
+d2airx10.excludeAnnotations                 = $(mobile_exclude)
+fenix6pro.excludeAnnotations                = $(mobile_exclude)
+fenix6spro.excludeAnnotations               = $(mobile_exclude)
+fenix6xpro.excludeAnnotations               = $(mobile_exclude)
+fr165.excludeAnnotations                    = $(mobile_exclude)
+fr165m.excludeAnnotations                   = $(mobile_exclude)
+fr945lte.excludeAnnotations                 = $(mobile_exclude)
+marqadventurer.excludeAnnotations           = $(mobile_exclude)
+marqathlete.excludeAnnotations              = $(mobile_exclude)
+marqaviator.excludeAnnotations              = $(mobile_exclude)
+marqcaptain.excludeAnnotations              = $(mobile_exclude)
+marqcommander.excludeAnnotations            = $(mobile_exclude)
+marqdriver.excludeAnnotations               = $(mobile_exclude)
+marqexpedition.excludeAnnotations           = $(mobile_exclude)
+marqgolfer.excludeAnnotations               = $(mobile_exclude)
+venu2.excludeAnnotations                    = $(mobile_exclude)
+venu2plus.excludeAnnotations                = $(mobile_exclude)
+venu2s.excludeAnnotations                   = $(mobile_exclude)
+venu3.excludeAnnotations                    = $(mobile_exclude)
+venu3s.excludeAnnotations                   = $(mobile_exclude)
+venusq2.excludeAnnotations                  = $(mobile_exclude)
+venusq2m.excludeAnnotations                 = $(mobile_exclude)
+vivoactive5.excludeAnnotations              = $(mobile_exclude)
 
+
+################################
 # Low memory (lowend) devices
+################################
 
-enduro.excludeAnnotations                   = $(mobile-light_excludeAnnotations)
-fenix5.excludeAnnotations                   = $(mobile-light_excludeAnnotations)
-fenix5s.excludeAnnotations                  = $(mobile-light_excludeAnnotations)
-fenix6.excludeAnnotations                   = $(mobile-light_excludeAnnotations)
-fenix6s.excludeAnnotations                  = $(mobile-light_excludeAnnotations)
-fenixchronos.excludeAnnotations             = $(mobile-light_excludeAnnotations)
-fr245.excludeAnnotations                    = $(mobile-light_excludeAnnotations)
-fr645.excludeAnnotations                    = $(mobile-light_excludeAnnotations)
-fr935.excludeAnnotations                    = $(mobile-light_excludeAnnotations)
-venusq.excludeAnnotations                   = $(mobile-light_excludeAnnotations)
-vivoactive3.excludeAnnotations              = $(mobile-light_excludeAnnotations)
+d2air.excludeAnnotations                    = $(mobile-light_exclude)
+d2delta.excludeAnnotations                  = $(mobile-light_exclude)
+d2deltapx.excludeAnnotations                = $(mobile-light_exclude)
+d2deltas.excludeAnnotations                 = $(mobile-light_exclude)
+descentmk1.excludeAnnotations               = $(mobile-light_exclude)
+descentmk2.excludeAnnotations               = $(mobile-light_exclude)
+descentmk2s.excludeAnnotations              = $(mobile-light_exclude)
+enduro.excludeAnnotations                   = $(mobile-light_exclude)
+fenix5.excludeAnnotations                   = $(mobile-light_exclude)
+fenix5plus.excludeAnnotations               = $(mobile-light_exclude)
+fenix5s.excludeAnnotations                  = $(mobile-light_exclude)
+fenix5splus.excludeAnnotations              = $(mobile-light_exclude)
+fenix5x.excludeAnnotations                  = $(mobile-light_exclude)
+fenix5xplus.excludeAnnotations              = $(mobile-light_exclude)
+fenix6.excludeAnnotations                   = $(mobile-light_exclude)
+fenix6s.excludeAnnotations                  = $(mobile-light_exclude)
+fenixchronos.excludeAnnotations             = $(mobile-light_exclude)
+fr245.excludeAnnotations                    = $(mobile-light_exclude)
+fr245m.excludeAnnotations                   = $(mobile-light_exclude)
+fr645m.excludeAnnotations                   = $(mobile-light_exclude)
+fr645.excludeAnnotations                    = $(mobile-light_exclude)
+fr745.excludeAnnotations                    = $(mobile-light_exclude)
+fr935.excludeAnnotations                    = $(mobile-light_exclude)
+fr945.excludeAnnotations                    = $(mobile-light_exclude)
+legacyherocaptainmarvel.excludeAnnotations  = $(mobile-light_exclude)
+legacyherofirstavenger.excludeAnnotations   = $(mobile-light_exclude)
+legacysagadarthvader.excludeAnnotations     = $(mobile-light_exclude)
+legacysagarey.excludeAnnotations            = $(mobile-light_exclude)
+venu.excludeAnnotations                     = $(mobile-light_exclude)
+venud.excludeAnnotations                    = $(mobile-light_exclude)
+venusq.excludeAnnotations                   = $(mobile-light_exclude)
+venusqm.excludeAnnotations                  = $(mobile-light_exclude)
+vivoactive3.excludeAnnotations              = $(mobile-light_exclude)
+vivoactive3m.excludeAnnotations             = $(mobile-light_exclude)
+vivoactive3mlte.excludeAnnotations          = $(mobile-light_exclude)
+vivoactive4.excludeAnnotations              = $(mobile-light_exclude)
+vivoactive4s.excludeAnnotations             = $(mobile-light_exclude)
 
-enduro.resourcePath                         = $(mobile-light_resourcePath)
-fenix5.resourcePath                         = $(mobile-light_resourcePath)
-fenix5s.resourcePath                        = $(mobile-light_resourcePath)
-fenix6.resourcePath                         = $(mobile-light_resourcePath)
-fenix6s.resourcePath                        = $(mobile-light_resourcePath)
-fenixchronos.resourcePath                   = $(mobile-light_resourcePath)
-fr245.resourcePath                          = $(mobile-light_resourcePath)
-fr645.resourcePath                          = $(mobile-light_resourcePath)
-fr935.resourcePath                          = $(mobile-light_resourcePath)
-venusq.resourcePath                         = $(mobile-light_resourcePath)
-vivoactive3.resourcePath                    = $(mobile-light_resourcePath)
+
+d2air.resourcePath                          = resources/lowend; $(d2air.resourcePath)
+d2delta.resourcePath                        = resources/lowend; $(d2delta.resourcePath)
+d2deltapx.resourcePath                      = resources/lowend; $(d2deltapx.resourcePath)
+d2deltas.resourcePath                       = resources/lowend; $(d2deltas.resourcePath)
+descentmk1.resourcePath                     = resources/lowend; $(descentmk1.resourcePath)
+descentmk2.resourcePath                     = resources/lowend; $(descentmk2.resourcePath)
+descentmk2s.resourcePath                    = resources/lowend; $(descentmk2s.resourcePath)
+enduro.resourcePath                         = resources/lowend; $(enduro.resourcePath)
+fenix5.resourcePath                         = resources/lowend; $(fenix5.resourcePath)
+fenix5plus.resourcePath                     = resources/lowend; $(fenix5plus.resourcePath)
+fenix5s.resourcePath                        = resources/lowend; $(fenix5s.resourcePath)
+fenix5splus.resourcePath                    = resources/lowend; $(fenix5splus.resourcePath)
+fenix5x.resourcePath                        = resources/lowend; $(fenix5x.resourcePath)
+fenix5xplus.resourcePath                    = resources/lowend; $(fenix5xplus.resourcePath)
+fenix6.resourcePath                         = resources/lowend; $(fenix6.resourcePath)
+fenix6s.resourcePath                        = resources/lowend; $(fenix6s.resourcePath)
+fenixchronos.resourcePath                   = resources/lowend; $(fenixchronos.resourcePath)
+fr245.resourcePath                          = resources/lowend; $(fr245.resourcePath)
+fr245m.resourcePath                         = resources/lowend; $(fr245m.resourcePath)
+fr645m.resourcePath                         = resources/lowend; $(fr645m.resourcePath)
+fr645.resourcePath                          = resources/lowend; $(fr645.resourcePath)
+fr745.resourcePath                          = resources/lowend; $(fr745.resourcePath)
+fr935.resourcePath                          = resources/lowend; $(fr935.resourcePath)
+fr945.resourcePath                          = resources/lowend; $(fr945.resourcePath)
+legacyherocaptainmarvel.resourcePath        = resources/lowend; $(legacyherocaptainmarvel.resourcePath)
+legacyherofirstavenger.resourcePath         = resources/lowend; $(legacyherofirstavenger.resourcePath)
+legacysagadarthvader.resourcePath           = resources/lowend; $(legacysagadarthvader.resourcePath)
+legacysagarey.resourcePath                  = resources/lowend; $(legacysagarey.resourcePath)
+venu.resourcePath                           = resources/lowend; $(venu.resourcePath)
+venud.resourcePath                          = resources/lowend; $(venud.resourcePath)
+venusq.resourcePath                         = resources/lowend; $(venusq.resourcePath)
+venusqm.resourcePath                        = resources/lowend; $(venusqm.resourcePath)
+vivoactive3.resourcePath                    = resources/lowend; $(vivoactive3.resourcePath)
+vivoactive3m.resourcePath                   = resources/lowend; $(vivoactive3m.resourcePath)
+vivoactive3mlte.resourcePath                = resources/lowend; $(vivoactive3mlte.resourcePath)
+vivoactive4.resourcePath                    = resources/lowend; $(vivoactive4.resourcePath)
+vivoactive4s.resourcePath                   = resources/lowend; $(vivoactive4s.resourcePath)
