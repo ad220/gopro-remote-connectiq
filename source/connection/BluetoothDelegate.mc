@@ -53,7 +53,7 @@ class BluetoothDelegate extends CameraDelegate {
             scanMenuDelegate.onScanResults(scanResultsArray);
         }
         // else {
-        //     System.println("[WARNING]   Scan menu is null");
+            // System.println("[WARNING]   Scan menu is null");
         // }
     }
 

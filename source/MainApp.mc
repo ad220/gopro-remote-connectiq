@@ -2,9 +2,11 @@ import Toybox.Application;
 import Toybox.Lang;
 import Toybox.WatchUi;
 import Toybox.System;
+import Toybox.Communications;
 
 using Toybox.BluetoothLowEnergy as Ble;
 using BleApiWrapper as BleAPI;
+using CommApiWrapper as CommAPI;
 using ErrorManager as EM;
 
 
@@ -65,7 +67,7 @@ class GoProRemoteApp extends Application.AppBase {
         if (appStarted) {
             if (viewController instanceof ViewController)   { viewController.returnHome(null, null); }
             if (timerController instanceof TimerController) { timerController.stopAll(); }
-            Communications.registerForPhoneAppMessages(null);
+            CommAPI.registerForPhoneAppMessages(null);
         }
         
         Storage.setValue("reportsEnabled", reportsEnabled);
