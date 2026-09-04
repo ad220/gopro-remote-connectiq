@@ -5,6 +5,7 @@ import Toybox.Test;
 
 using GattProfileManager as GPM;
 using BleApiWrapper as BleAPI;
+using CommApiWrapper as CommAPI;
 using Toybox.BluetoothLowEnergy as Ble;
 
 (:test)
@@ -97,19 +98,51 @@ module TestInit {
         }
     }
 
-    function initFake(specs as FakeGoProSpecs.ISpecs?) as Void {
+    (:ble)
+    function initFake(specs as FakeGoProSpecs.ISpecs?) as FakeGoProDevice {
         if (specs == null) { specs = FakeGoProSpecs.getSpecsH11M(); }
+
         BleAPI.device = new FakeGoProDevice(
             initSettings,
             initStatuses,
             specs
         );
+        return BleAPI.device;
     }
 
+    (:mobile)
+    function initFake(specs as FakeGoProSpecs.ISpecs?) as FakeGoProDevice {
+        if (specs == null) { specs = FakeGoProSpecs.getSpecsH11M(); }
+        CommAPI.device = new FakeGoProDevice(
+            initSettings,
+            initStatuses,
+            specs
+        );
+        return CommAPI.device;
+    }
+
+    (:inline :ble)
+    function setDevice(dev as FakeGoProDevice) as Void {
+        BleAPI.device = dev;
+    }
+
+    (:inline :mobile)
+    function setDevice(dev as FakeGoProDevice) as Void {
+        CommAPI.device = dev;
+    }
+
+    (:ble)
     function initConnection(goproId as Number) as Void {
         var delegate = new BluetoothDelegate();
         delegate.connect(new BleAPI.MockScanResult(0, null, goproId) as Ble.ScanResult);
         BleAPI.device.processRequests();
+    }
+
+    (:mobile)
+    function initConnection(goproId as Number) as Void {
+        var delegate = new MobileDelegate();
+        delegate.connect(null);
+        CommAPI.device.processRequests();
     }
 
 }

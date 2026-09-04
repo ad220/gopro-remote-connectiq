@@ -4,7 +4,6 @@ import Toybox.System;
 import Toybox.Test;
 
 using Toybox.BluetoothLowEnergy as Ble;
-using BleApiWrapper as BleAPI;
 using GattProfileManager as GPM;
 
 
@@ -14,7 +13,7 @@ module RemoteDelegateTest {
     (:test)
     function testSettings(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake(null);
+        var device = TestInit.initFake(null);
         TestInit.initConnection(GoProCamera.GP_HERO11M);
         
         var camera = getApp().gopro;
@@ -26,7 +25,7 @@ module RemoteDelegateTest {
         viewController.push(new RemoteView(), delegate, WatchUi.SLIDE_IMMEDIATE);
         
         camera.sendCommand(GoProCamera.SHUTTER);
-        BleAPI.device.processRequests();
+        device.processRequests();
         delegate.onNextPage();
 
         if (viewController.getCurrentDelegate() != delegate) {
@@ -35,7 +34,7 @@ module RemoteDelegateTest {
         }
         
         camera.sendCommand(GoProCamera.SHUTTER);
-        BleAPI.device.processRequests();
+        device.processRequests();
         delegate.onNextPage();
         
         var tmpDlgt = viewController.getCurrentDelegate();
@@ -46,7 +45,7 @@ module RemoteDelegateTest {
         tmpDlgt.onBack();
 
         camera.sendCommand(GoProCamera.SWITCH_MODE);
-        BleAPI.device.processRequests();
+        device.processRequests();
         delegate.onNextPage();
 
         if (!(viewController.getCurrentDelegate() instanceof SettingPickerDelegate)) {
@@ -61,7 +60,7 @@ module RemoteDelegateTest {
     (:test)
     function testMenu(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake(null);
+        var device = TestInit.initFake(null);
         TestInit.initConnection(GoProCamera.GP_HERO11M);
         
         var camera = getApp().gopro;
@@ -73,7 +72,7 @@ module RemoteDelegateTest {
         viewController.push(new RemoteView(), delegate, WatchUi.SLIDE_IMMEDIATE);
         
         camera.sendCommand(GoProCamera.SHUTTER);
-        BleAPI.device.processRequests();
+        device.processRequests();
         delegate.onMenu();
 
         if (viewController.getCurrentDelegate() != delegate) {
@@ -82,7 +81,7 @@ module RemoteDelegateTest {
         }
         
         camera.sendCommand(GoProCamera.SHUTTER);
-        BleAPI.device.processRequests();
+        device.processRequests();
         delegate.onMenu();
         
         var tmpDlgt = viewController.getCurrentDelegate();
@@ -97,7 +96,7 @@ module RemoteDelegateTest {
     (:test)
     function testTogglables(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake(null);
+        var device = TestInit.initFake(null);
         TestInit.initConnection(GoProCamera.GP_HERO11M);
         
         var camera = getApp().gopro;
@@ -109,7 +108,7 @@ module RemoteDelegateTest {
         viewController.push(new RemoteView(), delegate, WatchUi.SLIDE_IMMEDIATE);
         
         camera.sendCommand(GoProCamera.SHUTTER);
-        BleAPI.device.processRequests();
+        device.processRequests();
         delegate.onPreviousPage();
 
         if (viewController.getCurrentDelegate() != delegate) {
@@ -118,7 +117,7 @@ module RemoteDelegateTest {
         }
         
         camera.sendCommand(GoProCamera.SHUTTER);
-        BleAPI.device.processRequests();
+        device.processRequests();
         delegate.onPreviousPage();
         
         if (!(viewController.getCurrentDelegate() instanceof TogglablesDelegate)) {
@@ -132,7 +131,7 @@ module RemoteDelegateTest {
     (:test)
     function testShutter(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake(null);
+        var device = TestInit.initFake(null);
         TestInit.initConnection(GoProCamera.GP_HERO11M);
         
         var camera = getApp().gopro;
@@ -145,7 +144,7 @@ module RemoteDelegateTest {
         
         var keyEvent = new TestInit.MockKeyEvent(WatchUi.KEY_ENTER, WatchUi.PRESS_TYPE_ACTION);
         delegate.onKeyPressed(keyEvent);
-        BleAPI.device.processRequests();
+        device.processRequests();
 
         if (!camera.isRecording()) {
             logger.error("Camera should be recording");
@@ -153,7 +152,7 @@ module RemoteDelegateTest {
         }
         
         delegate.onKeyPressed(keyEvent);
-        BleAPI.device.processRequests();
+        device.processRequests();
         
         if (camera.isRecording()) {
             logger.error("Camera should not be recording");
@@ -166,21 +165,16 @@ module RemoteDelegateTest {
     (:test)
     function testHilight(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake(null);
+        var device = TestInit.initFake(null);
         TestInit.initConnection(GoProCamera.GP_HERO11M);
         
-        var device = BleAPI.device as FakeGoProDevice;
-
         var viewController = new ViewDebugController();
         getApp().viewController = viewController;
         
         var delegate = new RemoteDelegate();
         viewController.push(new RemoteView(), delegate, WatchUi.SLIDE_IMMEDIATE);
         
-        BleAPI.delegate.onCharacteristicChanged(
-            BleAPI.device.gpQueryResponseChar as Ble.Characteristic,
-            [5, GoProDecoder.NOTIF_STATUS, 0, 10, 1, 1]b
-        );
+        device.iface.sendMessage(GPM.UUID_QUERY_RESPONSE_CHAR, [5, GoProDecoder.NOTIF_STATUS, 0, 10, 1, 1]b);
 
         device.requests = [];
         delegate.onPreviousPage();
@@ -196,10 +190,8 @@ module RemoteDelegateTest {
     (:test)
     function testBack(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake(null);
+        var device = TestInit.initFake(null);
         TestInit.initConnection(GoProCamera.GP_HERO11M);
-        
-        var device = BleAPI.device as FakeGoProDevice;
 
         var viewController = new ViewDebugController();
         getApp().viewController = viewController;

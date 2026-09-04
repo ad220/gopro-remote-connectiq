@@ -34,11 +34,11 @@ module SettingPickerDelegateTest {
     function testItemOrder(logger as Test.Logger) as Boolean {
         var result = true;
         TestInit.initDefaults();
-        TestInit.initFake(null);
+        var device = TestInit.initFake(null);
         TestInit.initConnection(GoProCamera.GP_HERO11M);
 
         var gopro = getApp().gopro;
-        var specs = BleAPI.device.specs;
+        var specs = device.specs;
 
         specs.availablePhotoLens.addAll([
             GoProSettings.WIDE_12MP,
@@ -69,7 +69,7 @@ module SettingPickerDelegateTest {
         ];
 
         gopro.queryValues(GoProDecoder.GET_AVAILABLE, []b.addAll(settings));
-        BleAPI.device.processRequests();
+        device.processRequests();
 
         (settings as Array).add(GoProSettings.RATIO);
         var expectedLabels = [
@@ -106,7 +106,7 @@ module SettingPickerDelegateTest {
     (:test)
     function testSelectItem(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake(null);
+        var device = TestInit.initFake(null);
         TestInit.initConnection(GoProCamera.GP_HERO11M);
 
         var settingsCamera = [
@@ -117,7 +117,7 @@ module SettingPickerDelegateTest {
             GoProSettings.HYPERSMOOTH
         ];
         getApp().gopro.queryValues(GoProDecoder.REGISTER_AVAILABLE, []b.addAll(settingsCamera));
-        BleAPI.device.processRequests();
+        device.processRequests();
 
         var settingsIface = [
             GoProSettings.RESOLUTION,
@@ -132,7 +132,7 @@ module SettingPickerDelegateTest {
         for (var i=0; i<settingsIface.size(); i+=1) {
             var menu = initMenu(settingsIface[i]);
             menu[1].onSelect(menu[0].debugItems[indexes[i]]);
-            BleAPI.device.processRequests();
+            device.processRequests();
         }
         
         var expectedValues = [100, 9, 8, 0, 4];

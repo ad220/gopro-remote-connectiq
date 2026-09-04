@@ -5,7 +5,7 @@ using Toybox.BluetoothLowEnergy as Ble;
 using BleApiWrapper as BleAPI;
 using GattProfileManager as GPM;
 
-(:debug :ble) class FakeGoProDevice {
+(:debug) class FakeGoProDevice {
 
     typedef FakeGoProSettings as Dictionary<Number or GoProSettings.SettingId, Number or Number>;
     typedef FakeGoProStatuses as Dictionary<Number or GoProCamera.StatusId, Number>;
@@ -18,15 +18,14 @@ using GattProfileManager as GPM;
     var notifStatuses as ByteArray;
     var notifAvailable as ByteArray;
 
-    var gpControlService as BleAPI.MockService;
-    var gpQueryResponseChar as BleAPI.MockCharacteristic;
-
     var autoSleepTimer as TimerCallback?;
     var hilightCount as Number = 0;
 
     typedef Message as [GPM.GoProUuid, ByteArray];
     var requests as Array<Message>;
     var processingRequests as Boolean;
+
+    var iface as FakeGoProInterface;
 
     public function initialize(
             settings as FakeGoProSettings,
@@ -36,6 +35,7 @@ using GattProfileManager as GPM;
         self.settings = settings;
         self.statuses = statuses;
         self.specs = specs;
+        self.iface = new FakeGoProInterface();
 
         self.notifSettings = []b;
         self.notifStatuses = []b;
@@ -44,13 +44,6 @@ using GattProfileManager as GPM;
         self.processingRequests = false;
 
         resetSleepTimer();
-
-        var device = new BleAPI.MockDevice();
-        gpControlService = new BleAPI.MockService(Ble.stringToUuid(GPM.GOPRO_CONTROL_SERVICE), device);
-        gpQueryResponseChar = new BleAPI.MockCharacteristic(
-            GPM.getUuid(GPM.UUID_QUERY_RESPONSE_CHAR),
-            gpControlService
-        );
     }
 
     private function resetSleepTimer() as Void {
@@ -61,10 +54,8 @@ using GattProfileManager as GPM;
     }
 
     public function sleep() as Void {
-        BleAPI.delegate.onConnectedStateChanged(
-            gpControlService.device as Ble.Device,
-            Ble.CONNECTION_STATE_DISCONNECTED
-        );
+        iface.disconnect();
+
         if (autoSleepTimer != null) {
             autoSleepTimer.stop();
             autoSleepTimer = null;
@@ -140,17 +131,14 @@ using GattProfileManager as GPM;
                             statuses.put(GoProCamera.ENCODING, data[3]);
                             responseSplitter(GPM.UUID_COMMAND_RESPONSE_CHAR, [1, 0]b);
                             if (notifStatuses.indexOf(GoProCamera.ENCODING) != -1) {
-                                BleAPI.delegate.onCharacteristicChanged(
-                                    gpQueryResponseChar as Ble.Characteristic,
-                                    [0x05, GoProDecoder.NOTIF_STATUS, 0x00, GoProCamera.ENCODING, 0x01, data[3]]b
-                                );
+                                iface.sendMessage(GPM.UUID_QUERY_RESPONSE_CHAR, [0x05, GoProDecoder.NOTIF_STATUS, 0x00, GoProCamera.ENCODING, 0x01, data[3]]b);
                             }
                         } else {
                             var pt = 1 + statuses[GoProCamera.PHOTOS_TAKEN] as Number;
                             statuses[GoProCamera.PHOTOS_TAKEN] = pt;
                             if (notifStatuses.indexOf(GoProCamera.PHOTOS_TAKEN) != -1) {
-                                BleAPI.delegate.onCharacteristicChanged(
-                                    gpQueryResponseChar as Ble.Characteristic,
+                                iface.sendMessage(
+                                    GPM.UUID_QUERY_RESPONSE_CHAR,
                                     [0x08, GoProDecoder.NOTIF_STATUS, 0x00, GoProCamera.PHOTOS_TAKEN, 0x04, 0, 0, pt >> 8, pt & 0xFF]b
                                 );
                             }
@@ -260,17 +248,14 @@ using GattProfileManager as GPM;
     private function responseSplitter(uuid as GPM.GoProUuid, response as ByteArray) as Void {
         var length = response.size();
 
-        uuid = GPM.getUuid(uuid);
-        var characteristic = new BleAPI.MockCharacteristic(uuid, gpControlService) as Ble.Characteristic;
-
         if (length<20) {
-            BleAPI.delegate.onCharacteristicChanged(characteristic, [length]b.addAll(response));
+            iface.sendMessage(uuid, [length]b.addAll(response));
         }
-        BleAPI.delegate.onCharacteristicChanged(characteristic, [0x20 | (0x1F & (length>>8)), 0xFF & length]b.addAll(response.slice(0, 18)));
+        iface.sendMessage(uuid, [0x20 | (0x1F & (length>>8)), 0xFF & length]b.addAll(response.slice(0, 18)));
         var counter = 0;
         response = response.slice(18, null);
         while (response.size()>0) {
-            BleAPI.delegate.onCharacteristicChanged(characteristic, [0x80 | 0x0F & counter]b.addAll(response.slice(0,19)));
+            iface.sendMessage(uuid, [0x80 | 0x0F & counter]b.addAll(response.slice(0,19)));
             response = response.slice(19, null);
             counter++;
         }

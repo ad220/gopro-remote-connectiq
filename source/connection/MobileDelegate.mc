@@ -114,9 +114,16 @@ class MobileConnection extends Communications.ConnectionListener {
         self.errorCallback = errorCallback;
     }
 
+    (:release)
     public function onComplete() as Void {
         // System.println("[DEBUG]     Successfully sent message");
         getApp().timerController.start(completeCallback, 1, false);
+    }
+
+    (:debug)
+    public function onComplete() as Void {
+        // System.println("[DEBUG]     Successfully sent message");
+        completeCallback.invoke();
     }
 
     public function onError() {

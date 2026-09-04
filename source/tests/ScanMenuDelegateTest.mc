@@ -8,7 +8,7 @@ using Toybox.BluetoothLowEnergy as Ble;
 using BleApiWrapper as BleAPI;
 
 
-(:test)
+(:test :ble)
 module ScanMenuDelegateTest {
 
     function callback(scanResult as Ble.ScanResult?) as Void {

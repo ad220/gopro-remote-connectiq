@@ -2,6 +2,10 @@ import Toybox.Lang;
 
 using Toybox.BluetoothLowEnergy as Ble;
 
+(:mobile)
+module BleApiWrapper {
+    // prevent warning caused by using statements in mobile builds
+}
 
 (:ble :release)
 module BleApiWrapper {

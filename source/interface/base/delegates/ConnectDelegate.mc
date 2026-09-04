@@ -103,6 +103,11 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         return true;
     }
 
+    (:mobile)
+    public function startScan() as Void {
+        // quick fix for missing startScan function with mobile builds
+    }
+
     (:ble)
     public function startScan() as Void {
         var scanMenu = ICM.newCustomMenu(0.1, 0.3);

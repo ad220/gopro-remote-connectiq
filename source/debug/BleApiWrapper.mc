@@ -1,7 +1,6 @@
 import Toybox.Lang;
 
 using Toybox.BluetoothLowEnergy as Ble;
-using BleApiWrapper as BleAPI;
 
 (:ble :debug)
 module BleApiWrapper {
@@ -163,7 +162,7 @@ module BleApiWrapper {
 
         function requestBond() as Void {
             bonded = true;
-            BleAPI.delegate.onEncryptionStatus(self as Ble.Device, Ble.STATUS_SUCCESS);
+            delegate.onEncryptionStatus(self as Ble.Device, Ble.STATUS_SUCCESS);
         }
     }
 
