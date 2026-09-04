@@ -16,11 +16,11 @@ class FakeGoProInterface {
         gpControlService = new BleAPI.MockService(Ble.stringToUuid(GPM.GOPRO_CONTROL_SERVICE), device);
         gpQueryResponseChar = new BleAPI.MockCharacteristic(
             GPM.getUuid(GPM.UUID_QUERY_RESPONSE_CHAR),
-            gpControlService
+            gpControlService as BleAPI.MockService
         );
     }
 
-    function disconnect() {
+    function disconnect() as Void {
         BleAPI.delegate.onConnectedStateChanged(
             gpControlService.getDevice(),
             Ble.CONNECTION_STATE_DISCONNECTED
@@ -28,7 +28,8 @@ class FakeGoProInterface {
     }
 
     function sendMessage(charId as GPM.GoProUuid, msg as ByteArray) as Void {
-        BleAPI.delegate.onCharacteristicChanged(charId, msg);
+        var char = gpControlService.getCharacteristic(GPM.getUuid(charId));
+        if (char != null) { BleAPI.delegate.onCharacteristicChanged(char, msg); }
     }
 
 }

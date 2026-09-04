@@ -24,7 +24,7 @@ module InterfaceComponentsManager {
     function loadFonts() as Void{
         fontTiny = Graphics.FONT_XTINY;
         fontSmall = Graphics.FONT_TINY;
-        fontMedium = WatchUi.loadResource(Rez.Fonts.Medium);
+        fontMedium = WatchUi.loadResource(Rez.Fonts.Medium) as FontResource;
     }
 
     (:typecheck(false) :inline)

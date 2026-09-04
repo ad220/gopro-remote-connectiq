@@ -1,3 +1,4 @@
 <fonts>
-    <font id="Medium" filename="../../typefaces/fonts/extrabold/extrabold_28_fix.fnt" antialias="true" filter=" !'.0123456789ADEFGHLOPRSabcdefghijlmnopqrstuvyèé"/>
+    <font id="Tiny" filename="../../typefaces/fonts/semibold/semibold_14.fnt" antialias="true" filter=""/>
+    <font id="Small" filename="../../typefaces/fonts/bold/bold_18_fix.fnt" antialias="true" filter=""/>
 </fonts>

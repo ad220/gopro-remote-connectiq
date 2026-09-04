@@ -14,7 +14,7 @@ module HelperTest {
         var sortedArray = [-45, -12, -5.0, -2, 0, 0, 5.2d/42, 1, 2.3, 7, 1l<<48];
 
         for (var i=0; i<array.size(); i++) {
-            if (array[i] != sortedArray[i]) {
+            if (!array[i].equals(sortedArray[i])) {
                 logger.error(
                     "Expecting sorted array: " + sortedArray + 
                     "\ngiven: " + array

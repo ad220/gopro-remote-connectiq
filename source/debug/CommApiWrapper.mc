@@ -24,7 +24,7 @@ module CommApiWrapper {
             if (eventCallback != null) { eventCallback.invoke(msg); }
         }
         
-        if (content instanceof Array) {
+        if (content instanceof Lang.Array) {
             var gpxx = content[0] as GPM.GoProUuid;
             content.remove(gpxx);
             var data = []b.addAll(content as Array);

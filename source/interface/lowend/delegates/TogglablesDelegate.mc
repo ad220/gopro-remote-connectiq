@@ -12,7 +12,7 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
 
     private var menu as Menu2;
     private var gopro as GoProCamera;
-    private var selected as MenuItem?;
+    (:initialized) private var selected as MenuItem;
 
     public function initialize(menu as Menu2) {
         Menu2InputDelegate.initialize();
@@ -41,7 +41,7 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
         var gopro = getApp().gopro;
 
         var sdRemaining = gopro.getStatus(GoProCamera.SD_REMAINING);
-        sdRemaining = sdRemaining ? sdRemaining / 3600 + ":" + (sdRemaining % 3600 / 60).format("%02d") : "--:--";
+        sdRemaining = sdRemaining != null ? sdRemaining / 3600 + ":" + (sdRemaining % 3600 / 60).format("%02d") : "--:--";
 
         var battery = gopro.getStatus(GoProCamera.BATTERY);
         battery = (battery ? battery : "--") + "%";
@@ -94,6 +94,7 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
         var gps = gopro.getSetting(GoProSettings.GPS) as Number?;
         if (gps==null) {
             EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x01 << 16, GoProSettings.GPS, :WarningErr);
+            return;
         }
         
         (selected as ToggleMenuItem).setEnabled(gps & 0x01 == 0);

@@ -4,17 +4,19 @@ import Toybox.Communications;
 import Toybox.StringUtil;
 
 using Toybox.BluetoothLowEnergy as Ble;
-
+using ErrorManager as EM;
+using GattProfileManager as GPM;
 
 (:mobile)
 class MobileDelegate extends CameraDelegate {
 
     private var queue as Array<Object>;
-    private var failCount = 0;
+    private var failCount as Number;
 
     public function initialize() {
         CameraDelegate.initialize();
         queue = [];
+        failCount = 0;
     }
 
     public function connect(device as Ble.ScanResult?) as Void {
@@ -32,8 +34,8 @@ class MobileDelegate extends CameraDelegate {
         CameraDelegate.disconnect();
     }
     
-    protected function onPairingFailed() as Void {
-        CameraDelegate.onPairingFailed(0);
+    protected function onPairingFailed(errCode as Number) as Void {
+        CameraDelegate.onPairingFailed(errCode);
         disconnect();
     }
 
@@ -43,20 +45,21 @@ class MobileDelegate extends CameraDelegate {
             if (data) {
                 onConnect(null);
             } else {
-                onPairingFailed();
+                if (isPairing())    { onPairingFailed(EM.SUB_BLE_STATUS | 0x0F);  }
+                else                { disconnect(); }
             }
             return;
         }
         
         // System.println("[DEBUG]     Received from mobile: " + data);
         if (data instanceof Array) {
-            var uuid = data[0];
+            var uuid = data[0] as GPM.GoProUuid;
             data.remove(uuid);
             onMessage(uuid, []b.addAll(data));
         }
     }
 
-    private function transmit(data as Object) {
+    private function transmit(data as Object) as Void {
         // System.println("[DEBUG]     Sending to mobile: "+data.toString());
         queue.add(data);
         if (queue.size() == 1) { processQueue(); }
@@ -81,7 +84,7 @@ class MobileDelegate extends CameraDelegate {
             }
             failCount++;
             Communications.transmit(
-                queue[0],
+                queue[0] as TransmitType,
                 {},
                 new MobileConnection(
                     method(:onSent),
