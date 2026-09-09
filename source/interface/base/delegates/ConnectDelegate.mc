@@ -6,6 +6,7 @@ import Toybox.Application;
 using Toybox.BluetoothLowEnergy as Ble;
 using InterfaceComponentsManager as ICM;
 using BleApiWrapper as BleAPI;
+using CommApiWrapper as CommAPI;
 
 
 class ConnectDelegate extends WatchUi.BehaviorDelegate {
@@ -31,7 +32,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         // );
     }
 
-    (:mobile)
+    (:release :mobile)
     public function initialize(lastPairedDevice as Ble.ScanResult?) {
         BehaviorDelegate.initialize();
         self.delegate = new MobileDelegate();
@@ -72,6 +73,37 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         BleAPI.scannedDevices[0].goproId = BleAPI.device.specs.cameraId;
 
         var processMethod = BleAPI.device.method(:processRequests);
+        getApp().timerController.start(processMethod, 1, true);
+    }
+
+    (:debug :mobile)
+    public function initialize(lastPairedDevice as Ble.ScanResult?) {
+        BehaviorDelegate.initialize();
+        self.delegate = new MobileDelegate();
+        
+        CommAPI.device = new FakeGoProDevice(
+            {
+                GoProSettings.RESOLUTION        => 1,
+                GoProSettings.LENS              => GoProSettings.WIDE,
+                GoProSettings.FRAMERATE         => 5,
+                GoProSettings.FLICKER           => GoProSettings.HZ60,
+                GoProSettings.HYPERSMOOTH       => GoProSettings.HS_HIGH,
+                GoProSettings.LED               => GoProSettings.LED_ALL_ON,
+                GoProSettings.GPS               => 1,
+                GoProSettings.PHOTO_LENS        => GoProSettings.WIDE_7MP,
+            } as FakeGoProDevice.FakeGoProSettings,
+            {
+                GoProCamera.CAPTURE_MODE        => GoProCamera.MODE_VIDEO,
+                GoProCamera.ENCODING            => 0,
+                GoProCamera.ENCODING_DURATION   => 0,
+                GoProCamera.SD_REMAINING        => 6942,
+                GoProCamera.BATTERY             => 42,
+                GoProCamera.PHOTOS_TAKEN        => 1234,
+            } as FakeGoProDevice.FakeGoProStatuses,
+            new FakeGoProSpecs.SpecsH11Mini()
+        );
+
+        var processMethod = CommAPI.device.method(:processRequests);
         getApp().timerController.start(processMethod, 1, true);
     }
 

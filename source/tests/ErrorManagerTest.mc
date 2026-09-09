@@ -57,7 +57,7 @@ module ErrorManagerTest {
         
         if (viewController.stack.size() != 1) {
             logger.error("Raising a critical error should have pushed a notif view, view stack size=" + viewController.stack.size());
-            result = false;
+            return false;
         }
 
         if (!(viewController.stack[0][0] instanceof NotifView)) {
@@ -79,11 +79,11 @@ module ErrorManagerTest {
         }
 
         var expectedQueue = [
-            0x102000F5,
-            0x10970487,
-            0x100000DC,
-            0x100000DD,
-            0x1010002A,
+            EM.BUILD_FLAGS ^ 0x102000F5,
+            EM.BUILD_FLAGS ^ 0x10970487,
+            EM.BUILD_FLAGS ^ 0x100000DC,
+            EM.BUILD_FLAGS ^ 0x100000DD,
+            EM.BUILD_FLAGS ^ 0x1010002A,
         ] as Array;
 
         if (!TestInit.haveSameData(expectedQueue, EM.errorQueue as Array)) {

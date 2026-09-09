@@ -41,8 +41,7 @@ class FakeGoProInterface {
     }
 
     function sendMessage(charId as GPM.GoProUuid, msg as ByteArray) as Void {
-
-        var packet = [GattRequestQueue.WRITE_CHARACTERISTIC, charId];
+        var packet = [charId];
         for (var i=0; i<msg.size(); i++) { packet.add(msg[i]); }
         transmit(packet);
     }
@@ -52,6 +51,10 @@ class FakeGoProInterface {
         msg.data = data;
 
         var callback = CommAPI.eventCallback;
-        if (callback != null) { callback.invoke(msg); }
+        if (callback != null) {
+            callback.invoke(msg);
+        } else {
+            // System.println("[ERROR]     Watch callback for mobile messages is null");
+        }
     }
 }

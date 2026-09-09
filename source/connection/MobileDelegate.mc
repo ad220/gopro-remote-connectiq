@@ -4,6 +4,7 @@ import Toybox.Communications;
 import Toybox.StringUtil;
 
 using Toybox.BluetoothLowEnergy as Ble;
+using CommApiWrapper as CommAPI;
 using ErrorManager as EM;
 using GattProfileManager as GPM;
 
@@ -21,7 +22,7 @@ class MobileDelegate extends CameraDelegate {
 
     public function connect(device as Ble.ScanResult?) as Void {
         CameraDelegate.connect(device);
-        Communications.registerForPhoneAppMessages(method(:onReceive) as Communications.PhoneMessageCallback);
+        CommAPI.registerForPhoneAppMessages(method(:onReceive) as Communications.PhoneMessageCallback);
         transmit(true);
     }
 
@@ -30,7 +31,7 @@ class MobileDelegate extends CameraDelegate {
             transmit(false);
         }
         queue = [];
-        Communications.registerForPhoneAppMessages(null);
+        CommAPI.registerForPhoneAppMessages(null);
         CameraDelegate.disconnect();
     }
     
@@ -49,6 +50,10 @@ class MobileDelegate extends CameraDelegate {
                 else                { disconnect(); }
             }
             return;
+        }
+        if (data instanceof Number) {
+            goproId = data;
+            onConnect(null);
         }
         
         // System.println("[DEBUG]     Received from mobile: " + data);
@@ -83,7 +88,7 @@ class MobileDelegate extends CameraDelegate {
                 return;
             }
             failCount++;
-            Communications.transmit(
+            CommAPI.transmit(
                 queue[0] as TransmitType,
                 {},
                 new MobileConnection(
@@ -119,13 +124,11 @@ class MobileConnection extends Communications.ConnectionListener {
 
     (:release)
     public function onComplete() as Void {
-        // System.println("[DEBUG]     Successfully sent message");
         getApp().timerController.start(completeCallback, 1, false);
     }
 
     (:debug)
     public function onComplete() as Void {
-        // System.println("[DEBUG]     Successfully sent message");
         completeCallback.invoke();
     }
 

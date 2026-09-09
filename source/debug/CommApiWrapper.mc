@@ -17,20 +17,22 @@ module CommApiWrapper {
     }
 
     function transmit(content as TransmitType, options as Dictionary?, listener as ConnectionListener) as Void {
+        listener.onComplete();
+
         if (content instanceof Lang.Boolean) {
             var msg = new Communications.PhoneAppMessage();
-            msg.data = content;
+            msg.data = content ? device.specs.cameraId : false;
 
             if (eventCallback != null) { eventCallback.invoke(msg); }
         }
         
         if (content instanceof Lang.Array) {
-            var gpxx = content[0] as GPM.GoProUuid;
-            content.remove(gpxx);
-            var data = []b.addAll(content as Array);
+            if (content [0]) {
+                var gpxx = content[1] as GPM.GoProUuid;
+                var data = []b.addAll(content.slice(2, null) as Array);
 
-            listener.onComplete();
-            device.onSend([gpxx, data]);
+                device.onSend([gpxx, data]);
+            }
         }
     }
 

@@ -67,6 +67,7 @@ using GattProfileManager as GPM;
     }
 
     public function processRequests() as Void {
+        // System.println("[DEBUG]     Processing requests");
         processingRequests = true;
         while (requests.size() > 0) {
             processMsg(requests[0]);
@@ -250,6 +251,7 @@ using GattProfileManager as GPM;
 
         if (length<20) {
             iface.sendMessage(uuid, [length]b.addAll(response));
+            return;
         }
         iface.sendMessage(uuid, [0x20 | (0x1F & (length>>8)), 0xFF & length]b.addAll(response.slice(0, 18)));
         var counter = 0;

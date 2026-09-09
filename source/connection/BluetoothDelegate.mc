@@ -205,6 +205,8 @@ class BluetoothDelegate extends CameraDelegate {
     public function onCharacteristicChanged(characteristic as Ble.Characteristic, value as ByteArray) as Void {
         var charId = characteristic.getUuid().toString().substring(4,8);
         if (charId == null) { EM.raise(EM.ERR_NULL, 10, :WarningErr); return; }
+
+        // System.println("[DEBUG]     Received from watch id: " + charId + ", data: " + value);
         onMessage(charId.toNumber() as GPM.GoProUuid, value);
     }
 
