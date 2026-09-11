@@ -360,6 +360,7 @@ using GattProfileManager as GPM;
                 break;
         }
         for (var i=0; i<available.size(); i++) {
+            if (specs.cameraId >= GoProCamera.GP_MISSION1PRO) { response.addAll([0xFF, 0]); }
             response.addAll([id, 0x01, available[i]]b);
         }
     }

@@ -198,13 +198,15 @@ class GoProCamera extends GoProSettings {
     }
 
     public function onReceiveStatus(id as Number or StatusId, value as Number) as Void {
+        var timer = getApp().timerController;
         if (id == ENCODING) {
             if (value == 1) {
+                timer.stop(progressTimer);
                 statuses.put(ENCODING_DURATION, 0);
                 queryValues(GoProDecoder.GET_STATUS, [ENCODING_DURATION]b);
-                progressTimer = getApp().timerController.start(method(:incrementEncodingDuration), 5, true);
+                progressTimer = timer.start(method(:incrementEncodingDuration), 5, true);
             } else {
-                getApp().timerController.stop(progressTimer);
+                timer.stop(progressTimer);
             }
         }
 
@@ -319,6 +321,11 @@ class GoProCamera extends GoProSettings {
 
     public function getId() as Number {
         return goproId;
+    }
+
+    public function stopProgressTimer() as Void {
+        getApp().timerController.stop(progressTimer);
+        progressTimer = null;
     }
 
     public function getDecoder() as GoProDecoder {
