@@ -60,9 +60,14 @@ class CameraDelegate {
     public function disconnect() as Void {
         if (connected) {
             connected = false;
+            
+            var app = getApp();
+            if (app.gopro instanceof GoProCamera) {
+                app.gopro.stopProgressTimer();
+            }
 
-            getApp().viewController.returnHome(Rez.Strings.Disconnected, NotifView.NOTIF_INFO);
-            getApp().gopro = Helper.createNullObject() as GoProCamera;
+            app.viewController.returnHome(Rez.Strings.Disconnected, NotifView.NOTIF_INFO);
+            app.gopro = Helper.createNullObject() as GoProCamera;
         }
     }
 
