@@ -7,6 +7,7 @@ This guide explains how to install, pair, and use the GoPro Remote widget on you
 - [Installation](#installation)
 - [First launch](#first-launch-and-pairing)
 - [Home menu](#home-menu)
+- [Glance](#glance)
 - [Remote screen](#remote-screen)
 - [Video settings](#video-settings-menu)
 - [Camera settings](#camera-settings-togglables)
@@ -20,6 +21,7 @@ This guide explains how to install, pair, and use the GoPro Remote widget on you
 - HERO4 Silver / Black
 - HERO5 Black / Session
 - Fusion
+- HERO6 Black
 - HERO7 Black / White / Silver
 - HERO 2018
 - HERO8 Black
@@ -36,9 +38,7 @@ This guide explains how to install, pair, and use the GoPro Remote widget on you
 
 ### Garmin smartwatches
 - Approach® S70
-- D2™ Air X15
 - D2™ Mach 1
-- D2™ Mach 1 Pro
 - D2™ Mach 2
 - Descent™ G2
 - Descent™ MK3
@@ -48,7 +48,8 @@ This guide explains how to install, pair, and use the GoPro Remote widget on you
 - epix™ (Gen 2)
 - epix™ Pro
 - fēnix® 7(S/X) (Pro / Solar)
-- fēnix® 8 (Pro / Solar / AMOLED)
+- fēnix® 8 (Pro / Solar)
+- fēnix® 9 (Pro / Solar)
 - fēnix® E
 - Forerunner® 255(S) (Music)
 - Forerunner® 265(S)
@@ -57,9 +58,7 @@ This guide explains how to install, pair, and use the GoPro Remote widget on you
 - Forerunner® 965
 - Forerunner® 970
 - Instinct® 3
-- MARQ® (Gen 2)
-- MARQ® Commander (Gen 2)
-- MARQ™ Aviator (Gen 2)
+- MARQ® Gen 2 (Athlete / Adventurer / Captain / Golfer / Carbon Edition / Commander - Carbon Edition)
 - tactix® 7
 - tactix® 8
 - Venu® 4
@@ -95,7 +94,7 @@ You can also build the widget for your specific device with the Garmin SDK and t
 1. Open the widget on your watch.
 2. On the connect screen, press the pair button.
 3. Put your GoPro into pairing mode (from the camera's connections menu).
-4. Your watch scans for nearby cameras. Select your GoPro from the list once it appears.
+4. Your watch scans for nearby cameras. Select your GoPro from the list (cameras are shown with their model name) once it appears.
 5. Wait for the camera to accept the pairing request.
 
 Once paired, your watch remembers the camera. On future launches, the button on the connect screen will say "Connect" instead of "Pair", pressing it reconnects directly to the last used camera.
@@ -116,20 +115,40 @@ From the connect screen, open the home menu to:
 No personal data or footage is ever transmitted, only anonymous the error code and your app version - the code of both this widget and the dashboard is open source anyway, you can check by yourself if you're curious. You can turn this off at any time from the home menu.
 
 
+## Glance
+
+On watches that support Glances, the widget can be added to a watch face. It shows the name of the last used camera (or "Scan for camera" if none is paired yet) and opens the widget directly into the connect flow when tapped.
+
+
 ## Remote screen
 
 Once connected, you'll see the main remote screen with:
 
 - #### Shutter button
-  Starts and stops recording (or takes a photo/timelapse depending on the camera's current mode).
+  Starts and stops recording (or takes a photo when the camera is in photo mode, see [Switch capture mode](#switch-capture-mode)).
 
 - #### Hilight button
   Adds a Hilight tag while recording, so you can find key moments later when editing your footage.
 
 - #### Settings button
-  Shows the camera's current video settings (resolution, framerate, aspect ratio), or `. . .` while settings are still loading. Opens the video settings menu (see below). Only available while the camera is idle (not recording).
+  Shows the camera's current video settings (resolution, framerate, aspect ratio), or `. . .` while settings are still loading. Opens the video settings menu (see below). When the camera is in photo mode, it shows the current photo lens instead and opens the photo lens picker. Only available while the camera is idle (not recording).
 
-While recording, only the shutter and hilight buttons remain active.
+- #### Recording timer
+  While recording, a blinking red dot and the recording duration (minutes:seconds) are shown at the top of the screen.
+
+### Navigation
+
+The remote screen is controlled as follows (on touchscreens, the shutter, hilight and settings touch targets work the same way):
+
+- **Up button**: adds a Hilight tag while recording, or opens the camera settings menu when the camera is idle.
+- **Settings button**: opens the video settings menu in video mode, or the photo lens picker in photo mode, while the camera is idle.
+- **Menu key**: opens the advanced settings menu, which lets you switch the capture mode (see below).
+
+While recording, only the shutter and hilight actions remain active.
+
+### Switch capture mode
+
+Press the **menu key** on the remote screen and choose *Switch capture mode* to alternate the camera between video and photo mode. In photo mode, the shutter takes a photo, the settings description shows the current photo lens (e.g. "27MP Wide"), and the settings button lets you change the photo lens (megapixels and composition).
 
 
 ## Video settings menu
@@ -157,13 +176,13 @@ Opened from the remote screen while the camera is idle. It offers:
 
 ## Camera settings (togglables)
 
-A second menu, separate from video settings, is accessible from the remote screen while the camera is idle. It groups camera-level toggles:
+A second menu, separate from video settings, is opened with the **up button** from the remote screen while the camera is idle. It groups camera-level toggles:
 
-- **LED**
-- **GPS**
-- **Anti-flicker**
-- **HyperSmooth / stabilization**
-- **Power off**
+- **LED**: turns the camera LEDs on or off. If your camera supports more than two LED states, a picker with all of them is opened instead.
+- **GPS**: enables or disables GPS on cameras that have it.
+- **Anti-flicker**: toggles the video frequency between 50 Hz and 60 Hz to avoid flicker under artificial light.
+- **HyperSmooth / stabilization**: disables or changes the stabilization level (a picker with the levels your camera offers is opened).
+- **Power off**: puts the camera to sleep.
 
 This screen also shows the camera's current **battery level** and **remaining SD card recording time**.
 
