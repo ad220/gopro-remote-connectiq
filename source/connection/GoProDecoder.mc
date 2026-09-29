@@ -242,6 +242,7 @@ class GoProDecoder {
 
             if (length == 0) {
                 EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | queryType << 16, type, :SilentErr);
+                break;
             }
 
             value = data.slice(i+2, i+2+length);
