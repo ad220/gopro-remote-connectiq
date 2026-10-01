@@ -162,7 +162,7 @@ module FakeGoProSpecs {
 
         const availableFlicker = [
             GoProSettings.NTSC,
-            GoProSettings.PAL
+            GoProSettings.PAL,
         ]b;
 
         const availableLed = [
@@ -227,7 +227,7 @@ module FakeGoProSpecs {
 
         const availableFlicker = [
             GoProSettings.NTSC,
-            GoProSettings.PAL
+            GoProSettings.PAL,
         ]b;
 
         const availableLed = [

@@ -84,7 +84,6 @@ class GoProCamera extends GoProSettings {
         SWITCH_MODE = 0x02,
         SLEEP       = 0x05,
         HILIGHT     = 0x18,
-        KEEP_ALIVE  = 0x5B,
     }
 
     public enum CaptureMode {
