@@ -136,23 +136,14 @@ class BluetoothDelegate extends CameraDelegate {
 
         CameraDelegate.onConnect(device);
 
+        // keep alive loop with 5s period
         keepAliveTimer = getApp().timerController.start(method(:keepAlive), 25, true);
     }
 
     public function keepAlive() as Void {
-        if (connected and requestQueue != null) {
-            // System.println("[DEBUG]     keepAlive");
-
-            var data = getApp().gopro.getDecoder().encodeSettings(GoProSettings.LED, 0x42);
-            (requestQueue as GattRequestQueue).add(
-                GattRequestQueue.WRITE_CHARACTERISTIC,
-                GattProfileManager.getUuid(GattProfileManager.UUID_SETTINGS_CHAR),
-                data
-            );
-        } else {
-            // ERA_CRASH(x9v4.0.1)
-            EM.raise(EM.ERR_COMM, EM.SUB_BLE_NULLQ | 0x00, :CriticalErr);
-        }
+        // send keep alive packet which takes the form of setting LED to 0x42 (gets rejected by camera)
+        var data = getApp().gopro.getDecoder().encodeSettings(GoProSettings.LED, 0x42);
+        send(GattRequestQueue.WRITE_CHARACTERISTIC, GattProfileManager.UUID_SETTINGS_CHAR, data);
     }
 
     public function disconnect() as Void {
@@ -166,6 +157,8 @@ class BluetoothDelegate extends CameraDelegate {
                 requestQueue = null;
             }
 
+            CameraDelegate.disconnect();
+
             if (camera != null) {
                 try { BleAPI.unpairDevice(camera); }
                 catch (ex) { EM.raise(EM.ERR_COMM, EM.SUB_BLE_API | 0x02, :SilentErr); }
@@ -175,8 +168,6 @@ class BluetoothDelegate extends CameraDelegate {
             else {
                 EM.raise(EM.ERR_NULL, 2, :SilentErr); // paranoid
             }
-
-            CameraDelegate.disconnect();
         }
     }
 
