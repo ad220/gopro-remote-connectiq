@@ -33,7 +33,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
         if (gopro.isRecording()) { return false; }
 
         var vc = getApp().viewController;
-        if (gopro.getStatus(GoProCamera.CAPTURE_MODE) == GoProCamera.MODE_VIDEO) {
+        if (gopro.getStatus(GoProCamera.PRESET_GRP) == GoProCamera.PGRP_VIDEO) {
             var menu = ICM.newCustomMenu(0.15, null);
             vc.switchTo(menu, new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, []), SLIDE_UP);
         } else {

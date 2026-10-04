@@ -40,6 +40,7 @@ class GoProDecoder {
         GoProSettings.FORMAT, 
         GoProSettings.EIS,
         GoProSettings.PHOTO_RES,
+        GoProCamera.CAPTURE_MODE,
     ]b;
 
     public static const NEW_SETTINGS   = [
@@ -47,6 +48,7 @@ class GoProDecoder {
         GoProSettings.FLICKER,
         GoProSettings.HYPERSMOOTH,
         GoProSettings.PHOTO_LENS,
+        GoProCamera.PRESET_GRP,
     ]b;
 
 
@@ -105,10 +107,16 @@ class GoProDecoder {
         if      (command == GoProCamera.SHUTTER) {
             request.addAll([0x01, cam.isRecording() ? 0x00 : 0x01]);
         }
-        else if (command == GoProCamera.SWITCH_MODE) {
-            var mode = cam.getStatus(GoProCamera.CAPTURE_MODE);
-            if (mode == null) { mode = 0; }
-            request.addAll([0x01, mode ^ 0x01]);
+        else if (command == GoProCamera.LOAD_PGRP) {
+            var mode = cam.getStatus(GoProCamera.PRESET_GRP);
+            if (mode == null) { mode = 1002; }
+
+            if (goproId < GoProCamera.GP_MAX) {
+                request[1] = GoProCamera.SWITCH_MODE;
+                request.addAll([0x01, (mode - 1001) & 1 ^ 1]);
+            } else {
+                request.addAll([0x04, 0, 0, GoProCamera.PGRP_VIDEO >> 8, mode & 0xFF ^ 3]);
+            }
         }
 
         request[0] = request.size()-1;
@@ -118,11 +126,17 @@ class GoProDecoder {
     function decodeStatus(id as Number or GoProCamera.StatusId, value as ByteArray) 
         as [Number or GoProCamera.StatusId,  Number]
     {
+        if (id == GoProCamera.CAPTURE_MODE) {
+            return [GoProCamera.PRESET_GRP, value[0] & 1 + 1001];
+        }
+
         if (id == GoProCamera.ENCODING_DURATION
             or id == GoProCamera.SD_REMAINING
-            or id == GoProCamera.PHOTOS_TAKEN)
+            or id == GoProCamera.PHOTOS_TAKEN
+            or id == GoProCamera.PRESET_GRP)
         {
-            value = value.decodeNumber(Lang.NUMBER_FORMAT_UINT32, {:endianness => Lang.ENDIAN_BIG}) as Number;
+            value = value.decodeNumber(Lang.NUMBER_FORMAT_UINT32, {:endianness => Lang.ENDIAN_BIG})
+                         .toNumber();
         } else {
             value = value[0];
         }
@@ -149,7 +163,7 @@ class GoProDecoder {
             values = idsBuffer;
         }
 
-        if (goproId < GoProCamera.GP_MAX and queryId & 0xF == 0x2) {
+        if (goproId < GoProCamera.GP_MAX and queryId & 0xE == 0x2) {
             var idx;
             for (var i=0; i<NEW_SETTINGS.size(); i+=1) {
                 idx = values.indexOf(NEW_SETTINGS[i]);

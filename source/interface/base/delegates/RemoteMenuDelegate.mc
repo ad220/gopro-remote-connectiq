@@ -23,7 +23,7 @@ class RemoteMenuDelegate extends WatchUi.Menu2InputDelegate {
         var id = item.getId();
 
         if (id == :SwitchMode) {
-            getApp().gopro.sendCommand(GoProCamera.SWITCH_MODE);
+            getApp().gopro.sendCommand(GoProCamera.LOAD_PGRP);
             onBack();
         }
     }

@@ -70,12 +70,12 @@ module TestInit {
     };
 
     const defaultStatuses = {
-        GoProCamera.CAPTURE_MODE        => 0,
         GoProCamera.ENCODING            => 0,
         GoProCamera.ENCODING_DURATION   => 0,
         GoProCamera.SD_REMAINING        => 6942,
         GoProCamera.BATTERY             => 42,
         GoProCamera.PHOTOS_TAKEN        => 1234,
+        GoProCamera.PRESET_GRP          => GoProCamera.PGRP_VIDEO,
     };
 
     (:initialized) var initSettings as FakeGoProDevice.FakeGoProSettings;
@@ -99,6 +99,12 @@ module TestInit {
 
     function initFake(specs as FakeGoProSpecs.ISpecs?) as Void {
         if (specs == null) { specs = FakeGoProSpecs.getSpecsH11M(); }
+
+        if (specs.cameraId < GoProCamera.GP_MAX) {
+            initStatuses[GoProCamera.PRESET_GRP] = Helper.createNullObject() as Number;
+            initStatuses[GoProCamera.CAPTURE_MODE] = GoProCamera.MODE_VIDEO;
+        }
+
         BleAPI.device = new FakeGoProDevice(
             initSettings,
             initStatuses,

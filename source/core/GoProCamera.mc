@@ -73,24 +73,32 @@ class GoProCamera extends GoProSettings {
         ENCODING_DURATION   = 13,
         SD_REMAINING        = 35,
         PHOTOS_TAKEN        = 38,
-        CAPTURE_MODE        = 43,
+        CAPTURE_MODE        = 43,   // deprecated for preset group
         BATTERY             = 70,
         // READY               = 82,
         // COLD                = 85,
-    }
-
-    public enum CommandId {
-        SHUTTER     = 0x01,
-        SWITCH_MODE = 0x02,
-        SLEEP       = 0x05,
-        HILIGHT     = 0x18,
-        KEEP_ALIVE  = 0x5B,
+        PRESET_GRP          = 96,
     }
 
     public enum CaptureMode {
         MODE_VIDEO,
         MODE_PHOTO,
         MODE_MULTISHOT,
+    }
+
+    public enum PresetGroup {
+        PGRP_VIDEO      = 1001,
+        PGRP_PHOTO      = 1002,
+        PGRP_TIMELAPSE  = 1003,
+    }
+
+    public enum CommandId {
+        SHUTTER         = 0x01,
+        SWITCH_MODE     = 0x02, // deprecated for load preset group
+        SLEEP           = 0x05,
+        HILIGHT         = 0x18,
+        LOAD_PGRP       = 0x3E,
+        KEEP_ALIVE      = 0x5B,
     }
 
 
@@ -122,7 +130,7 @@ class GoProCamera extends GoProSettings {
 
     public function registerSettings() as Void {
         decoder.enableNotifications(delegate);
-        queryValues(GoProDecoder.REGISTER_STATUS, [CAPTURE_MODE]b);
+        queryValues(GoProDecoder.REGISTER_STATUS, [PRESET_GRP]b);
         queryValues(GoProDecoder.REGISTER_SETTING, [GoProSettings.GPS, GoProSettings.LED, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b);
     }
 
@@ -208,8 +216,8 @@ class GoProCamera extends GoProSettings {
             }
         }
 
-        if (id == CAPTURE_MODE and value != statuses.get(CAPTURE_MODE)) {
-            var invertFlag = value == MODE_PHOTO ? 0x20 : 0;
+        if (id == PRESET_GRP) {
+            var invertFlag = value == PGRP_PHOTO ? 0x20 : 0;
             registerMode(invertFlag);
         }
 
@@ -310,7 +318,7 @@ class GoProCamera extends GoProSettings {
     }
 
     public function updateDescription() as Void {
-        if (statuses.get(CAPTURE_MODE) == MODE_VIDEO) {
+        if (statuses.get(PRESET_GRP) == PGRP_VIDEO) {
             description = GoProSettings.getDescription();
         } else {
             description = getLabel(PHOTO_LENS, settings[PHOTO_LENS]) as String;

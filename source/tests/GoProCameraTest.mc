@@ -706,28 +706,33 @@ module GoProCameraTest {
     (:test)
     function testPhotoMode(logger as Logger) as Boolean {
         var result = true;
+
+        for (var k=0; k<testDeviceIds.size(); k+=1)
+        { // start of testDevice loop
+
         TestInit.initDefaults();
-        TestInit.initFake(FakeGoProSpecs.getSpecsM1Pro());
-        TestInit.initConnection(GoProCamera.GP_MISSION1PRO);
+        TestInit.initFake(testDeviceSpecs[k].invoke());
+        TestInit.initConnection(testDeviceIds[k]);
         
         var camera = getApp().gopro;
         BleAPI.device.processRequests();
 
         if (camera.getStatus(GoProCamera.PHOTOS_TAKEN) != null) {
-            logger.error("Camera photos taken status should still be null");
+            logDeviceError(logger, "Camera photos taken status should still be null", k);
+            result = false;
         }
 
-        camera.sendCommand(GoProCamera.SWITCH_MODE);
+        camera.sendCommand(GoProCamera.LOAD_PGRP);
         BleAPI.device.processRequests();
 
-        if (camera.getStatus(GoProCamera.CAPTURE_MODE) != GoProCamera.MODE_PHOTO) {
-            logger.error("Camera should be in photo mode");
+        if (camera.getStatus(GoProCamera.PRESET_GRP) != GoProCamera.PGRP_PHOTO) {
+            logDeviceError(logger, "Camera should be in photo mode", k);
             result = false;
         }
 
         var photosTaken = camera.getStatus(GoProCamera.PHOTOS_TAKEN);
         if (photosTaken != 1234) {
-            logger.error("There should be 1234 photos taken, got: " + photosTaken);
+            logDeviceError(logger, "There should be 1234 photos taken, got: " + photosTaken, k);
             result = false;
         }
 
@@ -735,13 +740,13 @@ module GoProCameraTest {
         BleAPI.device.processRequests();
 
         if (camera.isRecording()) {
-            logger.error("Camera is in photo mode, it shouuld not be recording");
+            logDeviceError(logger, "Camera is in photo mode, it shouuld not be recording", k);
             result = false;
         }
 
         photosTaken = camera.getStatus(GoProCamera.PHOTOS_TAKEN);
         if (photosTaken != 1235) {
-            logger.error("There should be 1235 photos taken, got: " + photosTaken);
+            logDeviceError(logger, "There should be 1235 photos taken, got: " + photosTaken, k);
             result = false;
         }
 
@@ -754,9 +759,11 @@ module GoProCameraTest {
 
         photosTaken = camera.getStatus(GoProCamera.PHOTOS_TAKEN);
         if (photosTaken != 1239) {
-            logger.error("There should be 1239 photos taken, got: " + photosTaken);
+            logDeviceError(logger, "There should be 1239 photos taken, got: " + photosTaken, k);
             result = false;
         }
+
+        } // end of testDevice loop
 
         return result;
     }
@@ -837,7 +844,7 @@ module GoProCameraTest {
             result = false;
         }
 
-        camera.sendCommand(GoProCamera.SWITCH_MODE);
+        camera.sendCommand(GoProCamera.LOAD_PGRP);
         BleAPI.device.processRequests();
 
         label = camera.getLabel(GoProCamera.PHOTO_LENS, null);
@@ -902,7 +909,7 @@ module GoProCameraTest {
             return false;
         }
 
-        camera.sendCommand(GoProCamera.SWITCH_MODE);
+        camera.sendCommand(GoProCamera.LOAD_PGRP);
         BleAPI.device.processRequests();
 
         label = camera.getDescription();

@@ -136,7 +136,7 @@ using GattProfileManager as GPM;
                 var commandId = data[1];
                 switch (commandId) {
                     case GoProCamera.SHUTTER:
-                        if (statuses[GoProCamera.CAPTURE_MODE] == GoProCamera.MODE_VIDEO) {
+                        if (statuses[GoProCamera.PRESET_GRP] == GoProCamera.PGRP_VIDEO) {
                             statuses.put(GoProCamera.ENCODING, data[3]);
                             responseSplitter(GPM.UUID_COMMAND_RESPONSE_CHAR, [1, 0]b);
                             if (notifStatuses.indexOf(GoProCamera.ENCODING) != -1) {
@@ -173,6 +173,17 @@ using GattProfileManager as GPM;
                             responseSplitter(
                                 GPM.UUID_QUERY_RESPONSE_CHAR,
                                 [GoProDecoder.NOTIF_STATUS, 0x00, modeId, 1, data[3]]b
+                            );
+                        }
+                        break;
+
+                    case GoProCamera.LOAD_PGRP:
+                        var grpId = GoProCamera.PRESET_GRP;
+                        statuses.put(grpId, data[5] << 8 + data[6]);
+                        if (notifStatuses.indexOf(grpId) != -1) {
+                            responseSplitter(
+                                GPM.UUID_QUERY_RESPONSE_CHAR,
+                                [GoProDecoder.NOTIF_STATUS, 0x00, grpId, 4, data[3], data[4], data[5], data[6]]b
                             );
                         }
                         break;
@@ -311,7 +322,8 @@ using GattProfileManager as GPM;
 
         if (id == GoProCamera.SD_REMAINING
             or id == GoProCamera.ENCODING_DURATION
-            or id == GoProCamera.PHOTOS_TAKEN)
+            or id == GoProCamera.PHOTOS_TAKEN
+            or id == GoProCamera.PRESET_GRP)
         {
             response.addAll([id, 0x04]b);
             var valueN = statuses.get(id);

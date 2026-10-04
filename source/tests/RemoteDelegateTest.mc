@@ -45,7 +45,7 @@ module RemoteDelegateTest {
         }
         tmpDlgt.onBack();
 
-        camera.sendCommand(GoProCamera.SWITCH_MODE);
+        camera.sendCommand(GoProCamera.LOAD_PGRP);
         BleAPI.device.processRequests();
         delegate.onNextPage();
 
