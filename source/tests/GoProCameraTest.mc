@@ -210,6 +210,59 @@ module GoProCameraTest {
 
 
     (:test)
+    function testKeepAlive(logger as Logger) as Boolean {
+        var result = true;
+
+        for (var k=0; k<testDeviceIds.size(); k+=1)
+        { // start of testDevice loop
+
+        TestInit.initDefaults();
+        TestInit.initFake(testDeviceSpecs[k].invoke());
+
+        BleAPI.pairedDevices = [];
+
+        var delegate = new MockBluetoothDelegate();
+        delegate.connect(new BleAPI.MockScanResult(0, null, testDeviceIds[k]) as Ble.ScanResult);
+
+        var device = BleAPI.device as FakeGoProDevice;
+        var camera = getApp().gopro;
+        device.processRequests();
+
+        device.requests = [];
+
+        delegate.keepAlive();
+
+        if (device.requests.size() != 1) {
+            logDeviceError(logger, "Keep alive should queue exactly 1 request, got: " + device.requests.size(), k);
+            delegate.disconnect();
+            return false;
+        }
+
+        var expected = [GPM.UUID_SETTINGS_CHAR, expectedSettingRequest(GoProSettings.LED, 0x42, k)];
+        var sent = device.requests[0];
+        if (!sent[0].equals(expected[0]) or !sent[1].equals(expected[1])) {
+            logDeviceError(logger, "Wrong keep alive request, expected: " + expected + ", got: " + sent, k);
+            result = false;
+        }
+
+        device.processRequests();
+
+        var led = camera.getSetting(GoProSettings.LED);
+        if (led != TestInit.defaultSettings[GoProSettings.LED]) {
+            logDeviceError(logger, "Keep alive should not change the LED setting, expected: " \
+                                    + TestInit.defaultSettings[GoProSettings.LED] as Number + ", got: " + led, k);
+            result = false;
+        }
+
+        delegate.disconnect();
+
+        } // end of testDevice loop
+
+        return result;
+    }
+
+
+    (:test)
     function testSendSetting(logger as Logger) as Boolean {
 
         for (var k=0; k<testDeviceIds.size(); k+=1)
@@ -335,8 +388,8 @@ module GoProCameraTest {
         ];
         var values = [
             9,
-            GoProSettings.SUPERVIEW,
-            GoProSettings.HZ50,
+            k == 0 ? GoProSettings.LINEAR : GoProSettings.SUPERVIEW,
+            k == 1 ? GoProSettings.HZ50 : GoProSettings.PAL,
             6,
             GoProSettings.HS_OFF,
         ]; // 1080p 50fps

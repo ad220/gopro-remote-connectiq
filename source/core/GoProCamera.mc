@@ -98,7 +98,6 @@ class GoProCamera extends GoProSettings {
         SLEEP           = 0x05,
         HILIGHT         = 0x18,
         LOAD_PGRP       = 0x3E,
-        KEEP_ALIVE      = 0x5B,
     }
 
 

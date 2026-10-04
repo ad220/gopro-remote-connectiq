@@ -208,14 +208,17 @@ using GattProfileManager as GPM;
                     if (idx != -1) { id = GoProDecoder.NEW_SETTINGS[idx]; }
 
                     var value = data[i+2];
+                    var available = availableValues(id);
 
-                    settings.put(id, value);
-                    if (notifSettings.indexOf(id) != -1) {
-                        response.addAll([data[i], 0x01, value]);
+                    if (available.size() == 0 or available.indexOf(value) != -1) {
+                        settings.put(id, value);
+                        if (notifSettings.indexOf(id) != -1) {
+                            response.addAll([data[i], 0x01, value]);
+                        }
+                        minSettingChanged = id == GoProSettings.RESOLUTION ? id : \
+                                            id == GoProSettings.LENS and minSettingChanged != GoProSettings.RESOLUTION ? id : \
+                                            id == GoProSettings.FRAMERATE and minSettingChanged==0xFF ? id : minSettingChanged;
                     }
-                    minSettingChanged = id == GoProSettings.RESOLUTION ? id : \
-                                        id == GoProSettings.LENS and minSettingChanged != GoProSettings.RESOLUTION ? id : \
-                                        id == GoProSettings.FRAMERATE and minSettingChanged==0xFF ? id : minSettingChanged;
                 }
                 responseSplitter(GPM.UUID_SETTINGS_RESPONSE_CHAR, [1, 0]b);
                 if (response.size()>2) {
@@ -350,7 +353,14 @@ using GattProfileManager as GPM;
         updateNotif(notifAvailable, query, internalId);
         if (query >= 0x70) { return; }
 
-        var available;
+        var available = availableValues(internalId);
+        for (var i=0; i<available.size(); i++) {
+            response.addAll([id, 0x01, available[i]]b);
+        }
+    }
+
+    private function availableValues(internalId as Number) as ByteArray {
+        var available = []b;
         switch (internalId) {
             case GoProSettings.RESOLUTION:
                 available = specs.availableSettingsMap.keys();
@@ -380,13 +390,11 @@ using GattProfileManager as GPM;
                 available = specs.availablePhotoLens;
                 break;
             default:
-                available = []b;
                 // System.println("[DBG WARN]  Wrong id");
                 break;
         }
-        for (var i=0; i<available.size(); i++) {
-            response.addAll([id, 0x01, available[i]]b);
-        }
+        if (available instanceof Array) { available = []b.addAll(available as Array); }
+        return available;
     }
 
     function setSetting(id as GoProSettings.SettingId or Number, value as Number) as Void {
