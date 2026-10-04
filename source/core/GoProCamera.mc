@@ -87,9 +87,9 @@ class GoProCamera extends GoProSettings {
     }
 
     public enum PresetGroup {
-        PGRP_VIDEO      = 1001,
-        PGRP_PHOTO      = 1002,
-        PGRP_TIMELAPSE  = 1003,
+        PGRP_VIDEO      = 1000,
+        PGRP_PHOTO      = 1001,
+        PGRP_TIMELAPSE  = 1002,
     }
 
     public enum CommandId {

@@ -109,13 +109,13 @@ class GoProDecoder {
         }
         else if (command == GoProCamera.LOAD_PGRP) {
             var mode = cam.getStatus(GoProCamera.PRESET_GRP);
-            if (mode == null) { mode = 1002; }
+            if (mode == null) { mode = GoProCamera.PGRP_PHOTO; }
 
             if (goproId < GoProCamera.GP_MAX) {
                 request[1] = GoProCamera.SWITCH_MODE;
-                request.addAll([0x01, (mode - 1001) & 1 ^ 1]);
+                request.addAll([0x01, (mode - GoProCamera.PGRP_VIDEO) & 1 ^ 1]);
             } else {
-                request.addAll([0x04, 0, 0, GoProCamera.PGRP_VIDEO >> 8, mode & 0xFF ^ 3]);
+                request.addAll([0x04, 0, 0, GoProCamera.PGRP_VIDEO >> 8, mode & 0xFF ^ 1]);
             }
         }
 
@@ -127,7 +127,7 @@ class GoProDecoder {
         as [Number or GoProCamera.StatusId,  Number]
     {
         if (id == GoProCamera.CAPTURE_MODE) {
-            return [GoProCamera.PRESET_GRP, value[0] & 1 + 1001];
+            return [GoProCamera.PRESET_GRP, value[0] & 1 + GoProCamera.PGRP_VIDEO];
         }
 
         if (id == GoProCamera.ENCODING_DURATION
