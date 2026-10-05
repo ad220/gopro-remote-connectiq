@@ -71,8 +71,7 @@ class GoProCamera extends GoProSettings {
             else if (id == GoProSettings.HYPERSMOOTH)   { id = GoProSettings.EIS; }
         }
 
-        var request = goproId == CameraDelegate.GP_MISSION1 or goproId == CameraDelegate.GP_MISSION1PRO ?
-            [0x05, 0xFF, 0x00]b : [0x03]b;
+        var request = goproId >= CameraDelegate.GP_MISSION1PRO ? [0x05, 0xFF, 0x00]b : [0x03]b;
         request.addAll([id as Number, 0x01, value]b);
 
         delegate.send(GattRequestQueue.WRITE_CHARACTERISTIC, GPM.UUID_SETTINGS_CHAR, request);
@@ -92,7 +91,7 @@ class GoProCamera extends GoProSettings {
         var idsSize = values.size();
         var request = [idsSize + 1, queryId as Number]b;
         
-        if (goproId == CameraDelegate.GP_MISSION1 or goproId == CameraDelegate.GP_MISSION1PRO) {
+        if (goproId >= CameraDelegate.GP_MISSION1PRO) {
             idsSize *= 2;
 
             if ((queryId & 0x1F) ^ 0x02 != 0 and queryId != 0x32) { queryId += 3; }

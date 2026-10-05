@@ -258,7 +258,7 @@ using GattProfileManager as GPM;
             return;
         }
 
-        if (specs.cameraId < CameraDelegate.GP_MISSION1PRO) { response.addAll([0xFF, 0]); }
+        if (specs.cameraId >= CameraDelegate.GP_MISSION1PRO) { response.addAll([0xFF, 0]); }
         response.addAll([id, 0x01, value]b);
     }
 
@@ -266,7 +266,7 @@ using GattProfileManager as GPM;
         updateNotif(notifStatuses, query, id);
         if (query >= 0x70) { return; }
 
-        if (specs.cameraId < CameraDelegate.GP_MISSION1PRO) { response.addAll([0xFF, 0]); }
+        if (specs.cameraId >= CameraDelegate.GP_MISSION1PRO) { response.addAll([0xFF, 0]); }
 
         if (id==GoProCamera.SD_REMAINING or id==GoProCamera.ENCODING_DURATION) {
             response.addAll([id, 0x04]b);
