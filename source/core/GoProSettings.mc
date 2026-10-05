@@ -11,11 +11,18 @@ class GoProSettings {
         RESOLUTION  = 2,
         FRAMERATE   = 3,
         FOV         = 4,    // deprecated for lens
+        ISO_MAX     = 13,
         PHOTO_RES   = 17,   // deprecated for photo lens
         FORMAT      = 57,   // deprecated for anti-flicker
         EIS         = 78,   // deprecated for hypersmooth
         GPS         = 83,
         LED         = 91,
+        ISO_MIN     = 102,
+        PROTUNE     = 114,
+        WHITE_BL    = 115,
+        COLOR       = 116,
+        SHARPNESS   = 117,
+        EV_COMP     = 118,
         LENS        = 121,
         PHOTO_LENS  = 122,
         FLICKER     = 134,
@@ -90,6 +97,20 @@ class GoProSettings {
 
     public static const FRAMERATE_LABEL = WatchUi.loadResource(Rez.Strings._FPS) as String;
 
+    public static const ISO_MAP = {
+        9 => 0,
+        0 => 6400,
+        3 => 3200,
+        1 => 1600,
+        5 => 1200,
+        6 => 1000,
+        4 => 800,
+        2 => 400,
+        7 => 200,
+        8 => 100,
+    } as Dictionary<Number, Number or ResourceId>;
+
+
     public enum LedId {
         LED_OFF         = 0,
         LED_FROFF       = 1,
@@ -109,6 +130,38 @@ class GoProSettings {
         LED_FRONT_OFF   => Rez.Strings.FrontOffOnly,
         LED_BACK_ONLY   => Rez.Strings.BackOnly,
     } as Dictionary<LedId or Number, ResourceId>;
+
+    public static const WB_MAP = {
+        3               => 6500,
+        7               => 6000,
+        2               => 5500,
+        12              => 5000,
+        6               => 4000,
+        11              => 4500,
+        0               => Rez.Strings.Auto,
+        4               => Rez.Strings.Native,
+        5               => 4000,
+        10              => 3200,
+        1               => 3000,
+        9               => 2800,
+        8               => 2300,
+    } as Dictionary<Number, Number or ResourceId>;
+
+    public enum ColorId {
+        COLOR_GOPRO,
+        COLOR_FLAT,
+    }
+
+    public enum SharpnessId {
+        SHARP_HIGH,
+        SHARP_MEDIUM,
+        SHARP_LOW,
+    }
+
+    (:inline)
+    public static function evCompValue(evCompId as Number) as Float {
+        return 2.0 - evCompId * 0.5;
+    }
 
     public enum LensId {
         WIDE            = 0,
