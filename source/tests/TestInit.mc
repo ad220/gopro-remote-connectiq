@@ -51,25 +51,6 @@ module TestInit {
         }
     }
 
-    class SinkGoProDevice extends FakeGoProDevice {
-
-        var requests as Array<[GPM.GoProUuid, ByteArray]>;
-
-        function initialize(
-            settings as FakeGoProDevice.FakeGoProSettings,
-            statuses as FakeGoProDevice.FakeGoProStatuses,
-            specs as FakeGoProSpecs.ISpecs
-        ) {
-            FakeGoProDevice.initialize(settings, statuses, specs);
-
-            self.requests = [];
-        }
-
-        function onSend(uuid as GPM.GoProUuid, data as ByteArray) as Void {
-            requests.add([uuid, data]);
-        }       
-    }
-
     class MockPreset extends GoProPreset {
         function initialize(settings as Dictionary<GoProSettings.SettingId, Number>) {
             GoProPreset.initialize(0);
@@ -84,14 +65,17 @@ module TestInit {
         GoProSettings.FRAMERATE         => 5,
         GoProSettings.FLICKER           => GoProSettings.HZ60,
         GoProSettings.HYPERSMOOTH       => GoProSettings.HS_LOW,
-        GoProSettings.LED               => GoProSettings.LED_ON
+        GoProSettings.LED               => GoProSettings.LED_ON,
+        GoProSettings.PHOTO_LENS        => GoProSettings.WIDE_FULL,
     };
 
     const defaultStatuses = {
         GoProCamera.ENCODING            => 0,
         GoProCamera.ENCODING_DURATION   => 0,
         GoProCamera.SD_REMAINING        => 6942,
-        GoProCamera.BATTERY             => 42
+        GoProCamera.BATTERY             => 42,
+        GoProCamera.PHOTOS_TAKEN        => 1234,
+        GoProCamera.PRESET_GRP          => GoProCamera.PGRP_VIDEO,
     };
 
     (:initialized) var initSettings as FakeGoProDevice.FakeGoProSettings;
@@ -115,16 +99,13 @@ module TestInit {
 
     function initFake(specs as FakeGoProSpecs.ISpecs?) as Void {
         if (specs == null) { specs = FakeGoProSpecs.getSpecsH11M(); }
-        BleAPI.device = new FakeGoProDevice(
-            initSettings,
-            initStatuses,
-            specs
-        );
-    }
 
-    function initSink(specs as FakeGoProSpecs.ISpecs?) as Void {
-        if (specs == null) { specs = FakeGoProSpecs.getSpecsH11M(); }
-        BleAPI.device = new SinkGoProDevice(
+        if (specs.cameraId < GoProCamera.GP_MAX) {
+            initStatuses[GoProCamera.PRESET_GRP] = Helper.createNullObject() as Number;
+            initStatuses[GoProCamera.CAPTURE_MODE] = GoProCamera.MODE_VIDEO;
+        }
+
+        BleAPI.device = new FakeGoProDevice(
             initSettings,
             initStatuses,
             specs
@@ -134,6 +115,7 @@ module TestInit {
     function initConnection(goproId as Number) as Void {
         var delegate = new BluetoothDelegate();
         delegate.connect(new BleAPI.MockScanResult(0, null, goproId) as Ble.ScanResult);
+        BleAPI.device.processRequests();
     }
 
 }

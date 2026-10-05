@@ -15,7 +15,7 @@ module RemoteDelegateTest {
     function testSettings(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
         TestInit.initFake(null);
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
         
         var camera = getApp().gopro;
 
@@ -26,6 +26,54 @@ module RemoteDelegateTest {
         viewController.push(new RemoteView(), delegate, WatchUi.SLIDE_IMMEDIATE);
         
         camera.sendCommand(GoProCamera.SHUTTER);
+        BleAPI.device.processRequests();
+        delegate.onNextPage();
+
+        if (viewController.getCurrentDelegate() != delegate) {
+            logger.error("Camera is recording, settings shouldn't be available");
+            return false;
+        }
+        
+        camera.sendCommand(GoProCamera.SHUTTER);
+        BleAPI.device.processRequests();
+        delegate.onNextPage();
+        
+        var tmpDlgt = viewController.getCurrentDelegate();
+        if (!(tmpDlgt instanceof SettingsMenuDelegate)) {
+            logger.error("Current view should be settings menu");
+            return false;
+        }
+        tmpDlgt.onBack();
+
+        camera.sendCommand(GoProCamera.LOAD_PGRP);
+        BleAPI.device.processRequests();
+        delegate.onNextPage();
+
+        if (!(viewController.getCurrentDelegate() instanceof SettingPickerDelegate)) {
+            logger.error("Current view should be setting picker menu");
+            return false;
+        }
+
+        return true;
+    }
+
+
+    (:test)
+    function testMenu(logger as Test.Logger) as Boolean {
+        TestInit.initDefaults();
+        TestInit.initFake(null);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
+        
+        var camera = getApp().gopro;
+
+        var viewController = new ViewDebugController();
+        getApp().viewController = viewController;
+        
+        var delegate = new RemoteDelegate();
+        viewController.push(new RemoteView(), delegate, WatchUi.SLIDE_IMMEDIATE);
+        
+        camera.sendCommand(GoProCamera.SHUTTER);
+        BleAPI.device.processRequests();
         delegate.onMenu();
 
         if (viewController.getCurrentDelegate() != delegate) {
@@ -34,9 +82,11 @@ module RemoteDelegateTest {
         }
         
         camera.sendCommand(GoProCamera.SHUTTER);
+        BleAPI.device.processRequests();
         delegate.onMenu();
         
-        if (!(viewController.getCurrentDelegate() instanceof SettingsMenuDelegate)) {
+        var tmpDlgt = viewController.getCurrentDelegate();
+        if (!(tmpDlgt instanceof RemoteMenuDelegate)) {
             logger.error("Current view should be settings menu");
             return false;
         }
@@ -48,7 +98,7 @@ module RemoteDelegateTest {
     function testTogglables(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
         TestInit.initFake(null);
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
         
         var camera = getApp().gopro;
 
@@ -59,6 +109,7 @@ module RemoteDelegateTest {
         viewController.push(new RemoteView(), delegate, WatchUi.SLIDE_IMMEDIATE);
         
         camera.sendCommand(GoProCamera.SHUTTER);
+        BleAPI.device.processRequests();
         delegate.onPreviousPage();
 
         if (viewController.getCurrentDelegate() != delegate) {
@@ -67,6 +118,7 @@ module RemoteDelegateTest {
         }
         
         camera.sendCommand(GoProCamera.SHUTTER);
+        BleAPI.device.processRequests();
         delegate.onPreviousPage();
         
         if (!(viewController.getCurrentDelegate() instanceof TogglablesDelegate)) {
@@ -81,7 +133,7 @@ module RemoteDelegateTest {
     function testShutter(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
         TestInit.initFake(null);
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
         
         var camera = getApp().gopro;
 
@@ -93,6 +145,7 @@ module RemoteDelegateTest {
         
         var keyEvent = new TestInit.MockKeyEvent(WatchUi.KEY_ENTER, WatchUi.PRESS_TYPE_ACTION);
         delegate.onKeyPressed(keyEvent);
+        BleAPI.device.processRequests();
 
         if (!camera.isRecording()) {
             logger.error("Camera should be recording");
@@ -100,6 +153,7 @@ module RemoteDelegateTest {
         }
         
         delegate.onKeyPressed(keyEvent);
+        BleAPI.device.processRequests();
         
         if (camera.isRecording()) {
             logger.error("Camera should not be recording");
@@ -112,10 +166,10 @@ module RemoteDelegateTest {
     (:test)
     function testHilight(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initSink(null);
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initFake(null);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
         
-        var device = BleAPI.device as TestInit.SinkGoProDevice;
+        var device = BleAPI.device as FakeGoProDevice;
 
         var viewController = new ViewDebugController();
         getApp().viewController = viewController;
@@ -125,7 +179,7 @@ module RemoteDelegateTest {
         
         BleAPI.delegate.onCharacteristicChanged(
             BleAPI.device.gpQueryResponseChar as Ble.Characteristic,
-            [5, CameraDelegate.NOTIF_STATUS, 0, 10, 1, 1]b
+            [5, GoProDecoder.NOTIF_STATUS, 0, 10, 1, 1]b
         );
 
         device.requests = [];
@@ -142,10 +196,10 @@ module RemoteDelegateTest {
     (:test)
     function testBack(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initSink(null);
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initFake(null);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
         
-        var device = BleAPI.device as TestInit.SinkGoProDevice;
+        var device = BleAPI.device as FakeGoProDevice;
 
         var viewController = new ViewDebugController();
         getApp().viewController = viewController;

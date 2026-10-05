@@ -21,16 +21,26 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onMenu() as Boolean {
-        if (!gopro.isRecording()) {
-            var menu = ICM.newCustomMenu(0.15, null);
-            getApp().viewController.switchTo(menu, new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, []), SLIDE_UP);
-            return true;
-        }
-        return false;
+        if (gopro.isRecording()) { return false; }
+
+        var vc = getApp().viewController;
+        var menu = new Menu2(null);
+        vc.push(menu, new RemoteMenuDelegate(menu), SLIDE_IMMEDIATE);
+        return true;
     }
 
     public function onNextPage() as Boolean {
-        return onMenu();
+        if (gopro.isRecording()) { return false; }
+
+        var vc = getApp().viewController;
+        if (gopro.getStatus(GoProCamera.PRESET_GRP) == GoProCamera.PGRP_VIDEO) {
+            var menu = ICM.newCustomMenu(0.15, null);
+            vc.switchTo(menu, new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, []), SLIDE_UP);
+        } else {
+            var menu = ICM.newCustomMenu(0.1, 0.3);
+            vc.push(menu, new SettingPickerDelegate(menu, GoProSettings.PHOTO_LENS), SLIDE_UP);
+        }
+        return true;
     }
 
     (:highend)
@@ -56,7 +66,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
             var menu = new Menu2(null);
             getApp().viewController.push(menu, new TogglablesDelegate(menu), SLIDE_DOWN);
             getApp().gopro.queryValues(
-                CameraDelegate.GET_AVAILABLE,
+                GoProDecoder.GET_AVAILABLE,
                 [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.HYPERSMOOTH]b
             );
             return true;

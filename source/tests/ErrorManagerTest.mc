@@ -13,8 +13,9 @@ module ErrorManagerTest {
 
         EM.errorQueue = [];
 
-        TestInit.initSink(null);
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initDefaults();
+        TestInit.initFake(null);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
 
         var viewController = new ViewDebugController();
         getApp().viewController = viewController;

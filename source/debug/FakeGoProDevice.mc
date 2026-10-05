@@ -24,6 +24,10 @@ using GattProfileManager as GPM;
     var autoSleepTimer as TimerCallback?;
     var hilightCount as Number = 0;
 
+    typedef Message as [GPM.GoProUuid, ByteArray];
+    var requests as Array<Message>;
+    var processingRequests as Boolean;
+
     public function initialize(
             settings as FakeGoProSettings,
             statuses as FakeGoProStatuses,
@@ -36,6 +40,8 @@ using GattProfileManager as GPM;
         self.notifSettings = []b;
         self.notifStatuses = []b;
         self.notifAvailable = []b;
+        self.requests = [];
+        self.processingRequests = false;
 
         resetSleepTimer();
 
@@ -65,7 +71,22 @@ using GattProfileManager as GPM;
         }
     }
 
-    public function onSend(uuid as GPM.GoProUuid, data as ByteArray) as Void {
+    public function onSend(msg as Message) as Void {
+        requests.add(msg);
+    }
+
+    public function processRequests() as Void {
+        processingRequests = true;
+        while (requests.size() > 0) {
+            processMsg(requests[0]);
+            requests.remove(requests[0]);
+        }
+        processingRequests = false;
+    }
+
+    private function processMsg(msg as Message) as Void {
+        var uuid = msg[0];
+        var data = msg[1];
         var response;
         resetSleepTimer();
         
@@ -76,25 +97,25 @@ using GattProfileManager as GPM;
                 data = data.slice(2, null);
 
                 switch (queryId) {
-                    case CameraDelegate.GET_SETTING:
-                    case CameraDelegate.GET_SETTING_2B:
-                    case CameraDelegate.REGISTER_SETTING:
-                    case CameraDelegate.REGISTER_SETTING_2B:
-                    case CameraDelegate.UNREGISTER_SETTING:
-                    case CameraDelegate.UNREGISTER_SETTING_2B:
+                    case GoProDecoder.GET_SETTING:
+                    case GoProDecoder.GET_SETTING_2B:
+                    case GoProDecoder.REGISTER_SETTING:
+                    case GoProDecoder.REGISTER_SETTING_2B:
+                    case GoProDecoder.UNREGISTER_SETTING:
+                    case GoProDecoder.UNREGISTER_SETTING_2B:
                         decoder = method(:onReceiveSetting);
                         break;
-                    case CameraDelegate.GET_STATUS:
-                    case CameraDelegate.GET_STATUS_2B:
-                    case CameraDelegate.REGISTER_STATUS:
-                    case CameraDelegate.REGISTER_STATUS_2B:
-                    case CameraDelegate.UNREGISTER_STATUS:
-                    case CameraDelegate.UNREGISTER_STATUS_2B:
+                    case GoProDecoder.GET_STATUS:
+                    case GoProDecoder.GET_STATUS_2B:
+                    case GoProDecoder.REGISTER_STATUS:
+                    case GoProDecoder.REGISTER_STATUS_2B:
+                    case GoProDecoder.UNREGISTER_STATUS:
+                    case GoProDecoder.UNREGISTER_STATUS_2B:
                         decoder = method(:onReceiveStatus);
                         break;
-                    case CameraDelegate.GET_AVAILABLE:
-                    case CameraDelegate.REGISTER_AVAILABLE:
-                    case CameraDelegate.UNREGISTER_AVAILABLE:
+                    case GoProDecoder.GET_AVAILABLE:
+                    case GoProDecoder.REGISTER_AVAILABLE:
+                    case GoProDecoder.UNREGISTER_AVAILABLE:
                         decoder = method(:onReceiveAvailable);
                         break;
                     default:
@@ -115,13 +136,24 @@ using GattProfileManager as GPM;
                 var commandId = data[1];
                 switch (commandId) {
                     case GoProCamera.SHUTTER:
-                        statuses.put(GoProCamera.ENCODING, data[3]);
-                        responseSplitter(GPM.UUID_COMMAND_RESPONSE_CHAR, [1, 0]b);
-                        if (notifStatuses.indexOf(GoProCamera.ENCODING) != -1) {
-                            BleAPI.delegate.onCharacteristicChanged(
-                                gpQueryResponseChar as Ble.Characteristic,
-                                [0x05, CameraDelegate.NOTIF_STATUS, 0x00, GoProCamera.ENCODING, 0x01, data[3]]b
-                            );
+                        if (statuses[GoProCamera.PRESET_GRP] == GoProCamera.PGRP_VIDEO) {
+                            statuses.put(GoProCamera.ENCODING, data[3]);
+                            responseSplitter(GPM.UUID_COMMAND_RESPONSE_CHAR, [1, 0]b);
+                            if (notifStatuses.indexOf(GoProCamera.ENCODING) != -1) {
+                                BleAPI.delegate.onCharacteristicChanged(
+                                    gpQueryResponseChar as Ble.Characteristic,
+                                    [0x05, GoProDecoder.NOTIF_STATUS, 0x00, GoProCamera.ENCODING, 0x01, data[3]]b
+                                );
+                            }
+                        } else {
+                            var pt = 1 + statuses[GoProCamera.PHOTOS_TAKEN] as Number;
+                            statuses[GoProCamera.PHOTOS_TAKEN] = pt;
+                            if (notifStatuses.indexOf(GoProCamera.PHOTOS_TAKEN) != -1) {
+                                BleAPI.delegate.onCharacteristicChanged(
+                                    gpQueryResponseChar as Ble.Characteristic,
+                                    [0x08, GoProDecoder.NOTIF_STATUS, 0x00, GoProCamera.PHOTOS_TAKEN, 0x04, 0, 0, pt >> 8, pt & 0xFF]b
+                                );
+                            }
                         }
                         break;
 
@@ -134,6 +166,28 @@ using GattProfileManager as GPM;
                         sleep();
                         break;
 
+                    case GoProCamera.SWITCH_MODE:
+                        var modeId = GoProCamera.CAPTURE_MODE;
+                        statuses.put(modeId, data[3]);
+                        if (notifStatuses.indexOf(modeId) != -1) {
+                            responseSplitter(
+                                GPM.UUID_QUERY_RESPONSE_CHAR,
+                                [GoProDecoder.NOTIF_STATUS, 0x00, modeId, 1, data[3]]b
+                            );
+                        }
+                        break;
+
+                    case GoProCamera.LOAD_PGRP:
+                        var grpId = GoProCamera.PRESET_GRP;
+                        statuses.put(grpId, data[5] << 8 + data[6]);
+                        if (notifStatuses.indexOf(grpId) != -1) {
+                            responseSplitter(
+                                GPM.UUID_QUERY_RESPONSE_CHAR,
+                                [GoProDecoder.NOTIF_STATUS, 0x00, grpId, 4, data[3], data[4], data[5], data[6]]b
+                            );
+                        }
+                        break;
+
                     default:
                         break;
                 }
@@ -141,7 +195,7 @@ using GattProfileManager as GPM;
 
             case GPM.UUID_SETTINGS_CHAR:
                 var minSettingChanged = 0xFF;
-                response = [CameraDelegate.NOTIF_SETTING, 0x00]b;
+                response = [GoProDecoder.NOTIF_SETTING, 0x00]b;
                 for (var i=1; i<data.size(); i+=2+data[i+1]) {
                     var id = data[i];
 
@@ -150,26 +204,28 @@ using GattProfileManager as GPM;
                         id = data[i];
                     }
 
-                    if      (id == GoProSettings.FOV)       { id = GoProSettings.LENS; }
-                    else if (id == GoProSettings.FORMAT)    { id = GoProSettings.FLICKER; }
-                    else if (id == GoProSettings.EIS)       { id = GoProSettings.HYPERSMOOTH; }
+                    var idx = GoProDecoder.OLD_SETTINGS.indexOf(id);
+                    if (idx != -1) { id = GoProDecoder.NEW_SETTINGS[idx]; }
 
                     var value = data[i+2];
+                    var available = availableValues(id);
 
-                    settings.put(id, value);
-                    if (notifSettings.indexOf(id) != -1) {
-                        response.addAll([data[i], 0x01, value]);
+                    if (available.size() == 0 or available.indexOf(value) != -1) {
+                        settings.put(id, value);
+                        if (notifSettings.indexOf(id) != -1) {
+                            response.addAll([data[i], 0x01, value]);
+                        }
+                        minSettingChanged = id == GoProSettings.RESOLUTION ? id : \
+                                            id == GoProSettings.LENS and minSettingChanged != GoProSettings.RESOLUTION ? id : \
+                                            id == GoProSettings.FRAMERATE and minSettingChanged==0xFF ? id : minSettingChanged;
                     }
-                    minSettingChanged = id == GoProSettings.RESOLUTION ? id : \
-                                        id == GoProSettings.LENS and minSettingChanged != GoProSettings.RESOLUTION ? id : \
-                                        id == GoProSettings.FRAMERATE and minSettingChanged==0xFF ? id : minSettingChanged;
                 }
                 responseSplitter(GPM.UUID_SETTINGS_RESPONSE_CHAR, [1, 0]b);
                 if (response.size()>2) {
                     responseSplitter(GPM.UUID_QUERY_RESPONSE_CHAR, response);
                 }
 
-                response = [CameraDelegate.NOTIF_AVAILABLE, 0x00]b;
+                response = [GoProDecoder.NOTIF_AVAILABLE, 0x00]b;
                 var iter;
                 var j;
                 var res = settings.get(GoProSettings.RESOLUTION) as Number; // could be null
@@ -184,7 +240,7 @@ using GattProfileManager as GPM;
                             settings.put(GoProSettings.LENS, iter[0]);
                         }
                         if (notifAvailable.indexOf(GoProSettings.LENS) != -1) {
-                            var lensId = specs.cameraId < CameraDelegate.GP_MAX
+                            var lensId = specs.cameraId < GoProCamera.GP_MAX
                                 ? GoProSettings.FOV : GoProSettings.LENS;
 
                             for (j=0; j<iter.size(); j++) {
@@ -245,9 +301,8 @@ using GattProfileManager as GPM;
     public function onReceiveSetting(id as Number, response as ByteArray, query as Number) as Void {
         var internalId = id;
 
-        if      (id == GoProSettings.FOV)       { internalId = GoProSettings.LENS; }
-        else if (id == GoProSettings.FORMAT)    { internalId = GoProSettings.FLICKER; }
-        else if (id == GoProSettings.EIS)       { internalId = GoProSettings.HYPERSMOOTH; }
+        var idx = GoProDecoder.OLD_SETTINGS.indexOf(id);
+        if (idx != -1) { internalId = GoProDecoder.NEW_SETTINGS[idx]; }
 
         updateNotif(notifSettings, query, internalId);
         if (query >= 0x70) { return; }
@@ -258,7 +313,7 @@ using GattProfileManager as GPM;
             return;
         }
 
-        if (specs.cameraId >= CameraDelegate.GP_MISSION1PRO) { response.addAll([0xFF, 0]); }
+        if (specs.cameraId >= GoProCamera.GP_MISSION1PRO) { response.addAll([0xFF, 0]); }
         response.addAll([id, 0x01, value]b);
     }
 
@@ -266,9 +321,13 @@ using GattProfileManager as GPM;
         updateNotif(notifStatuses, query, id);
         if (query >= 0x70) { return; }
 
-        if (specs.cameraId >= CameraDelegate.GP_MISSION1PRO) { response.addAll([0xFF, 0]); }
+        if (specs.cameraId >= GoProCamera.GP_MISSION1PRO) { response.addAll([0xFF, 0]); }
 
-        if (id==GoProCamera.SD_REMAINING or id==GoProCamera.ENCODING_DURATION) {
+        if (id == GoProCamera.SD_REMAINING
+            or id == GoProCamera.ENCODING_DURATION
+            or id == GoProCamera.PHOTOS_TAKEN
+            or id == GoProCamera.PRESET_GRP)
+        {
             response.addAll([id, 0x04]b);
             var valueN = statuses.get(id);
             var valueB = [0,0,0,0]b;
@@ -288,14 +347,21 @@ using GattProfileManager as GPM;
     public function onReceiveAvailable(id as Number, response as ByteArray, query as Number) as Void {
         var internalId = id;
 
-        if      (id == GoProSettings.FOV)       { internalId = GoProSettings.LENS; }
-        else if (id == GoProSettings.FORMAT)    { internalId = GoProSettings.FLICKER; }
-        else if (id == GoProSettings.EIS)       { internalId = GoProSettings.HYPERSMOOTH; }
+        var idx = GoProDecoder.OLD_SETTINGS.indexOf(id);
+        if (idx != -1) { internalId = GoProDecoder.NEW_SETTINGS[idx]; }
 
         updateNotif(notifAvailable, query, internalId);
         if (query >= 0x70) { return; }
 
-        var available;
+        var available = availableValues(internalId);
+        for (var i=0; i<available.size(); i++) {
+            if (specs.cameraId >= GoProCamera.GP_MISSION1PRO) { response.addAll([0xFF, 0]); }
+            response.addAll([id, 0x01, available[i]]b);
+        }
+    }
+
+    private function availableValues(internalId as Number) as ByteArray {
+        var available = []b;
         switch (internalId) {
             case GoProSettings.RESOLUTION:
                 available = specs.availableSettingsMap.keys();
@@ -321,33 +387,33 @@ using GattProfileManager as GPM;
             case GoProSettings.HYPERSMOOTH:
                 available = specs.availableHypersmooth;
                 break;
+            case GoProSettings.PHOTO_LENS:
+                available = specs.availablePhotoLens;
+                break;
             default:
-                available = []b;
                 // System.println("[DBG WARN]  Wrong id");
                 break;
         }
-        for (var i=0; i<available.size(); i++) {
-            response.addAll([id, 0x01, available[i]]b);
-        }
+        if (available instanceof Array) { available = []b.addAll(available as Array); }
+        return available;
     }
 
     function setSetting(id as GoProSettings.SettingId or Number, value as Number) as Void {
-        var msg = specs.cameraId < CameraDelegate.GP_MISSION1PRO ? [3]b : [5, 0xFF, 0]b;
+        var msg = specs.cameraId < GoProCamera.GP_MISSION1PRO ? [3]b : [5, 0xFF, 0]b;
 
-        if (specs.cameraId < CameraDelegate.GP_MAX) {
-            if      (id == GoProSettings.LENS)          { id = GoProSettings.FOV; }
-            else if (id == GoProSettings.FLICKER)       { id = GoProSettings.FORMAT; }
-            else if (id == GoProSettings.HYPERSMOOTH)   { id = GoProSettings.EIS; }
+        if (specs.cameraId < GoProCamera.GP_MAX) {
+            var idx = GoProDecoder.NEW_SETTINGS.indexOf(id);
+            if (idx != -1) { id = GoProDecoder.OLD_SETTINGS[idx]; }
         }
 
         msg.addAll([id, 1, value]);
-        onSend(GPM.UUID_SETTINGS_CHAR, msg);
+        onSend([GPM.UUID_SETTINGS_CHAR, msg]);
     }
 
     function setStatus(id as Number, value as Number) as Void {
         statuses.put(id, value);
 
-        var notif = [CameraDelegate.NOTIF_STATUS, 0, id]b;
+        var notif = [GoProDecoder.NOTIF_STATUS, 0, id]b;
         if (id == GoProCamera.SD_REMAINING or id == GoProCamera.ENCODING_DURATION) {
             var valueB = [0,0,0,0]b;
             valueB.encodeNumber(value, Lang.NUMBER_FORMAT_UINT32, {:endianness => Lang.ENDIAN_BIG});

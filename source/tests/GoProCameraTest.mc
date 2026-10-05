@@ -21,10 +21,10 @@ module GoProCameraTest {
     */
 
     const testDeviceIds = [
-        CameraDelegate.GP_HERO5S,
-        CameraDelegate.GP_HERO11M,
-        // CameraDelegate.GP_MAX2,
-        CameraDelegate.GP_MISSION1PRO,
+        GoProCamera.GP_HERO5S,
+        GoProCamera.GP_HERO11M,
+        // GoProCamera.GP_MAX2,
+        GoProCamera.GP_MISSION1PRO,
     ];
 
     const testDeviceSpecs = [
@@ -48,10 +48,10 @@ module GoProCameraTest {
 
     function expectedSettingRequest(id as Number, value as Number, k as Number) as ByteArray {
         k = testDeviceIds[k];
-        if      (k == CameraDelegate.GP_MISSION1PRO or k == CameraDelegate.GP_MISSION1) {
+        if      (k == GoProCamera.GP_MISSION1PRO or k == GoProCamera.GP_MISSION1) {
             return [5, 0xFF, 0, id, 1, value]b;
         }
-        else if (k < CameraDelegate.GP_MAX) {
+        else if (k < GoProCamera.GP_MAX) {
             if      (id == GoProSettings.LENS)          { id = GoProSettings.FOV; }
             else if (id == GoProSettings.FLICKER)       { id = GoProSettings.FORMAT; }
             else if (id == GoProSettings.HYPERSMOOTH)   { id = GoProSettings.EIS; }
@@ -80,20 +80,20 @@ module GoProCameraTest {
 
     (:test)
     function testModelIds(logger as Logger) as Boolean {
-        return CameraDelegate.goproModelTable.size() == CameraDelegate.goproModelString.size(); 
+        return GoProCamera.modelIdTable.size() == GoProCamera.modelStringTable.size(); 
     }
 
 
     (:test)
     function testConnectionSuccess(logger as Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initSink(null);
+        TestInit.initFake(null);
 
         BleAPI.pairedDevices = [];
         
         var result = true;
         var delegate = new MockBluetoothDelegate();
-        delegate.connect(new BleAPI.MockScanResult(0, null, CameraDelegate.GP_HERO11M) as Ble.ScanResult);
+        delegate.connect(new BleAPI.MockScanResult(0, null, GoProCamera.GP_HERO11M) as Ble.ScanResult);
 
         if (delegate.getDevice() == null) {
             logger.error("Delegate's BLE device is null after connection");
@@ -135,14 +135,14 @@ module GoProCameraTest {
     (:test)
     function testPairingFail(logger as Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initSink(null);
+        TestInit.initFake(null);
 
         BleAPI.pairedDevices = [];
         BleAPI.connectionStatus = Ble.CONNECTION_STATE_REJECTED;
         
         var result = true;
         var delegate = new MockBluetoothDelegate();
-        delegate.connect(new BleAPI.MockScanResult(0, null, CameraDelegate.GP_HERO11) as Ble.ScanResult);
+        delegate.connect(new BleAPI.MockScanResult(0, null, GoProCamera.GP_HERO11) as Ble.ScanResult);
 
         // following can't be tested as in a debug run, pairing fail occurs in the call stack of pairDevice()
         // thus BluetoothDelegate.camera is not modified after the pairDevice affectation and never set to null 
@@ -177,13 +177,13 @@ module GoProCameraTest {
     (:test)
     function testAsyncDisconnect(logger as Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initSink(null);
+        TestInit.initFake(null);
 
         BleAPI.pairedDevices = [];
         
         var result = true;
         var delegate = new MockBluetoothDelegate();
-        delegate.connect(new BleAPI.MockScanResult(0, null, CameraDelegate.GP_HERO11M) as Ble.ScanResult);
+        delegate.connect(new BleAPI.MockScanResult(0, null, GoProCamera.GP_HERO11M) as Ble.ScanResult);
         
         BleAPI.delegate.onConnectedStateChanged(
             delegate.getDevice() as Ble.Device,
@@ -210,16 +210,69 @@ module GoProCameraTest {
 
 
     (:test)
+    function testKeepAlive(logger as Logger) as Boolean {
+        var result = true;
+
+        for (var k=0; k<testDeviceIds.size(); k+=1)
+        { // start of testDevice loop
+
+        TestInit.initDefaults();
+        TestInit.initFake(testDeviceSpecs[k].invoke());
+
+        BleAPI.pairedDevices = [];
+
+        var delegate = new MockBluetoothDelegate();
+        delegate.connect(new BleAPI.MockScanResult(0, null, testDeviceIds[k]) as Ble.ScanResult);
+
+        var device = BleAPI.device as FakeGoProDevice;
+        var camera = getApp().gopro;
+        device.processRequests();
+
+        device.requests = [];
+
+        delegate.keepAlive();
+
+        if (device.requests.size() != 1) {
+            logDeviceError(logger, "Keep alive should queue exactly 1 request, got: " + device.requests.size(), k);
+            delegate.disconnect();
+            return false;
+        }
+
+        var expected = [GPM.UUID_SETTINGS_CHAR, expectedSettingRequest(GoProSettings.LED, 0x42, k)];
+        var sent = device.requests[0];
+        if (!sent[0].equals(expected[0]) or !sent[1].equals(expected[1])) {
+            logDeviceError(logger, "Wrong keep alive request, expected: " + expected + ", got: " + sent, k);
+            result = false;
+        }
+
+        device.processRequests();
+
+        var led = camera.getSetting(GoProSettings.LED);
+        if (led != TestInit.defaultSettings[GoProSettings.LED]) {
+            logDeviceError(logger, "Keep alive should not change the LED setting, expected: " \
+                                    + TestInit.defaultSettings[GoProSettings.LED] as Number + ", got: " + led, k);
+            result = false;
+        }
+
+        delegate.disconnect();
+
+        } // end of testDevice loop
+
+        return result;
+    }
+
+
+    (:test)
     function testSendSetting(logger as Logger) as Boolean {
 
         for (var k=0; k<testDeviceIds.size(); k+=1)
         { // start of testDevice loop
 
         TestInit.initDefaults();
-        TestInit.initSink(testDeviceSpecs[k].invoke());
+        TestInit.initFake(testDeviceSpecs[k].invoke());
         TestInit.initConnection(testDeviceIds[k]);
 
-        var device = BleAPI.device as TestInit.SinkGoProDevice;
+        var device = BleAPI.device as FakeGoProDevice;
         var camera = getApp().gopro;
         
         var ids = [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE, GoProSettings.HYPERSMOOTH, GoProSettings.FLICKER];
@@ -263,10 +316,10 @@ module GoProCameraTest {
         { // start of testDevice loop
         
         TestInit.initDefaults();
-        TestInit.initSink(testDeviceSpecs[k].invoke());
+        TestInit.initFake(testDeviceSpecs[k].invoke());
         TestInit.initConnection(testDeviceIds[k]);
 
-        var device = BleAPI.device as TestInit.SinkGoProDevice;
+        var device = BleAPI.device as FakeGoProDevice;
         var camera = getApp().gopro;
 
         device.requests = [];
@@ -315,6 +368,8 @@ module GoProCameraTest {
         
     (:test)
     function testNotifSettings(logger as Logger) as Boolean {
+        var ret = true;
+
         for (var k=0; k<testDeviceIds.size(); k+=1)
         { // start of testDevice loop
 
@@ -333,8 +388,8 @@ module GoProCameraTest {
         ];
         var values = [
             9,
-            GoProSettings.SUPERVIEW,
-            GoProSettings.HZ50,
+            k == 0 ? GoProSettings.LINEAR : GoProSettings.SUPERVIEW,
+            k == 1 ? GoProSettings.HZ50 : GoProSettings.PAL,
             6,
             GoProSettings.HS_OFF,
         ]; // 1080p 50fps
@@ -343,19 +398,21 @@ module GoProCameraTest {
             BleAPI.device.setSetting(ids[i], values[i]);
         }
 
+        BleAPI.device.processRequests();
+
         for (var i=0; i<ids.size(); i+=1) {
             var camSetting = camera.getSetting(ids[i]);
             if (camSetting != values[i]) {
                 logDeviceError(logger, "Setting was not updated correctly id: " + ids[i] \
                                         + ", expected: " + values[i] \
                                         + ", got: " + camSetting, k);
-                return false;
+                ret = false;
             }
         }
 
         } // end of testDevice loop
 
-        return true;
+        return ret;
     }
     
 
@@ -372,7 +429,9 @@ module GoProCameraTest {
 
         var camera = getApp().gopro;
 
-        camera.queryValues(CameraDelegate.GET_STATUS, [GoProCamera.BATTERY, GoProCamera.SD_REMAINING]b);
+        camera.queryValues(GoProDecoder.GET_STATUS, [GoProCamera.BATTERY, GoProCamera.SD_REMAINING]b);
+
+        BleAPI.device.processRequests();
         
         var battery = camera.getStatus(GoProCamera.BATTERY);
         if (battery != 42) {
@@ -405,10 +464,12 @@ module GoProCameraTest {
 
         var camera = getApp().gopro;
 
-        camera.queryValues(CameraDelegate.REGISTER_STATUS, [
+        camera.queryValues(GoProDecoder.REGISTER_STATUS, [
             GoProCamera.BATTERY,
             GoProCamera.SD_REMAINING
         ]b);
+
+        BleAPI.device.processRequests();
         
         var battery = camera.getStatus(GoProCamera.BATTERY);
         if (battery != 42) {
@@ -424,6 +485,8 @@ module GoProCameraTest {
         
         BleAPI.device.setStatus(GoProCamera.BATTERY, 90);
         BleAPI.device.setStatus(GoProCamera.SD_REMAINING, 7200);
+
+        BleAPI.device.processRequests();
         
         battery = camera.getStatus(GoProCamera.BATTERY);
         if (battery != 90) {
@@ -457,7 +520,7 @@ module GoProCameraTest {
         var camera = getApp().gopro;
                 
         camera.queryValues(
-            CameraDelegate.GET_AVAILABLE,
+            GoProDecoder.GET_AVAILABLE,
             [
                 GoProSettings.RESOLUTION,
                 GoProSettings.LENS,
@@ -465,6 +528,8 @@ module GoProCameraTest {
                 GoProSettings.HYPERSMOOTH
             ]b
         );
+
+        BleAPI.device.processRequests();
 
         var expectedFramerates = [
             [8, 9],
@@ -530,7 +595,7 @@ module GoProCameraTest {
         var camera = getApp().gopro;
                 
         camera.queryValues(
-            CameraDelegate.REGISTER_AVAILABLE,
+            GoProDecoder.REGISTER_AVAILABLE,
             [
                 GoProSettings.RESOLUTION,
                 GoProSettings.LENS,
@@ -539,10 +604,14 @@ module GoProCameraTest {
             ]b
         );
 
+        BleAPI.device.processRequests();
+
         BleAPI.device.setSetting(GoProSettings.RESOLUTION, 9);
         BleAPI.device.setSetting(GoProSettings.LENS, GoProSettings.LINEAR);
         BleAPI.device.setSetting(GoProSettings.FLICKER, GoProSettings.HZ60);
         BleAPI.device.setSetting(GoProSettings.FRAMERATE, 5);
+
+        BleAPI.device.processRequests();
 
         var expectedFramerates = [
             [5, 6, 8, 9, 10],
@@ -585,12 +654,12 @@ module GoProCameraTest {
             new FakeGoProSpecs.SpecsUnknown()
         );
 
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
 
         var camera = getApp().gopro;
                 
         camera.queryValues(
-            CameraDelegate.REGISTER_AVAILABLE,
+            GoProDecoder.REGISTER_AVAILABLE,
             [
                 GoProSettings.RESOLUTION,
                 GoProSettings.LENS,
@@ -599,9 +668,13 @@ module GoProCameraTest {
             ]b
         );
 
+        BleAPI.device.processRequests();
+
         BleAPI.device.setSetting(GoProSettings.RESOLUTION, 42);
         BleAPI.device.setSetting(GoProSettings.LENS, 220);
         BleAPI.device.setSetting(GoProSettings.FRAMERATE, 28);
+
+        BleAPI.device.processRequests();
 
         var expectedFramerates = [20,21,22,28];
         var expectedRatios = [];
@@ -627,9 +700,10 @@ module GoProCameraTest {
         var result = true;
         TestInit.initDefaults();
         TestInit.initFake(null);
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
         
         var camera = getApp().gopro;
+        BleAPI.device.processRequests();
 
         if (camera.isRecording()) {
             logger.error("Default camera is not supposed to be recording after init");
@@ -637,6 +711,7 @@ module GoProCameraTest {
         }
 
         camera.sendCommand(GoProCamera.SHUTTER);
+        BleAPI.device.processRequests();
 
         if (!camera.isRecording()) {
             logger.error("Camera should be recording after shutter command");
@@ -654,6 +729,7 @@ module GoProCameraTest {
         }
 
         camera.sendCommand(GoProCamera.HILIGHT);
+        BleAPI.device.processRequests();
 
         if (BleAPI.device.hilightCount != 1) {
             logger.error("Wrong hilight count, expected 1, got " + BleAPI.device.hilightCount);
@@ -662,6 +738,7 @@ module GoProCameraTest {
 
         camera.sendCommand(GoProCamera.HILIGHT);
         camera.sendCommand(GoProCamera.HILIGHT);
+        BleAPI.device.processRequests();
 
         if (BleAPI.device.hilightCount != 3) {
             logger.error("Wrong hilight count, expected 3, got " + BleAPI.device.hilightCount);
@@ -669,6 +746,7 @@ module GoProCameraTest {
         }
         
         camera.sendCommand(GoProCamera.SHUTTER);
+        BleAPI.device.processRequests();
 
         if (camera.isRecording()) {
             logger.error("Camera should not be recording anymore");
@@ -678,19 +756,85 @@ module GoProCameraTest {
         return result;
     }
 
+    (:test)
+    function testPhotoMode(logger as Logger) as Boolean {
+        var result = true;
+
+        for (var k=0; k<testDeviceIds.size(); k+=1)
+        { // start of testDevice loop
+
+        TestInit.initDefaults();
+        TestInit.initFake(testDeviceSpecs[k].invoke());
+        TestInit.initConnection(testDeviceIds[k]);
+        
+        var camera = getApp().gopro;
+        BleAPI.device.processRequests();
+
+        if (camera.getStatus(GoProCamera.PHOTOS_TAKEN) != null) {
+            logDeviceError(logger, "Camera photos taken status should still be null", k);
+            result = false;
+        }
+
+        camera.sendCommand(GoProCamera.LOAD_PGRP);
+        BleAPI.device.processRequests();
+
+        if (camera.getStatus(GoProCamera.PRESET_GRP) != GoProCamera.PGRP_PHOTO) {
+            logDeviceError(logger, "Camera should be in photo mode", k);
+            result = false;
+        }
+
+        var photosTaken = camera.getStatus(GoProCamera.PHOTOS_TAKEN);
+        if (photosTaken != 1234) {
+            logDeviceError(logger, "There should be 1234 photos taken, got: " + photosTaken, k);
+            result = false;
+        }
+
+        camera.sendCommand(GoProCamera.SHUTTER);
+        BleAPI.device.processRequests();
+
+        if (camera.isRecording()) {
+            logDeviceError(logger, "Camera is in photo mode, it shouuld not be recording", k);
+            result = false;
+        }
+
+        photosTaken = camera.getStatus(GoProCamera.PHOTOS_TAKEN);
+        if (photosTaken != 1235) {
+            logDeviceError(logger, "There should be 1235 photos taken, got: " + photosTaken, k);
+            result = false;
+        }
+
+
+        camera.sendCommand(GoProCamera.SHUTTER);
+        camera.sendCommand(GoProCamera.SHUTTER);
+        camera.sendCommand(GoProCamera.SHUTTER);
+        camera.sendCommand(GoProCamera.SHUTTER);
+        BleAPI.device.processRequests();
+
+        photosTaken = camera.getStatus(GoProCamera.PHOTOS_TAKEN);
+        if (photosTaken != 1239) {
+            logDeviceError(logger, "There should be 1239 photos taken, got: " + photosTaken, k);
+            result = false;
+        }
+
+        } // end of testDevice loop
+
+        return result;
+    }
+
 
     (:test)
     function testRecordingCamera(logger as Logger) as Boolean {
         TestInit.initDefaults();
         TestInit.initFake(null);
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
         
         var camera = getApp().gopro;
         
         TestInit.initStatuses.put(GoProCamera.ENCODING, 1);
         TestInit.initStatuses.put(GoProCamera.ENCODING_DURATION, 42);
 
-        BleAPI.device.onSend(GPM.UUID_COMMAND_CHAR, [3, 1, 1, 1]b);
+        BleAPI.device.onSend([GPM.UUID_COMMAND_CHAR, [3, 1, 1, 1]b]);
+        BleAPI.device.processRequests();
 
         if (!camera.isRecording()) {
             logger.error("Camera should already be recording, status: " + camera.getStatus(GoProCamera.ENCODING));
@@ -704,6 +848,7 @@ module GoProCameraTest {
         }
 
         camera.sendCommand(GoProCamera.SHUTTER);
+        BleAPI.device.processRequests();
 
         if (camera.isRecording()) {
             logger.error("Camera should not be recording anymore");
@@ -718,10 +863,12 @@ module GoProCameraTest {
     function testLabelKnown(logger as Logger) as Boolean {
         var result = true;
         TestInit.initDefaults();
+        TestInit.initSettings[GoProSettings.PHOTO_LENS] = GoProSettings.WIDE_27MP; 
         TestInit.initFake(null);
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
         
         var camera = getApp().gopro;
+        BleAPI.device.processRequests();
         var label;
 
         var ids = [
@@ -750,6 +897,21 @@ module GoProCameraTest {
             result = false;
         }
 
+        camera.sendCommand(GoProCamera.LOAD_PGRP);
+        BleAPI.device.processRequests();
+
+        label = camera.getLabel(GoProCamera.PHOTO_LENS, null);
+        if (!label.equals("27MP Wide")) {
+            logger.error("Wrong label, expected: '27MP Wide', got :" + label);
+            result = false;
+        }
+
+        label = camera.getDescription();
+        if (!label.equals("27MP Wide")) {
+            logger.error("Wrong description, expected '27MP Wide', got :" + label);
+            result = false;
+        }
+
         return result;
     }
 
@@ -765,11 +927,13 @@ module GoProCameraTest {
         TestInit.initSettings.put(GoProSettings.LED, 69);
         TestInit.initSettings.put(GoProSettings.FLICKER, 78);
         TestInit.initSettings.put(GoProSettings.HYPERSMOOTH, 26);
+        TestInit.initSettings.put(GoProSettings.PHOTO_LENS, 91);
 
         TestInit.initFake(null);
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
         
         var camera = getApp().gopro;
+        BleAPI.device.processRequests();
         var label;
 
         var ids = [
@@ -780,7 +944,8 @@ module GoProCameraTest {
             GoProSettings.GPS,
             GoProSettings.LED,
             GoProSettings.FLICKER,
-            GoProSettings.HYPERSMOOTH
+            GoProSettings.HYPERSMOOTH,
+            GoProSettings.PHOTO_LENS,
         ];
 
         for (var i=0; i<ids.size(); i+=1) {
@@ -790,10 +955,19 @@ module GoProCameraTest {
                 return false;
             }
         }
-        
+
         label = camera.getDescription();
         if (!label.equals(". . .")) {
             logger.error("Expected placeholder description as '. . .' got :" + label);
+            return false;
+        }
+
+        camera.sendCommand(GoProCamera.LOAD_PGRP);
+        BleAPI.device.processRequests();
+
+        label = camera.getDescription();
+        if (!label.equals("")) {
+            logger.error("Expected empty placeholder description got :" + label);
             return false;
         }
 

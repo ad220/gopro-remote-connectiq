@@ -36,6 +36,13 @@
     <!-- $$$ Small -->
     <string id="Pair">APPAIRER</string>
     <string id="Connect">CONNEXION</string>
+
+    <!-- Remote Menu -->
+    <!-- $$$ -->
+    <string id="AdvancedSettings">Paramètres avancés</string>
+    <string id="SwitchMode">Changer de mode</string>
+    <!-- <string id="Photo">Photo</string>
+    <string id="Video">Vidéo</string> -->
     
     <!-- PresetPick -->
     <!-- $$$ Small -->
@@ -55,6 +62,7 @@
     <string id="Ratio">Format</string>
     <string id="Lens">Objectif</string>
     <string id="Framerate">Fréq. d'image</string>
+    <string id="PhotoLens">Format photo</string>
 
     <!-- Paramètres de la caméra pour appareils avec peu de mémoire -->
      <!-- $$$ -->

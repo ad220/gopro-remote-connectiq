@@ -16,17 +16,17 @@ module SettingsMenuDelegateTest {
     (:test)
     function testInit(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initSink(null);
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initFake(null);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
 
-        var device = BleAPI.device as TestInit.SinkGoProDevice;
+        var device = BleAPI.device as FakeGoProDevice;
         device.requests = [];
 
         var menu = ICM.newCustomMenu(0.15, null);
         var delegate = new SettingsMenuDelegate(menu, SettingsMenuDelegate.CAMERA, []);
         var expected = [
             GPM.UUID_QUERY_CHAR,
-            [4, CameraDelegate.REGISTER_AVAILABLE, GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE]b
+            [4, GoProDecoder.REGISTER_AVAILABLE, GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE]b
         ];
 
         if (!TestInit.haveSameData(device.requests[0] as Array, expected as Array)) {
@@ -35,7 +35,7 @@ module SettingsMenuDelegateTest {
 
         device.requests = [];
         delegate.onBack();
-        expected[1][1] = CameraDelegate.UNREGISTER_AVAILABLE;
+        expected[1][1] = GoProDecoder.UNREGISTER_AVAILABLE;
 
         
         if (!TestInit.haveSameData(device.requests[0] as Array, expected as Array)) {
@@ -50,7 +50,7 @@ module SettingsMenuDelegateTest {
     function testSelectPreset(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
         TestInit.initFake(null);
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
         Application.Storage.clearValues();
 
         var viewController = new ViewDebugController();
@@ -61,6 +61,7 @@ module SettingsMenuDelegateTest {
 
         viewController.push(menu, delegate, WatchUi.SLIDE_IMMEDIATE);
         delegate.onSelect(menu.debugItems[1]);
+        BleAPI.device.processRequests();
 
         var ids = [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE, GoProSettings.FLICKER];
         var expected = [4, GoProSettings.WIDE, 6, GoProSettings.HZ50];
@@ -89,7 +90,7 @@ module SettingsMenuDelegateTest {
     function testSelectManual(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
         TestInit.initFake(null);
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
 
         // test selecting manual edit
         var viewController = new ViewDebugController();
@@ -154,7 +155,7 @@ module SettingsMenuDelegateTest {
     function testSelectSaveAs(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
         TestInit.initFake(null);
-        TestInit.initConnection(CameraDelegate.GP_HERO11M);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
         Application.Storage.clearValues();
 
         // test selecting preset saving
@@ -189,6 +190,7 @@ module SettingsMenuDelegateTest {
         var ids = [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE, GoProSettings.FLICKER];
         var result = true;
         var gopro = getApp().gopro;
+        BleAPI.device.processRequests();
 
         for (var i=0; i<ids.size(); i+=1) {
             if (preset.getSetting(ids[i]) != gopro.getSetting(ids[i])) {
