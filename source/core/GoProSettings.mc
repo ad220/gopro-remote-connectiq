@@ -98,7 +98,7 @@ class GoProSettings {
     public static const FRAMERATE_LABEL = WatchUi.loadResource(Rez.Strings._FPS) as String;
 
     public static const ISO_MAP = {
-        9 => 0,
+        9 => Rez.Strings.Auto,
         0 => 6400,
         3 => 3200,
         1 => 1600,
@@ -150,7 +150,16 @@ class GoProSettings {
     public enum ColorId {
         COLOR_GOPRO,
         COLOR_FLAT,
+        COLOR_NATURAL,
+        COLOR_VIBRANT   = 100,
     }
+
+    public static const COLOR_MAP = {
+        COLOR_GOPRO     => Rez.Strings.GoPro,
+        COLOR_FLAT      => Rez.Strings.Flat,
+        COLOR_NATURAL   => Rez.Strings.Natural,
+        COLOR_VIBRANT   => Rez.Strings.Vibrant,
+    } as Dictionary<Number, ResourceId>;
 
     public enum SharpnessId {
         SHARP_HIGH,
@@ -339,6 +348,20 @@ class GoProSettings {
                 lens &= 0xFF;
                 if (lens != 0)      { label = lens + "MP " + label; }
             }
+        }
+        else if (id == PROTUNE)     { label = setting == 1 ? Rez.Strings.Enabled : Rez.Strings.Disabled; }
+        else if (id == COLOR)       { label = COLOR_MAP.get(setting); }
+        else if (id == EV_COMP)     { label = evCompValue(setting).toString(); }
+        else if (id == SHARPNESS) {
+            label = [Rez.Strings.High, Rez.Strings.Medium, Rez.Strings.Low, ""][setting & 3];
+        }
+        else if (id == WHITE_BL) {
+            label = WB_MAP.get(setting);
+            if (label instanceof Lang. Number)  { label = label + "K"; }
+        }
+        else if (id == ISO_MAX or id == ISO_MIN) {
+            label = ISO_MAP.get(setting);
+            if (label instanceof Lang.Number)   { label = label.toString(); }
         }
         else {
             // System.println("[WARNING]   Unknown setting ID requested for label");

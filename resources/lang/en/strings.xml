@@ -3,7 +3,9 @@
     <string id="GlanceTitle" scope="glance">GoPro Remote</string>
     <string id="GlanceConnect" scope="glance">Find </string>
     <string id="GlanceScan" scope="glance">Scan for camera</string>
-    <!-- $$$ Medium -->
+
+    <!-- $$$ Medium Small Tiny-->
+    <!-- Added in small and tiny for protune color setting -->
     <string id="GoPro" translatable="false">GoPro</string>
 
     <!-- Notif messages -->
@@ -74,7 +76,7 @@
     <string id="Protune" translatable="false">Protune</string>
     <string id="IsoMin" translatable="false">ISO Min</string>
     <string id="IsoMax" translatable="false">ISO Max</string>
-    <string id="WhiteBal">White Balance</string>
+    <string id="WhiteBalance">White Balance</string>
     <string id="Color">Color</string>
     <string id="Sharpness">Sharpness</string>
     <string id="EvComp">EV Comp</string>
@@ -126,7 +128,12 @@
 
     <!-- Protune -->
     <!-- $$$ Small Tiny -->
+    <string id="Enabled">Enabled</string>
     <string id="Auto">Auto</string>
     <string id="Native">Native</string>
+    <string id="Flat">Flat</string>
+    <string id="Natural">Natural</string>
+    <string id="Vibrant">Vibrant</string>
+    <string id="Medium">Medium</string>
 
 </strings>
