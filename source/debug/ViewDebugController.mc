@@ -5,16 +5,16 @@ import Toybox.WatchUi;
 (:debug)
 class ViewDebugController extends ViewController {
 
-    var stack as Array<[View, BehaviorDelegate or Menu2InputDelegate or Null]>;
+    var stack as Array<[View, ViewController.Dlgt]>;
 
-    function initialize() {
-        ViewController.initialize();
+    function initialize(ctrl as ViewController) {
+        ViewController.initialize(ctrl.getCurrentDelegate());
 
         self.stack = [];
     }
 
     function push(view as View, delegate as BehaviorDelegate or Menu2InputDelegate or Null, slide as SlideType) as Void {        
-        if (currentDelegate instanceof NotifDelegate) {
+        if (viewStack[0] instanceof NotifDelegate) {
             stack[stack.size() - 1] = [view, delegate];
             return;
         }
@@ -24,7 +24,7 @@ class ViewDebugController extends ViewController {
     }
 
     function switchTo(view as View, delegate as BehaviorDelegate or Menu2InputDelegate or Null, slide as SlideType) as Void {
-        if (currentDelegate instanceof NotifDelegate) {
+        if (viewStack[0] instanceof NotifDelegate) {
             stack = stack.slice(0, -1);
         }
 
@@ -36,19 +36,11 @@ class ViewDebugController extends ViewController {
     }
 
     function pop(slide as SlideType) as Void {
-        if (currentDelegate instanceof NotifDelegate or viewLayersCount > 0) {
+        if (viewStack[0] instanceof NotifDelegate or viewStack[1] != null) {
             stack = stack.slice(0, -1);
         }
 
         ViewController.pop(slide);
-    }
-
-    function popNotif() as Void {
-        if (currentDelegate instanceof NotifDelegate) {
-            stack = stack.slice(0, -1);
-        }
-
-        ViewController.popNotif();
     }
 
     function getCurrentDelegate() as BehaviorDelegate or Menu2InputDelegate or Null {

@@ -35,9 +35,9 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
         else if (setting == GoProSettings.WHITE_BL)     { titleId = Rez.Strings.WhiteBalance;   comparator = new WhiteBalanceComparator(); }
         else if (setting == GoProSettings.COLOR)        { titleId = Rez.Strings.Color; }
         else if (setting == GoProSettings.SHARPNESS)    { titleId = Rez.Strings.Sharpness; }
-        else if (setting == GoProSettings.EV_COMP)      { titleId = Rez.Strings.PhotoLens; }
-        else if (setting == GoProSettings.ISO_MAX)      { titleId = Rez.Strings.PhotoLens;      comparator = new ISOComparator(); }
-        else if (setting == GoProSettings.ISO_MIN)      { titleId = Rez.Strings.PhotoLens;      comparator = new ISOComparator(); }
+        else if (setting == GoProSettings.EV_COMP)      { titleId = Rez.Strings.EvComp; }
+        else if (setting == GoProSettings.ISO_MAX)      { titleId = Rez.Strings.IsoMax;         comparator = new ISOComparator(); }
+        else if (setting == GoProSettings.ISO_MIN)      { titleId = Rez.Strings.IsoMin;         comparator = new ISOComparator(); }
         else {
             // System.println("[WARNING]   Unknown Setting id");
             EM.raise(EM.ERR_CAM | EM.SUB_CAM_ID | 0x01 << 16, setting, :CriticalErr);
