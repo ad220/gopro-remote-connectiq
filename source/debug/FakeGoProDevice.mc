@@ -390,6 +390,27 @@ using GattProfileManager as GPM;
             case GoProSettings.PHOTO_LENS:
                 available = specs.availablePhotoLens;
                 break;
+            case GoProSettings.PROTUNE:
+                available = specs.availableProtune;
+                break;
+            case GoProSettings.WHITE_BL:
+                available = specs.availableWhiteBl;
+                break;
+            case GoProSettings.COLOR:
+                available = specs.availableColor;
+                break;
+            case GoProSettings.SHARPNESS:
+                available = specs.availableSharpness;
+                break;
+            case GoProSettings.EV_COMP:
+                available = specs.availableEvComp;
+                break;
+            case GoProSettings.ISO_MAX:
+                available = specs.availableIsoMax;
+                break;
+            case GoProSettings.ISO_MIN:
+                available = specs.availableIsoMin;
+                break;
             default:
                 // System.println("[DBG WARN]  Wrong id");
                 break;

@@ -58,6 +58,13 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
                 GoProSettings.LED               => GoProSettings.LED_ALL_ON,
                 GoProSettings.GPS               => 1,
                 GoProSettings.PHOTO_LENS        => GoProSettings.WIDE_7MP,
+                GoProSettings.PROTUNE           => 0,
+                GoProSettings.WHITE_BL          => 4,
+                GoProSettings.COLOR             => GoProSettings.COLOR_NATURAL,
+                GoProSettings.SHARPNESS         => GoProSettings.SHARP_MEDIUM,
+                GoProSettings.EV_COMP           => 4,
+                GoProSettings.ISO_MAX           => 4,
+                GoProSettings.ISO_MIN           => 8,
             } as FakeGoProDevice.FakeGoProSettings,
             {
                 GoProCamera.CAPTURE_MODE        => GoProCamera.MODE_VIDEO,

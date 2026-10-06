@@ -13,6 +13,13 @@ module FakeGoProSpecs {
         var availableLed            as ByteArray;
         var availableGps            as ByteArray;
         var availablePhotoLens      as ByteArray;
+        var availableProtune        as ByteArray;
+        var availableWhiteBl        as ByteArray;
+        var availableColor          as ByteArray;
+        var availableSharpness      as ByteArray;
+        var availableEvComp         as ByteArray;
+        var availableIsoMax         as ByteArray;
+        var availableIsoMin         as ByteArray;
     };
 
     function getSpecsH11M()     as ISpecs { return new SpecsH11Mini(); }
@@ -111,6 +118,14 @@ module FakeGoProSpecs {
         const availableGps = []b;
 
         const availablePhotoLens = []b;
+
+        const availableProtune = [0, 1]b;
+        const availableWhiteBl = [0,2,3,4,5,7,8,9,10,11,12]b;
+        const availableColor = [GoProSettings.COLOR_VIBRANT, GoProSettings.COLOR_NATURAL, GoProSettings.COLOR_FLAT]b;
+        const availableSharpness = [GoProSettings.SHARP_HIGH, GoProSettings.SHARP_MEDIUM, GoProSettings.SHARP_LOW]b;
+        const availableEvComp = [0,1,2,3,4,5,6,7,8]b;
+        const availableIsoMax = [0,1,2,3,4,7,8,9]b;
+        const availableIsoMin = [0,1,2,3,4,7,8,9]b;
     }
 
     class SpecsMission1Pro {
@@ -181,6 +196,14 @@ module FakeGoProSpecs {
             GoProSettings.WIDE_FULL,
             GoProSettings.LINEAR_FULL,
         ]b;
+
+        const availableProtune = [0, 1]b;
+        const availableWhiteBl = [0,2,3,4,5,7,8,9,10,11,12]b;
+        const availableColor = [GoProSettings.COLOR_VIBRANT, GoProSettings.COLOR_NATURAL, GoProSettings.COLOR_FLAT]b;
+        const availableSharpness = [GoProSettings.SHARP_HIGH, GoProSettings.SHARP_MEDIUM, GoProSettings.SHARP_LOW]b;
+        const availableEvComp = [0,1,2,3,4,5,6,7,8]b;
+        const availableIsoMax = [0,1,2,3,4,7,8,9]b;
+        const availableIsoMin = [0,1,2,3,4,7,8,9]b;
     }
 
     class SpecsH5Session {
@@ -247,6 +270,14 @@ module FakeGoProSpecs {
             GoProSettings.WIDE_7MP,
             GoProSettings.MEDIUM_7MP,
         ]b;
+
+        const availableProtune = []b;
+        const availableWhiteBl = []b;
+        const availableColor = []b;
+        const availableSharpness = []b;
+        const availableEvComp = []b;
+        const availableIsoMax = []b;
+        const availableIsoMin = []b;
     }
 
     class SpecsUnknown {
@@ -273,6 +304,14 @@ module FakeGoProSpecs {
         const availableLed            = [7, 8]b;
         const availableGps            = [9, 10]b;
         const availablePhotoLens      = [78, 91]b;
+
+        const availableProtune = []b;
+        const availableWhiteBl = []b;
+        const availableColor = []b;
+        const availableSharpness = []b;
+        const availableEvComp = []b;
+        const availableIsoMax = []b;
+        const availableIsoMin = []b;
     }
 
     class SpecsEmpty {

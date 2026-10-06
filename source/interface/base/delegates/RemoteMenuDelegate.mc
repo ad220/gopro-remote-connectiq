@@ -20,7 +20,9 @@ class RemoteMenuDelegate extends WatchUi.Menu2InputDelegate {
         var icon = new Bitmap(bmpOptions);
         var item = new IconMenuItem(Rez.Strings.SwitchMode, null, :switchMode, icon, null);
         menu.addItem(item);
-        
+
+        if (getApp().gopro.getId() < GoProCamera.GP_MAX) { return; }
+
         bmpOptions[:rezId] = Rez.Drawables.CaptureMode;
         icon = new Bitmap(bmpOptions);
         item = new IconMenuItem(Rez.Strings.Protune, null, :protune, icon, null);
