@@ -146,7 +146,7 @@ module ScanMenuDelegateTest {
 
     (:test)
     function testSelectDevice(logger as Test.Logger) as Boolean {
-        var viewController = new ViewDebugController();
+        var viewController = new ViewDebugController(getApp().viewController);
         getApp().viewController = viewController;
 
         var menu = initMenu();
@@ -176,7 +176,7 @@ module ScanMenuDelegateTest {
 
     (:test)
     function testSelectStart(logger as Test.Logger) as Boolean {
-        var viewController = new ViewDebugController();
+        var viewController = new ViewDebugController(getApp().viewController);
         getApp().viewController = viewController;
 
         var menu = initMenu();

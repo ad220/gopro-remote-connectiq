@@ -38,7 +38,7 @@ class RemoteMenuDelegate extends WatchUi.Menu2InputDelegate {
             onBack();
         }
         else if (id == :protune) {
-            var newMenu = ICM.newCustomMenu(0.15, null);
+            var newMenu = new ProtuneMenu();
             app.viewController.switchTo(newMenu, new ProtuneMenuDelegate(newMenu), SLIDE_LEFT);
         }
     }

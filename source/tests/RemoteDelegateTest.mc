@@ -19,7 +19,7 @@ module RemoteDelegateTest {
         
         var camera = getApp().gopro;
 
-        var viewController = new ViewDebugController();
+        var viewController = new ViewDebugController(getApp().viewController);
         getApp().viewController = viewController;
         
         var delegate = new RemoteDelegate();
@@ -66,7 +66,7 @@ module RemoteDelegateTest {
         
         var camera = getApp().gopro;
 
-        var viewController = new ViewDebugController();
+        var viewController = new ViewDebugController(getApp().viewController);
         getApp().viewController = viewController;
         
         var delegate = new RemoteDelegate();
@@ -102,7 +102,7 @@ module RemoteDelegateTest {
         
         var camera = getApp().gopro;
 
-        var viewController = new ViewDebugController();
+        var viewController = new ViewDebugController(getApp().viewController);
         getApp().viewController = viewController;
         
         var delegate = new RemoteDelegate();
@@ -137,7 +137,7 @@ module RemoteDelegateTest {
         
         var camera = getApp().gopro;
 
-        var viewController = new ViewDebugController();
+        var viewController = new ViewDebugController(getApp().viewController);
         getApp().viewController = viewController;
         
         var delegate = new RemoteDelegate();
@@ -171,7 +171,7 @@ module RemoteDelegateTest {
         
         var device = BleAPI.device as FakeGoProDevice;
 
-        var viewController = new ViewDebugController();
+        var viewController = new ViewDebugController(getApp().viewController);
         getApp().viewController = viewController;
         
         var delegate = new RemoteDelegate();
@@ -201,7 +201,7 @@ module RemoteDelegateTest {
         
         var device = BleAPI.device as FakeGoProDevice;
 
-        var viewController = new ViewDebugController();
+        var viewController = new ViewDebugController(getApp().viewController);
         getApp().viewController = viewController;
         
         var delegate = new RemoteDelegate();

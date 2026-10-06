@@ -79,13 +79,14 @@ class GoProRemoteApp extends Application.AppBase {
     (:typecheck(false))
     function getInitialView() {
         self.appStarted = true;
-        self.timerController = new TimerController(200);
-        self.viewController = new ViewController();
 
         InterfaceComponentsManager.loadFonts();
+        self.timerController = new TimerController(200);
         
         var label = lastPairedDevice==null ? WatchUi.loadResource(Rez.Strings.Pair) : WatchUi.loadResource(Rez.Strings.Connect);
         var delegate = new ConnectDelegate(lastPairedDevice);
+
+        self.viewController = new ViewController(delegate);
         return [ new ConnectView(label, delegate), delegate ];
     }
 

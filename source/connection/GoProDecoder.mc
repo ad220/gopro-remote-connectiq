@@ -279,7 +279,7 @@ class GoProDecoder {
         else if (receiver == :onReceiveSetting) {
             gopro.updateDescription();
         }
-        $.Toybox.WatchUi.requestUpdate();
+        getApp().viewController.update();
     }
 
     public function decodeMessage(charId as GPM.GoProUuid, msg as ByteArray) as Void {

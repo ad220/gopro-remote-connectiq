@@ -7,39 +7,32 @@ using ErrorManager as EM;
 
 class ProtuneMenuDelegate extends WatchUi.Menu2InputDelegate {
 
-    public function initialize(menu as CustomMenu) {
+    private var menu as ProtuneMenu;
+
+    public function initialize(menu as ProtuneMenu) {
         Menu2InputDelegate.initialize();
+        self.menu = menu;
 
-        menu.setTitle(new PickerTitle(Rez.Strings.Protune));
-
-        var ids = [
-            GoProSettings.PROTUNE,
-            GoProSettings.WHITE_BL,
-            GoProSettings.COLOR,
-            GoProSettings.SHARPNESS,
-            GoProSettings.EV_COMP,
-            GoProSettings.ISO_MAX,
-            GoProSettings.ISO_MIN
-        ];
-        var labels = [
-            Rez.Strings.Protune,
-            Rez.Strings.WhiteBalance,
-            Rez.Strings.EvComp,
-            Rez.Strings.Color,
-            Rez.Strings.Sharpness,
-            Rez.Strings.IsoMax,
-            Rez.Strings.IsoMin,
-        ];
-        
-        for (var i=0; i<6; i++) { menu.addItem(new ProtuneMenuItem(ids[i], labels[i])); }
+        var gopro = getApp().gopro;
+        gopro.queryValues(GoProDecoder.REGISTER_SETTING, menu.ids);
+        gopro.queryValues(GoProDecoder.GET_AVAILABLE, menu.ids);
     }
 
-    public function onSelect(item) {
-        var id = item.getId() as GoProSettings.SettingId;
-        ICM.toggleOrPick(id);
+    public function update() as Void {
+        menu.update();
+        WatchUi.requestUpdate();
+    }
+
+    public function onSelect(item as MenuItem) as Void {
+        if (item.getSubLabel() != null) {
+            var id = item.getId() as GoProSettings.SettingId;
+            ICM.toggleOrPick(id);
+        }
     }
 
     public function onBack() as Void {
-        getApp().viewController.pop(SLIDE_RIGHT);
+        var app = getApp();
+        app.gopro.queryValues(GoProDecoder.UNREGISTER_SETTING, menu.ids);
+        app.viewController.pop(SLIDE_RIGHT);
     }
 }

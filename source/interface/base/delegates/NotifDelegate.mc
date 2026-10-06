@@ -4,11 +4,10 @@ import Toybox.WatchUi;
 
 class NotifDelegate extends WatchUi.BehaviorDelegate {
 
-    private var stillExists as Boolean;
+    private var timer as TimerCallback;
 
     public function initialize() {
-        self.stillExists = true;
-
+        self.timer = getApp().timerController.start(method(:onTimeout), 20, false);
         BehaviorDelegate.initialize();
     }
 
@@ -18,9 +17,11 @@ class NotifDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function pop() as Void {
-        if (stillExists) {
-            stillExists = false;
-            WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
-        }
+        timer.stop();
+        WatchUi.popView(WatchUi.SLIDE_UP);
+    }
+
+    public function onTimeout() as Void {
+        getApp().viewController.pop(SLIDE_UP);
     }
 }
