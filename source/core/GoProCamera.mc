@@ -162,6 +162,34 @@ class GoProCamera extends GoProSettings {
         );
     }
 
+    public function toggleSetting(id as GoProSettings.SettingId) as Number? {
+        // toggle between two available setting values
+        // return sent setting value
+
+        var available = getAvailableSettings(id); 
+
+        if (available.size() != 2) { return null; }
+
+        var currentSetting = getSetting(id);
+        if (currentSetting == null) {
+            EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x02 << 16, id, :WarningErr);
+            return null;
+        }
+
+        var index = available.indexOf(currentSetting);
+        if (index == -1) {
+            EM.raise(
+                EM.ERR_CAM | EM.SUB_CAM_AVAIL | 0x00 << 16,
+                currentSetting << 8 + id,
+                :WarningErr
+            );
+        }
+
+        currentSetting = available[index ^ 1];
+        sendSetting(id, currentSetting);
+        return currentSetting;
+    }
+
     public function sendPreset(preset as GoProPreset) as Void {
         var keys = [FLICKER, RESOLUTION, LENS, FRAMERATE];
         for (var i=0; i<keys.size(); i++) {
