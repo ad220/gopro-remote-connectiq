@@ -351,7 +351,7 @@ class GoProSettings {
         }
         else if (id == PROTUNE)     { label = setting == 1 ? Rez.Strings.Enabled : Rez.Strings.Disabled; }
         else if (id == COLOR)       { label = COLOR_MAP.get(setting); }
-        else if (id == EV_COMP)     { label = evCompValue(setting).toString(); }
+        else if (id == EV_COMP)     { label = evCompValue(setting).format("%.1f"); }
         else if (id == SHARPNESS) {
             label = [Rez.Strings.High, Rez.Strings.Medium, Rez.Strings.Low, ""][setting & 3];
         }
@@ -458,5 +458,31 @@ class PhotoLensComparator {
         if (b == null) { b = 0; }
         
         return (b-1) & 0xFF << 8 - (b >> 8) - (a-1) & 0xFF << 8 + (a >> 8);
+    }
+}
+
+
+class WhiteBalanceComparator {
+    public function compare(wbA as Object, wbB as Object) as Number {
+        var a = GoProSettings.WB_MAP.get(wbA as Number);
+        var b = GoProSettings.WB_MAP.get(wbB as Number);
+
+        if (!(a instanceof Number)) { a = 0; }
+        if (!(b instanceof Number)) { b = 0; }
+        
+        return a - b;
+    }
+}
+
+
+class ISOComparator {
+    public function compare(isoA as Object, isoB as Object) as Number {
+        var a = GoProSettings.ISO_MAP.get(isoA as Number);
+        var b = GoProSettings.ISO_MAP.get(isoB as Number);
+
+        if (!(a instanceof Number)) { a = 0; }
+        if (!(b instanceof Number)) { b = 0; }
+        
+        return a - b;
     }
 }
