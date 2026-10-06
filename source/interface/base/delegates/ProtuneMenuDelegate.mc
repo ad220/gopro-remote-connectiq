@@ -3,6 +3,7 @@ import Toybox.WatchUi;
 import Toybox.Graphics;
 
 using InterfaceComponentsManager as ICM;
+using ErrorManager as EM;
 
 class ProtuneMenuDelegate extends WatchUi.Menu2InputDelegate {
 
@@ -35,8 +36,7 @@ class ProtuneMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     public function onSelect(item) {
         var id = item.getId() as GoProSettings.SettingId;
-        var newMenu = ICM.newCustomMenu(0.1, 0.3);
-        getApp().viewController.push(newMenu, new SettingPickerDelegate(newMenu, id), SLIDE_LEFT);
+        ICM.toggleOrPick(id);
     }
 
     public function onBack() as Void {

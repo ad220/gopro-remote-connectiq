@@ -36,6 +36,21 @@ module InterfaceComponentsManager {
         var options = titleHeight != null ? {:titleItemHeight => (0.30*Screen.HEIGHT).toNumber()} : null;
         return new WatchUi.CustomMenu((itemHeight*Screen.HEIGHT).toNumber() << 1, Graphics.COLOR_BLACK, options);
     }
+
+    function toggleOrPick(id as GoProSettings.SettingId) as Number? {
+        var app = getApp();
+
+        var available = app.gopro.getAvailableSettings(id); 
+
+        if (available.size() > 2) {
+            var newMenu = newCustomMenu(0.1, 0.15);
+            app.viewController.push(newMenu, new SettingPickerDelegate(newMenu, id), WatchUi.SLIDE_LEFT);
+            return null;
+        }
+        else {
+            return app.gopro.toggleSetting(id);
+        }
+    }
 }
 
 
