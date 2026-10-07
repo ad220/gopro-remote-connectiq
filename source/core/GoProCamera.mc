@@ -183,6 +183,7 @@ class GoProCamera extends GoProSettings {
                 currentSetting << 8 + id,
                 :WarningErr
             );
+            return null;
         }
 
         currentSetting = available[index ^ 1];
