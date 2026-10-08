@@ -1,8 +1,8 @@
 import sys
 import glob
 
-TINY_SPECIAL_CHAR = ".Kp:°@%0123456789"
-SMALL_SPECIAL_CHAR = ".Kp:°_0123456789"
+TINY_SPECIAL_CHAR = ".Kp:°@%0123456789-"
+SMALL_SPECIAL_CHAR = ".Kp:°_0123456789-"
 MEDIUM_SPECIAL_CHAR = "i!0123456789"
 
 
@@ -10,7 +10,7 @@ def sort_filter(filter):
     return "".join(sorted(set("".join(filter))))
 
 
-def extract_word(line:str): 
+def extract_word(line:str):
     label = line.split('<')[1].split('>')[1]
     return "".join(label.split("\\n"))
 
@@ -32,7 +32,7 @@ def filter(filename:str, translatable:bool):
                 if 'Medium' in line:
                     current_filters.append(medium_filter)
 
-            if 'string id' in line:
+            if 'string id' in line and not line.strip().startswith("<!--"):
                 if translatable != ('translatable="false"' in line):
                     word = extract_word(line)
                     for filter in current_filters:
@@ -53,6 +53,7 @@ def filter_all(rootpath):
             "small":    sort_filter(filters[1]+not_translatables[1]),
             "medium":   sort_filter(filters[2]+not_translatables[2])
         })
+        print()
         for i in range(3):
             global_filter[i] = sort_filter(filters[i]+global_filter[i])
     print("global", {
