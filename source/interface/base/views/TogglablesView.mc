@@ -43,6 +43,7 @@ class TogglablesView extends WatchUi.View {
         var gps = camera.getSetting(GoProSettings.GPS);
         (findDrawableById("GpsButton") as Togglable).toggleState(gps==1);
         
+        // off-values are 0, 4 and 100 while on-values are 1, 2, 3 and 5
         var led = camera.getSetting(GoProSettings.LED);
         (findDrawableById("LedButton") as Togglable).toggleState(led != null and led & 3 != 0);
         

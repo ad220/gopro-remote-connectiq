@@ -33,7 +33,7 @@ module InterfaceComponentsManager {
     }
 
     function newCustomMenu(itemHeight as Float, titleHeight as Float?) as CustomMenu {
-        var options = titleHeight != null ? {:titleItemHeight => (titleHeight*Screen.HEIGHT).toNumber()} : null;
+        var options = titleHeight != null ? {:titleItemHeight => (titleHeight*Screen.HEIGHT).toNumber()<<1} : null;
         return new WatchUi.CustomMenu((itemHeight*Screen.HEIGHT).toNumber() << 1, Graphics.COLOR_BLACK, options);
     }
 

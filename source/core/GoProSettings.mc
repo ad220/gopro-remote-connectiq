@@ -436,19 +436,6 @@ class RatioComparator extends ResolutionComparator {
     }
 }
 
-
-class FramerateComparator {
-    public function compare(framerateA as Object, framerateB as Object) as Number {
-        var a = GoProSettings.FRAMERATE_MAP.get(framerateA as Number);
-        var b = GoProSettings.FRAMERATE_MAP.get(framerateB as Number);
-
-        if (a == null) { a = 0; }
-        if (b == null) { b = 0; }
-        
-        return b - a;
-    }
-}
-
 class PhotoLensComparator {
     public function compare(lensA as Object, lensB as Object) as Number {
         var a = GoProSettings.PHOTO_LENS_MAP.get(lensA as Number) as Number?;
@@ -461,28 +448,23 @@ class PhotoLensComparator {
     }
 }
 
+class MapComparator {
 
-class WhiteBalanceComparator {
-    public function compare(wbA as Object, wbB as Object) as Number {
-        var a = GoProSettings.WB_MAP.get(wbA as Number);
-        var b = GoProSettings.WB_MAP.get(wbB as Number);
+    private var map as Dictionary;
+    private var order as Number;
 
-        if (!(a instanceof Number)) { a = 0; }
-        if (!(b instanceof Number)) { b = 0; }
-        
-        return a - b;
+    public function initialize(map as Dictionary, order as Number) {
+        self.map = map;
+        self.order = order;
     }
-}
 
-
-class ISOComparator {
-    public function compare(isoA as Object, isoB as Object) as Number {
-        var a = GoProSettings.ISO_MAP.get(isoA as Number);
-        var b = GoProSettings.ISO_MAP.get(isoB as Number);
+    public function compare(settingA as Object, settingB as Object) as Number {
+        var a = map.get(settingA);
+        var b = map.get(settingB);
 
         if (!(a instanceof Number)) { a = 0; }
         if (!(b instanceof Number)) { b = 0; }
-        
-        return a - b;
+
+        return order * (a - b);
     }
 }
