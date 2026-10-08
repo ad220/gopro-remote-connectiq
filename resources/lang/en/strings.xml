@@ -4,7 +4,7 @@
     <string id="GlanceConnect" scope="glance">Find </string>
     <string id="GlanceScan" scope="glance">Scan for camera</string>
 
-    <!-- $$$ Medium Small Tiny-->
+    <!-- $$$ Medium Small Tiny -->
     <!-- Added in small and tiny for protune color setting -->
     <string id="GoPro" translatable="false">GoPro</string>
 
@@ -47,8 +47,8 @@
     <!-- $$$ -->
     <string id="AdvancedSettings">Advanced settings</string>
     <string id="SwitchMode">Switch capture mode</string>
-    <!-- <string id="Photo">Photo</string>
-    <string id="Video">Video</string> -->
+    <!-- <string id="Photo">Photo</string> -->
+    <!-- <string id="Video">Video</string> -->
 
     <!-- SettingsMenu -->
     <!-- $$$ Small -->
