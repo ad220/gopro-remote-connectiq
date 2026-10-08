@@ -79,6 +79,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     public function onLed() as Void {
         var led = ICM.toggleOrPick(GoProSettings.LED);
         if (led != null) { view.getHilighted().toggleState(led & 3 != 0); }
+        // off-values are 0, 4 and 100 while on-values are 1, 2, 3 and 5
     }
     
     (:keep)

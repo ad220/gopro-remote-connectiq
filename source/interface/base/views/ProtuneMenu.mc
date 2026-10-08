@@ -30,7 +30,6 @@ class ProtuneMenu extends WatchUi.CustomMenu {
             Rez.Strings.IsoMin,
         ];
         
-        setTitle(new PickerTitle(Rez.Strings.Protune));
         for (var i=0; i<7; i++) {
             var item = new ProtuneMenuItem(ids[i] as GoProSettings.SettingId, labels[i]);
             addItem(item);
@@ -42,6 +41,8 @@ class ProtuneMenu extends WatchUi.CustomMenu {
     }
 
     public function update() as Void {
+        if (Helper.safeGoProAccess(32) == null) { return; }
+
         for (var i=0; i<mItems.size(); i++) {
             (mItems[i] as ProtuneMenuItem).updateValue();
         }

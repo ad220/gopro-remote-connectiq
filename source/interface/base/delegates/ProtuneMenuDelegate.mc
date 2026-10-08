@@ -24,8 +24,8 @@ class ProtuneMenuDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     public function onSelect(item as MenuItem) as Void {
-        if (item.getSubLabel() != null) {
-            var id = item.getId() as GoProSettings.SettingId;
+        var id = item.getId() as GoProSettings.SettingId;
+        if (getApp().gopro.getSetting(id) != null) {
             ICM.toggleOrPick(id);
         }
     }
