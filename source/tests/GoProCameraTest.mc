@@ -78,6 +78,27 @@ module GoProCameraTest {
         }
     }
 
+    class UnpairOrderDelegate extends MockBluetoothDelegate {
+
+        var unpairSeenWhileConnected as Boolean = false;
+
+        function initialize() {
+            MockBluetoothDelegate.initialize();
+        }
+
+        function onConnectedStateChanged(device as Ble.Device, state as Ble.ConnectionState) as Void {
+            if (state == Ble.CONNECTION_STATE_DISCONNECTED) {
+                // Records whether the link was still up when the
+                // unpair callback fired. With the correct order
+                // (unpair before CameraDelegate.disconnect), the
+                // delegate is still connected here; with the reversed
+                // order it is already torn down.
+                unpairSeenWhileConnected = isConnected();
+            }
+            BluetoothDelegate.onConnectedStateChanged(device, state);
+        }
+    }
+
     const expectedPairingFinish = [0x0C, 0x03, 0x01, 0x08, 0x00, 0x12, 0x06, 0x67, 0x61, 0x72, 0x6D, 0x69, 0x6E]b;
 
     (:test)
@@ -134,6 +155,59 @@ module GoProCameraTest {
     }
 
     
+    (:test)
+    function testDisconnect(logger as Logger) as Boolean {
+        TestInit.initDefaults();
+        TestInit.initFake(null);
+
+        BleAPI.pairedDevices = [];
+
+        var delegate = new UnpairOrderDelegate();
+        delegate.connect(new BleAPI.MockScanResult(0, null, GoProCamera.GP_HERO11M) as Ble.ScanResult);
+
+        var device = delegate.getDevice();
+        if (device == null) {
+            logger.error("Delegate's BLE device is null after connection");
+            return false;
+        }
+
+        delegate.disconnect();
+
+        var result = true;
+
+        if (device.isConnected()) {
+            logger.error("BLE device is still connected after disconnect");
+            result = false;
+        }
+
+        if (BleAPI.pairedDevices.indexOf(device) != -1) {
+            logger.error("BLE device was not unpaired after disconnect");
+            result = false;
+        }
+
+        if (delegate.getDevice() != null) {
+            logger.error("Delegate's BLE device is not null after disconnect");
+            result = false;
+        }
+
+        if (delegate.getQueue() != null) {
+            logger.error("Request queue should be null after disconnect");
+            result = false;
+        }
+
+        // Regression check for the glance ghost keep-alive: unpairing must
+        // happen before CameraDelegate.disconnect(), because the latter
+        // triggers System.exit when launched from the glance, so anything
+        // placed after it (e.g. unpairDevice) never runs.
+        if (!delegate.unpairSeenWhileConnected) {
+            logger.error("Device was unpaired after teardown instead of before it");
+            result = false;
+        }
+
+        return result;
+    }
+
+
     (:test)
     function testPairingFail(logger as Logger) as Boolean {
         TestInit.initDefaults();
