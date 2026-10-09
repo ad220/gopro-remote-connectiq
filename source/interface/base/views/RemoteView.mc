@@ -55,6 +55,7 @@ class RemoteView extends WatchUi.View {
     function onHide() as Void {
         hilightIcon = null;
         settingsIcon = null;
+        photoIcon = null;
     }
 
     function onUpdate(dc as Dc) as Void {
