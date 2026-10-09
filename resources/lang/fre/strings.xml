@@ -12,7 +12,7 @@
     <string id="Disconnected">Caméra\ndéconnectée</string>
     <string id="ConnectErr">Connexion échouée à cause\nde l'erreur suivante veuillez\nréessayer ou redémarrer l'appli\n\n0x</string>
     <string id="WarningErr">Erreur imprévue, l'appli\npourrait être instable, merci\nde la signaler si récurrente.\n\n0x</string>
-    <string id="CriticalErr">Erreur critique, l'appli\nva fermer, merci de la\nsignaler si récurrente.\n\nx</string>
+    <string id="CriticalErr">Erreur critique, l'appli\nva fermer, merci de la\nsignaler si récurrente.\n\n0x</string>
 
     <!-- GoPro Models -->
     <!-- $$$ Small -->
