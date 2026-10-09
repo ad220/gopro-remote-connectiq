@@ -118,9 +118,9 @@ class GoProDecoder {
 
             if (goproId < GoProCamera.GP_MAX) {
                 request[1] = GoProCamera.SWITCH_MODE;
-                request.addAll([0x01, (mode - GoProCamera.PGRP_VIDEO) & 1 ^ 1]);
+                request.addAll([0x01, mode & 1 ^ 1]);
             } else {
-                request.addAll([0x04, 0, 0, GoProCamera.PGRP_VIDEO >> 8, mode & 0xFF ^ 1]);
+                request.addAll([0x04, 0, 0, GoProCamera.PGRP_VIDEO >> 8, mode & 1 ^ GoProCamera.PGRP_PHOTO & 0xFF]);
             }
         }
 
