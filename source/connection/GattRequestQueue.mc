@@ -83,7 +83,7 @@ class GattRequestQueue {
             catch (ex)  { onRequestFail(EM.SUB_BLE_WRITE | 0x00); }
         }
         
-        // System.println("[DEBUG]     Write data " + request[:data] + " to char " + request[:uuid]);
+        // System.println("[DEBUG]     Write data " + req[REQ_DATA] + " to char " + req[REQ_UUID]);
     }
 
 
@@ -114,7 +114,7 @@ class GattRequestQueue {
         var timer = request[REQ_TIMER];
         if (
             type != GattRequestQueue.REGISTER_NOTIFICATION and
-            !uuid.equals(request[REQ_UUID]) or timer == null
+            !uuid.equals(GPM.getUuid(request[REQ_UUID])) or timer == null
         ) {
             // System.println("[WARNING]   Desynchronized request queue");
             onRequestFail(EM.SUB_BLE_NULLQ | 0x05);

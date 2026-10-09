@@ -54,7 +54,7 @@ class GoProDecoder {
     // pairing finish loadout as per open gopro spec, with phoneName="garmin"
     // see https://gopro.github.io/OpenGoPro/docs/ble/protocol/protobuf#requestpairingfinish
     public static const PAIRING_FINISH =
-        [0x0D, 0x03, 0x01, 0x08, 0x00, 0x12, 0x06,
+        [0x0C, 0x03, 0x01, 0x08, 0x00, 0x12, 0x06,
          0x67, 0x61, 0x72, 0x6D, 0x69, 0x6E]b;
 
     private var goproId             as Number;
