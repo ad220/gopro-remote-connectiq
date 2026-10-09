@@ -78,6 +78,8 @@ module GoProCameraTest {
         }
     }
 
+    const expectedPairingFinish = [0x0C, 0x03, 0x01, 0x08, 0x00, 0x12, 0x06, 0x67, 0x61, 0x72, 0x6D, 0x69, 0x6E]b;
+
     (:test)
     function testModelIds(logger as Logger) as Boolean {
         return GoProCamera.modelIdTable.size() == GoProCamera.modelStringTable.size(); 
@@ -206,6 +208,96 @@ module GoProCameraTest {
         }
 
         return result;
+    }
+
+
+    (:test)
+    function testPairingFinish(logger as Logger) as Boolean {
+        TestInit.initDefaults();
+        TestInit.initFake(null);
+
+        BleAPI.pairedDevices = [];
+
+        var delegate = new MockBluetoothDelegate();
+        delegate.connect(new BleAPI.MockScanResult(0, null, GoProCamera.GP_HERO11M) as Ble.ScanResult);
+
+        var device = BleAPI.device as FakeGoProDevice;
+
+        if (device.requests.size() > 0 && device.requests[0][0].equals(GPM.UUID_NETWORK_CHAR)) {
+            logger.error("Pairing finish should not be sent unless connecting from the scan menu");
+            delegate.disconnect();
+            return false;
+        }
+
+        delegate.disconnect();
+        return true;
+    }
+
+
+    (:test)
+    function testPairingFinishOnScan(logger as Logger) as Boolean {
+        TestInit.initDefaults();
+        TestInit.initFake(null);
+
+        BleAPI.pairedDevices = [];
+
+        var delegate = new MockBluetoothDelegate();
+        delegate.setNeedsSetup(true);
+        delegate.connect(new BleAPI.MockScanResult(0, null, GoProCamera.GP_HERO11M) as Ble.ScanResult);
+
+        var device = BleAPI.device as FakeGoProDevice;
+
+        if (device.requests.size() < 1) {
+            logger.error("No request queued for pairing finish");
+            delegate.disconnect();
+            return false;
+        }
+
+        var sent = device.requests[0];
+        if (!sent[0].equals(GPM.UUID_NETWORK_CHAR) or !sent[1].equals(expectedPairingFinish)) {
+            logger.error("Wrong pairing finish request, expected: " \
+                            + [GPM.UUID_NETWORK_CHAR, expectedPairingFinish] + ", got: " + sent);
+            delegate.disconnect();
+            return false;
+        }
+
+        delegate.disconnect();
+        return true;
+    }
+
+
+    (:test)
+    function testPairingFinishNotRepeatedOnReconnect(logger as Logger) as Boolean {
+        TestInit.initDefaults();
+        TestInit.initFake(null);
+
+        BleAPI.pairedDevices = [];
+
+        var delegate = new MockBluetoothDelegate();
+        delegate.setNeedsSetup(true);
+        delegate.connect(new BleAPI.MockScanResult(0, null, GoProCamera.GP_HERO11M) as Ble.ScanResult);
+
+        var device = BleAPI.device as FakeGoProDevice;
+        if (device.requests.size() < 1 or !device.requests[0][0].equals(GPM.UUID_NETWORK_CHAR)) {
+            logger.error("Pairing finish was not sent on the scan menu connection");
+            delegate.disconnect();
+            return false;
+        }
+
+        // reconnect from the stored device, without going through the scan menu
+        delegate.disconnect();
+        BleAPI.pairedDevices = [];
+        device.requests = [];
+        delegate.connect(new BleAPI.MockScanResult(0, null, GoProCamera.GP_HERO11M) as Ble.ScanResult);
+
+        if (device.requests.size() > 0 && device.requests[0][0].equals(GPM.UUID_NETWORK_CHAR)) {
+            logger.error("Pairing finish should not be repeated on reconnect");
+            delegate.disconnect();
+            return false;
+        }
+
+        delegate.disconnect();
+        return true;
     }
 
 

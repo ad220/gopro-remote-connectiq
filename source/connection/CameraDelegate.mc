@@ -9,9 +9,15 @@ class CameraDelegate {
     protected var connected as Boolean;
     protected var goproId as Number?;
     private var pairingTimer as TimerCallback?;
+    private var needsSetup as Boolean;
 
     public function initialize() {
         connected = false;
+        needsSetup = false;
+    }
+
+    public function setNeedsSetup(value as Boolean) as Void {
+        needsSetup = value;
     }
 
     public function connect(device as Ble.ScanResult?) as Void {
@@ -50,7 +56,16 @@ class CameraDelegate {
         }
         var app = getApp();
         app.gopro = new GoProCamera(self, goproId as Number);
-        
+
+        if (needsSetup) {
+            needsSetup = false;
+            send(
+                GattRequestQueue.WRITE_CHARACTERISTIC,
+                GPM.UUID_NETWORK_CHAR,
+                GoProDecoder.PAIRING_FINISH
+            );
+        }
+
         var pushView = app.viewController.method(app.fromGlance ? :switchTo : :push);
         pushView.invoke(new RemoteView(), new RemoteDelegate(), WatchUi.SLIDE_LEFT);
         
@@ -81,6 +96,7 @@ class CameraDelegate {
                 pairingTimer.stop();
                 pairingTimer = null;
             }
+            needsSetup = false;
 
             if (goproId == null) { goproId = 0; }
             EM.raise(EM.ERR_COMM + goproId << 24, errCode, :ConnectErr);

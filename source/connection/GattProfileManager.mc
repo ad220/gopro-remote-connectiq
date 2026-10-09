@@ -18,10 +18,10 @@ module GattProfileManager {
         UUID_QUERY_RESPONSE_CHAR,
         UUID_CONTROL_MAX,
 
-        // UUID_MANAGE_SERVICE         = 90,
-        // UUID_NETWORK_CHAR,
-        // UUID_NETWORK_RESPONSE_CHAR,
-        // UUID_MANAGE_MAX,
+        UUID_MANAGE_SERVICE         = 90,
+        UUID_NETWORK_CHAR,
+        UUID_NETWORK_RESPONSE_CHAR,
+        UUID_MANAGE_MAX,
     }
     
     (:ble)
@@ -30,9 +30,16 @@ module GattProfileManager {
     }
 
     (:ble)
-    function registerProfile(serviceUuid as Ble.Uuid, charMin as Number, charMax as Number) as Void {
+    function getServiceUuid(gpxx as GoProUuid) as Ble.Uuid {
+        return gpxx < UUID_MANAGE_SERVICE
+            ? Ble.stringToUuid(GOPRO_CONTROL_SERVICE)
+            : getUuid(UUID_MANAGE_SERVICE);
+    }
+
+    (:ble)
+    function registerProfile(charMin as GoProUuid, charMax as GoProUuid) as Void {
         var profile = {
-            :uuid => serviceUuid
+            :uuid => getServiceUuid(charMin)
         };
         var chars = [];
         while(charMin<charMax) {

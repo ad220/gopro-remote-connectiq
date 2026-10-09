@@ -3,6 +3,7 @@ import Toybox.Lang;
 
 using Toybox.BluetoothLowEnergy as Ble;
 using ErrorManager as EM;
+using GattProfileManager as GPM;
 
 
 (:ble)
@@ -15,30 +16,32 @@ class GattRequestQueue {
         WRITE_CHARACTERISTIC,
     }
 
-    typedef GattRequest as {
-        :type           as RequestType,
-        :uuid           as Ble.Uuid,
-        :data           as ByteArray,
-        :timer          as TimerCallback?,
-    };
+    enum RequestParams {
+        REQ_TYPE,
+        REQ_UUID,
+        REQ_DATA,
+        REQ_TIMER,
+    }
+
+    typedef GattRequest as [RequestType, GPM.GoProUuid, ByteArray, TimerCallback?];
 
 
-    private var service         as Ble.Service;
+    private var device          as Ble.Device;
     protected var queue         as Array<GattRequest>;
     protected var isProcessing  as Boolean;
     protected var failCounter   as Number;
 
 
-    public function initialize(service as Ble.Service) {
-        self.service = service;
+    public function initialize(device as Ble.Device) {
+        self.device = device;
         self.queue = [];
         self.isProcessing = false;
         self.failCounter = 0;
     }
 
 
-    public function add(type as RequestType, uuid as Ble.Uuid, data as ByteArray) as Void {
-        var request = {:type => type, :uuid => uuid, :data => data, :timer => null} as GattRequest;
+    public function add(type as RequestType, gpxx as GPM.GoProUuid, data as ByteArray) as Void {
+        var request = [type, gpxx, data, null] as GattRequest;
         queue.add(request);
         if (!isProcessing) {
             failCounter = 0;
@@ -49,30 +52,33 @@ class GattRequestQueue {
 
     private function sendRequest() as Void {
         isProcessing = true;
-        var request = queue[0];
-        var characteristic = service.getCharacteristic(request[:uuid] as Ble.Uuid);
+        var req = queue[0];
+        var uuid = req[REQ_UUID];
+        var service = device.getService(GPM.getServiceUuid(uuid));
+        var characteristic = service!=null ? service.getCharacteristic(GPM.getUuid(uuid)) : null;
         if (characteristic == null) {
             onRequestFail(EM.SUB_BLE_BADSCD | 0x01);
             return;
         }
 
-        request[:timer] = getApp().timerController.start(method(:onRequestTimeout), 5, false);
+        req[REQ_TIMER] = getApp().timerController.start(method(:onRequestTimeout), 5, false);
 
+        var data = req[REQ_DATA];
         // Register notifications for characteristic
-        if (request[:type] == GattRequestQueue.REGISTER_NOTIFICATION) {
+        if (req[REQ_TYPE] == GattRequestQueue.REGISTER_NOTIFICATION) {
             var descriptor = characteristic.getDescriptor(Ble.cccdUuid());
             if (descriptor == null) {
                 onRequestFail(EM.SUB_BLE_BADSCD | 0x02);
                 return;
             }
 
-            try         { descriptor.requestWrite(request[:data] as ByteArray); }
+            try         { descriptor.requestWrite(data); }
             catch (ex)  { onRequestFail(EM.SUB_BLE_WRITE | 0x00); }
 
         // Write request.data in characteristic
         } else {
             try {
-                characteristic.requestWrite(request[:data] as ByteArray, {:writeType => Ble.WRITE_TYPE_DEFAULT});
+                characteristic.requestWrite(data, {:writeType => Ble.WRITE_TYPE_DEFAULT});
             }
             catch (ex)  { onRequestFail(EM.SUB_BLE_WRITE | 0x00); }
         }
@@ -105,16 +111,17 @@ class GattRequestQueue {
             return;
         }
         
+        var timer = request[REQ_TIMER];
         if (
             type != GattRequestQueue.REGISTER_NOTIFICATION and
-            !uuid.equals(request[:uuid]) or request[:timer] == null
+            !uuid.equals(request[REQ_UUID]) or timer == null
         ) {
             // System.println("[WARNING]   Desynchronized request queue");
             onRequestFail(EM.SUB_BLE_NULLQ | 0x05);
             return;
         }
         
-        (request[:timer] as TimerCallback).stop();
+        timer.stop();
         nextRequest();
     }
 
@@ -144,10 +151,11 @@ class GattRequestQueue {
 
     public function close() as Void {
         if (isProcessing) {
-            if (queue.size()<1 or queue[0][:timer] == null) {
+            var timer = queue[0][REQ_TIMER];
+            if (queue.size()<1 or timer == null) {
                 EM.raise(EM.ERR_COMM, EM.SUB_BLE_NULLQ | 0x06, :SilentErr);
             } else {
-                (queue[0][:timer] as TimerCallback).stop();
+                timer.stop();
             }
         }
         queue = [];

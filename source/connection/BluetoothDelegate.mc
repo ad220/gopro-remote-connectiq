@@ -126,13 +126,11 @@ class BluetoothDelegate extends CameraDelegate {
             return;
         }
 
-        var service = device.getService(Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE));
-        if (service != null) {
-            requestQueue = new GattRequestQueue(service);
-        } else {
+        if (device.getService(Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE)) == null) {
             onPairingFailed(EM.SUB_BLE_BADSCD | 0x00);
             return;
         }
+        requestQueue = new GattRequestQueue(device);
 
         CameraDelegate.onConnect(device);
 
@@ -180,7 +178,7 @@ class BluetoothDelegate extends CameraDelegate {
             EM.raise(EM.ERR_COMM, EM.SUB_BLE_NULLQ | 0x01, :CriticalErr);
             return;
         }
-        requestQueue.add(type, GattProfileManager.getUuid(uuid), data);
+        requestQueue.add(type, uuid, data);
     }
 
     public function onCharacteristicChanged(characteristic as Ble.Characteristic, value as ByteArray) as Void {
