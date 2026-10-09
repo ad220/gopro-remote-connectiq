@@ -119,6 +119,8 @@ class BluetoothDelegate extends CameraDelegate {
     }
 
     private function onConnect(device as Ble.Device?) as Void {
+        if (connected) { return; }
+
         BleAPI.setScanState(Ble.SCAN_STATE_OFF);
         
         if (device == null) { 
@@ -135,6 +137,7 @@ class BluetoothDelegate extends CameraDelegate {
         CameraDelegate.onConnect(device);
 
         // keep alive loop with 5s period
+        if (keepAliveTimer != null) { keepAliveTimer.stop(); }
         keepAliveTimer = getApp().timerController.start(method(:keepAlive), 25, true);
     }
 

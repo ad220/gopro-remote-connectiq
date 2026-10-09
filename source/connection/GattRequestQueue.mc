@@ -53,6 +53,8 @@ class GattRequestQueue {
     private function sendRequest() as Void {
         isProcessing = true;
         var req = queue[0];
+        req[REQ_TIMER] = getApp().timerController.start(method(:onRequestTimeout), 5, false);
+
         var uuid = req[REQ_UUID];
         var service = device.getService(GPM.getServiceUuid(uuid));
         var characteristic = service!=null ? service.getCharacteristic(GPM.getUuid(uuid)) : null;
@@ -60,8 +62,6 @@ class GattRequestQueue {
             onRequestFail(EM.SUB_BLE_BADSCD | 0x01);
             return;
         }
-
-        req[REQ_TIMER] = getApp().timerController.start(method(:onRequestTimeout), 5, false);
 
         var data = req[REQ_DATA];
         // Register notifications for characteristic
