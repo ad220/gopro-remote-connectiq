@@ -61,6 +61,7 @@ using GattProfileManager as GPM;
     }
 
     public function sleep() as Void {
+        gpControlService.device.connected = false;
         BleAPI.delegate.onConnectedStateChanged(
             gpControlService.device as Ble.Device,
             Ble.CONNECTION_STATE_DISCONNECTED

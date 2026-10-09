@@ -21,10 +21,11 @@ class CameraDelegate {
     }
 
     public function connect(device as Ble.ScanResult?) as Void {
-        pairingTimer = getApp().timerController.start(method(:onPairingTimeout), 50, false);
+        var app = getApp();
+        pairingTimer = app.timerController.start(method(:onPairingTimeout), 50, false);
 
-        var pushMethod = getApp().viewController.method(getApp().fromGlance ? :switchTo : :push);
-        var delegate = getApp().fromGlance ? null : new NotifDelegate();
+        var pushMethod = app.viewController.method(app.fromGlance ? :switchTo : :push);
+        var delegate = app.fromGlance ? null : new NotifDelegate();
         pushMethod.invoke(
             new NotifView(Rez.Strings.Connecting, NotifView.NOTIF_INFO),
             delegate, 
@@ -80,7 +81,8 @@ class CameraDelegate {
             if (app.gopro instanceof GoProCamera) {
                 app.gopro.stopProgressTimer();
             }
-
+            
+            // Will trigger System.exit if started fromGlance, always call in last.
             app.viewController.returnHome(Rez.Strings.Disconnected, NotifView.NOTIF_INFO);
             app.gopro = Helper.createNullObject() as GoProCamera;
         }

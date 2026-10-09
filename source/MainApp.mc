@@ -53,6 +53,7 @@ class GoProRemoteApp extends Application.AppBase {
             if (viewController instanceof ViewController)   { viewController.returnHome(null, null); }
             if (timerController instanceof TimerController) { timerController.stopAll(); }
             BleAPI.setDelegate(Helper.createNullObject() as Ble.BleDelegate);
+            gopro = Helper.createNullObject() as GoProCamera;
         }
 
         Storage.setValue("reportsEnabled", reportsEnabled);
@@ -66,6 +67,7 @@ class GoProRemoteApp extends Application.AppBase {
             if (viewController instanceof ViewController)   { viewController.returnHome(null, null); }
             if (timerController instanceof TimerController) { timerController.stopAll(); }
             Communications.registerForPhoneAppMessages(null);
+            gopro = Helper.createNullObject() as GoProCamera;
         }
         
         Storage.setValue("reportsEnabled", reportsEnabled);

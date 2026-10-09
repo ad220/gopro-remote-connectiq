@@ -155,8 +155,6 @@ class BluetoothDelegate extends CameraDelegate {
                 requestQueue = null;
             }
 
-            CameraDelegate.disconnect();
-
             if (camera != null) {
                 try { BleAPI.unpairDevice(camera); }
                 catch (ex) { EM.raise(EM.ERR_COMM, EM.SUB_BLE_API | 0x02, :SilentErr); }
@@ -166,6 +164,9 @@ class BluetoothDelegate extends CameraDelegate {
             else {
                 EM.raise(EM.ERR_NULL, 2, :SilentErr); // paranoid
             }
+
+            // Will trigger System.exit if started fromGlance, always call in last.
+            CameraDelegate.disconnect();
         }
     }
 
