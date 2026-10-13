@@ -30,9 +30,9 @@ This guide explains how to install, pair, and use the GoPro Remote widget on you
 - HERO12 Black
 - MAX2
 - HERO13 Black
-- HERO (2024)
+- HERO 2024
 - HERO Lit
-- Mission1 (Pro)
+- Mission1 (Pro (ILS))
 
 ### Garmin smartwatches
 - Approach® S70
@@ -130,6 +130,8 @@ Once connected, you'll see the main remote screen with:
   Shows the camera's current video settings (resolution, framerate, aspect ratio), or `. . .` while settings are still loading. Opens the video settings menu (see below). Only available while the camera is idle (not recording).
 
 While recording, only the shutter and hilight buttons remain active.
+
+You can also open the remote menu (with a long press on the *UP* button or whatever is the *MENU* intent on your watch). It currently only allows to switch between video and photo capture modes but it will have more features soon.
 
 
 ## Video settings menu
