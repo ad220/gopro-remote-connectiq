@@ -19,6 +19,7 @@ Every BLE capable GoPro camera is now supported (HERO4+ except HERO Session - RI
 - allows a Garmin watch to control any BLE capable GoPro camera.
 - press shutter (start and stop video)
 - add hilight when recording
+- switch between video and photo capture mode
 - change video settings manually (resolution, aspect ratio, lens and framerate)
 - change video settings with customizable presets
 - edit camera settings (hypersmooth, gps, leds, anti-flicker)
@@ -27,7 +28,6 @@ Every BLE capable GoPro camera is now supported (HERO4+ except HERO Session - RI
 ### Planned
 - better support for 360 cameras (switch between single lens and 360 mode)
 - protune settings and more
-- add photo and timelapse support
 
 ### Moved to another app
 - QR Code generator for GoPro Labs support (see [QR Control CIQ](https://github.com/ad220/gopro-qr-control-connectiq/) project)
@@ -42,7 +42,7 @@ Install the widget from the [Garmin Connect IQ store](https://apps.garmin.com/ap
 ### Getting started
 On the first launch, press the pair button on the main screen of the widget and put your GoPro in pairing mode. After being scanned by the watch, select the camera and wait for it to validate pairing. Once it is done, you should see the remote screen with the shutter button and the GoPro current settings.
 
-On this view, press the select button on your watch to start recording and the up button to hilight during capture. Using the up button when the camera is idle will open the camera settings menu and while the down down button will open the video settings menu. In this menu, you can apply a defined preset, manually change video settings or save the current applied video settings as a preset. Be careful as applying a preset with another anti-flicker setting than the current one (i.e. 50/60 fps) won't work properly.
+On this view, press the select button on your watch to start recording and the up button to hilight during capture. Using the *UP* button when the camera is idle will open the camera settings view, the *MENU* intent will allow you to switch between photo and video mode and finally the *DOWN* button will open the video settings. In this menu, you can apply a defined preset, manually change video settings or save the current applied video settings as a preset. Be careful as applying a preset with another anti-flicker setting than the current one (i.e. 50/60 fps) won't work properly.
 
 ## Screenshot gallery
 ![](documentation/screenshots/connect.png)
@@ -53,6 +53,10 @@ On this view, press the select button on your watch to start recording and the u
 ![](documentation/screenshots/settings.png)
 
 ## Changelog
+
+### v4.4
+- Add photo mode
+- Add support for Mission1 Pro ILS
 
 ### v4.3
 - Add support for Mission1 cameras (not tested)

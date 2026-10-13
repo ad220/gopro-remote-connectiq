@@ -39,7 +39,7 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
             }
         } else {
             getApp().gopro.queryValues(
-                CameraDelegate.REGISTER_AVAILABLE,
+                GoProDecoder.REGISTER_AVAILABLE,
                 [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE]b
             );
 
@@ -76,7 +76,11 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
             toRemote();
         }
         else if (menuId == CAMERA) {
-            unsubscribeAvailable();
+            getApp().gopro.queryValues(
+                GoProDecoder.UNREGISTER_AVAILABLE,
+                [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE]b
+            );
+
             var menu = ICM.newCustomMenu(0.15, null);
             var delegate = new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, []);
             menu.setFocus(3);
@@ -94,12 +98,6 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
         return false;
     }
 
-    private function unsubscribeAvailable() as Void {
-        getApp().gopro.queryValues(
-            CameraDelegate.UNREGISTER_AVAILABLE,
-            [GoProSettings.RESOLUTION, GoProSettings.LENS, GoProSettings.FRAMERATE]b
-        );
-    }
 
     (:debug)
     public function getId() as MenuId {

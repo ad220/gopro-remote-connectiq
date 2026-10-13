@@ -52,9 +52,7 @@ class MobileDelegate extends CameraDelegate {
         if (data instanceof Array) {
             var uuid = data[0];
             data.remove(uuid);
-            if (uuid == GattProfileManager.UUID_QUERY_RESPONSE_CHAR) {
-                decodeQuery([]b.addAll(data));
-            }
+            onMessage(uuid, []b.addAll(data));
         }
     }
 

@@ -10,6 +10,7 @@ class RemoteView extends WatchUi.View {
 
     private var hilightIcon as BitmapType?;
     private var settingsIcon as BitmapType?;
+    private var photoIcon as BitmapType?;
 
     function initialize() {
         View.initialize();
@@ -21,24 +22,24 @@ class RemoteView extends WatchUi.View {
         // Shutter button
         layout.add(new Button({
             :behavior   => :shutter,
-            :locX       => Screen.HEIGHT * 0.35,
-            :locY       => Screen.WIDTH * 0.2,
+            :locX       => Screen.WIDTH * 0.35,
+            :locY       => Screen.HEIGHT * 0.2,
             :width      => Screen.WIDTH * 0.4,
             :height     => Screen.HEIGHT * 0.4
         }));
         // Hilight button
         layout.add(new Button({
             :behavior   => :hilight,
-            :locX       => Screen.HEIGHT * 0.1,
-            :locY       => Screen.WIDTH * 0.3,
+            :locX       => Screen.WIDTH * 0.1,
+            :locY       => Screen.HEIGHT * 0.3,
             :width      => Screen.WIDTH * 0.2,
             :height     => Screen.HEIGHT * 0.2
         }));
         // Settings button
         layout.add(new Button({
-            :behavior   => :onMenu,
-            :locX       => Screen.HEIGHT * 0.2,
-            :locY       => Screen.WIDTH * 0.65,
+            :behavior   => :onNextPage,
+            :locX       => Screen.WIDTH * 0.2,
+            :locY       => Screen.HEIGHT * 0.65,
             :width      => Screen.WIDTH * 0.6,
             :height     => Screen.HEIGHT * 0.2
         }));
@@ -48,11 +49,13 @@ class RemoteView extends WatchUi.View {
     function onShow() as Void {
         hilightIcon = loadResource(Rez.Drawables.Hilight) as BitmapType;
         settingsIcon = loadResource(Rez.Drawables.Settings) as BitmapType;
+        photoIcon = loadResource(Rez.Drawables.Photo) as BitmapType;
     }
 
     function onHide() as Void {
         hilightIcon = null;
         settingsIcon = null;
+        photoIcon = null;
     }
 
     function onUpdate(dc as Dc) as Void {
@@ -60,12 +63,8 @@ class RemoteView extends WatchUi.View {
             dc.setAntiAlias(true);
         }
 
-        var gopro = getApp().gopro as GoProCamera?;
-        if (gopro == null) {
-            // ERA_CRASH(x11v4.0.1, x100v4.0.2): before null check
-            EM.raise(EM.ERR_NULL, 7, :CriticalErr);
-            return;
-        }
+        var gopro = Helper.safeGoProAccess(7);
+        if (gopro == null) { return; } // ERA_CRASH(x11v4.0.1, x100v4.0.2): before null check
 
         View.onUpdate(dc);
 
@@ -85,12 +84,12 @@ class RemoteView extends WatchUi.View {
             if (recordTime % 2) {
                 dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_BLACK);
             }
-            dc.fillCircle(0.38*Screen.WIDTH, 0.10*Screen.HEIGHT, 0.025*Screen.WIDTH);
+            dc.fillCircle(0.365*Screen.WIDTH, 0.125*Screen.HEIGHT, 0.025*Screen.WIDTH);
 
             // Draw the recording duration 
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
             var timeString = (recordTime / 60) + ":" + (recordTime % 60).format("%02d");
-            dc.drawText(Screen.WIDTH * 0.45, 0.1*Screen.HEIGHT, ICM.fontTiny, timeString, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+            dc.drawText(Screen.WIDTH * 0.445, 0.12*Screen.HEIGHT, ICM.fontSmall, timeString, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
 
             // Settings button
             dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
@@ -100,10 +99,19 @@ class RemoteView extends WatchUi.View {
         }
         dc.drawText(0.55*Screen.WIDTH, 0.765*Screen.HEIGHT, ICM.fontTiny, gopro.getDescription(), ICM.JTEXT_MID);
         
+
         // Draw icons
-        if (hilightIcon!=null and settingsIcon!=null) {
+        if (hilightIcon!=null and settingsIcon!=null and photoIcon != null) {
             dc.drawBitmap(0.156*Screen.WIDTH, 0.356*Screen.HEIGHT, hilightIcon);
             dc.drawBitmap(0.21*Screen.WIDTH, 0.72*Screen.HEIGHT, settingsIcon);
+
+            // Draw photos taken
+            if (gopro.getStatus(GoProCamera.PRESET_GRP) == GoProCamera.PGRP_PHOTO) {
+                dc.drawBitmap(0.345 * Screen.WIDTH, 0.085 * Screen.HEIGHT, photoIcon as BitmapType);
+                dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                dc.drawText(Screen.WIDTH * 0.45, 0.12*Screen.HEIGHT, ICM.fontSmall, gopro.getStatus(GoProCamera.PHOTOS_TAKEN),
+                    Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+            }
         } else {
             EM.raise(EM.ERR_NULL, 8, :WarningErr);
         }

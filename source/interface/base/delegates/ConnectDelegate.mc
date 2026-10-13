@@ -20,15 +20,13 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         self.lastPairedDevice = lastPairedDevice;
         self.delegate = new BluetoothDelegate();
         GattProfileManager.registerProfile(
-            Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE),
             GattProfileManager.UUID_COMMAND_CHAR, 
             GattProfileManager.UUID_CONTROL_MAX
         );
-        // GattProfileManager.registerProfile(
-        //     GattProfileManager.getUuid(GattProfileManager.UUID_MANAGE_SERVICE),
-        //     GattProfileManager.UUID_NETWORK_CHAR,
-        //     GattProfileManager.UUID_MANAGE_MAX
-        // );
+        GattProfileManager.registerProfile(
+            GattProfileManager.UUID_NETWORK_CHAR,
+            GattProfileManager.UUID_MANAGE_MAX
+        );
     }
 
     (:mobile)
@@ -43,9 +41,12 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         self.lastPairedDevice = lastPairedDevice;
         self.delegate = new BluetoothDelegate();
         GattProfileManager.registerProfile(
-            Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE),
             GattProfileManager.UUID_COMMAND_CHAR, 
             GattProfileManager.UUID_CONTROL_MAX
+        );
+        GattProfileManager.registerProfile(
+            GattProfileManager.UUID_NETWORK_CHAR,
+            GattProfileManager.UUID_MANAGE_MAX
         );
         
         BleAPI.device = new FakeGoProDevice(
@@ -57,16 +58,23 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
                 GoProSettings.HYPERSMOOTH       => GoProSettings.HS_HIGH,
                 GoProSettings.LED               => GoProSettings.LED_ALL_ON,
                 GoProSettings.GPS               => 1,
+                GoProSettings.PHOTO_LENS        => GoProSettings.WIDE_7MP,
             } as FakeGoProDevice.FakeGoProSettings,
             {
+                GoProCamera.CAPTURE_MODE        => GoProCamera.MODE_VIDEO,
                 GoProCamera.ENCODING            => 0,
                 GoProCamera.ENCODING_DURATION   => 0,
                 GoProCamera.SD_REMAINING        => 6942,
-                GoProCamera.BATTERY             => 42
+                GoProCamera.BATTERY             => 42,
+                GoProCamera.PHOTOS_TAKEN        => 1234,
+                GoProCamera.PRESET_GRP          => GoProCamera.PGRP_VIDEO,
             } as FakeGoProDevice.FakeGoProStatuses,
-            new FakeGoProSpecs.SpecsMission1Pro()
+            new FakeGoProSpecs.SpecsH11Mini()
         );
         BleAPI.scannedDevices[0].goproId = BleAPI.device.specs.cameraId;
+
+        var processMethod = BleAPI.device.method(:processRequests);
+        getApp().timerController.start(processMethod, 1, true);
     }
 
     
@@ -99,6 +107,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
 
     (:ble)
     public function startScan() as Void {
+        delegate.setNeedsSetup(true);
         var scanMenu = ICM.newCustomMenu(0.1, 0.3);
         var menuDelegate = new ScanMenuDelegate(scanMenu, method(:onScanResult));
         (delegate as BluetoothDelegate).setScanMenuDelegate(menuDelegate);

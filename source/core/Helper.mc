@@ -1,5 +1,7 @@
 import Toybox.Lang;
 
+using ErrorManager as EM;
+
 module Helper {
     (:mobile)
     function customSort(array as Array, comp as Lang.Comparator?) as Void {
@@ -25,6 +27,21 @@ module Helper {
     (:ble :inline)
     function customSort(array as Array, comp as Lang.Comparator?) as Void {
         array.sort(comp);
+    }
+
+    (:typecheck(false))
+    function safeGoProAccess(callsiteIdx as Number?) as GoProCamera? {
+        var camera = getApp().gopro;
+
+        if (! (camera instanceof GoProCamera) and callsiteIdx != null) {
+            EM.raise(EM.ERR_NULL, callsiteIdx, :CriticalErr);
+        }
+        return camera;
+    }
+
+    (:inline)
+    function createNullObject() as Object? {
+        return null;
     }
 
     (:mobile)

@@ -31,6 +31,7 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
         else if (setting == GoProSettings.FRAMERATE)    { titleId = Rez.Strings.Framerate;      comparator = new FramerateComparator(); }
         else if (setting == GoProSettings.LED)          { titleId = Rez.Strings.Led; }
         else if (setting == GoProSettings.HYPERSMOOTH)  { titleId = Rez.Strings.HyperSmooth; }
+        else if (setting == GoProSettings.PHOTO_LENS)   { titleId = Rez.Strings.PhotoLens;      comparator = new PhotoLensComparator(); }
         else {
             // System.println("[WARNING]   Unknown Setting id");
             EM.raise(EM.ERR_CAM | EM.SUB_CAM_ID | 0x01 << 16, setting, :CriticalErr);

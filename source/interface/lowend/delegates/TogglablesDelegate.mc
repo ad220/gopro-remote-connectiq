@@ -19,7 +19,7 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
 
         self.menu = menu;
         self.gopro = getApp().gopro;
-        gopro.queryValues(CameraDelegate.GET_STATUS, [GoProCamera.BATTERY, GoProCamera.SD_REMAINING]b);
+        gopro.queryValues(GoProDecoder.GET_STATUS, [GoProCamera.BATTERY, GoProCamera.SD_REMAINING]b);
 
         var flicker = gopro.getSetting(GoProSettings.FLICKER);
         if (flicker == null) { flicker = 0; }

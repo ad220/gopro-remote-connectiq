@@ -92,9 +92,9 @@ class ScanMenuDelegate extends WatchUi.Menu2InputDelegate {
 
                 if (label == null) {
                     // from Open GoPro documentation, Model ID is given in byte 13
-                    var camId = CameraDelegate.getGoProId(results[i]);
+                    var camId = GoProDecoder.getGoProId(results[i]);
 
-                    label = CameraDelegate.goproModelString[camId];
+                    label = GoProCamera.modelStringTable[camId];
                     if (label instanceof Symbol) {
                         label = ICM.loadString(label);
                     } else {

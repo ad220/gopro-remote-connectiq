@@ -12,6 +12,7 @@ module FakeGoProSpecs {
         var availableHypersmooth    as ByteArray;
         var availableLed            as ByteArray;
         var availableGps            as ByteArray;
+        var availablePhotoLens      as ByteArray;
     };
 
     function getSpecsH11M()     as ISpecs { return new SpecsH11Mini(); }
@@ -19,7 +20,7 @@ module FakeGoProSpecs {
     function getSpecsH5S()      as ISpecs { return new SpecsH5Session(); }
 
     class SpecsH11Mini {
-        const cameraId = CameraDelegate.GP_HERO11M;
+        const cameraId = GoProCamera.GP_HERO11M;
 
         const availableSettingsMap = {
             26  => {
@@ -108,10 +109,12 @@ module FakeGoProSpecs {
         ]b;
 
         const availableGps = []b;
+
+        const availablePhotoLens = []b;
     }
 
     class SpecsMission1Pro {
-        const cameraId = CameraDelegate.GP_MISSION1PRO;
+        const cameraId = GoProCamera.GP_MISSION1PRO;
 
         const availableSettingsMap = {
             40  => {
@@ -159,7 +162,7 @@ module FakeGoProSpecs {
 
         const availableFlicker = [
             GoProSettings.NTSC,
-            GoProSettings.PAL
+            GoProSettings.PAL,
         ]b;
 
         const availableLed = [
@@ -174,10 +177,14 @@ module FakeGoProSpecs {
         ]b;
 
         const availableGps = [0, 1]b;
+        const availablePhotoLens = [
+            GoProSettings.WIDE_FULL,
+            GoProSettings.LINEAR_FULL,
+        ]b;
     }
 
     class SpecsH5Session {
-        const cameraId = CameraDelegate.GP_HERO5S;
+        const cameraId = GoProCamera.GP_HERO5S;
 
         const availableSettingsMap = {
             1   => {
@@ -220,7 +227,7 @@ module FakeGoProSpecs {
 
         const availableFlicker = [
             GoProSettings.NTSC,
-            GoProSettings.PAL
+            GoProSettings.PAL,
         ]b;
 
         const availableLed = [
@@ -235,10 +242,15 @@ module FakeGoProSpecs {
         ]b;
 
         const availableGps = [0, 1]b;
+        const availablePhotoLens = [
+            GoProSettings.WIDE_5MP,
+            GoProSettings.WIDE_7MP,
+            GoProSettings.MEDIUM_7MP,
+        ]b;
     }
 
     class SpecsUnknown {
-        const cameraId = CameraDelegate.GP_UNKNOWN;
+        const cameraId = GoProCamera.GP_UNKNOWN;
 
         const availableSettingsMap    = {
             42  => {
@@ -260,14 +272,16 @@ module FakeGoProSpecs {
         const availableHypersmooth    = [52, 63]b;
         const availableLed            = [7, 8]b;
         const availableGps            = [9, 10]b;
+        const availablePhotoLens      = [78, 91]b;
     }
 
     class SpecsEmpty {
-        const cameraId                = CameraDelegate.GP_UNKNOWN;
+        const cameraId                = GoProCamera.GP_UNKNOWN;
         const availableSettingsMap    = {} as SpecsMap;
         const availableFlicker        = []b;
         const availableHypersmooth    = []b;
         const availableLed            = []b;
         const availableGps            = []b;
+        const availablePhotoLens      = []b;
     }
 }

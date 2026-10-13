@@ -40,7 +40,14 @@
     <!-- $$$ Small -->
     <string id="Pair">PAIR</string>
     <string id="Connect">CONNECT</string>
-    
+
+    <!-- Remote Menu -->
+    <!-- $$$ -->
+    <string id="AdvancedSettings">Advanced settings</string>
+    <string id="SwitchMode">Switch capture mode</string>
+    <!-- <string id="Photo">Photo</string>
+    <string id="Video">Video</string> -->
+
     <!-- SettingsMenu -->
     <!-- $$$ Small -->
     <string id="Cinema">Cinema</string>
@@ -59,6 +66,7 @@
     <string id="Lens">Lens</string>
     <string id="Resolution">Resolution</string>
     <string id="Ratio">Aspect ratio</string>
+    <string id="PhotoLens">Photo Lens</string>
     <string id="Gps" translatable="false">GPS</string>
     <string id="Led" translatable="false">LED</string>
     <string id="HyperSmooth" translatable="false">HyperSmooth</string>
