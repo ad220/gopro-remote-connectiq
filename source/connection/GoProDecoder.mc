@@ -40,7 +40,6 @@ class GoProDecoder {
         GoProSettings.FORMAT, 
         GoProSettings.EIS,
         GoProSettings.PHOTO_RES,
-        GoProCamera.CAPTURE_MODE,
     ]b;
 
     public static const NEW_SETTINGS   = [
@@ -48,7 +47,6 @@ class GoProDecoder {
         GoProSettings.FLICKER,
         GoProSettings.HYPERSMOOTH,
         GoProSettings.PHOTO_LENS,
-        GoProCamera.PRESET_GRP,
     ]b;
 
     // pairing finish loadout as per open gopro spec, with phoneName="garmin"
@@ -168,12 +166,17 @@ class GoProDecoder {
             values = idsBuffer;
         }
 
-        if (goproId < GoProCamera.GP_MAX and queryId & 0xE == 0x2) {
+        if (goproId < GoProCamera.GP_MAX and queryId & 0xF == 0x2) {
             var idx;
             for (var i=0; i<NEW_SETTINGS.size(); i+=1) {
                 idx = values.indexOf(NEW_SETTINGS[i]);
                 if (idx != -1) { values[idx] = OLD_SETTINGS[i]; }
             }
+        }
+        
+        if (goproId < GoProCamera.GP_HERO8 and queryId & 0xF == 0x3) {
+            var idx = values.indexOf(GoProCamera.PRESET_GRP);
+            if (idx != -1) { values[idx] = GoProCamera.CAPTURE_MODE; }
         }
 
         request.addAll(values);
