@@ -27,4 +27,8 @@ class RemoteMenuDelegate extends WatchUi.Menu2InputDelegate {
             onBack();
         }
     }
+
+    public function onBack() as Void {
+        getApp().viewController.pop(SLIDE_LEFT);
+    }
 }
