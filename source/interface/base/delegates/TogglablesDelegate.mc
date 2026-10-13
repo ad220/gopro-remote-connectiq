@@ -18,10 +18,13 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
         self.view = view;
         self.camera = getApp().gopro;
 
-        camera.queryValues(
-            GoProDecoder.GET_AVAILABLE,
-            [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.HYPERSMOOTH, GoProSettings.GPS]b
-        );
+        camera.queryValues(GoProDecoder.GET_STATUS, [GoProCamera.BATTERY, GoProCamera.SD_REMAINING]b);
+        camera.queryValues(GoProDecoder.REGISTER_SETTING, view.togglableIds);
+        camera.queryValues(GoProDecoder.GET_AVAILABLE, view.togglableIds);
+    }
+
+    public function update() as Void {
+        view.update();
     }
 
     public function onKey(keyEvent as KeyEvent) as Boolean {
@@ -55,43 +58,16 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
         }
         if (button instanceof Togglable) {
             view.onTouch(button);
+
+            var id = button.identifier;
+            if (id == GoProCamera.SLEEP) {
+                getApp().gopro.sendCommand(GoProCamera.SLEEP);
+            } else {
+                ICM.toggleOrPick(id as GoProSettings.SettingId);
+            }
             return true;
         }
         return false;
-    }
-
-    (:keep)
-    public function onFlicker() as Void {
-        var flicker = camera.getSetting(GoProSettings.FLICKER);
-        if (flicker != null) { // expected behavior with MAX2 cam
-            view.getHilighted().toggleState(flicker & 0x01 == 0);
-            camera.sendSetting(GoProSettings.FLICKER, flicker ^ 0x01);
-        }
-    }
-    
-    (:keep)
-    public function onPower() as Void {
-        view.getHilighted().toggleState(true);
-        camera.sendCommand(GoProCamera.SLEEP);
-    }
-    
-    (:keep)
-    public function onLed() as Void {
-        var led = ICM.toggleOrPick(GoProSettings.LED);
-        if (led != null) { view.getHilighted().toggleState(led & 3 != 0); }
-        // off-values are 0, 4 and 100 while on-values are 1, 2, 3 and 5
-    }
-    
-    (:keep)
-    public function onGps() as Void {
-        var gps = camera.toggleSetting(GoProSettings.GPS);
-        if (gps != null) { view.getHilighted().toggleState(gps != 0); }
-    }
-
-    (:keep)
-    public function onStabilize() as Void {
-        var stab = ICM.toggleOrPick(GoProSettings.HYPERSMOOTH);
-        if (stab != null) { view.getHilighted().toggleState(stab != 0); }
     }
 
     public function onSwipe(swipeEvent as SwipeEvent) as Boolean {
@@ -102,7 +78,9 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     }
 
     public function onBack() as Boolean {
-        getApp().viewController.pop(SLIDE_UP);
+        var app = getApp();
+        app.viewController.pop(SLIDE_UP);
+        app.gopro.queryValues(GoProDecoder.UNREGISTER_SETTING, view.togglableIds);
         return true;
     }
 }

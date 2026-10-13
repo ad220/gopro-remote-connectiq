@@ -299,6 +299,20 @@ class GoProSettings {
         return settings;
     }
 
+    public function isEnabled(id as SettingId) as Boolean {
+        var ret = false;
+        var value = settings.get(id);
+        if (value == null) {}
+        
+        // off-values are 0, 4 and 100 while on-values are 1, 2, 3 and 5
+        else if (id == LED)         { ret = value & 3 != 0; }
+        else if (id == FLICKER)     { ret = value & 1 != 0; }
+        else if (id == HYPERSMOOTH) { ret = value != 0;}
+        else if (id == GPS)         { ret = value != 0;}
+
+        return ret;
+    }
+
     public static function getLabel(id as GoProSettings.SettingId, setting as Number?) as String or ResourceId {
         var label = "";
 
