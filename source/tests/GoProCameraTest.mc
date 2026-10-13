@@ -989,6 +989,55 @@ module GoProCameraTest {
 
 
     (:test)
+    function testTimelapseMultishotFallback(logger as Logger) as Boolean {
+        var result = true;
+
+        for (var k=0; k<testDeviceIds.size(); k+=1)
+        { // start of testDevice loop
+
+        TestInit.initDefaults();
+        TestInit.initFake(testDeviceSpecs[k].invoke());
+
+        var device = BleAPI.device as FakeGoProDevice;
+
+        if (testDeviceIds[k] < GoProCamera.GP_HERO8) {
+            device.statuses.put(GoProCamera.CAPTURE_MODE, GoProCamera.MODE_MULTISHOT);
+        } else {
+            device.statuses.put(GoProCamera.PRESET_GRP, GoProCamera.PGRP_TIMELAPSE);
+        }
+
+        TestInit.initConnection(testDeviceIds[k]);
+
+        var camera = getApp().gopro;
+        BleAPI.device.processRequests();
+
+        camera.sendCommand(GoProCamera.LOAD_PGRP);
+        BleAPI.device.processRequests();
+        var mode = camera.getStatus(GoProCamera.PRESET_GRP) as Number;
+
+        if (mode != GoProCamera.PGRP_VIDEO and mode != GoProCamera.PGRP_PHOTO) {
+            logDeviceError(logger, "Switching capture mode should have fallback to video or video: " \
+                                    + mode, k);
+            result = false;
+        }
+        
+        camera.sendCommand(GoProCamera.LOAD_PGRP);
+        BleAPI.device.processRequests();
+        var newMode = camera.getStatus(GoProCamera.PRESET_GRP);
+
+        if (newMode != mode ^ 1) {
+            logDeviceError(logger, "Switching capture mode again should have switch between photo and video, prev: " \
+                                    + mode + ", now: " + newMode, k);
+            result = false;
+        }
+
+        } // end of testDevice loop
+
+        return result;
+    }
+
+
+    (:test)
     function testRecordingCamera(logger as Logger) as Boolean {
         TestInit.initDefaults();
         TestInit.initFake(null);
