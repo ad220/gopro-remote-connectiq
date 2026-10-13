@@ -162,18 +162,22 @@ class GoProCamera extends GoProSettings {
         );
     }
 
-    public function toggleSetting(id as GoProSettings.SettingId) as Number? {
+    public function toggleSetting(id as GoProSettings.SettingId) as Void {
         // toggle between two available setting values
         // return sent setting value
 
-        var available = getAvailableSettings(id); 
-
-        if (available.size() != 2) { return null; }
-
         var currentSetting = getSetting(id);
+        if (id == GoProSettings.BEEPS) {
+            sendSetting(id, currentSetting == 0 ? 100 : 0);
+            return;
+        }
+
+        var available = getAvailableSettings(id); 
+        if (available.size() != 2) { return; }
+
         if (currentSetting == null) {
             EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x02 << 16, id, :WarningErr);
-            return null;
+            return;
         }
 
         var index = available.indexOf(currentSetting);
@@ -183,12 +187,10 @@ class GoProCamera extends GoProSettings {
                 currentSetting << 8 + id,
                 :WarningErr
             );
-            return null;
+            return;
         }
 
-        currentSetting = available[index ^ 1];
-        sendSetting(id, currentSetting);
-        return currentSetting;
+        sendSetting(id, available[index ^ 1]);
     }
 
     public function sendPreset(preset as GoProPreset) as Void {

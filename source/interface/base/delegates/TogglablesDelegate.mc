@@ -59,11 +59,11 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
         if (button instanceof Togglable) {
             view.onTouch(button);
 
-            var id = button.identifier;
-            if (id == GoProCamera.SLEEP) {
-                getApp().gopro.sendCommand(GoProCamera.SLEEP);
+            var id = button.identifier as GoProSettings.SettingId;
+            if (id == GoProSettings.BEEPS) {
+                getApp().gopro.toggleSetting(id);
             } else {
-                ICM.toggleOrPick(id as GoProSettings.SettingId);
+                ICM.toggleOrPick(id);
             }
             return true;
         }

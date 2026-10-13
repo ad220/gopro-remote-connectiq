@@ -66,6 +66,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
                 GoProSettings.EV_COMP           => 4,
                 GoProSettings.ISO_MAX           => 4,
                 GoProSettings.ISO_MIN           => 8,
+                GoProSettings.BEEPS             => 100,
             } as FakeGoProDevice.FakeGoProSettings,
             {
                 GoProCamera.CAPTURE_MODE        => GoProCamera.MODE_VIDEO,

@@ -20,7 +20,7 @@ class TogglablesView extends WatchUi.View {
         self.currentHilight = 0;
         self.togglableIds = [
             GoProSettings.FLICKER,
-            GoProCamera.SLEEP,
+            GoProSettings.BEEPS,
             GoProSettings.LED,
             GoProSettings.GPS,
             GoProSettings.HYPERSMOOTH,

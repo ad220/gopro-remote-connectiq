@@ -212,6 +212,7 @@ using GattProfileManager as GPM;
 
                     var idx = GoProDecoder.OLD_SETTINGS.indexOf(id);
                     if (idx != -1) { id = GoProDecoder.NEW_SETTINGS[idx]; }
+                    if (id == GoProSettings.BEEPS_OLD) { id = GoProSettings.BEEPS; }
 
                     var value = data[i+2];
                     var available = availableValues(id);
@@ -309,6 +310,7 @@ using GattProfileManager as GPM;
 
         var idx = GoProDecoder.OLD_SETTINGS.indexOf(id);
         if (idx != -1) { internalId = GoProDecoder.NEW_SETTINGS[idx]; }
+        if (id == GoProSettings.BEEPS_OLD) { internalId = GoProSettings.BEEPS; }
 
         updateNotif(notifSettings, query, internalId);
         if (query >= 0x70) { return; }
