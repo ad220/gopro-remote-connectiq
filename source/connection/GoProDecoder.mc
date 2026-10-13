@@ -40,7 +40,6 @@ class GoProDecoder {
         GoProSettings.FORMAT, 
         GoProSettings.EIS,
         GoProSettings.PHOTO_RES,
-        GoProCamera.CAPTURE_MODE,
     ]b;
 
     public static const NEW_SETTINGS   = [
@@ -48,9 +47,13 @@ class GoProDecoder {
         GoProSettings.FLICKER,
         GoProSettings.HYPERSMOOTH,
         GoProSettings.PHOTO_LENS,
-        GoProCamera.PRESET_GRP,
     ]b;
 
+    // pairing finish loadout as per open gopro spec, with phoneName="garmin"
+    // see https://gopro.github.io/OpenGoPro/docs/ble/protocol/protobuf#requestpairingfinish
+    public static const PAIRING_FINISH =
+        [0x0C, 0x03, 0x01, 0x08, 0x00, 0x12, 0x06,
+         0x67, 0x61, 0x72, 0x6D, 0x69, 0x6E]b;
 
     private var goproId             as Number;
     private var queryResponseBuffer as ByteArray?;
@@ -113,9 +116,9 @@ class GoProDecoder {
 
             if (goproId < GoProCamera.GP_MAX) {
                 request[1] = GoProCamera.SWITCH_MODE;
-                request.addAll([0x01, (mode - GoProCamera.PGRP_VIDEO) & 1 ^ 1]);
+                request.addAll([0x01, mode & 1 ^ 1]);
             } else {
-                request.addAll([0x04, 0, 0, GoProCamera.PGRP_VIDEO >> 8, mode & 0xFF ^ 1]);
+                request.addAll([0x04, 0, 0, GoProCamera.PGRP_VIDEO >> 8, mode & 1 ^ GoProCamera.PGRP_PHOTO & 0xFF]);
             }
         }
 
@@ -163,12 +166,17 @@ class GoProDecoder {
             values = idsBuffer;
         }
 
-        if (goproId < GoProCamera.GP_MAX and queryId & 0xE == 0x2) {
+        if (goproId < GoProCamera.GP_MAX and queryId & 0xF == 0x2) {
             var idx;
             for (var i=0; i<NEW_SETTINGS.size(); i+=1) {
                 idx = values.indexOf(NEW_SETTINGS[i]);
                 if (idx != -1) { values[idx] = OLD_SETTINGS[i]; }
             }
+        }
+        
+        if (goproId < GoProCamera.GP_HERO8 and queryId & 0xF == 0x3) {
+            var idx = values.indexOf(GoProCamera.PRESET_GRP);
+            if (idx != -1) { values[idx] = GoProCamera.CAPTURE_MODE; }
         }
 
         request.addAll(values);
@@ -256,7 +264,7 @@ class GoProDecoder {
 
             if (length == 0) {
                 EM.raise(EM.ERR_MSG | EM.SUB_MSG_STRUCT | queryType << 16, type, :SilentErr);
-                break;
+                continue;
             }
 
             value = data.slice(i+2, i+2+length);

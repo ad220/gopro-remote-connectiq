@@ -22,24 +22,24 @@ class RemoteView extends WatchUi.View {
         // Shutter button
         layout.add(new Button({
             :behavior   => :shutter,
-            :locX       => Screen.HEIGHT * 0.35,
-            :locY       => Screen.WIDTH * 0.2,
+            :locX       => Screen.WIDTH * 0.35,
+            :locY       => Screen.HEIGHT * 0.2,
             :width      => Screen.WIDTH * 0.4,
             :height     => Screen.HEIGHT * 0.4
         }));
         // Hilight button
         layout.add(new Button({
             :behavior   => :hilight,
-            :locX       => Screen.HEIGHT * 0.1,
-            :locY       => Screen.WIDTH * 0.3,
+            :locX       => Screen.WIDTH * 0.1,
+            :locY       => Screen.HEIGHT * 0.3,
             :width      => Screen.WIDTH * 0.2,
             :height     => Screen.HEIGHT * 0.2
         }));
         // Settings button
         layout.add(new Button({
             :behavior   => :onNextPage,
-            :locX       => Screen.HEIGHT * 0.2,
-            :locY       => Screen.WIDTH * 0.65,
+            :locX       => Screen.WIDTH * 0.2,
+            :locY       => Screen.HEIGHT * 0.65,
             :width      => Screen.WIDTH * 0.6,
             :height     => Screen.HEIGHT * 0.2
         }));
@@ -55,6 +55,7 @@ class RemoteView extends WatchUi.View {
     function onHide() as Void {
         hilightIcon = null;
         settingsIcon = null;
+        photoIcon = null;
     }
 
     function onUpdate(dc as Dc) as Void {

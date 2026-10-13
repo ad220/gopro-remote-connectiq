@@ -20,15 +20,13 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         self.lastPairedDevice = lastPairedDevice;
         self.delegate = new BluetoothDelegate();
         GattProfileManager.registerProfile(
-            Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE),
             GattProfileManager.UUID_COMMAND_CHAR, 
             GattProfileManager.UUID_CONTROL_MAX
         );
-        // GattProfileManager.registerProfile(
-        //     GattProfileManager.getUuid(GattProfileManager.UUID_MANAGE_SERVICE),
-        //     GattProfileManager.UUID_NETWORK_CHAR,
-        //     GattProfileManager.UUID_MANAGE_MAX
-        // );
+        GattProfileManager.registerProfile(
+            GattProfileManager.UUID_NETWORK_CHAR,
+            GattProfileManager.UUID_MANAGE_MAX
+        );
     }
 
     (:mobile)
@@ -43,9 +41,12 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
         self.lastPairedDevice = lastPairedDevice;
         self.delegate = new BluetoothDelegate();
         GattProfileManager.registerProfile(
-            Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE),
             GattProfileManager.UUID_COMMAND_CHAR, 
             GattProfileManager.UUID_CONTROL_MAX
+        );
+        GattProfileManager.registerProfile(
+            GattProfileManager.UUID_NETWORK_CHAR,
+            GattProfileManager.UUID_MANAGE_MAX
         );
         
         BleAPI.device = new FakeGoProDevice(
@@ -106,6 +107,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
 
     (:ble)
     public function startScan() as Void {
+        delegate.setNeedsSetup(true);
         var scanMenu = ICM.newCustomMenu(0.1, 0.3);
         var menuDelegate = new ScanMenuDelegate(scanMenu, method(:onScanResult));
         (delegate as BluetoothDelegate).setScanMenuDelegate(menuDelegate);

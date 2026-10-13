@@ -119,6 +119,8 @@ class BluetoothDelegate extends CameraDelegate {
     }
 
     private function onConnect(device as Ble.Device?) as Void {
+        if (connected) { return; }
+
         BleAPI.setScanState(Ble.SCAN_STATE_OFF);
         
         if (device == null) { 
@@ -126,17 +128,16 @@ class BluetoothDelegate extends CameraDelegate {
             return;
         }
 
-        var service = device.getService(Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE));
-        if (service != null) {
-            requestQueue = new GattRequestQueue(service);
-        } else {
+        if (device.getService(Ble.stringToUuid(GattProfileManager.GOPRO_CONTROL_SERVICE)) == null) {
             onPairingFailed(EM.SUB_BLE_BADSCD | 0x00);
             return;
         }
+        requestQueue = new GattRequestQueue(device);
 
         CameraDelegate.onConnect(device);
 
         // keep alive loop with 5s period
+        if (keepAliveTimer != null) { keepAliveTimer.stop(); }
         keepAliveTimer = getApp().timerController.start(method(:keepAlive), 25, true);
     }
 
@@ -157,8 +158,6 @@ class BluetoothDelegate extends CameraDelegate {
                 requestQueue = null;
             }
 
-            CameraDelegate.disconnect();
-
             if (camera != null) {
                 try { BleAPI.unpairDevice(camera); }
                 catch (ex) { EM.raise(EM.ERR_COMM, EM.SUB_BLE_API | 0x02, :SilentErr); }
@@ -168,6 +167,9 @@ class BluetoothDelegate extends CameraDelegate {
             else {
                 EM.raise(EM.ERR_NULL, 2, :SilentErr); // paranoid
             }
+
+            // Will trigger System.exit if started fromGlance, always call in last.
+            CameraDelegate.disconnect();
         }
     }
 
@@ -180,7 +182,7 @@ class BluetoothDelegate extends CameraDelegate {
             EM.raise(EM.ERR_COMM, EM.SUB_BLE_NULLQ | 0x01, :CriticalErr);
             return;
         }
-        requestQueue.add(type, GattProfileManager.getUuid(uuid), data);
+        requestQueue.add(type, uuid, data);
     }
 
     public function onCharacteristicChanged(characteristic as Ble.Characteristic, value as ByteArray) as Void {

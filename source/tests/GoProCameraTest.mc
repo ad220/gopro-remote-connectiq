@@ -78,6 +78,29 @@ module GoProCameraTest {
         }
     }
 
+    class UnpairOrderDelegate extends MockBluetoothDelegate {
+
+        var unpairSeenWhileConnected as Boolean = false;
+
+        function initialize() {
+            MockBluetoothDelegate.initialize();
+        }
+
+        function onConnectedStateChanged(device as Ble.Device, state as Ble.ConnectionState) as Void {
+            if (state == Ble.CONNECTION_STATE_DISCONNECTED) {
+                // Records whether the link was still up when the
+                // unpair callback fired. With the correct order
+                // (unpair before CameraDelegate.disconnect), the
+                // delegate is still connected here; with the reversed
+                // order it is already torn down.
+                unpairSeenWhileConnected = isConnected();
+            }
+            BluetoothDelegate.onConnectedStateChanged(device, state);
+        }
+    }
+
+    const expectedPairingFinish = [0x0C, 0x03, 0x01, 0x08, 0x00, 0x12, 0x06, 0x67, 0x61, 0x72, 0x6D, 0x69, 0x6E]b;
+
     (:test)
     function testModelIds(logger as Logger) as Boolean {
         return GoProCamera.modelIdTable.size() == GoProCamera.modelStringTable.size(); 
@@ -132,6 +155,59 @@ module GoProCameraTest {
     }
 
     
+    (:test)
+    function testDisconnect(logger as Logger) as Boolean {
+        TestInit.initDefaults();
+        TestInit.initFake(null);
+
+        BleAPI.pairedDevices = [];
+
+        var delegate = new UnpairOrderDelegate();
+        delegate.connect(new BleAPI.MockScanResult(0, null, GoProCamera.GP_HERO11M) as Ble.ScanResult);
+
+        var device = delegate.getDevice();
+        if (device == null) {
+            logger.error("Delegate's BLE device is null after connection");
+            return false;
+        }
+
+        delegate.disconnect();
+
+        var result = true;
+
+        if (device.isConnected()) {
+            logger.error("BLE device is still connected after disconnect");
+            result = false;
+        }
+
+        if (BleAPI.pairedDevices.indexOf(device) != -1) {
+            logger.error("BLE device was not unpaired after disconnect");
+            result = false;
+        }
+
+        if (delegate.getDevice() != null) {
+            logger.error("Delegate's BLE device is not null after disconnect");
+            result = false;
+        }
+
+        if (delegate.getQueue() != null) {
+            logger.error("Request queue should be null after disconnect");
+            result = false;
+        }
+
+        // Regression check for the glance ghost keep-alive: unpairing must
+        // happen before CameraDelegate.disconnect(), because the latter
+        // triggers System.exit when launched from the glance, so anything
+        // placed after it (e.g. unpairDevice) never runs.
+        if (!delegate.unpairSeenWhileConnected) {
+            logger.error("Device was unpaired after teardown instead of before it");
+            result = false;
+        }
+
+        return result;
+    }
+
+
     (:test)
     function testPairingFail(logger as Logger) as Boolean {
         TestInit.initDefaults();
@@ -206,6 +282,96 @@ module GoProCameraTest {
         }
 
         return result;
+    }
+
+
+    (:test)
+    function testPairingFinish(logger as Logger) as Boolean {
+        TestInit.initDefaults();
+        TestInit.initFake(null);
+
+        BleAPI.pairedDevices = [];
+
+        var delegate = new MockBluetoothDelegate();
+        delegate.connect(new BleAPI.MockScanResult(0, null, GoProCamera.GP_HERO11M) as Ble.ScanResult);
+
+        var device = BleAPI.device as FakeGoProDevice;
+
+        if (device.requests.size() > 0 && device.requests[0][0].equals(GPM.UUID_NETWORK_CHAR)) {
+            logger.error("Pairing finish should not be sent unless connecting from the scan menu");
+            delegate.disconnect();
+            return false;
+        }
+
+        delegate.disconnect();
+        return true;
+    }
+
+
+    (:test)
+    function testPairingFinishOnScan(logger as Logger) as Boolean {
+        TestInit.initDefaults();
+        TestInit.initFake(null);
+
+        BleAPI.pairedDevices = [];
+
+        var delegate = new MockBluetoothDelegate();
+        delegate.setNeedsSetup(true);
+        delegate.connect(new BleAPI.MockScanResult(0, null, GoProCamera.GP_HERO11M) as Ble.ScanResult);
+
+        var device = BleAPI.device as FakeGoProDevice;
+
+        if (device.requests.size() < 1) {
+            logger.error("No request queued for pairing finish");
+            delegate.disconnect();
+            return false;
+        }
+
+        var sent = device.requests[0];
+        if (!sent[0].equals(GPM.UUID_NETWORK_CHAR) or !sent[1].equals(expectedPairingFinish)) {
+            logger.error("Wrong pairing finish request, expected: " \
+                            + [GPM.UUID_NETWORK_CHAR, expectedPairingFinish] + ", got: " + sent);
+            delegate.disconnect();
+            return false;
+        }
+
+        delegate.disconnect();
+        return true;
+    }
+
+
+    (:test)
+    function testPairingFinishNotRepeatedOnReconnect(logger as Logger) as Boolean {
+        TestInit.initDefaults();
+        TestInit.initFake(null);
+
+        BleAPI.pairedDevices = [];
+
+        var delegate = new MockBluetoothDelegate();
+        delegate.setNeedsSetup(true);
+        delegate.connect(new BleAPI.MockScanResult(0, null, GoProCamera.GP_HERO11M) as Ble.ScanResult);
+
+        var device = BleAPI.device as FakeGoProDevice;
+        if (device.requests.size() < 1 or !device.requests[0][0].equals(GPM.UUID_NETWORK_CHAR)) {
+            logger.error("Pairing finish was not sent on the scan menu connection");
+            delegate.disconnect();
+            return false;
+        }
+
+        // reconnect from the stored device, without going through the scan menu
+        delegate.disconnect();
+        BleAPI.pairedDevices = [];
+        device.requests = [];
+        delegate.connect(new BleAPI.MockScanResult(0, null, GoProCamera.GP_HERO11M) as Ble.ScanResult);
+
+        if (device.requests.size() > 0 && device.requests[0][0].equals(GPM.UUID_NETWORK_CHAR)) {
+            logger.error("Pairing finish should not be repeated on reconnect");
+            delegate.disconnect();
+            return false;
+        }
+
+        delegate.disconnect();
+        return true;
     }
 
 
@@ -813,6 +979,55 @@ module GoProCameraTest {
         photosTaken = camera.getStatus(GoProCamera.PHOTOS_TAKEN);
         if (photosTaken != 1239) {
             logDeviceError(logger, "There should be 1239 photos taken, got: " + photosTaken, k);
+            result = false;
+        }
+
+        } // end of testDevice loop
+
+        return result;
+    }
+
+
+    (:test)
+    function testTimelapseMultishotFallback(logger as Logger) as Boolean {
+        var result = true;
+
+        for (var k=0; k<testDeviceIds.size(); k+=1)
+        { // start of testDevice loop
+
+        TestInit.initDefaults();
+        TestInit.initFake(testDeviceSpecs[k].invoke());
+
+        var device = BleAPI.device as FakeGoProDevice;
+
+        if (testDeviceIds[k] < GoProCamera.GP_HERO8) {
+            device.statuses.put(GoProCamera.CAPTURE_MODE, GoProCamera.MODE_MULTISHOT);
+        } else {
+            device.statuses.put(GoProCamera.PRESET_GRP, GoProCamera.PGRP_TIMELAPSE);
+        }
+
+        TestInit.initConnection(testDeviceIds[k]);
+
+        var camera = getApp().gopro;
+        BleAPI.device.processRequests();
+
+        camera.sendCommand(GoProCamera.LOAD_PGRP);
+        BleAPI.device.processRequests();
+        var mode = camera.getStatus(GoProCamera.PRESET_GRP) as Number;
+
+        if (mode != GoProCamera.PGRP_VIDEO and mode != GoProCamera.PGRP_PHOTO) {
+            logDeviceError(logger, "Switching capture mode should have fallback to video or video: " \
+                                    + mode, k);
+            result = false;
+        }
+        
+        camera.sendCommand(GoProCamera.LOAD_PGRP);
+        BleAPI.device.processRequests();
+        var newMode = camera.getStatus(GoProCamera.PRESET_GRP);
+
+        if (newMode != mode ^ 1) {
+            logDeviceError(logger, "Switching capture mode again should have switch between photo and video, prev: " \
+                                    + mode + ", now: " + newMode, k);
             result = false;
         }
 

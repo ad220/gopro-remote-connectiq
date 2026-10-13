@@ -61,6 +61,7 @@ using GattProfileManager as GPM;
     }
 
     public function sleep() as Void {
+        gpControlService.device.connected = false;
         BleAPI.delegate.onConnectedStateChanged(
             gpControlService.device as Ble.Device,
             Ble.CONNECTION_STATE_DISCONNECTED
@@ -136,7 +137,12 @@ using GattProfileManager as GPM;
                 var commandId = data[1];
                 switch (commandId) {
                     case GoProCamera.SHUTTER:
-                        if (statuses[GoProCamera.PRESET_GRP] == GoProCamera.PGRP_VIDEO) {
+                        var mode = specs.cameraId < GoProCamera.GP_HERO8
+                            ? GoProCamera.CAPTURE_MODE
+                            : GoProCamera.PRESET_GRP;
+                        mode = statuses[mode] as Number;
+
+                        if (mode & 1 == GoProCamera.MODE_VIDEO) {
                             statuses.put(GoProCamera.ENCODING, data[3]);
                             responseSplitter(GPM.UUID_COMMAND_RESPONSE_CHAR, [1, 0]b);
                             if (notifStatuses.indexOf(GoProCamera.ENCODING) != -1) {

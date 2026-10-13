@@ -25,7 +25,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
 
         var vc = getApp().viewController;
         var menu = new Menu2(null);
-        vc.push(menu, new RemoteMenuDelegate(menu), SLIDE_IMMEDIATE);
+        vc.push(menu, new RemoteMenuDelegate(menu), SLIDE_RIGHT);
         return true;
     }
 

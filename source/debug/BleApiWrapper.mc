@@ -76,7 +76,8 @@ module BleApiWrapper {
             return null;
 
         } else {
-            var result = new MockDevice() as Ble.Device;
+            var result = new MockDevice();
+            result.connected = true;
             delegate.onConnectedStateChanged(result, connectionStatus);
             pairedDevices.add(result);
             return result;
@@ -85,9 +86,10 @@ module BleApiWrapper {
 
     function unpairDevice(device as Ble.Device) as Void {
         var found = pairedDevices.remove(device);
-        if (found) {
+        if (found and device.isConnected()) {
             delegate.onConnectedStateChanged(device, Ble.CONNECTION_STATE_DISCONNECTED);
         }
+        (device as MockDevice).connected = false;
     }
 
 
