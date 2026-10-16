@@ -114,11 +114,11 @@ class GoProDecoder {
             var mode = cam.getStatus(GoProCamera.PRESET_GRP);
             if (mode == null) { mode = GoProCamera.PGRP_PHOTO; }
 
-            if (goproId < GoProCamera.GP_MAX) {
+            if (goproId < GoProCamera.GP_HERO8) {
                 request[1] = GoProCamera.SWITCH_MODE;
                 request.addAll([0x01, mode & 1 ^ 1]);
             } else {
-                request.addAll([0x04, 0, 0, GoProCamera.PGRP_VIDEO >> 8, mode & 1 ^ GoProCamera.PGRP_PHOTO & 0xFF]);
+                request.addAll([0x02, GoProCamera.PGRP_VIDEO >> 8, mode & 1 ^ GoProCamera.PGRP_PHOTO & 0xFF]);
             }
         }
 
