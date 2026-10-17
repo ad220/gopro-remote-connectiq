@@ -185,11 +185,11 @@ using GattProfileManager as GPM;
 
                     case GoProCamera.LOAD_PGRP:
                         var grpId = GoProCamera.PRESET_GRP;
-                        statuses.put(grpId, data[5] << 8 + data[6]);
+                        statuses.put(grpId, data[3] << 8 + data[4]);
                         if (notifStatuses.indexOf(grpId) != -1) {
                             responseSplitter(
                                 GPM.UUID_QUERY_RESPONSE_CHAR,
-                                [GoProDecoder.NOTIF_STATUS, 0x00, grpId, 4, data[3], data[4], data[5], data[6]]b
+                                [GoProDecoder.NOTIF_STATUS, 0x00, grpId, 4, 0, 0, data[3], data[4]]b
                             );
                         }
                         break;

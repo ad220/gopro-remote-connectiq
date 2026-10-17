@@ -80,7 +80,7 @@ class GattRequestQueue {
             try {
                 characteristic.requestWrite(data, {:writeType => Ble.WRITE_TYPE_DEFAULT});
             }
-            catch (ex)  { onRequestFail(EM.SUB_BLE_WRITE | 0x00); }
+            catch (ex)  { onRequestFail(EM.SUB_BLE_WRITE | 0x01); }
         }
         
         // System.println("[DEBUG]     Write data " + req[REQ_DATA] + " to char " + req[REQ_UUID]);
