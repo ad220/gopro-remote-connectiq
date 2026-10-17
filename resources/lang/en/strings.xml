@@ -3,7 +3,9 @@
     <string id="GlanceTitle" scope="glance">GoPro Remote</string>
     <string id="GlanceConnect" scope="glance">Find </string>
     <string id="GlanceScan" scope="glance">Scan for camera</string>
-    <!-- $$$ Medium -->
+
+    <!-- $$$ Medium Small Tiny -->
+    <!-- Added in small and tiny for protune color setting -->
     <string id="GoPro" translatable="false">GoPro</string>
 
     <!-- Notif messages -->
@@ -45,8 +47,8 @@
     <!-- $$$ -->
     <string id="AdvancedSettings">Advanced settings</string>
     <string id="SwitchMode">Switch capture mode</string>
-    <!-- <string id="Photo">Photo</string>
-    <string id="Video">Video</string> -->
+    <!-- <string id="Photo">Photo</string> -->
+    <!-- <string id="Video">Video</string> -->
 
     <!-- SettingsMenu -->
     <!-- $$$ Small -->
@@ -70,6 +72,14 @@
     <string id="Gps" translatable="false">GPS</string>
     <string id="Led" translatable="false">LED</string>
     <string id="HyperSmooth" translatable="false">HyperSmooth</string>
+    <!-- TODO(opt): remove this from medium filter for lowend -->
+    <string id="Protune" translatable="false">Protune</string>
+    <string id="IsoMin" translatable="false">ISO Min</string>
+    <string id="IsoMax" translatable="false">ISO Max</string>
+    <string id="WhiteBalance">White Balance</string>
+    <string id="Color">Color</string>
+    <string id="Sharpness">Sharpness</string>
+    <string id="EvComp">EV Comp</string>
 
     <!-- Low end devices settings menu -->
      <!-- $$$ -->
@@ -115,5 +125,15 @@
     <string id="Boost">Boost</string>
     <string id="AutoBoost">AutoBoost</string>
     <string id="Standard">Standard</string>
+
+    <!-- Protune -->
+    <!-- $$$ Small Tiny -->
+    <string id="Enabled">Enabled</string>
+    <string id="Auto">Auto</string>
+    <string id="Native">Native</string>
+    <string id="Flat">Flat</string>
+    <string id="Natural">Natural</string>
+    <string id="Vibrant">Vibrant</string>
+    <string id="Medium">Medium</string>
 
 </strings>

@@ -4,47 +4,52 @@ import Toybox.WatchUi;
 
 class ViewController {
 
-    protected var viewLayersCount as Number;
-    protected var currentDelegate as WatchUi.BehaviorDelegate or WatchUi.Menu2InputDelegate or Null;
+    typedef Dlgt as WatchUi.BehaviorDelegate or WatchUi.Menu2InputDelegate or Null;
+    typedef DlgtStack as [Dlgt, DlgtStack?];
 
+    protected var viewStack as DlgtStack;
 
-    public function initialize() {
-        self.viewLayersCount = 0;
-    } 
+    public function initialize(rootView as Dlgt) {
+        self.viewStack = [rootView, null];
+    }
 
-    public function push(view as WatchUi.View, delegate as WatchUi.BehaviorDelegate or WatchUi.Menu2InputDelegate or Null, slide as WatchUi.SlideType) as Void {
-        if (currentDelegate instanceof NotifDelegate) { currentDelegate.pop(); }
-
-        currentDelegate = delegate;
-        WatchUi.pushView(view, delegate, slide);
-        if (delegate instanceof NotifDelegate) {
-            getApp().timerController.start(method(:popNotif), 20, false);
+    (:typecheck(false))
+    public function update() as Void {
+        var dlgt = viewStack[0];
+        if (dlgt != null and dlgt has :update){
+            dlgt.update();
         } else {
-            viewLayersCount++;
+            WatchUi.requestUpdate();
         }
     }
 
-    public function switchTo(view as WatchUi.View, delegate as WatchUi.BehaviorDelegate or WatchUi.Menu2InputDelegate or Null, slide as WatchUi.SlideType) as Void {
-        if (currentDelegate instanceof NotifDelegate) { currentDelegate.pop(); }
+    public function push(view as WatchUi.View, delegate as Dlgt, slide as WatchUi.SlideType) as Void {
+        var dlgt = viewStack[0];
+        if (dlgt instanceof NotifDelegate) {
+            viewStack[0] = delegate;
+            dlgt.pop();
+        } else {
+            viewStack = [delegate, viewStack] as DlgtStack;
+        }
+        WatchUi.pushView(view, delegate, slide);
+    }
 
-        currentDelegate = delegate;
+    public function switchTo(view as WatchUi.View, delegate as Dlgt, slide as WatchUi.SlideType) as Void {
+        var dlgt = viewStack[0];
+        if (dlgt instanceof NotifDelegate) { dlgt.pop(); }
+
+        viewStack[0] = delegate;
         WatchUi.switchToView(view, delegate, slide);
     }
 
     public function pop(slide as WatchUi.SlideType) as Void {
-        if (currentDelegate instanceof NotifDelegate) {
-            currentDelegate.pop();
-        } else if (viewLayersCount > 0) {
-            WatchUi.popView(slide);
-            viewLayersCount--;
-        }
-        currentDelegate = null;
-    }
+        var dlgt = viewStack[0];
+        var prev = viewStack[1];
 
-    public function popNotif() as Void {
-        if (currentDelegate instanceof NotifDelegate) {
-            currentDelegate.pop();
-            currentDelegate = null;
+        if (prev != null) {
+            if (dlgt instanceof NotifDelegate) { dlgt.pop(); }
+            else { WatchUi.popView(slide); }
+            viewStack = prev as DlgtStack;
         }
     }
 
@@ -53,10 +58,7 @@ class ViewController {
             getApp().fromGlance = false;
             System.exit();
         } else {
-            while (viewLayersCount>1) {
-                pop(WatchUi.SLIDE_IMMEDIATE);
-            }
-            if (viewLayersCount>0) {
+            while (viewStack[1] != null) {
                 pop(WatchUi.SLIDE_RIGHT);
             }
 
@@ -65,5 +67,10 @@ class ViewController {
                 push(notif, new NotifDelegate(), WatchUi.SLIDE_DOWN);
             }
         }
+    }
+
+    (:debug)
+    public function getCurrentDelegate() as Dlgt {
+        return viewStack[0];
     }
 }

@@ -20,7 +20,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
 
         camera.queryValues(
             GoProDecoder.GET_AVAILABLE,
-            [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.HYPERSMOOTH]b
+            [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.HYPERSMOOTH, GoProSettings.GPS]b
         );
     }
 
@@ -77,59 +77,21 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
     
     (:keep)
     public function onLed() as Void {
-        var available = camera.getAvailableSettings(GoProSettings.LED);
-
-        var availableCount = available.size();
-        if (availableCount == 0) {
-            EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x08 <<16, GoProSettings.LED, :WarningErr);
-            return;
-        }
-
-        if (availableCount > 2) {
-            var menu = ICM.newCustomMenu(0.1, 0.15);
-            getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.LED), SLIDE_LEFT);
-        } else {
-            var ledStatus = camera.getSetting(GoProSettings.LED);
-            if (ledStatus == null) {
-                EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x01 << 16, GoProSettings.LED, :WarningErr);
-                return;
-            }
-
-            var index = available.indexOf(ledStatus);
-            if (index == -1) {
-                EM.raise(
-                    EM.ERR_CAM | EM.SUB_CAM_AVAIL | 0x01 << 16,
-                    ledStatus << 8 + GoProSettings.LED,
-                    :WarningErr
-                );
-            }
-
-            var newStatus = available[(index + 1) % availableCount];
-            view.getHilighted().toggleState(
-                newStatus != GoProSettings.LED_OFF and
-                newStatus != GoProSettings.LED_ALL_OFF and 
-                newStatus != GoProSettings.LED_BACK_ONLY
-            );
-            camera.sendSetting(GoProSettings.LED, newStatus);
-        }
+        var led = ICM.toggleOrPick(GoProSettings.LED);
+        if (led != null) { view.getHilighted().toggleState(led & 3 != 0); }
+        // off-values are 0, 4 and 100 while on-values are 1, 2, 3 and 5
     }
     
     (:keep)
     public function onGps() as Void {
-        var gps = camera.getSetting(GoProSettings.GPS) as Number?;
-        if (gps==null) {
-            EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x01 << 16, GoProSettings.GPS, :WarningErr);
-            return;
-        }
-        
-        view.getHilighted().toggleState(gps & 0x01 == 0);
-        camera.sendSetting(GoProSettings.GPS, gps ^ 0x01);
+        var gps = camera.toggleSetting(GoProSettings.GPS);
+        if (gps != null) { view.getHilighted().toggleState(gps != 0); }
     }
 
     (:keep)
     public function onStabilize() as Void {
-        var menu = ICM.newCustomMenu(0.1, 0.15);
-        getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.HYPERSMOOTH), SLIDE_LEFT);
+        var stab = ICM.toggleOrPick(GoProSettings.HYPERSMOOTH);
+        if (stab != null) { view.getHilighted().toggleState(stab != 0); }
     }
 
     public function onSwipe(swipeEvent as SwipeEvent) as Boolean {

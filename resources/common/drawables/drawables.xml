@@ -6,6 +6,7 @@
     <bitmap id="Photo" filename="photo.png" scaleY="7%"  dithering="none" automaticPalette="true"/>
 
     <bitmap id="CaptureMode" filename="capture_mode.png" scaleY="10%" dithering="none" automaticPalette="true"/>
+    <bitmap id="Protune" filename="protune.png" scaleY="10%" dithering="none" automaticPalette="true"/>
 
     <bitmap id="Save" filename="save.png" scaleY="10%"  dithering="none" automaticPalette="true"/>
     <bitmap id="Camera" filename="camera.png" scaleY="10%"  dithering="none" automaticPalette="true"/>

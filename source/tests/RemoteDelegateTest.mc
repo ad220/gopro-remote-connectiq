@@ -2,6 +2,7 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 import Toybox.System;
 import Toybox.Test;
+import Toybox.Graphics;
 
 using Toybox.BluetoothLowEnergy as Ble;
 using BleApiWrapper as BleAPI;
@@ -19,7 +20,7 @@ module RemoteDelegateTest {
         
         var camera = getApp().gopro;
 
-        var viewController = new ViewDebugController();
+        var viewController = new ViewDebugController(getApp().viewController);
         getApp().viewController = viewController;
         
         var delegate = new RemoteDelegate();
@@ -66,7 +67,7 @@ module RemoteDelegateTest {
         
         var camera = getApp().gopro;
 
-        var viewController = new ViewDebugController();
+        var viewController = new ViewDebugController(getApp().viewController);
         getApp().viewController = viewController;
         
         var delegate = new RemoteDelegate();
@@ -95,6 +96,57 @@ module RemoteDelegateTest {
     }
     
     (:test)
+    function testAdvancedSettingsMenu(logger as Test.Logger) as Boolean {
+        var result = true;
+        TestInit.initDefaults();
+        TestInit.initFake(null);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
+
+        var device = BleAPI.device as FakeGoProDevice;
+        var viewController = new ViewDebugController(getApp().viewController);
+        getApp().viewController = viewController;
+
+        // RemoteMenuDelegate needs a real Menu2, its items can't be inspected
+        var menu = new WatchUi.Menu2(null);
+        var delegate = new RemoteMenuDelegate(menu);
+        viewController.push(menu, delegate, WatchUi.SLIDE_IMMEDIATE);
+
+        var icon = new WatchUi.Bitmap({:rezId => Rez.Drawables.CaptureMode});
+
+        delegate.onSelect(new WatchUi.IconMenuItem(Rez.Strings.Protune, null, :protune, icon, null));
+        BleAPI.device.processRequests();
+
+        if (!(viewController.getCurrentDelegate() instanceof ProtuneMenuDelegate)) {
+            logger.error("Selecting protune should have opened the protune menu");
+            result = false;
+        }
+
+        device.requests = [];
+        delegate.onSelect(new WatchUi.IconMenuItem(Rez.Strings.SwitchMode, null, :switchMode, icon, null));
+
+        if (device.requests.size() != 1) {
+            logger.error("Selecting switch mode should queue exactly 1 request, got: " + device.requests.size());
+            return false;
+        }
+
+        var sent = device.requests[0] as Array;
+        var payload = sent[1] as ByteArray;
+        if (!TestInit.haveSameData([sent[0]] as Array, [GPM.UUID_COMMAND_CHAR] as Array)
+                or payload[1] != GoProCamera.LOAD_PGRP) {
+            logger.error("Selecting switch mode should send the LOAD_PGRP command, got: " + payload);
+            result = false;
+        }
+
+        if (viewController.getCurrentDelegate() == delegate) {
+            logger.error("Selecting switch mode should have closed the advanced settings menu");
+            result = false;
+        }
+
+        return result;
+    }
+
+
+    (:test)
     function testTogglables(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
         TestInit.initFake(null);
@@ -102,7 +154,7 @@ module RemoteDelegateTest {
         
         var camera = getApp().gopro;
 
-        var viewController = new ViewDebugController();
+        var viewController = new ViewDebugController(getApp().viewController);
         getApp().viewController = viewController;
         
         var delegate = new RemoteDelegate();
@@ -137,7 +189,7 @@ module RemoteDelegateTest {
         
         var camera = getApp().gopro;
 
-        var viewController = new ViewDebugController();
+        var viewController = new ViewDebugController(getApp().viewController);
         getApp().viewController = viewController;
         
         var delegate = new RemoteDelegate();
@@ -171,7 +223,7 @@ module RemoteDelegateTest {
         
         var device = BleAPI.device as FakeGoProDevice;
 
-        var viewController = new ViewDebugController();
+        var viewController = new ViewDebugController(getApp().viewController);
         getApp().viewController = viewController;
         
         var delegate = new RemoteDelegate();
@@ -201,7 +253,7 @@ module RemoteDelegateTest {
         
         var device = BleAPI.device as FakeGoProDevice;
 
-        var viewController = new ViewDebugController();
+        var viewController = new ViewDebugController(getApp().viewController);
         getApp().viewController = viewController;
         
         var delegate = new RemoteDelegate();

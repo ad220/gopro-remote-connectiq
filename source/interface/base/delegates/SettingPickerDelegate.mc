@@ -28,10 +28,16 @@ class SettingPickerDelegate extends WatchUi.Menu2InputDelegate {
         if      (setting == GoProSettings.RESOLUTION)   { titleId = Rez.Strings.Resolution;     comparator = new ResolutionComparator(); }
         else if (setting == GoProSettings.RATIO)        { titleId = Rez.Strings.Ratio;          comparator = new RatioComparator(); }
         else if (setting == GoProSettings.LENS)         { titleId = Rez.Strings.Lens; }
-        else if (setting == GoProSettings.FRAMERATE)    { titleId = Rez.Strings.Framerate;      comparator = new FramerateComparator(); }
+        else if (setting == GoProSettings.FRAMERATE)    { titleId = Rez.Strings.Framerate;      comparator = new MapComparator(GoProSettings.FRAMERATE_MAP as Dictionary, -1); }
         else if (setting == GoProSettings.LED)          { titleId = Rez.Strings.Led; }
         else if (setting == GoProSettings.HYPERSMOOTH)  { titleId = Rez.Strings.HyperSmooth; }
         else if (setting == GoProSettings.PHOTO_LENS)   { titleId = Rez.Strings.PhotoLens;      comparator = new PhotoLensComparator(); }
+        else if (setting == GoProSettings.WHITE_BL)     { titleId = Rez.Strings.WhiteBalance;   comparator = new MapComparator(GoProSettings.WB_MAP as Dictionary, 1); }
+        else if (setting == GoProSettings.COLOR)        { titleId = Rez.Strings.Color; }
+        else if (setting == GoProSettings.SHARPNESS)    { titleId = Rez.Strings.Sharpness; }
+        else if (setting == GoProSettings.EV_COMP)      { titleId = Rez.Strings.EvComp; }
+        else if (setting == GoProSettings.ISO_MAX)      { titleId = Rez.Strings.IsoMax;         comparator = new MapComparator(GoProSettings.ISO_MAP as Dictionary, 1); }
+        else if (setting == GoProSettings.ISO_MIN)      { titleId = Rez.Strings.IsoMin;         comparator = new MapComparator(GoProSettings.ISO_MAP as Dictionary, 1); }
         else {
             // System.println("[WARNING]   Unknown Setting id");
             EM.raise(EM.ERR_CAM | EM.SUB_CAM_ID | 0x01 << 16, setting, :CriticalErr);

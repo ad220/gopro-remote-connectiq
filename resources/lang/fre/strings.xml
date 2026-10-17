@@ -64,6 +64,11 @@
     <string id="Framerate">Fréq. d'image</string>
     <string id="PhotoLens">Format photo</string>
 
+    <string id="WhiteBalance">Température (WB)</string>
+    <string id="Color">Saturation</string>
+    <string id="Sharpness">Netteté</string>
+    <string id="EvComp">Exposition</string>
+
     <!-- Paramètres de la caméra pour appareils avec peu de mémoire -->
      <!-- $$$ -->
     <string id="AntiFlicker">Anti scintillement</string>
@@ -101,4 +106,15 @@
     <string id="Boost">Boost</string>
     <string id="AutoBoost">Auto Boost</string>
     <string id="Standard">Standard</string>
+
+    <!-- Protune -->
+    <!-- $$$ Small Tiny -->
+    <string id="Enabled">Activé</string>
+    <string id="Auto">Auto</string>
+    <string id="Native">Natif</string>
+    <string id="Flat">Plat</string>
+    <string id="Natural">Naturel</string>
+    <string id="Vibrant">Vibrant</string>
+    <string id="Medium">Moyen</string>
+
 </strings>
