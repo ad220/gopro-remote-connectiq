@@ -32,11 +32,11 @@ class TogglablesView extends WatchUi.View {
         buttonsCount = 5;
 
         var params = [
-            [0.6853 * Screen.WIDTH, 0.4927 * Screen.HEIGHT, Rez.Drawables.Flicker60, Rez.Drawables.Flicker50],
-            [0.4000 * Screen.WIDTH, 0.7000 * Screen.HEIGHT, Rez.Drawables.PowerOn,   Rez.Drawables.PowerOff],
-            [0.1147 * Screen.WIDTH, 0.4927 * Screen.HEIGHT, Rez.Drawables.LedOn,     Rez.Drawables.LedOff],
-            [0.2237 * Screen.WIDTH, 0.1573 * Screen.HEIGHT, Rez.Drawables.GpsOn,     Rez.Drawables.GpsOff],
-            [0.5763 * Screen.WIDTH, 0.1573 * Screen.HEIGHT, Rez.Drawables.StabOn,    Rez.Drawables.StabOff],
+            [0.6853 * Screen.WIDTH, 0.4927 * Screen.HEIGHT, Rez.Drawables.Flicker60,    Rez.Drawables.Flicker50],
+            [0.4000 * Screen.WIDTH, 0.7000 * Screen.HEIGHT, Rez.Drawables.BeepOff,      Rez.Drawables.BeepOn],
+            [0.1147 * Screen.WIDTH, 0.4927 * Screen.HEIGHT, Rez.Drawables.LedOff,       Rez.Drawables.LedOn],
+            [0.2237 * Screen.WIDTH, 0.1573 * Screen.HEIGHT, Rez.Drawables.GpsOff,       Rez.Drawables.GpsOn],
+            [0.5763 * Screen.WIDTH, 0.1573 * Screen.HEIGHT, Rez.Drawables.StabOff,      Rez.Drawables.StabOn],
         ];
 
         for (var i=0; i<buttonsCount; i++) {

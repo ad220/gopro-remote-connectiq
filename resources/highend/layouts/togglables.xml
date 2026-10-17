@@ -12,8 +12,8 @@
     <bitmap id="LedOff" filename="../../common/drawables/led_off.png" scaleX="20%"  dithering="none"/>
     <bitmap id="LedOn" filename="../../common/drawables/led_on.png" scaleX="20%"  dithering="none"/>
     
-    <bitmap id="PowerOff" filename="../../common/drawables/power_off.png" scaleX="20%"  dithering="none"/>
-    <bitmap id="PowerOn" filename="../../common/drawables/power_on.png" scaleX="20%"  dithering="none"/>
+    <bitmap id="BeepOff" filename="../../common/drawables/beep_off.png" scaleX="20%"  dithering="none"/>
+    <bitmap id="BeepOn" filename="../../common/drawables/beep_on.png" scaleX="20%"  dithering="none"/>
     
     <bitmap id="Flicker60" filename="../../common/drawables/flicker_60.png" scaleX="20%"  dithering="none"/>
     <bitmap id="Flicker50" filename="../../common/drawables/flicker_50.png" scaleX="20%"  dithering="none"/>
