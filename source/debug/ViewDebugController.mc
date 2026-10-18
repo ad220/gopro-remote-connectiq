@@ -13,12 +13,12 @@ class ViewDebugController extends ViewController {
         self.stack = [];
     }
 
-    function push(view as View, delegate as ViewController.Dlgt, slide as SlideType) as Void {        
-        if (viewStack[0] instanceof NotifDelegate) {
+    function push(view as View, delegate as ViewController.Dlgt, slide as SlideType) as Void {
+        if (viewStack[0] instanceof NotifDelegate and stack.size() > 0) {
             stack[stack.size() - 1] = [view, delegate];
-            return;
+        } else {
+            stack.add([view, delegate]);
         }
-        stack.add([view, delegate]);
 
         ViewController.push(view, delegate, slide);
     }
@@ -36,7 +36,7 @@ class ViewDebugController extends ViewController {
     }
 
     function pop(slide as SlideType) as Void {
-        if (viewStack[1] != null) {
+        if (viewStack[0] instanceof NotifDelegate or viewStack[1] != null) {
             stack = stack.slice(0, -1);
         }
 

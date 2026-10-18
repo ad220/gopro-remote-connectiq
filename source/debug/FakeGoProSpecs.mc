@@ -307,6 +307,7 @@ module FakeGoProSpecs {
         const availableHypersmooth    = [52, 63]b;
         const availableLed            = [7, 8]b;
         const availableGps            = [9, 10]b;
+        const availableBeeps          = [200, 250]b;
         const availablePhotoLens      = [78, 91]b;
 
         const availableProtune = []b;
