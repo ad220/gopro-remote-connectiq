@@ -21,6 +21,9 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
 
         camera.queryValues(GoProDecoder.GET_STATUS, [GoProCamera.BATTERY, GoProCamera.SD_REMAINING]b);
         camera.queryValues(GoProDecoder.REGISTER_SETTING, ids);
+
+        ids.remove(GoProSettings.BEEPS);
+        ids.remove(GoProSettings.BEEPS_OLD);
         camera.queryValues(GoProDecoder.GET_AVAILABLE, ids);
     }
 

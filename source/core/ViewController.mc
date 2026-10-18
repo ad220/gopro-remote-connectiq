@@ -36,7 +36,7 @@ class ViewController {
 
     public function switchTo(view as WatchUi.View, delegate as Dlgt, slide as WatchUi.SlideType) as Void {
         var dlgt = viewStack[0];
-        if (dlgt instanceof NotifDelegate) { dlgt.pop(); }
+        if (dlgt instanceof NotifDelegate) { pop(WatchUi.SLIDE_UP); }
 
         viewStack[0] = delegate;
         WatchUi.switchToView(view, delegate, slide);

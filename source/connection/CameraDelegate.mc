@@ -27,7 +27,7 @@ class CameraDelegate {
         var pushMethod = app.viewController.method(app.fromGlance ? :switchTo : :push);
         pushMethod.invoke(
             new NotifView(Rez.Strings.Connecting, NotifView.NOTIF_INFO),
-            new NotifDelegate(50), 
+            app.fromGlance ? null : new NotifDelegate(50), 
             WatchUi.SLIDE_DOWN
         );
 

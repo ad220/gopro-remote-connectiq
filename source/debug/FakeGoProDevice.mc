@@ -395,6 +395,9 @@ using GattProfileManager as GPM;
             case GoProSettings.HYPERSMOOTH:
                 available = specs.availableHypersmooth;
                 break;
+            case GoProSettings.BEEPS:
+                available = specs.availableBeeps;
+                break;
             case GoProSettings.PHOTO_LENS:
                 available = specs.availablePhotoLens;
                 break;
