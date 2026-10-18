@@ -12,6 +12,7 @@ module FakeGoProSpecs {
         var availableHypersmooth    as ByteArray;
         var availableLed            as ByteArray;
         var availableGps            as ByteArray;
+        var availableBeeps          as ByteArray;
         var availablePhotoLens      as ByteArray;
         var availableProtune        as ByteArray;
         var availableWhiteBl        as ByteArray;
@@ -116,6 +117,7 @@ module FakeGoProSpecs {
         ]b;
 
         const availableGps = []b;
+        const availableBeeps = [0, 70, 100]b;
 
         const availablePhotoLens = []b;
 
@@ -191,6 +193,7 @@ module FakeGoProSpecs {
             GoProSettings.HS_AUTO_BOOST,
         ]b;
 
+        const availableBeeps = [0, 70, 100]b;
         const availableGps = [0, 1]b;
         const availablePhotoLens = [
             GoProSettings.WIDE_FULL,
@@ -264,6 +267,7 @@ module FakeGoProSpecs {
             GoProSettings.HS_LOW,
         ]b;
 
+        const availableBeeps = [0, 1, 2]b;
         const availableGps = [0, 1]b;
         const availablePhotoLens = [
             GoProSettings.WIDE_5MP,
@@ -303,6 +307,7 @@ module FakeGoProSpecs {
         const availableHypersmooth    = [52, 63]b;
         const availableLed            = [7, 8]b;
         const availableGps            = [9, 10]b;
+        const availableBeeps          = [200, 250]b;
         const availablePhotoLens      = [78, 91]b;
 
         const availableProtune = []b;

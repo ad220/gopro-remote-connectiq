@@ -10,6 +10,7 @@ class TogglablesView extends WatchUi.View {
     private var buttons as Array<Togglable>;
     private var buttonsCount as Number;
     private var currentHilight as Number;
+    public var togglableIds as ByteArray;
 
     public function initialize() {
         View.initialize();
@@ -17,11 +18,39 @@ class TogglablesView extends WatchUi.View {
         self.buttons = [];
         self.buttonsCount = 0;
         self.currentHilight = 0;
+        self.togglableIds = [
+            GoProSettings.FLICKER,
+            GoProSettings.BEEPS,
+            GoProSettings.LED,
+            GoProSettings.GPS,
+            GoProSettings.HYPERSMOOTH,
+        ]b;
     }
 
     public function onLayout(dc as Dc) as Void {
-        buttons = Rez.Layouts.TogglablesLayout(dc) as Array<Togglable>;
-        buttonsCount = buttons.size();
+        buttons     = [];
+        buttonsCount = 5;
+
+        var params = [
+            [0.6853 * Screen.WIDTH, 0.4927 * Screen.HEIGHT, Rez.Drawables.Flicker60,    Rez.Drawables.Flicker50],
+            [0.4000 * Screen.WIDTH, 0.7000 * Screen.HEIGHT, Rez.Drawables.BeepOff,      Rez.Drawables.BeepOn],
+            [0.1147 * Screen.WIDTH, 0.4927 * Screen.HEIGHT, Rez.Drawables.LedOff,       Rez.Drawables.LedOn],
+            [0.2237 * Screen.WIDTH, 0.1573 * Screen.HEIGHT, Rez.Drawables.GpsOff,       Rez.Drawables.GpsOn],
+            [0.5763 * Screen.WIDTH, 0.1573 * Screen.HEIGHT, Rez.Drawables.StabOff,      Rez.Drawables.StabOn],
+        ];
+
+        for (var i=0; i<buttonsCount; i++) {
+            buttons.add(new Togglable({
+                :width          => 0.2 * Screen.WIDTH,
+                :height         => 0.2 * Screen.HEIGHT,
+                :identifier     => togglableIds[i],
+                :locX           => params[i][0],
+                :locY           => params[i][1],
+                :defaultBmpId   => params[i][2],
+                :enabledBmpId   => params[i][3],
+            }));
+        }
+
         currentHilight = buttonsCount-1;
         buttons[currentHilight].isHilighted = true;
         
@@ -31,33 +60,16 @@ class TogglablesView extends WatchUi.View {
     }
 
     public function onShow() as Void {
-        View.onShow();
-        var camera = getApp().gopro;
-        camera.queryValues(GoProDecoder.GET_STATUS, [GoProCamera.BATTERY, GoProCamera.SD_REMAINING]b);
-
-        var flicker = camera.getSetting(GoProSettings.FLICKER);
-        (findDrawableById("FlickerButton") as Togglable).toggleState(
-            flicker != null and flicker & 1 != 0
-        );
-        
-        var gps = camera.getSetting(GoProSettings.GPS);
-        (findDrawableById("GpsButton") as Togglable).toggleState(gps==1);
-        
-        // off-values are 0, 4 and 100 while on-values are 1, 2, 3 and 5
-        var led = camera.getSetting(GoProSettings.LED);
-        (findDrawableById("LedButton") as Togglable).toggleState(led != null and led & 3 != 0);
-        
-        var hypersmooth = camera.getSetting(GoProSettings.HYPERSMOOTH);
-        (findDrawableById("StabilizeButton") as Togglable).toggleState(hypersmooth != GoProSettings.HS_OFF);
+        update();
     }
 
-    public function onUpdate(dc as Dc) as Void {
-        if (dc has :setAntiAlias) {
-            dc.setAntiAlias(true);
-        }
-
-        var camera = Helper.safeGoProAccess(11);
+    public function update() as Void {
+        var camera = Helper.safeGoProAccess(33);
         if (camera == null) { return; }
+
+        for (var i=0; i<buttons.size(); i++) {
+            buttons[i].updateState();
+        }
 
         var sdRemaining = camera.getStatus(GoProCamera.SD_REMAINING);
         if (sdRemaining!=null) {
@@ -69,6 +81,12 @@ class TogglablesView extends WatchUi.View {
         var battery = camera.getStatus(GoProCamera.BATTERY);
         if (battery!=null) {
             (findDrawableById("BatteryLevel") as Text).setText(battery+"%");
+        }
+    }
+
+    public function onUpdate(dc as Dc) as Void {
+        if (dc has :setAntiAlias) {
+            dc.setAntiAlias(true);
         }
 
         View.onUpdate(dc);

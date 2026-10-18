@@ -129,19 +129,9 @@ class GoProCamera extends GoProSettings {
 
     public function registerSettings() as Void {
         decoder.enableNotifications(delegate);
-        queryValues(GoProDecoder.REGISTER_STATUS, [PRESET_GRP]b);
-        queryValues(GoProDecoder.REGISTER_SETTING, [GoProSettings.GPS, GoProSettings.LED, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b);
-    }
-
-    (:inline)
-    private function registerMode(invertFlag as Number) as Void {
-        // invertFlag should be 0x20 to register for photo mode, 0 for video.
-        var videoSettings = [GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.LENS]b;
-        queryValues((GoProDecoder.REGISTER_SETTING      + invertFlag) as GoProDecoder.QueryId, videoSettings);
-        queryValues((GoProDecoder.REGISTER_STATUS       + invertFlag) as GoProDecoder.QueryId, [ENCODING]b);
-        queryValues((GoProDecoder.UNREGISTER_SETTING    - invertFlag) as GoProDecoder.QueryId, [GoProSettings.PHOTO_LENS]b);
-        queryValues((GoProDecoder.UNREGISTER_STATUS     - invertFlag) as GoProDecoder.QueryId, [PHOTOS_TAKEN]b);
-        queryValues((GoProDecoder.UNREGISTER_AVAILABLE  - invertFlag) as GoProDecoder.QueryId, [GoProSettings.PHOTO_LENS]b);
+        queryValues(GoProDecoder.REGISTER_STATUS, [PRESET_GRP, ENCODING, PHOTOS_TAKEN]b);
+        queryValues(GoProDecoder.REGISTER_SETTING,[GoProSettings.RESOLUTION,
+            GoProSettings.FRAMERATE, GoProSettings.LENS, GoProSettings.PHOTO_LENS]b);
     }
 
 
@@ -162,18 +152,22 @@ class GoProCamera extends GoProSettings {
         );
     }
 
-    public function toggleSetting(id as GoProSettings.SettingId) as Number? {
+    public function toggleSetting(id as GoProSettings.SettingId) as Void {
         // toggle between two available setting values
         // return sent setting value
 
-        var available = getAvailableSettings(id); 
-
-        if (available.size() != 2) { return null; }
-
         var currentSetting = getSetting(id);
+        if (id == GoProSettings.BEEPS) {
+            sendSetting(id, currentSetting == 0 ? 100 : 0);
+            return;
+        }
+
+        var available = getAvailableSettings(id); 
+        if (available.size() != 2) { return; }
+
         if (currentSetting == null) {
             EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x02 << 16, id, :WarningErr);
-            return null;
+            return;
         }
 
         var index = available.indexOf(currentSetting);
@@ -183,12 +177,10 @@ class GoProCamera extends GoProSettings {
                 currentSetting << 8 + id,
                 :WarningErr
             );
-            return null;
+            return;
         }
 
-        currentSetting = available[index ^ 1];
-        sendSetting(id, currentSetting);
-        return currentSetting;
+        sendSetting(id, available[index ^ 1]);
     }
 
     public function sendPreset(preset as GoProPreset) as Void {
@@ -244,11 +236,6 @@ class GoProCamera extends GoProSettings {
             } else {
                 timer.stop(progressTimer);
             }
-        }
-
-        if (id == PRESET_GRP) {
-            var invertFlag = value == PGRP_PHOTO ? 0x20 : 0;
-            registerMode(invertFlag);
         }
 
         statuses.put(id, value);

@@ -16,6 +16,7 @@ class GoProSettings {
         FORMAT      = 57,   // deprecated for anti-flicker
         EIS         = 78,   // deprecated for hypersmooth
         GPS         = 83,
+        BEEPS_OLD   = 87,   // deprecated for beeps (< max2)
         LED         = 91,
         ISO_MIN     = 102,
         PROTUNE     = 114,
@@ -27,6 +28,7 @@ class GoProSettings {
         PHOTO_LENS  = 122,
         FLICKER     = 134,
         HYPERSMOOTH = 135,
+        BEEPS       = 216,
 
         RATIO = -1
     }
@@ -297,6 +299,21 @@ class GoProSettings {
 
     protected function getSettings() as Dictionary<SettingId, Number> {
         return settings;
+    }
+
+    public function isEnabled(id as SettingId) as Boolean {
+        var ret = false;
+        var value = settings.get(id);
+        if (value == null) {}
+        
+        // off-values are 0, 4 and 100 while on-values are 1, 2, 3 and 5
+        else if (id == LED)         { ret = value & 3 != 0; }
+        else if (id == FLICKER)     { ret = value & 1 != 0; }
+        else if (id == HYPERSMOOTH) { ret = value != 0;}
+        else if (id == GPS)         { ret = value == 1;}
+        else if (id == BEEPS)       { ret = value != 0;}
+
+        return ret;
     }
 
     public static function getLabel(id as GoProSettings.SettingId, setting as Number?) as String or ResourceId {

@@ -91,12 +91,13 @@ module ErrorManager {
                          "_" + (code & 0xFFFF).format(format);
             
             var view = new NotifView(errMsg, NotifView.NOTIF_ERROR);
+            var delegate = new NotifDelegate(100);
 
             if (level != :CriticalErr) {
-                app.viewController.push(view, null, WatchUi.SLIDE_UP);
+                app.viewController.push(view, delegate, WatchUi.SLIDE_DOWN);
             } else {
                 app.viewController.returnHome(null, null);
-                app.viewController.switchTo(view, null, WatchUi.SLIDE_IMMEDIATE);
+                app.viewController.switchTo(view, delegate, WatchUi.SLIDE_IMMEDIATE);
 
                 if (goproExists) { app.gopro.disconnect(); }
             }
