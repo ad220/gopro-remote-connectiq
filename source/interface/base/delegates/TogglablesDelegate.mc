@@ -26,17 +26,14 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
 
     public function update() as Void {
         view.update();
+        WatchUi.requestUpdate();
     }
 
     public function onKey(keyEvent as KeyEvent) as Boolean {
         if (keyEvent.getType() == PRESS_TYPE_ACTION) {
             if (keyEvent.getKey() == KEY_ENTER) {
-                var callback = view.getHilighted().behavior;
-                if (callback != null) {
-                    method(callback).invoke();
-                    return true;
-                }
-                EM.raise(EM.ERR_NULL, 6, :WarningErr);
+                ICM.toggleOrPick(view.getHilighted().identifier as GoProSettings.SettingId);
+                return true;
             }
             else if (keyEvent.getKey() == KEY_UP) {
                 view.nextButton();
@@ -60,12 +57,7 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
         if (button instanceof Togglable) {
             view.onTouch(button);
 
-            var id = button.identifier as GoProSettings.SettingId;
-            if (id == GoProSettings.BEEPS) {
-                getApp().gopro.toggleSetting(id);
-            } else {
-                ICM.toggleOrPick(id);
-            }
+            ICM.toggleOrPick(button.identifier as GoProSettings.SettingId);
             return true;
         }
         return false;

@@ -57,7 +57,7 @@ class ConnectDelegate extends WatchUi.BehaviorDelegate {
                 GoProSettings.FLICKER           => GoProSettings.HZ60,
                 GoProSettings.HYPERSMOOTH       => GoProSettings.HS_HIGH,
                 GoProSettings.LED               => GoProSettings.LED_ALL_ON,
-                GoProSettings.GPS               => 1,
+                GoProSettings.GPS               => null,
                 GoProSettings.PHOTO_LENS        => GoProSettings.WIDE_7MP,
                 GoProSettings.PROTUNE           => 0,
                 GoProSettings.WHITE_BL          => 4,
