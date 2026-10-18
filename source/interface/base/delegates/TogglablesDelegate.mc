@@ -17,10 +17,11 @@ class TogglablesDelegate extends WatchUi.BehaviorDelegate {
 
         self.view = view;
         self.camera = getApp().gopro;
+        var ids = view.togglableIds.slice(null, null);
 
         camera.queryValues(GoProDecoder.GET_STATUS, [GoProCamera.BATTERY, GoProCamera.SD_REMAINING]b);
-        camera.queryValues(GoProDecoder.REGISTER_SETTING, view.togglableIds);
-        camera.queryValues(GoProDecoder.GET_AVAILABLE, view.togglableIds);
+        camera.queryValues(GoProDecoder.REGISTER_SETTING, ids);
+        camera.queryValues(GoProDecoder.GET_AVAILABLE, ids);
     }
 
     public function update() as Void {

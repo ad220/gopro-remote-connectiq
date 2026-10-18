@@ -283,10 +283,9 @@ class GoProDecoder {
             gopro.method(receiver).invoke(tuple[0], tuple[1]);
         }
 
-        if      (receiver == :onReceiveAvailable) {
+        if (receiver == :onReceiveAvailable) {
             gopro.applyAvailableSettings();
-        }
-        else if (receiver == :onReceiveSetting) {
+        } else {
             gopro.updateDescription();
         }
         getApp().viewController.update();

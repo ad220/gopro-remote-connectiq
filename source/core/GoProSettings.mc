@@ -310,7 +310,7 @@ class GoProSettings {
         else if (id == LED)         { ret = value & 3 != 0; }
         else if (id == FLICKER)     { ret = value & 1 != 0; }
         else if (id == HYPERSMOOTH) { ret = value != 0;}
-        else if (id == GPS)         { ret = value != 0;}
+        else if (id == GPS)         { ret = value == 1;}
         else if (id == BEEPS)       { ret = value != 0;}
 
         return ret;

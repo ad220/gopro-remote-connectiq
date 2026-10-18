@@ -129,19 +129,9 @@ class GoProCamera extends GoProSettings {
 
     public function registerSettings() as Void {
         decoder.enableNotifications(delegate);
-        queryValues(GoProDecoder.REGISTER_STATUS, [PRESET_GRP]b);
-        queryValues(GoProDecoder.REGISTER_SETTING, [GoProSettings.GPS, GoProSettings.LED, GoProSettings.FLICKER, GoProSettings.HYPERSMOOTH]b);
-    }
-
-    (:inline)
-    private function registerMode(invertFlag as Number) as Void {
-        // invertFlag should be 0x20 to register for photo mode, 0 for video.
-        var videoSettings = [GoProSettings.RESOLUTION, GoProSettings.FRAMERATE, GoProSettings.LENS]b;
-        queryValues((GoProDecoder.REGISTER_SETTING      + invertFlag) as GoProDecoder.QueryId, videoSettings);
-        queryValues((GoProDecoder.REGISTER_STATUS       + invertFlag) as GoProDecoder.QueryId, [ENCODING]b);
-        queryValues((GoProDecoder.UNREGISTER_SETTING    - invertFlag) as GoProDecoder.QueryId, [GoProSettings.PHOTO_LENS]b);
-        queryValues((GoProDecoder.UNREGISTER_STATUS     - invertFlag) as GoProDecoder.QueryId, [PHOTOS_TAKEN]b);
-        queryValues((GoProDecoder.UNREGISTER_AVAILABLE  - invertFlag) as GoProDecoder.QueryId, [GoProSettings.PHOTO_LENS]b);
+        queryValues(GoProDecoder.REGISTER_STATUS, [PRESET_GRP, ENCODING, PHOTOS_TAKEN]b);
+        queryValues(GoProDecoder.REGISTER_SETTING,[GoProSettings.RESOLUTION,
+            GoProSettings.FRAMERATE, GoProSettings.LENS, GoProSettings.PHOTO_LENS]b);
     }
 
 
@@ -246,11 +236,6 @@ class GoProCamera extends GoProSettings {
             } else {
                 timer.stop(progressTimer);
             }
-        }
-
-        if (id == PRESET_GRP) {
-            var invertFlag = value == PGRP_PHOTO ? 0x20 : 0;
-            registerMode(invertFlag);
         }
 
         statuses.put(id, value);
