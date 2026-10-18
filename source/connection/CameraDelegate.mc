@@ -25,10 +25,9 @@ class CameraDelegate {
         pairingTimer = app.timerController.start(method(:onPairingTimeout), 50, false);
 
         var pushMethod = app.viewController.method(app.fromGlance ? :switchTo : :push);
-        var delegate = app.fromGlance ? null : new NotifDelegate();
         pushMethod.invoke(
             new NotifView(Rez.Strings.Connecting, NotifView.NOTIF_INFO),
-            delegate, 
+            new NotifDelegate(50), 
             WatchUi.SLIDE_DOWN
         );
 

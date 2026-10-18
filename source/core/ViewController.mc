@@ -4,7 +4,7 @@ import Toybox.WatchUi;
 
 class ViewController {
 
-    typedef Dlgt as WatchUi.BehaviorDelegate or WatchUi.Menu2InputDelegate or Null;
+    typedef Dlgt as WatchUi.BehaviorDelegate or WatchUi.Menu2InputDelegate;
     typedef DlgtStack as [Dlgt, DlgtStack?];
 
     protected var viewStack as DlgtStack;
@@ -16,7 +16,7 @@ class ViewController {
     (:typecheck(false))
     public function update() as Void {
         var dlgt = viewStack[0];
-        if (dlgt != null and dlgt has :update){
+        if (dlgt has :update){
             dlgt.update();
         } else {
             WatchUi.requestUpdate();
@@ -64,7 +64,7 @@ class ViewController {
 
             if (message != null and messageType != null) {
                 var notif = new NotifView(message, messageType);
-                push(notif, new NotifDelegate(), WatchUi.SLIDE_DOWN);
+                push(notif, new NotifDelegate(25), WatchUi.SLIDE_DOWN);
             }
         }
     }

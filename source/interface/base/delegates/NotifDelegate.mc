@@ -6,19 +6,19 @@ class NotifDelegate extends WatchUi.BehaviorDelegate {
 
     private var timer as TimerCallback;
 
-    public function initialize() {
-        self.timer = getApp().timerController.start(method(:onTimeout), 20, false);
+    public function initialize(ticksTimeout as Number) {
+        self.timer = getApp().timerController.start(method(:onTimeout), ticksTimeout, false);
         BehaviorDelegate.initialize();
     }
 
     public function onBack() {
-        pop();
+        onTimeout();
         return true;
     }
 
     public function pop() as Void {
         timer.stop();
-        WatchUi.popView(WatchUi.SLIDE_UP);
+        WatchUi.popView(SLIDE_UP);
     }
 
     public function onTimeout() as Void {
