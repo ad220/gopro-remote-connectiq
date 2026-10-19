@@ -83,14 +83,15 @@ class GoProDecoder {
 
     function encodeSettings(id as GoProSettings.SettingId, value as Number) as ByteArray {
         
-        if (id == GoProSettings.BEEPS and goproId < GoProCamera.GP_MAX2) {
-            id = GoProSettings.BEEPS_OLD;
-        }
-        else if (goproId < GoProCamera.GP_MAX) {
-            var idx = NEW_SETTINGS.indexOf(id);
-            if (idx != -1) { id = OLD_SETTINGS[idx]; }
-        }
+        if (goproId < GoProCamera.GP_MAX2) {
+            if      (id == GoProSettings.BEEPS)      { id = GoProSettings.BEEPS_OLD; }
+            else if (id == GoProSettings.CAM_MODE)   { id = GoProSettings.LENS_MODE; }
 
+            else if (goproId < GoProCamera.GP_MAX) {
+                var idx = NEW_SETTINGS.indexOf(id);
+                if (idx != -1) { id = OLD_SETTINGS[idx]; }
+            }
+        }
         var request = goproId >= GoProCamera.GP_MISSION1PRO ?
             [0x05, 0xFF, 0x00]b : [0x03]b;
         request.addAll([id as Number, 0x01, value]b);
@@ -104,7 +105,8 @@ class GoProDecoder {
         var idx = OLD_SETTINGS.indexOf(id);
         if (idx != -1) { id = NEW_SETTINGS[idx]; }
 
-        if (id == GoProSettings.BEEPS_OLD) { id = GoProSettings.BEEPS; }
+        else if (id == GoProSettings.BEEPS_OLD) { id = GoProSettings.BEEPS; }
+        else if (id == GoProSettings.LENS_MODE) { id = GoProSettings.CAM_MODE; }
 
         return [id, value[0]];
     }
@@ -175,6 +177,9 @@ class GoProDecoder {
         if (queryId & 0xF == 0x2 and goproId < GoProCamera.GP_MAX2) {
             var idx = values.indexOf(GoProSettings.BEEPS);
             if (idx != -1) { values[idx] = GoProSettings.BEEPS_OLD; }
+
+            idx = values.indexOf(GoProSettings.CAM_MODE);
+            if (idx != -1) { values[idx] = GoProSettings.LENS_MODE; }
 
             if (goproId < GoProCamera.GP_MAX) {
                 for (var i=0; i<NEW_SETTINGS.size(); i+=1) {

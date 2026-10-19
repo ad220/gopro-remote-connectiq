@@ -21,11 +21,19 @@ class RemoteMenuDelegate extends WatchUi.Menu2InputDelegate {
         var item = new IconMenuItem(Rez.Strings.SwitchMode, null, :switchMode, icon, null);
         menu.addItem(item);
 
-        if (getApp().gopro.getId() < GoProCamera.GP_MAX) { return; }
+        var camId = getApp().gopro.getId();
+        if (camId < GoProCamera.GP_MAX) { return; }
 
         bmpOptions[:rezId] = Rez.Drawables.Protune;
         icon = new Bitmap(bmpOptions);
         item = new IconMenuItem(Rez.Strings.Protune, null, :protune, icon, null);
+        menu.addItem(item);
+
+        if (camId != GoProCamera.GP_MAX and camId != GoProCamera.GP_MAX2) { return; }
+
+        bmpOptions[:rezId] = Rez.Drawables.Mode360;
+        icon = new Bitmap(bmpOptions);
+        item = new IconMenuItem(Rez.Strings.Mode360, null, :mode360, icon, null);
         menu.addItem(item);
     }
 
@@ -35,6 +43,13 @@ class RemoteMenuDelegate extends WatchUi.Menu2InputDelegate {
 
         if      (id == :switchMode) {
             app.gopro.sendCommand(GoProCamera.LOAD_PGRP);
+            onBack();
+        }
+        else if (id == :mode360) {
+            var mode = app.gopro.getSetting(GoProSettings.CAM_MODE);
+            if (mode == null) { return; }
+
+            app.gopro.sendSetting(GoProSettings.CAM_MODE, mode ^ 1);
             onBack();
         }
         else if (id == :protune) {

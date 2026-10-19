@@ -47,8 +47,7 @@
     <!-- $$$ -->
     <string id="AdvancedSettings">Advanced settings</string>
     <string id="SwitchMode">Switch capture mode</string>
-    <!-- <string id="Photo">Photo</string> -->
-    <!-- <string id="Video">Video</string> -->
+    <string id="Mode360">Switch between single lens and 360 mode</string>
 
     <!-- SettingsMenu -->
     <!-- $$$ Small -->

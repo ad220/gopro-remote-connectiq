@@ -130,8 +130,12 @@ class GoProCamera extends GoProSettings {
     public function registerSettings() as Void {
         decoder.enableNotifications(delegate);
         queryValues(GoProDecoder.REGISTER_STATUS, [PRESET_GRP, ENCODING, PHOTOS_TAKEN]b);
-        queryValues(GoProDecoder.REGISTER_SETTING,[GoProSettings.RESOLUTION,
+        queryValues(GoProDecoder.REGISTER_SETTING, [GoProSettings.RESOLUTION,
             GoProSettings.FRAMERATE, GoProSettings.LENS, GoProSettings.PHOTO_LENS]b);
+        
+        if (goproId == GP_MAX or goproId == GP_MAX2) {
+            queryValues(GoProDecoder.REGISTER_SETTING, [GoProSettings.CAM_MODE]b);
+        }
     }
 
 
