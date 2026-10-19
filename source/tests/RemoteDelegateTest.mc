@@ -147,6 +147,79 @@ module RemoteDelegateTest {
 
 
     (:test)
+    function testMode360(logger as Test.Logger) as Boolean {
+        var result = true;
+        var camIds = [GoProCamera.GP_MAX, GoProCamera.GP_MAX2] as Array<Number>;
+        var specMethods = [
+            new Lang.Method(FakeGoProSpecs, :getSpecsMax),
+            new Lang.Method(FakeGoProSpecs, :getSpecsMax2),
+        ] as Array<Method() as FakeGoProSpecs.ISpecs>;
+
+        var icon = new WatchUi.Bitmap({:rezId => Rez.Drawables.Mode360});
+
+        for (var k=0; k<camIds.size(); k+=1) {
+            TestInit.initDefaults();
+            TestInit.initSettings.put(
+                GoProSettings.CAM_MODE, GoProSettings.MAXCAM_SINGLE);
+            TestInit.initFake(specMethods[k].invoke());
+            TestInit.initConnection(camIds[k]);
+
+            var device = BleAPI.device as FakeGoProDevice;
+            var camera = getApp().gopro;
+
+            device.processRequests();
+            var value = camera.getSetting(GoProSettings.CAM_MODE);
+
+            if (value != GoProSettings.MAXCAM_SINGLE) {
+                logger.error("Camera mode should be registered on connect, got: " + value);
+                result = false;
+                continue;
+            }
+
+            var viewController = new ViewDebugController(getApp().viewController);
+            getApp().viewController = viewController;
+
+            var menu = new WatchUi.Menu2(null);
+            var delegate = new RemoteMenuDelegate(menu);
+            viewController.push(menu, delegate, WatchUi.SLIDE_IMMEDIATE);
+
+            device.requests = [];
+            delegate.onSelect(
+                new WatchUi.IconMenuItem(Rez.Strings.Mode360, null, :mode360, icon, null));
+
+            if (device.requests.size() != 1) {
+                logger.error("Selecting 360 mode should queue exactly 1 request, got: "
+                    + device.requests.size());
+                result = false;
+                continue;
+            }
+
+            // MAX answers to the deprecated lens mode id, MAX2 to the camera mode one
+            var sentId = camIds[k] < GoProCamera.GP_MAX2
+                ? GoProSettings.LENS_MODE : GoProSettings.CAM_MODE;
+            var expectedPayload = [3, sentId, 1, GoProSettings.MAXCAM_DOUBLE]b;
+            var sent = device.requests[0];
+            BleAPI.device.processRequests();
+
+            if (!TestInit.haveSameData(sent as Array, [GPM.UUID_SETTINGS_CHAR, expectedPayload])) {
+                logger.error("Wrong 360 mode request, expected: " + expectedPayload
+                    + ", got: " + sent[1]);
+                result = false;
+                continue;
+            }
+
+            value = camera.getSetting(GoProSettings.CAM_MODE);
+            if (value != GoProSettings.MAXCAM_DOUBLE) {
+                logger.error("Camera mode should be 360, got: " + value);
+                result = false;
+            }
+        }
+
+        return result;
+    }
+
+
+    (:test)
     function testTogglables(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
         TestInit.initFake(null);
