@@ -28,6 +28,8 @@ class GoProSettings {
         PHOTO_LENS  = 122,
         FLICKER     = 134,
         HYPERSMOOTH = 135,
+        LENS_MODE   = 142,  // deprecated for camera mode
+        CAM_MODE    = 194,
         BEEPS       = 216,
 
         RATIO = -1
@@ -286,6 +288,11 @@ class GoProSettings {
         HS_AUTO_BOOST   => Rez.Strings.AutoBoost,
         HS_STANDARD     => Rez.Strings.Standard,
     } as Dictionary<HypersmoothId or Number, ResourceId>;
+
+    public enum Max360CamMode {
+        MAXCAM_SINGLE,
+        MAXCAM_DOUBLE,
+    }
 
     protected var settings as Dictionary<SettingId, Number>;
 

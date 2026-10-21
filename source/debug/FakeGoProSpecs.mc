@@ -26,6 +26,8 @@ module FakeGoProSpecs {
     function getSpecsH11M()     as ISpecs { return new SpecsH11Mini(); }
     function getSpecsM1Pro()    as ISpecs { return new SpecsMission1Pro(); }
     function getSpecsH5S()      as ISpecs { return new SpecsH5Session(); }
+    function getSpecsMax()      as ISpecs { return new SpecsMax(); }
+    function getSpecsMax2()     as ISpecs { return new SpecsMax2(); }
 
     class SpecsH11Mini {
         const cameraId = GoProCamera.GP_HERO11M;
@@ -128,6 +130,18 @@ module FakeGoProSpecs {
         const availableEvComp = [0,1,2,3,4,5,6,7,8]b;
         const availableIsoMax = [0,1,2,3,4,7,8,9]b;
         const availableIsoMin = [0,1,2,3,4,7,8,9]b;
+    }
+
+    // shortcut: video settings map is borrowed from H11M, MAX only resolutions / lens
+    // combos are not modelled, add them if a test needs MAX specific res / lens behavior
+    class SpecsMax extends SpecsH11Mini {
+        const cameraId = GoProCamera.GP_MAX;
+        function initialize() { SpecsH11Mini.initialize(); }
+    }
+
+    class SpecsMax2 extends SpecsMax {
+        const cameraId = GoProCamera.GP_MAX2;
+        function initialize() { SpecsMax.initialize(); }
     }
 
     class SpecsMission1Pro {

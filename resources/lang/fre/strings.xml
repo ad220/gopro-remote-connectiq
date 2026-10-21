@@ -40,9 +40,8 @@
     <!-- Remote Menu -->
     <!-- $$$ -->
     <string id="AdvancedSettings">Paramètres avancés</string>
-    <string id="SwitchMode">Changer de mode</string>
-    <!-- <string id="Photo">Photo</string>
-    <string id="Video">Vidéo</string> -->
+    <string id="SwitchMode">Changer de mode d'enregistrement</string>
+    <string id="Mode360">Basculer entre vidéo standard et 360</string>
     
     <!-- PresetPick -->
     <!-- $$$ Small -->
