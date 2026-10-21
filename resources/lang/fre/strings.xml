@@ -100,11 +100,12 @@
     <!-- Hypersmooth -->
     <!-- $$$ Small -->
     <string id="Disabled">Désactivé</string>
-    <string id="Low">Bas</string>
-    <string id="High">Haut</string>
     <string id="Boost">Boost</string>
     <string id="AutoBoost">Auto Boost</string>
     <string id="Standard">Standard</string>
+    <!-- $$$ Small Tiny -->
+    <string id="Low">Bas</string>
+    <string id="High">Haut</string>
 
     <!-- Protune -->
     <!-- $$$ Small Tiny -->
