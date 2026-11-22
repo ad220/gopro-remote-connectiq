@@ -28,7 +28,7 @@ class BluetoothDelegate extends CameraDelegate {
 
     public function onScanStateChange(scanState as Ble.ScanState, status as Ble.Status) as Void {
         if (status == Ble.STATUS_SUCCESS) {
-            if (scanMenuDelegate != null) { scanMenuDelegate.setScanState(scanState); }
+            if (scanMenuDelegate != null) { scanMenuDelegate.toggleScan(scanState); }
         }
         else {
             EM.raise(EM.ERR_COMM, EM.SUB_BLE_STATUS | 0x00, :WarningErr);
