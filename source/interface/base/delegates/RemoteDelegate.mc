@@ -37,8 +37,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
             var menu = ICM.newCustomMenu(0.15, null);
             vc.switchTo(menu, new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, []), SLIDE_UP);
         } else {
-            var menu = ICM.newCustomMenu(0.1, 0.3);
-            vc.push(menu, new SettingPickerDelegate(menu, GoProSettings.PHOTO_LENS), SLIDE_UP);
+            ICM.toggleOrPick(GoProSettings.PHOTO_LENS);
         }
         return true;
     }

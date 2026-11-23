@@ -15,8 +15,8 @@ module RemoteDelegateTest {
     (:test)
     function testSettings(logger as Test.Logger) as Boolean {
         TestInit.initDefaults();
-        TestInit.initFake(null);
-        TestInit.initConnection(GoProCamera.GP_HERO11M);
+        TestInit.initFake(FakeGoProSpecs.getSpecsM1Pro());
+        TestInit.initConnection(GoProCamera.GP_MISSION1PRO);
         
         var camera = getApp().gopro;
 
@@ -46,7 +46,23 @@ module RemoteDelegateTest {
         }
         tmpDlgt.onBack();
 
+        delegate = viewController.getCurrentDelegate();
+        if (!(delegate instanceof RemoteDelegate)) {
+            logger.error("Current view should be remote delegate");
+            return false;
+        }
+
         camera.sendCommand(GoProCamera.LOAD_PGRP);
+        BleAPI.device.processRequests();
+        delegate.onNextPage();
+
+        if (viewController.getCurrentDelegate() != delegate) {
+            logger.error("Less than 2 available photo lens, should not open picker menu");
+            return false;
+        }
+
+        BleAPI.device.specs.availablePhotoLens.addAll([GoProSettings.MAXSV_FULL]b);
+        camera.queryValues(GoProDecoder.GET_AVAILABLE, [GoProSettings.PHOTO_LENS]b);
         BleAPI.device.processRequests();
         delegate.onNextPage();
 

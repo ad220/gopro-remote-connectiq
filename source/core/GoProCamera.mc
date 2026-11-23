@@ -241,6 +241,11 @@ class GoProCamera extends GoProSettings {
                 timer.stop(progressTimer);
             }
         }
+        else if (id == PRESET_GRP and value == PGRP_PHOTO \
+            and availableSettings.get(PRESET_GRP) == null)
+        {
+            queryValues(GoProDecoder.REGISTER_AVAILABLE, [GoProSettings.PHOTO_LENS]b);
+        }
 
         statuses.put(id, value);
     }
