@@ -11,15 +11,26 @@ class GoProSettings {
         RESOLUTION  = 2,
         FRAMERATE   = 3,
         FOV         = 4,    // deprecated for lens
+        ISO_MAX     = 13,
         PHOTO_RES   = 17,   // deprecated for photo lens
         FORMAT      = 57,   // deprecated for anti-flicker
         EIS         = 78,   // deprecated for hypersmooth
         GPS         = 83,
+        BEEPS_OLD   = 87,   // deprecated for beeps (< max2)
         LED         = 91,
+        ISO_MIN     = 102,
+        PROTUNE     = 114,
+        WHITE_BL    = 115,
+        COLOR       = 116,
+        SHARPNESS   = 117,
+        EV_COMP     = 118,
         LENS        = 121,
         PHOTO_LENS  = 122,
         FLICKER     = 134,
         HYPERSMOOTH = 135,
+        LENS_MODE   = 142,  // deprecated for camera mode
+        CAM_MODE    = 194,
+        BEEPS       = 216,
 
         RATIO = -1
     }
@@ -90,6 +101,20 @@ class GoProSettings {
 
     public static const FRAMERATE_LABEL = WatchUi.loadResource(Rez.Strings._FPS) as String;
 
+    public static const ISO_MAP = {
+        9 => Rez.Strings.Auto,
+        0 => 6400,
+        3 => 3200,
+        1 => 1600,
+        5 => 1200,
+        6 => 1000,
+        4 => 800,
+        2 => 400,
+        7 => 200,
+        8 => 100,
+    } as Dictionary<Number, Number or ResourceId>;
+
+
     public enum LedId {
         LED_OFF         = 0,
         LED_FROFF       = 1,
@@ -109,6 +134,47 @@ class GoProSettings {
         LED_FRONT_OFF   => Rez.Strings.FrontOffOnly,
         LED_BACK_ONLY   => Rez.Strings.BackOnly,
     } as Dictionary<LedId or Number, ResourceId>;
+
+    public static const WB_MAP = {
+        3               => 6500,
+        7               => 6000,
+        2               => 5500,
+        12              => 5000,
+        6               => 4000,
+        11              => 4500,
+        0               => Rez.Strings.Auto,
+        4               => Rez.Strings.Native,
+        5               => 4000,
+        10              => 3200,
+        1               => 3000,
+        9               => 2800,
+        8               => 2300,
+    } as Dictionary<Number, Number or ResourceId>;
+
+    public enum ColorId {
+        COLOR_GOPRO,
+        COLOR_FLAT,
+        COLOR_NATURAL,
+        COLOR_VIBRANT   = 100,
+    }
+
+    public static const COLOR_MAP = {
+        COLOR_GOPRO     => Rez.Strings.GoPro,
+        COLOR_FLAT      => Rez.Strings.Flat,
+        COLOR_NATURAL   => Rez.Strings.Natural,
+        COLOR_VIBRANT   => Rez.Strings.Vibrant,
+    } as Dictionary<Number, ResourceId>;
+
+    public enum SharpnessId {
+        SHARP_HIGH,
+        SHARP_MEDIUM,
+        SHARP_LOW,
+    }
+
+    (:inline)
+    public static function evCompValue(evCompId as Number) as Float {
+        return 2.0 - evCompId * 0.5;
+    }
 
     public enum LensId {
         WIDE            = 0,
@@ -223,6 +289,11 @@ class GoProSettings {
         HS_STANDARD     => Rez.Strings.Standard,
     } as Dictionary<HypersmoothId or Number, ResourceId>;
 
+    public enum Max360CamMode {
+        MAXCAM_SINGLE,
+        MAXCAM_DOUBLE,
+    }
+
     protected var settings as Dictionary<SettingId, Number>;
 
     function initialize() {
@@ -235,6 +306,21 @@ class GoProSettings {
 
     protected function getSettings() as Dictionary<SettingId, Number> {
         return settings;
+    }
+
+    public function isEnabled(id as SettingId) as Boolean {
+        var ret = false;
+        var value = settings.get(id);
+        if (value == null) {}
+        
+        // off-values are 0, 4 and 100 while on-values are 1, 2, 3 and 5
+        else if (id == LED)         { ret = value & 3 != 0; }
+        else if (id == FLICKER)     { ret = value & 1 != 0; }
+        else if (id == HYPERSMOOTH) { ret = value != 0;}
+        else if (id == GPS)         { ret = value == 1;}
+        else if (id == BEEPS)       { ret = value != 0;}
+
+        return ret;
     }
 
     public static function getLabel(id as GoProSettings.SettingId, setting as Number?) as String or ResourceId {
@@ -286,6 +372,20 @@ class GoProSettings {
                 lens &= 0xFF;
                 if (lens != 0)      { label = lens + "MP " + label; }
             }
+        }
+        else if (id == PROTUNE)     { label = setting == 1 ? Rez.Strings.Enabled : Rez.Strings.Disabled; }
+        else if (id == COLOR)       { label = COLOR_MAP.get(setting); }
+        else if (id == EV_COMP)     { label = evCompValue(setting).format("%.1f"); }
+        else if (id == SHARPNESS) {
+            label = [Rez.Strings.High, Rez.Strings.Medium, Rez.Strings.Low, ""][setting & 3];
+        }
+        else if (id == WHITE_BL) {
+            label = WB_MAP.get(setting);
+            if (label instanceof Lang. Number)  { label = label + "K"; }
+        }
+        else if (id == ISO_MAX or id == ISO_MIN) {
+            label = ISO_MAP.get(setting);
+            if (label instanceof Lang.Number)   { label = label.toString(); }
         }
         else {
             // System.println("[WARNING]   Unknown setting ID requested for label");
@@ -348,33 +448,20 @@ class ResolutionComparator {
     }
 
 
-    public function compare(resolutionA as Object, resolutionB as Object) as Number {
+    public function compare(resolutionA as Object?, resolutionB as Object?) as Number {
         return wrappedCompare(resolutionA as Number, resolutionB as Number, true);
     }
 }
 
 (:typecheck(false))
 class RatioComparator extends ResolutionComparator {
-    public function compare(ratioA as Object, ratioB as Object) as Number {
+    public function compare(ratioA as Object?, ratioB as Object?) as Number {
         return wrappedCompare(ratioA as Number, ratioB as Number, false);
     }
 }
 
-
-class FramerateComparator {
-    public function compare(framerateA as Object, framerateB as Object) as Number {
-        var a = GoProSettings.FRAMERATE_MAP.get(framerateA as Number);
-        var b = GoProSettings.FRAMERATE_MAP.get(framerateB as Number);
-
-        if (a == null) { a = 0; }
-        if (b == null) { b = 0; }
-        
-        return b - a;
-    }
-}
-
 class PhotoLensComparator {
-    public function compare(lensA as Object, lensB as Object) as Number {
+    public function compare(lensA as Object?, lensB as Object?) as Number {
         var a = GoProSettings.PHOTO_LENS_MAP.get(lensA as Number) as Number?;
         var b = GoProSettings.PHOTO_LENS_MAP.get(lensB as Number) as Number?;
 
@@ -382,5 +469,26 @@ class PhotoLensComparator {
         if (b == null) { b = 0; }
         
         return (b-1) & 0xFF << 8 - (b >> 8) - (a-1) & 0xFF << 8 + (a >> 8);
+    }
+}
+
+class MapComparator {
+
+    private var map as Dictionary;
+    private var order as Number;
+
+    public function initialize(map as Dictionary, order as Number) {
+        self.map = map;
+        self.order = order;
+    }
+
+    public function compare(settingA as Object?, settingB as Object?) as Number {
+        var a = map.get(settingA);
+        var b = map.get(settingB);
+
+        if (!(a instanceof Number)) { a = 0; }
+        if (!(b instanceof Number)) { b = 0; }
+
+        return order * (a - b);
     }
 }

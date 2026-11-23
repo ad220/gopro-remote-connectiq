@@ -37,8 +37,7 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
             var menu = ICM.newCustomMenu(0.15, null);
             vc.switchTo(menu, new SettingsMenuDelegate(menu, SettingsMenuDelegate.MAIN, []), SLIDE_UP);
         } else {
-            var menu = ICM.newCustomMenu(0.1, 0.3);
-            vc.push(menu, new SettingPickerDelegate(menu, GoProSettings.PHOTO_LENS), SLIDE_UP);
+            ICM.toggleOrPick(GoProSettings.PHOTO_LENS);
         }
         return true;
     }
@@ -65,10 +64,6 @@ class RemoteDelegate extends WatchUi.BehaviorDelegate {
         } else if (!gopro.getDescription().equals(". . .")) {
             var menu = new Menu2(null);
             getApp().viewController.push(menu, new TogglablesDelegate(menu), SLIDE_DOWN);
-            getApp().gopro.queryValues(
-                GoProDecoder.GET_AVAILABLE,
-                [GoProSettings.FLICKER, GoProSettings.LED, GoProSettings.HYPERSMOOTH]b
-            );
             return true;
         }
         return false;

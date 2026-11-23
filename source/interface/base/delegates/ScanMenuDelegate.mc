@@ -80,7 +80,7 @@ class ScanMenuDelegate extends WatchUi.Menu2InputDelegate {
         }
     }
 
-    public function setScanState(state as Ble.ScanState) as Void {
+    public function toggleScan(state as Ble.ScanState) as Void {
         scanState = state;
     }
 

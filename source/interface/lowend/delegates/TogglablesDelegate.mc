@@ -55,47 +55,32 @@ class TogglablesDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     public function onStab() as Void {
-        var menu = ICM.newCustomMenu(0.1, 0.15);
-        getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.HYPERSMOOTH), SLIDE_LEFT);
+        var stab = ICM.toggleOrPick(GoProSettings.HYPERSMOOTH);
+        if (stab != null) {
+            selected.setSubLabel(GoProSettings.getLabel(GoProSettings.HYPERSMOOTH, stab));
+        }
         // TODO(mobile): update stab sublabel on change
     }
     
     public function onLed() as Void {
-        var available = gopro.getAvailableSettings(GoProSettings.LED);
-        if (available.size()>2) {
-            var menu = ICM.newCustomMenu(0.1, 0.15);
-            getApp().viewController.push(menu, new SettingPickerDelegate(menu, GoProSettings.LED), SLIDE_LEFT);
-        } else {
-            var ledStatus = gopro.getSetting(GoProSettings.LED);
-            if (ledStatus == null) {
-                EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x01 << 16, GoProSettings.LED, :WarningErr);
-                return;
-            }
-            
-            var newStatus = available[available.indexOf(ledStatus) ^ 0x01];
-            selected.setSubLabel(GoProSettings.getLabel(GoProSettings.LED, newStatus));
-            gopro.sendSetting(GoProSettings.LED, newStatus);
+        var led = ICM.toggleOrPick(GoProSettings.LED);
+        if (led != null) {
+            selected.setSubLabel(GoProSettings.getLabel(GoProSettings.LED, led));
         }
     }
     
     public function onFlicker() as Void {
         var flicker = gopro.getSetting(GoProSettings.FLICKER);
-        if (flicker == null) {
-            EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x01 << 16, GoProSettings.FLICKER, :WarningErr);
-            return;
+        if (flicker != null) { // expected behavior with MAX2
+            (selected as ToggleMenuItem).setEnabled(flicker & 0x01 == 0);
+            selected.setSubLabel(flicker & 1 ? "60Hz" : "50Hz");
+            gopro.sendSetting(GoProSettings.FLICKER, flicker ^ 0x01);
         }
 
-        (selected as ToggleMenuItem).setEnabled(flicker & 0x01 == 0);
-        selected.setSubLabel(flicker & 1 ? "60Hz" : "50Hz");
-        gopro.sendSetting(GoProSettings.FLICKER, flicker ^ 0x01);
     }
     
     public function onGps() as Void {
-        var gps = gopro.getSetting(GoProSettings.GPS) as Number?;
-        if (gps==null) {
-            EM.raise(EM.ERR_CAM | EM.SUB_CAM_NULL | 0x01 << 16, GoProSettings.GPS, :WarningErr);
-        }
-        
+        var gps = gopro.getSetting(GoProSettings.GPS) as Number?;       
         (selected as ToggleMenuItem).setEnabled(gps & 0x01 == 0);
         gopro.sendSetting(GoProSettings.GPS, gps ^ 0x01);
     }

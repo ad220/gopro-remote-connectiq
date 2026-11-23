@@ -212,6 +212,8 @@ using GattProfileManager as GPM;
 
                     var idx = GoProDecoder.OLD_SETTINGS.indexOf(id);
                     if (idx != -1) { id = GoProDecoder.NEW_SETTINGS[idx]; }
+                    if (id == GoProSettings.BEEPS_OLD) { id = GoProSettings.BEEPS; }
+                    if (id == GoProSettings.LENS_MODE) { id = GoProSettings.CAM_MODE; }
 
                     var value = data[i+2];
                     var available = availableValues(id);
@@ -309,6 +311,8 @@ using GattProfileManager as GPM;
 
         var idx = GoProDecoder.OLD_SETTINGS.indexOf(id);
         if (idx != -1) { internalId = GoProDecoder.NEW_SETTINGS[idx]; }
+        if (id == GoProSettings.BEEPS_OLD) { internalId = GoProSettings.BEEPS; }
+        if (id == GoProSettings.LENS_MODE) { internalId = GoProSettings.CAM_MODE; }
 
         updateNotif(notifSettings, query, internalId);
         if (query >= 0x70) { return; }
@@ -393,8 +397,32 @@ using GattProfileManager as GPM;
             case GoProSettings.HYPERSMOOTH:
                 available = specs.availableHypersmooth;
                 break;
+            case GoProSettings.BEEPS:
+                available = specs.availableBeeps;
+                break;
             case GoProSettings.PHOTO_LENS:
                 available = specs.availablePhotoLens;
+                break;
+            case GoProSettings.PROTUNE:
+                available = specs.availableProtune;
+                break;
+            case GoProSettings.WHITE_BL:
+                available = specs.availableWhiteBl;
+                break;
+            case GoProSettings.COLOR:
+                available = specs.availableColor;
+                break;
+            case GoProSettings.SHARPNESS:
+                available = specs.availableSharpness;
+                break;
+            case GoProSettings.EV_COMP:
+                available = specs.availableEvComp;
+                break;
+            case GoProSettings.ISO_MAX:
+                available = specs.availableIsoMax;
+                break;
+            case GoProSettings.ISO_MIN:
+                available = specs.availableIsoMin;
                 break;
             default:
                 // System.println("[DBG WARN]  Wrong id");

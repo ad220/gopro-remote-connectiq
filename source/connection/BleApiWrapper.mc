@@ -15,27 +15,27 @@ module BleApiWrapper {
     };
 
 
-    (:inline)
+    (:inline :force_dce)
     function registerProfile(profile as GattProfile) as Void {
         Ble.registerProfile(profile);
     }
 
-    (:inline)
+    (:inline :force_dce)
     function setDelegate(delegate as Ble.BleDelegate) as Void {
         Ble.setDelegate(delegate);
     }
 
-    (:inline)
+    (:inline :force_dce)
     function setScanState(state as Ble.ScanState) as Void {
         Ble.setScanState(state);
     }
 
-    (:inline)
+    (:inline :force_dce)
     function pairDevice(device as Ble.ScanResult) as Ble.Device? {
         return Ble.pairDevice(device);
     }
 
-    (:inline)
+    (:inline :force_dce)
     function unpairDevice(device as Ble.Device) as Void {
         Ble.unpairDevice(device);
     }    

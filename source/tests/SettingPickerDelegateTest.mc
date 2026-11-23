@@ -66,11 +66,17 @@ module SettingPickerDelegateTest {
             GoProSettings.LED,
             GoProSettings.HYPERSMOOTH,
             GoProSettings.PHOTO_LENS,
+            GoProSettings.ISO_MAX,
+            GoProSettings.ISO_MIN,
+            GoProSettings.COLOR,
+            GoProSettings.SHARPNESS,
+            GoProSettings.EV_COMP,
         ];
 
         gopro.queryValues(GoProDecoder.GET_AVAILABLE, []b.addAll(settings));
         BleAPI.device.processRequests();
 
+        // ratios are derived from the available resolutions, they can't be queried directly
         (settings as Array).add(GoProSettings.RATIO);
         var expectedLabels = [
             ["5.3K", "4K", "2.7K", "1080p"],
@@ -82,6 +88,11 @@ module SettingPickerDelegateTest {
                 "13MP Wide", "13MP Linear", "13MP Ultra Wide", "13MP Ultra Linear",
                 "12MP Wide", "12MP Medium", "12MP Narrow", "12MP Linear", "12MP Ultra Wide",
                 "9MP Wide"],
+            ["Auto", "100", "200", "400", "800", "1600", "3200", "6400"],
+            ["Auto", "100", "200", "400", "800", "1600", "3200", "6400"],
+            ["Flat", "Natural", "Vibrant"],
+            ["High", "Medium", "Low"],
+            ["2.0", "1.5", "1.0", "0.5", "0.0", "-0.5", "-1.0", "-1.5", "-2.0"],
             ["8:7", "4:3", "16:9"],
         ];
 
@@ -150,5 +161,51 @@ module SettingPickerDelegateTest {
         }
 
         return result;
+    }
+
+
+    (:test)
+    function testWhiteBalanceOrder(logger as Test.Logger) as Boolean {
+        TestInit.initDefaults();
+        TestInit.initFake(null);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
+
+        var gopro = getApp().gopro;
+        gopro.queryValues(GoProDecoder.GET_AVAILABLE, [GoProSettings.WHITE_BL]b);
+        BleAPI.device.processRequests();
+
+        var menu = initMenu(GoProSettings.WHITE_BL);
+        var labels = getLabels(menu[0]);
+
+        // WhiteBalanceComparator sorts Auto and Native as 0, only the Kelvin order is deterministic
+        var expected = [
+            "2300K", "2800K", "3200K", "4000K", "4500K",
+            "5000K", "5500K", "6000K", "6500K",
+        ];
+
+        if (labels.size() != expected.size() + 2) {
+            logger.error("Wrong number of white balance options, expected: " \
+                + (expected.size() + 2) + ", got: " + labels);
+            return false;
+        }
+
+        // getLabel returns ResourceIds, which only compare equal to Strings via equals()
+        var first = labels[0] as Object;
+        var second = labels[1] as Object;
+        if (!((first.equals("Auto") and second.equals("Native")) or
+              (first.equals("Native") and second.equals("Auto")))) {
+            logger.error("Auto and Native should come first, got: " + labels);
+            return false;
+        }
+
+        for (var i=0; i<expected.size(); i+=1) {
+            if (!(labels[i + 2] as Object).equals(expected[i])) {
+                logger.error("Unexpected white balance order, expected: " \
+                    + expected + ", got: " + labels);
+                return false;
+            }
+        }
+
+        return true;
     }
 }

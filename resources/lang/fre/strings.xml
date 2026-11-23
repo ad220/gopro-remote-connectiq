@@ -40,9 +40,8 @@
     <!-- Remote Menu -->
     <!-- $$$ -->
     <string id="AdvancedSettings">Paramètres avancés</string>
-    <string id="SwitchMode">Changer de mode</string>
-    <!-- <string id="Photo">Photo</string>
-    <string id="Video">Vidéo</string> -->
+    <string id="SwitchMode">Changer de mode d'enregistrement</string>
+    <string id="Mode360">Basculer entre vidéo standard et 360</string>
     
     <!-- PresetPick -->
     <!-- $$$ Small -->
@@ -63,6 +62,11 @@
     <string id="Lens">Objectif</string>
     <string id="Framerate">Fréq. d'image</string>
     <string id="PhotoLens">Format photo</string>
+
+    <string id="WhiteBalance">Température (WB)</string>
+    <string id="Color">Saturation</string>
+    <string id="Sharpness">Netteté</string>
+    <string id="EvComp">Exposition</string>
 
     <!-- Paramètres de la caméra pour appareils avec peu de mémoire -->
      <!-- $$$ -->
@@ -95,10 +99,22 @@
 
     <!-- Hypersmooth -->
     <!-- $$$ Small -->
-    <string id="Disabled">Désactivé</string>
-    <string id="Low">Bas</string>
-    <string id="High">Haut</string>
     <string id="Boost">Boost</string>
     <string id="AutoBoost">Auto Boost</string>
     <string id="Standard">Standard</string>
+    <!-- $$$ Small Tiny -->
+    <string id="Disabled">Désactivé</string>
+    <string id="Low">Bas</string>
+    <string id="High">Haut</string>
+
+    <!-- Protune -->
+    <!-- $$$ Small Tiny -->
+    <string id="Enabled">Activé</string>
+    <string id="Auto">Auto</string>
+    <string id="Native">Natif</string>
+    <string id="Flat">Plat</string>
+    <string id="Natural">Naturel</string>
+    <string id="Vibrant">Vibrant</string>
+    <string id="Medium">Moyen</string>
+
 </strings>

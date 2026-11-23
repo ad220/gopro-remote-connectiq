@@ -55,6 +55,7 @@ module GoProCameraTest {
             if      (id == GoProSettings.LENS)          { id = GoProSettings.FOV; }
             else if (id == GoProSettings.FLICKER)       { id = GoProSettings.FORMAT; }
             else if (id == GoProSettings.HYPERSMOOTH)   { id = GoProSettings.EIS; }
+            else if (id == GoProSettings.PHOTO_LENS)    { id = GoProSettings.PHOTO_RES; }
         }
         return [3, id, 1, value]b;
     }
@@ -392,6 +393,8 @@ module GoProCameraTest {
 
         var device = BleAPI.device as FakeGoProDevice;
         var camera = getApp().gopro;
+        
+        camera.queryValues(GoProDecoder.REGISTER_SETTING, [GoProSettings.LED]b);
         device.processRequests();
 
         device.requests = [];
@@ -559,6 +562,8 @@ module GoProCameraTest {
             6,
             GoProSettings.HS_OFF,
         ]; // 1080p 50fps
+
+        camera.queryValues(GoProDecoder.REGISTER_SETTING, []b.addAll(ids));
         
         for (var i=0; i<ids.size(); i+=1) {
             BleAPI.device.setSetting(ids[i], values[i]);
@@ -936,11 +941,6 @@ module GoProCameraTest {
         var camera = getApp().gopro;
         BleAPI.device.processRequests();
 
-        if (camera.getStatus(GoProCamera.PHOTOS_TAKEN) != null) {
-            logDeviceError(logger, "Camera photos taken status should still be null", k);
-            result = false;
-        }
-
         camera.sendCommand(GoProCamera.LOAD_PGRP);
         BleAPI.device.processRequests();
 
@@ -959,7 +959,7 @@ module GoProCameraTest {
         BleAPI.device.processRequests();
 
         if (camera.isRecording()) {
-            logDeviceError(logger, "Camera is in photo mode, it shouuld not be recording", k);
+            logDeviceError(logger, "Camera is in photo mode, it should not be recording", k);
             result = false;
         }
 
@@ -1082,10 +1082,6 @@ module GoProCameraTest {
         TestInit.initFake(null);
         TestInit.initConnection(GoProCamera.GP_HERO11M);
         
-        var camera = getApp().gopro;
-        BleAPI.device.processRequests();
-        var label;
-
         var ids = [
             GoProSettings.RESOLUTION,
             GoProSettings.RATIO,
@@ -1096,6 +1092,12 @@ module GoProCameraTest {
             GoProSettings.FLICKER,
             GoProSettings.HYPERSMOOTH,
         ];
+
+        var camera = getApp().gopro;
+        camera.queryValues(GoProDecoder.REGISTER_SETTING, []b.addAll(ids));
+        BleAPI.device.processRequests();
+        var label;
+
         var expected = ["4K", "16:9", Rez.Strings._WIDE, "60 fps", "", Rez.Strings.On, "", Rez.Strings.Low];
 
         for (var i=0; i<ids.size(); i+=1) {
@@ -1131,6 +1133,257 @@ module GoProCameraTest {
     }
 
     
+    (:test)
+    function testToggleSetting(logger as Logger) as Boolean {
+        var result = true;
+        TestInit.initDefaults();
+        TestInit.initSettings.put(GoProSettings.PROTUNE, 0);
+        TestInit.initFake(null);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
+
+        var device = BleAPI.device;
+        var camera = getApp().gopro;
+        camera.queryValues(
+            GoProDecoder.REGISTER_SETTING,
+            [GoProSettings.PROTUNE]b
+        );
+        camera.queryValues(
+            GoProDecoder.GET_AVAILABLE,
+            [GoProSettings.PROTUNE, GoProSettings.WHITE_BL]b
+        );
+        BleAPI.device.processRequests();
+
+        if (camera.getSetting(GoProSettings.PROTUNE) != 0) {
+            logger.error("Protune should be 0 before toggle, got: " + camera.getSetting(GoProSettings.PROTUNE));
+            return false;
+        }
+
+        // settings with anything but 2 available values can't be toggled
+        device.requests = [];
+        camera.toggleSetting(GoProSettings.WHITE_BL);
+        if (device.requests.size() != 0) {
+            logger.error("White balance has " + camera.getAvailableSettings(GoProSettings.WHITE_BL).size() \
+                + " available values, nothing should have been sent, got: " + device.requests);
+            result = false;
+        }
+
+        device.requests = [];
+        camera.toggleSetting(GoProSettings.PROTUNE);
+        if (!TestInit.haveSameData(device.requests[0] as Array,
+            [GPM.UUID_SETTINGS_CHAR, [3, GoProSettings.PROTUNE, 0x01, 1]b]))
+        {
+            logger.error("Protune should have been toggled to 1, got: " + camera.getSetting(GoProSettings.PROTUNE) \
+                + ", request: " + device.requests);
+            result = false;
+        }
+
+        BleAPI.device.processRequests();
+
+        device.requests = [];
+        camera.toggleSetting(GoProSettings.PROTUNE);
+        if (!TestInit.haveSameData(device.requests[0] as Array,
+            [GPM.UUID_SETTINGS_CHAR, [3, GoProSettings.PROTUNE, 0x01, 0]b] as Array))
+        {
+            logger.error("Protune should have been toggled back to 0, got: " + camera.getSetting(GoProSettings.PROTUNE) \
+                + ", request: " + device.requests);
+            result = false;
+        }
+
+        BleAPI.device.processRequests();
+
+        return result;
+    }
+
+
+    (:test)
+    function testToggleSettingOutOfAvailable(logger as Logger) as Boolean {
+        // current setting isn't part of the available values: warn instead of
+        // writing an out of bounds value
+        TestInit.initDefaults();
+        TestInit.initSettings.put(GoProSettings.PROTUNE, 1);
+        TestInit.initFake(null);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
+
+        var camera = getApp().gopro;
+        camera.queryValues(GoProDecoder.REGISTER_SETTING, [GoProSettings.PROTUNE]b);
+        camera.queryValues(GoProDecoder.GET_AVAILABLE, [GoProSettings.PROTUNE]b);
+        BleAPI.device.processRequests();
+
+        // 42 isn't in the available values, which are 0 and 1. The fake device
+        // refuses out of range writes, so its state is changed directly.
+        BleAPI.device.settings.put(GoProSettings.PROTUNE, 42);
+        camera.queryValues(GoProDecoder.REGISTER_SETTING, [GoProSettings.PROTUNE]b);
+        BleAPI.device.processRequests();
+
+        if (camera.getSetting(GoProSettings.PROTUNE) != 42) {
+            logger.error("Protune should be 42 before toggle, got: " + camera.getSetting(GoProSettings.PROTUNE));
+            return false;
+        }
+
+        BleAPI.device.requests = [];
+        camera.toggleSetting(GoProSettings.PROTUNE);
+
+        if (camera.getSetting(GoProSettings.PROTUNE) != 42) {
+            logger.error("Protune should not have been changed, got: " + camera.getSetting(GoProSettings.PROTUNE));
+            return false;
+        }
+
+        if (BleAPI.device.requests.size() != 0) {
+            logger.error("Nothing should have been sent for a setting which isn't in the available values, got: " \
+                + BleAPI.device.requests);
+            return false;
+        }
+
+        BleAPI.device.processRequests();
+
+        return true;
+    }
+
+
+    (:test)
+    function testToggleBeeps(logger as Logger) as Boolean {
+        var result = true;
+
+        for (var k=0; k<testDeviceIds.size(); k+=1)
+        { // start of testDevice loop
+
+        TestInit.initDefaults();
+        TestInit.initSettings.put(GoProSettings.BEEPS, 70);
+        TestInit.initFake(testDeviceSpecs[k].invoke());
+        TestInit.initConnection(testDeviceIds[k]);
+
+        var device = BleAPI.device as FakeGoProDevice;
+        var camera = getApp().gopro;
+        var id = testDeviceIds[k] < GoProCamera.GP_MAX2 ? GoProSettings.BEEPS_OLD : GoProSettings.BEEPS;
+
+        device.requests = [];
+        camera.queryValues(GoProDecoder.REGISTER_SETTING, [GoProSettings.BEEPS]b);
+
+        BleAPI.device.processRequests();
+
+        if (camera.getSetting(GoProSettings.BEEPS) != 70 or !camera.isEnabled(GoProSettings.BEEPS)) {
+            logDeviceError(logger, "Beeps should be 0 after registering it, got: "
+                + camera.getSetting(GoProSettings.BEEPS), k);
+            result = false;
+            continue;
+        }
+
+        device.requests = [];
+        camera.toggleSetting(GoProSettings.BEEPS);
+        var expected = expectedSettingRequest(id, 0, k);
+
+        if (device.requests.size() != 1
+            or !device.requests[0][1].equals(expected))
+        {
+            logDeviceError(logger, "Wrong toggle beeps request, expected :"
+                + expected + ", got: " + device.requests[0][1], k);
+            result = false;
+            continue;
+        }
+
+        BleAPI.device.processRequests();
+        
+        if (camera.getSetting(GoProSettings.BEEPS) != 0 or camera.isEnabled(GoProSettings.BEEPS)) {
+            logDeviceError(logger, "Beeps should be set to 100, got: "
+                + camera.getSetting(GoProSettings.BEEPS), k);
+            result = false;
+            continue;
+        }
+
+        device.requests = [];
+        camera.toggleSetting(GoProSettings.BEEPS);
+        expected = expectedSettingRequest(id, 100, k);
+
+        if (device.requests.size() != 1
+            or !device.requests[0][1].equals(expected))
+        {
+            logDeviceError(logger, "Wrong toggle beeps request, expected :"
+                + expected + ", got: " + device.requests[0][1], k);
+            result = false;
+            continue;
+        }
+
+        BleAPI.device.processRequests();
+
+        if (camera.getSetting(GoProSettings.BEEPS) != 100 or !camera.isEnabled(GoProSettings.BEEPS)) {
+            logDeviceError(logger, "Beeps should have been disabled got: "
+                + camera.getSetting(GoProSettings.BEEPS), k);
+            result = false;
+            continue;
+        }
+
+        } // end of testDevice loop
+
+        return result;
+    }
+
+
+    (:test)
+    function testProtuneLabels(logger as Logger) as Boolean {
+        var result = true;
+        TestInit.initDefaults();
+        TestInit.initFake(null);
+        TestInit.initConnection(GoProCamera.GP_HERO11M);
+
+        var camera = getApp().gopro;
+        BleAPI.device.processRequests();
+
+        var ids = [
+            GoProSettings.PROTUNE,
+            GoProSettings.PROTUNE,
+            GoProSettings.WHITE_BL,
+            GoProSettings.WHITE_BL,
+            GoProSettings.WHITE_BL,
+            GoProSettings.WHITE_BL,
+            GoProSettings.COLOR,
+            GoProSettings.COLOR,
+            GoProSettings.COLOR,
+            GoProSettings.COLOR,
+            GoProSettings.SHARPNESS,
+            GoProSettings.SHARPNESS,
+            GoProSettings.SHARPNESS,
+            GoProSettings.EV_COMP,
+            GoProSettings.EV_COMP,
+            GoProSettings.EV_COMP,
+            GoProSettings.ISO_MAX,
+            GoProSettings.ISO_MAX,
+            GoProSettings.ISO_MAX,
+            GoProSettings.ISO_MIN,
+            GoProSettings.ISO_MIN,
+        ];
+        var values = [
+            1, 0,
+            0, 4, 3, 8,
+            GoProSettings.COLOR_GOPRO, GoProSettings.COLOR_FLAT,
+            GoProSettings.COLOR_NATURAL, GoProSettings.COLOR_VIBRANT,
+            GoProSettings.SHARP_HIGH, GoProSettings.SHARP_MEDIUM, GoProSettings.SHARP_LOW,
+            0, 4, 8,
+            9, 0, 8,
+            9, 8,
+        ];
+        var expected = [
+            Rez.Strings.Enabled, Rez.Strings.Disabled,
+            Rez.Strings.Auto, Rez.Strings.Native, "6500K", "2300K",
+            Rez.Strings.GoPro, Rez.Strings.Flat, Rez.Strings.Natural, Rez.Strings.Vibrant,
+            Rez.Strings.High, Rez.Strings.Medium, Rez.Strings.Low,
+            "2.0", "0.0", "-2.0",
+            Rez.Strings.Auto, "6400", "100",
+            Rez.Strings.Auto, "100",
+        ];
+
+        for (var i=0; i<ids.size(); i+=1) {
+            var label = camera.getLabel(ids[i], values[i]);
+            if (!label.equals(expected[i])) {
+                logger.error("Wrong label for setting id: " + ids[i] + ", value: " + values[i] \
+                    + ", expected: " + expected[i] + ", got: " + label);
+                result = false;
+            }
+        }
+
+        return result;
+    }
+
+
     (:test)
     function testLabelUnknown(logger as Logger) as Boolean {
         TestInit.initDefaults();

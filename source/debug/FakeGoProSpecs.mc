@@ -12,12 +12,22 @@ module FakeGoProSpecs {
         var availableHypersmooth    as ByteArray;
         var availableLed            as ByteArray;
         var availableGps            as ByteArray;
+        var availableBeeps          as ByteArray;
         var availablePhotoLens      as ByteArray;
+        var availableProtune        as ByteArray;
+        var availableWhiteBl        as ByteArray;
+        var availableColor          as ByteArray;
+        var availableSharpness      as ByteArray;
+        var availableEvComp         as ByteArray;
+        var availableIsoMax         as ByteArray;
+        var availableIsoMin         as ByteArray;
     };
 
     function getSpecsH11M()     as ISpecs { return new SpecsH11Mini(); }
     function getSpecsM1Pro()    as ISpecs { return new SpecsMission1Pro(); }
     function getSpecsH5S()      as ISpecs { return new SpecsH5Session(); }
+    function getSpecsMax()      as ISpecs { return new SpecsMax(); }
+    function getSpecsMax2()     as ISpecs { return new SpecsMax2(); }
 
     class SpecsH11Mini {
         const cameraId = GoProCamera.GP_HERO11M;
@@ -109,8 +119,29 @@ module FakeGoProSpecs {
         ]b;
 
         const availableGps = []b;
+        const availableBeeps = [0, 70, 100]b;
 
         const availablePhotoLens = []b;
+
+        const availableProtune = [0, 1]b;
+        const availableWhiteBl = [0,2,3,4,5,7,8,9,10,11,12]b;
+        const availableColor = [GoProSettings.COLOR_VIBRANT, GoProSettings.COLOR_NATURAL, GoProSettings.COLOR_FLAT]b;
+        const availableSharpness = [GoProSettings.SHARP_HIGH, GoProSettings.SHARP_MEDIUM, GoProSettings.SHARP_LOW]b;
+        const availableEvComp = [0,1,2,3,4,5,6,7,8]b;
+        const availableIsoMax = [0,1,2,3,4,7,8,9]b;
+        const availableIsoMin = [0,1,2,3,4,7,8,9]b;
+    }
+
+    // shortcut: video settings map is borrowed from H11M, MAX only resolutions / lens
+    // combos are not modelled, add them if a test needs MAX specific res / lens behavior
+    class SpecsMax extends SpecsH11Mini {
+        const cameraId = GoProCamera.GP_MAX;
+        function initialize() { SpecsH11Mini.initialize(); }
+    }
+
+    class SpecsMax2 extends SpecsMax {
+        const cameraId = GoProCamera.GP_MAX2;
+        function initialize() { SpecsMax.initialize(); }
     }
 
     class SpecsMission1Pro {
@@ -176,11 +207,20 @@ module FakeGoProSpecs {
             GoProSettings.HS_AUTO_BOOST,
         ]b;
 
+        const availableBeeps = [0, 70, 100]b;
         const availableGps = [0, 1]b;
         const availablePhotoLens = [
             GoProSettings.WIDE_FULL,
             GoProSettings.LINEAR_FULL,
         ]b;
+
+        const availableProtune = [0, 1]b;
+        const availableWhiteBl = [0,2,3,4,5,7,8,9,10,11,12]b;
+        const availableColor = [GoProSettings.COLOR_VIBRANT, GoProSettings.COLOR_NATURAL, GoProSettings.COLOR_FLAT]b;
+        const availableSharpness = [GoProSettings.SHARP_HIGH, GoProSettings.SHARP_MEDIUM, GoProSettings.SHARP_LOW]b;
+        const availableEvComp = [0,1,2,3,4,5,6,7,8]b;
+        const availableIsoMax = [0,1,2,3,4,7,8,9]b;
+        const availableIsoMin = [0,1,2,3,4,7,8,9]b;
     }
 
     class SpecsH5Session {
@@ -241,12 +281,21 @@ module FakeGoProSpecs {
             GoProSettings.HS_LOW,
         ]b;
 
+        const availableBeeps = [0, 1, 2]b;
         const availableGps = [0, 1]b;
         const availablePhotoLens = [
             GoProSettings.WIDE_5MP,
             GoProSettings.WIDE_7MP,
             GoProSettings.MEDIUM_7MP,
         ]b;
+
+        const availableProtune = []b;
+        const availableWhiteBl = []b;
+        const availableColor = []b;
+        const availableSharpness = []b;
+        const availableEvComp = []b;
+        const availableIsoMax = []b;
+        const availableIsoMin = []b;
     }
 
     class SpecsUnknown {
@@ -272,7 +321,16 @@ module FakeGoProSpecs {
         const availableHypersmooth    = [52, 63]b;
         const availableLed            = [7, 8]b;
         const availableGps            = [9, 10]b;
+        const availableBeeps          = [200, 250]b;
         const availablePhotoLens      = [78, 91]b;
+
+        const availableProtune = []b;
+        const availableWhiteBl = []b;
+        const availableColor = []b;
+        const availableSharpness = []b;
+        const availableEvComp = []b;
+        const availableIsoMax = []b;
+        const availableIsoMin = []b;
     }
 
     class SpecsEmpty {

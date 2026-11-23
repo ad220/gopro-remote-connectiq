@@ -53,7 +53,7 @@ module SettingsMenuDelegateTest {
         TestInit.initConnection(GoProCamera.GP_HERO11M);
         Application.Storage.clearValues();
 
-        var viewController = new ViewDebugController();
+        var viewController = new ViewDebugController(getApp().viewController);
         getApp().viewController = viewController;
 
         var menu = new TestInit.DebugCustomMenu((0.15*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, null);
@@ -93,7 +93,7 @@ module SettingsMenuDelegateTest {
         TestInit.initConnection(GoProCamera.GP_HERO11M);
 
         // test selecting manual edit
-        var viewController = new ViewDebugController();
+        var viewController = new ViewDebugController(getApp().viewController);
         getApp().viewController = viewController;
 
         var menu = new TestInit.DebugCustomMenu((0.15*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, null);
@@ -109,7 +109,7 @@ module SettingsMenuDelegateTest {
         }
 
         // test selecting settings options in manual editing menu
-        viewController = new ViewDebugController();
+        viewController = new ViewDebugController(getApp().viewController);
         getApp().viewController = viewController;
 
         menu = new TestInit.DebugCustomMenu((0.15*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, null);
@@ -159,7 +159,7 @@ module SettingsMenuDelegateTest {
         Application.Storage.clearValues();
 
         // test selecting preset saving
-        var viewController = new ViewDebugController();
+        var viewController = new ViewDebugController(getApp().viewController);
         getApp().viewController = viewController;
 
         var menu = new TestInit.DebugCustomMenu((0.15*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, null);
@@ -176,7 +176,7 @@ module SettingsMenuDelegateTest {
         }
 
         // test selecting a preset in the saving settings as preset menu
-        viewController = new ViewDebugController();
+        viewController = new ViewDebugController(getApp().viewController);
         getApp().viewController = viewController;
 
         menu = new TestInit.DebugCustomMenu((0.15*Screen.HEIGHT).toNumber()<<1, Graphics.COLOR_BLACK, null);

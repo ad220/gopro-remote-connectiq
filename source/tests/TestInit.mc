@@ -67,6 +67,13 @@ module TestInit {
         GoProSettings.HYPERSMOOTH       => GoProSettings.HS_LOW,
         GoProSettings.LED               => GoProSettings.LED_ON,
         GoProSettings.PHOTO_LENS        => GoProSettings.WIDE_FULL,
+        GoProSettings.PROTUNE           => 1,
+        GoProSettings.WHITE_BL          => 0,
+        GoProSettings.COLOR             => GoProSettings.COLOR_FLAT,
+        GoProSettings.SHARPNESS         => GoProSettings.SHARP_LOW,
+        GoProSettings.EV_COMP           => 4,
+        GoProSettings.ISO_MAX           => 1,
+        GoProSettings.ISO_MIN           => 8,
     };
 
     const defaultStatuses = {
