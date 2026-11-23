@@ -448,20 +448,20 @@ class ResolutionComparator {
     }
 
 
-    public function compare(resolutionA as Object, resolutionB as Object) as Number {
+    public function compare(resolutionA as Object?, resolutionB as Object?) as Number {
         return wrappedCompare(resolutionA as Number, resolutionB as Number, true);
     }
 }
 
 (:typecheck(false))
 class RatioComparator extends ResolutionComparator {
-    public function compare(ratioA as Object, ratioB as Object) as Number {
+    public function compare(ratioA as Object?, ratioB as Object?) as Number {
         return wrappedCompare(ratioA as Number, ratioB as Number, false);
     }
 }
 
 class PhotoLensComparator {
-    public function compare(lensA as Object, lensB as Object) as Number {
+    public function compare(lensA as Object?, lensB as Object?) as Number {
         var a = GoProSettings.PHOTO_LENS_MAP.get(lensA as Number) as Number?;
         var b = GoProSettings.PHOTO_LENS_MAP.get(lensB as Number) as Number?;
 
@@ -482,7 +482,7 @@ class MapComparator {
         self.order = order;
     }
 
-    public function compare(settingA as Object, settingB as Object) as Number {
+    public function compare(settingA as Object?, settingB as Object?) as Number {
         var a = map.get(settingA);
         var b = map.get(settingB);
 
