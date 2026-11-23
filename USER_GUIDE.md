@@ -131,7 +131,19 @@ Once connected, you'll see the main remote screen with:
 
 While recording, only the shutter and hilight buttons remain active.
 
-You can also open the remote menu (with a long press on the *UP* button or whatever is the *MENU* intent on your watch). It currently only allows to switch between video and photo capture modes but it will have more features soon.
+
+## Remote menu
+
+You can open the remote menu with a long press on the *UP* button or whatever is the *MENU* intent on your watch. It allows to :
+
+- #### Switch shutter mode
+  Switch between video and photo capture mode.
+
+- #### Edit Protune settings
+  Opens a menu enabling to change Protune settings such as white balance, saturation, sharpness, exposure and iso.
+
+- #### Switch 360 mode
+  Toggle between single and dual lens recording mode for 360 cameras.
 
 
 ## Video settings menu
