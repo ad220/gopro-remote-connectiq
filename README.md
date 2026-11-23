@@ -22,7 +22,8 @@ Every BLE capable GoPro camera is now supported (HERO4+ except HERO Session - RI
 - switch between video and photo capture mode
 - change video settings manually (resolution, aspect ratio, lens and framerate)
 - change video settings with customizable presets
-- edit camera settings (hypersmooth, gps, leds, anti-flicker)
+- edit camera settings (hypersmooth, gps, leds, anti-flicker, beeps)
+- edit protune settings (white balance, color, sharpness, exposure, iso)
 - automatic report of error codes to [dashboard](https://github.com/ad220/gopro-remote-error-dashboard)
 
 ### Planned
@@ -54,13 +55,18 @@ On this view, press the select button on your watch to start recording and the u
 
 ## Changelog
 
+### v4.5
+- Add Protune settings
+- Add toggle 360 mode support for MAX cameras (not tested)
+- Replace power off button with a toggle beeps button in system settings
+
 ### v4.4
 - Add photo mode
 - Add support for Mission1 Pro ILS
 
 ### v4.3
-- Add support for Mission1 cameras (not tested)
-- Add support for older cameras (not tested)
+- Add support for Mission1 cameras
+- Add support for older cameras
 - Add user guide
 
 ### v4.2

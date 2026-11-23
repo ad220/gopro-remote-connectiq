@@ -118,11 +118,11 @@
 
     <!-- Hypersmooth -->
     <!-- $$$ Small -->
-    <string id="Disabled">Disabled</string>
     <string id="Boost">Boost</string>
     <string id="AutoBoost">AutoBoost</string>
     <string id="Standard">Standard</string>
     <!-- $$$ Small Tiny -->
+    <string id="Disabled">Disabled</string>
     <string id="Low">Low</string>
     <string id="High">High</string>
 
